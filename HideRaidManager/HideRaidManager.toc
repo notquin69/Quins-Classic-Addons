@@ -1,0 +1,8 @@
+## Interface: 11302
+## Version: 1.0
+## Title: HideRaidManager
+## Notes: Only shows the Raid Manager on mouseover
+## Author: Ketho @ EU-Boulderfist
+## Dependencies: Blizzard_CompactRaidFrames
+
+HideRaidManager.lua

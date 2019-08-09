@@ -1,0 +1,8 @@
+2011-02-13  Bryan McLemore  <kaelten@gmail.com>
+
+[5c5f818d3f43] [v3.3.13]
+* .hgignore, .pkgmeta, OneBag3.lua, OneBag3.xml, localization/deDE.lua, localization/enUS.lua, localization/esES.lua, localization/esMX.lua, localization/frFR.lua, localization/koKR.lua, localization/ruRU.lua, localization/zhCN.lua, localization/zhTW.lua:
+
+Updating to AceLocale-3.1
+
+

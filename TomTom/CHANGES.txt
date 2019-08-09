@@ -1,0 +1,10 @@
+lightweight tag 159e1205857f00ba8a378c663f83a0bd51708102 v80200-1.0.2
+Author:	Ludovicus Maior <ludovicus.maior@gmail.com>
+Date:	Fri Jun 28 13:36:58 2019 +0000
+
+commit 159e1205857f00ba8a378c663f83a0bd51708102
+Author: Ludovicus Maior <ludovicus.maior@gmail.com>
+Date:   Fri Jun 28 13:36:58 2019 +0000
+
+    Fix bogus references to opts.silent
+
