@@ -110,6 +110,7 @@ function LibKeyBound:Initialize()
 		okayBindings:SetScript('OnClick', function(self)
 			current = (perChar:GetChecked() and 2) or 1
 			if InCombatLockdown() then
+				print ('In combat... Window should not be open.')
 				self:RegisterEvent('PLAYER_REGEN_ENABLED')
 			else
 				SaveBindings(current)
@@ -249,6 +250,7 @@ Example:
  	LibKeyBound:Toggle()
 --]]
 function LibKeyBound:Toggle()
+	--Print('LibKeyBound:Toggle called')
 	if (LibKeyBound:IsShown()) then
 		LibKeyBound:Deactivate()
 	else
@@ -266,6 +268,7 @@ Example:
  	LibKeyBound:Activate()
 --]]
 function LibKeyBound:Activate()
+	--print('LibKeyBound:Activate called')
 	if not self:IsShown() then
 		if InCombatLockdown() then
 			UIErrorsFrame:AddMessage(L.CannotBindInCombat, 1, 0.3, 0.3, 1, UIERRORS_HOLD_TIME)

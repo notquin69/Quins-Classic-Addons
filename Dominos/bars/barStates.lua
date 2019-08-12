@@ -2,6 +2,7 @@
 	barStates.lua
 		A thingy for mapping stateIds to macro states
 --]]
+
 local _, Addon = ...
 local states = {}
 
@@ -72,17 +73,10 @@ do
 	local class = select(2, UnitClass("player"))
 
 	if class == "DRUID" then
-		if Addon:IsBuild("classic") then
-			addState(
-				"class",
-				"moonkin",
-				function()
-					return ("[form:%d]"):format(GetNumShapeshiftForms())
-				end,
-				GetSpellInfo(24858)
-			)
-		else
-			addState("class", "moonkin", "[bonusbar:4]", GetSpellInfo(24858))
+		addState("class", "moonkin", "[bonusbar:4]", GetSpellInfo(24858))
+		addState("class", "bear", "[bonusbar:3]", GetSpellInfo(5487))
+
+		if GetSpellInfo(33891) then
 			addState(
 				"class",
 				"tree",
@@ -93,8 +87,6 @@ do
 			)
 		end
 
-		addState("class", "bear", "[bonusbar:3]", GetSpellInfo(5487))
-
 		addState("class", "prowl", "[bonusbar:1,stealth]", GetSpellInfo(5215))
 		addState("class", "cat", "[bonusbar:1]", GetSpellInfo(768))
 	elseif class == "ROGUE" then
@@ -103,12 +95,12 @@ do
 		end
 
 		addState("class", "stealth", "[bonusbar:1]", GetSpellInfo(1784))
-	elseif class == "WARRIOR" and Addon:IsBuild("classic") then
+	elseif class == 'WARRIOR' and Addon:IsBuild("classic") then
 		addState("class", "battle", "[bonusbar:1]", GetSpellInfo(2457))
 		addState("class", "defensive", "[bonusbar:2]", GetSpellInfo(71))
 		addState("class", "berserker", "[bonusbar:3]", GetSpellInfo(2458))
-	elseif class == "PRIEST" and Addon:IsBuild("classic") then
-		addState("class", "shadowform", "[form:1]", GetSpellInfo(16592))
+	elseif class == 'PRIEST' and Addon:IsBuild("classic") then
+		addState("class", "shadowform", "[bonusbar:1]", GetSpellInfo(16592))
 	end
 end
 
