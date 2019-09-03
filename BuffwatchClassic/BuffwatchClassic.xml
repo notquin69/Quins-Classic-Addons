@@ -1,0 +1,281 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <Frame name="BuffwatchFrame" clampedToScreen="true" movable="true" parent="UIParent">
+
+    <Size>
+      <AbsDimension x="150" y="44" />
+    </Size>
+
+    <Anchors>
+      <Anchor point="CENTER" relativeTo="UIParent">
+        <Offset>
+          <AbsDimension x="200" y="200" />
+        </Offset>
+      </Anchor>
+    </Anchors>
+
+    <Frames>
+
+      <Frame name="$parent_Background" SetAllPoints="true">
+
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+          <BackgroundInsets>
+            <AbsInset left="2" right="2" top="2" bottom="2" />
+          </BackgroundInsets>
+          <TileSize>
+            <AbsValue val="12" />
+          </TileSize>
+          <EdgeSize>
+            <AbsValue val="12" />
+          </EdgeSize>
+          <BorderColor r="0" g="0" b="0" />
+        </Backdrop>
+
+      </Frame>
+	  
+      <CheckButton name="$parent_LockAll" inherits="UICheckButtonTemplate">
+        <Size>
+          <AbsDimension x="18" y="18"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="5" y="-2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            BUFFWATCHADDON_G.Set_AllChecks(self:GetChecked());
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <Button name="$parent_Header">
+        <Size>
+          <AbsDimension x="59" y="12"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="-4" y="-4"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" setAllPoints="true" text="Buffwatch" />
+            <Texture name="$parentCombatIcon" file="Interface\CharacterFrame\UI-StateIcon" hidden="true">
+              <Size>
+                <AbsDimension x="18" y="18"/>
+              </Size>
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="BuffwatchFrame">
+                  <Offset>
+                    <AbsDimension x="5" y="-2"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <TexCoords left="0.546875" right="0.921875" top="0.0625" bottom="0.4375"/>
+            </Texture>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            self:RegisterForClicks("RightButtonUp");
+          </OnLoad>
+          <OnClick>
+            BUFFWATCHADDON_G.Header_Clicked(button, down);
+          </OnClick>
+          <OnMouseDown>
+            BUFFWATCHADDON_G.MouseDown(self:GetParent(), button);
+          </OnMouseDown>
+          <OnMouseUp>
+            BUFFWATCHADDON_G.MouseUp(self:GetParent(), button);
+          </OnMouseUp>
+        </Scripts>
+      </Button>
+
+      <Frame name="$parent_HeaderDropDown" inherits="UIDropDownMenuTemplate" hidden="true">
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            BUFFWATCHADDON_G.HeaderDropDown_OnLoad(self);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+	  
+      <Button name="$parent_MinimizeButton" hidden="false">
+        <Size>
+          <AbsDimension x="16" y="16"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPRIGHT" relativeTo="$parent_Background" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-1" y="-1"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <NormalTexture file="Interface\AddOns\BuffwatchClassic\MinimizeButton-Min"/>
+        <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD"/>
+        <Scripts>
+          <OnClick>
+            BUFFWATCHADDON_G.MinimizeButton_Clicked(self);
+          </OnClick>
+          <OnEnter>
+		    BUFFWATCHADDON_G.MinimizeButton_Enter(self);
+          </OnEnter>
+          <OnLeave>
+            GameTooltip:Hide();
+          </OnLeave>
+        </Scripts>
+      </Button>
+
+      <Button name="$parent_HideButton" hidden="false">
+        <Size>
+          <AbsDimension x="16" y="16"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPRIGHT" relativeTo="$parent_MinimizeButton" relativePoint="TOPLEFT"/>
+        </Anchors>
+        <NormalTexture file="Interface\AddOns\BuffwatchClassic\MinimizeButton-Hide"/>
+        <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD"/>
+        <Scripts>
+          <OnClick>
+            BUFFWATCHADDON_G.HideButton_Clicked(self);
+          </OnClick>
+          <OnEnter>
+			BUFFWATCHADDON_G.HideButton_Enter(self);
+          </OnEnter>
+          <OnLeave>
+            GameTooltip:Hide();
+          </OnLeave>
+        </Scripts>
+      </Button>
+	  
+      <Frame name="$parent_PlayerFrame">
+
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="6" y="-18"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="-6" y="6"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+
+      </Frame>
+
+    </Frames>
+
+    <Scripts>
+
+      <OnLoad>
+        BUFFWATCHADDON_G.OnLoad(self);
+      </OnLoad>
+      <OnEvent>
+        BUFFWATCHADDON_G.OnEvent(self, event, ...);
+      </OnEvent>
+      <OnMouseDown>
+        BUFFWATCHADDON_G.MouseDown(self, button);
+      </OnMouseDown>
+      <OnMouseUp>
+        BUFFWATCHADDON_G.MouseUp(self, button);
+      </OnMouseUp>
+    </Scripts>
+
+  </Frame>
+
+  <!--== Inherited Frames ==============================================================-->
+
+  <CheckButton name="Buffwatch_LockButton_Template" inherits="UICheckButtonTemplate" hidden="false" virtual="true">
+    <Size>
+      <AbsDimension x="16" y="16"/>
+    </Size>
+    <Scripts>
+      <OnClick>
+        BUFFWATCHADDON_G.Check_Clicked(self, button, down);
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+
+  <Button name="Buffwatch_PlayerName_Template" inherits="SecureActionButtonTemplate" hidden="false" virtual="true">
+    <Size>
+      <AbsDimension x="18" y="10"/>
+    </Size>
+    <Layers>
+      <Layer level="OVERLAY">
+        <FontString name="$parentText" inherits="GameFontNormalSmall" justifyH="LEFT"/>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+        self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+      </OnLoad>
+    </Scripts>
+  </Button>
+
+  <Button name="Buffwatch_BuffButton_Template" inherits="SecureActionButtonTemplate" hidden="false" virtual="true">
+    <Size>
+      <AbsDimension x="18" y="18"/>
+    </Size>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture name="$parentIcon"/>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+        self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+      </OnLoad>
+      <PostClick>
+        BUFFWATCHADDON_G.Buff_Clicked(self, button, down);
+      </PostClick>
+      <OnEnter>
+        BUFFWATCHADDON_G.Buff_Tooltip(self, motion);
+      </OnEnter>
+      <OnLeave>
+        GameTooltip:Hide();
+      </OnLeave>
+    </Scripts>
+  </Button>
+
+  <Frame name="Buffwatch_Player_Template" hidden="false" virtual="true">
+    <Size>
+      <AbsDimension x="100" y="18"/>
+    </Size>
+    <Frames>
+      <CheckButton name="$parent_Lock" inherits="Buffwatch_LockButton_Template">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-1"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </CheckButton>
+
+      <Button name="$parent_Name" inherits="Buffwatch_PlayerName_Template">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parent_Lock" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-1" y="-3"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </Button>
+
+    </Frames>
+  </Frame>
+
+</Ui>

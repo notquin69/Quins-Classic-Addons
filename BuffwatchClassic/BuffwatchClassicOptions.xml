@@ -1,0 +1,486 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+    <Frame name="Buffwatch_Options">
+
+        <Layers>
+
+            <Layer level="ARTWORK">
+
+                <FontString name="$parent_Title" inherits="GameFontNormalLarge">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset x="20" y="-15"/>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+
+                <FontString name="$parent_ModeLabel" inherits="GameFontNormalSmall" text="Group Mode">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset x="85" y="-60" />
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+
+                <FontString name="$parent_SortOrderLabel" inherits="GameFontNormalSmall" text="Sort Order">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parent_ModeLabel" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                                <AbsDimension x="0" y="-20" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+
+                <FontString name="$parent_AnchorPointLabel" inherits="GameFontNormalSmall" text="Anchor Point">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parent_SortOrderLabel" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                                <AbsDimension x="0" y="-20" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+
+            </Layer>
+
+        </Layers>
+
+        <Frames>
+
+            <Frame name="$parent_Mode" inherits="UIDropDownMenuTemplate" enableMouse="true">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parent_ModeLabel" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="0" y="-2" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        BUFFWATCHADDON_G.Options_Mode_OnLoad(self);
+                    </OnLoad>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText("Selects which players to show");
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Frame>
+
+            <Frame name="$parent_SortOrder" inherits="UIDropDownMenuTemplate" enableMouse="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_Mode" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="2" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        BUFFWATCHADDON_G.Options_SortOrder_OnLoad(self);
+                    </OnLoad>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SORTORDER);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Frame>
+
+            <Frame name="$parent_AnchorPoint" inherits="UIDropDownMenuTemplate" enableMouse="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_SortOrder" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="-10" y="2" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        BUFFWATCHADDON_G.Options_AnchorPoint_OnLoad(self);
+                    </OnLoad>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.ANCHORPOINT);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Frame>
+
+            <CheckButton name="$parent_ShowPets" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_AnchorPointLabel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="-5" y="-30"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show Pets");
+                    </OnLoad>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_ShowPets_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWPETS);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_ShowOnlyMine" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowPets" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show only buffs you cast");
+                    </OnLoad>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_ShowOnlyMine_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWONLYMINE);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_ShowOnlyCastableBuffs" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowOnlyMine" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show only castable buffs");
+                    </OnLoad>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_ShowOnlyCastableBuffs_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWCASTABLEBUFFS);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_ShowAllForPlayer" inherits="OptionsCheckButtonTemplate">
+                <Size>
+                    <AbsDimension x="20" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowOnlyCastableBuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="10" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show all buffs for this player");
+                    </OnLoad>
+                    <OnShow>
+                        if (BuffwatchPlayerConfig.ShowCastableBuffs == true or BuffwatchPlayerConfig.ShowOnlyMine == true) then
+                            BUFFWATCHADDON_G.Options_EnableCheckbox(self);
+                        else
+                            BUFFWATCHADDON_G.Options_DisableCheckbox(self);
+                        end
+                    </OnShow>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_ShowAllForPlayer_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWALLFORPLAYER);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_ShowSpirals" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowAllForPlayer" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="-10" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show cooldown spirals");
+                    </OnLoad>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_ShowSpirals_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWSPIRALS);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_HideCooldownText" inherits="OptionsCheckButtonTemplate">
+                <Size>
+                    <AbsDimension x="20" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowSpirals" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="10" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        getglobal(self:GetName().."Text"):SetText("Hide cooldown text");
+                    </OnLoad>
+                    <OnShow>
+                        if (BuffwatchConfig.Spirals == true) then
+                            BUFFWATCHADDON_G.Options_EnableCheckbox(self);
+                        else
+                            BUFFWATCHADDON_G.Options_DisableCheckbox(self);
+                        end
+                    </OnShow>
+                    <OnClick>
+                        BUFFWATCHADDON_G.Options_HideCooldownText_OnClick(self);
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.HIDECOOLDOWNTEXT);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+<!--
+            <CheckButton name="$parent_ShowExpiredWarning" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowOnlyDispellDebuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Show Expired Warning");
+                    </OnLoad>
+                    <OnClick>
+                        if (self:GetChecked()) then
+                            BuffwatchConfig.ExpiredWarning = true;
+                        else
+                            BuffwatchConfig.ExpiredWarning = false;
+                        end
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SHOWEXPIREDWARNING);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+
+            <CheckButton name="$parent_PlayExpiredSound" inherits="OptionsCheckButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_ShowExpiredWarning" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."Text"]:SetText("Play Expired Sound");
+                    </OnLoad>
+                    <OnClick>
+                        if (self:GetChecked()) then
+                            BuffwatchConfig.ExpiredSound = true;
+                        else
+                            BuffwatchConfig.ExpiredSound = false;
+                        end
+                    </OnClick>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.PLAYEXPIREDSOUND);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </CheckButton>
+-->
+            <Slider name="$parent_Alpha" inherits="OptionsSliderTemplate">
+                <Size>
+                    <AbsDimension x="220" y="16"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_HideCooldownText" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-20" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."High"]:SetText("1");
+                        _G[self:GetName().."Low"]:SetText("0");
+                        self:SetMinMaxValues(0.0,1.0);
+                        self:SetValueStep(0.01);
+                    </OnLoad>
+                    <OnValueChanged>
+                        BuffwatchConfig.Alpha = self:GetValue();
+                        BuffwatchFrame_Background:SetAlpha(BuffwatchConfig.Alpha);
+                        _G[self:GetName().."Text"]:SetText("Transparency ("..string.format("%.2f", BuffwatchConfig.Alpha)..")");
+                    </OnValueChanged>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.ALPHA);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Slider>
+
+            <Slider name="$parent_Scale" inherits="OptionsSliderTemplate">
+                <Size>
+                    <AbsDimension x="220" y="16"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_Alpha" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-20" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."High"]:SetText("200%");
+                        _G[self:GetName().."Low"]:SetText("50%");
+                        self:SetMinMaxValues(0.5,2.0);
+                        self:SetValueStep(0.01);
+                    </OnLoad>
+                    <OnValueChanged>
+                        BuffwatchPlayerConfig.Scale = self:GetValue();
+                        BuffwatchFrame:SetScale(BuffwatchPlayerConfig.Scale);
+                        _G[self:GetName().."Text"]:SetText("Scale ("..string.format("%.0f%%", BuffwatchPlayerConfig.Scale * 100)..")");
+                    </OnValueChanged>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.SCALE);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Slider>
+
+            <Slider name="$parent_CooldownTextScale" inherits="OptionsSliderTemplate">
+                <Size>
+                    <AbsDimension x="220" y="16"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parent_Scale" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-20" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        _G[self:GetName().."High"]:SetText("100%");
+                        _G[self:GetName().."Low"]:SetText("20%");
+                        self:SetMinMaxValues(0.2,1.0);
+                        self:SetValueStep(0.01);
+                    </OnLoad>
+                    <OnValueChanged>
+                        BuffwatchConfig.CooldownTextScale = self:GetValue();
+                        BUFFWATCHADDON_G.Set_CooldownTextScale();
+                        _G[self:GetName().."Text"]:SetText("Cooldown Text Scale ("..string.format("%.0f%%", BuffwatchConfig.CooldownTextScale * 100)..")");
+                    </OnValueChanged>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+                        GameTooltip:SetText(BUFFWATCHADDON_G.TOOLTIP.COOLDOWNTEXTSCALE);
+                    </OnEnter>
+                    <OnLeave>
+                        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Slider>
+			
+        </Frames>
+
+        <Scripts>
+            <OnLoad>
+                BUFFWATCHADDON_G.Options_OnLoad(self);
+            </OnLoad>
+        </Scripts>
+
+    </Frame>	
+
+	<Frame name="Buffwatch_HelpFrame">
+		<Frames>
+	
+			<ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="0" y="-4"/>
+					<Anchor point="BOTTOMRIGHT" x="-25" y="5"/>
+				</Anchors>
+				<ScrollChild>
+					<Frame>
+						<Size x="500" y="500"/>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString name="Buffwatch_HelpFrameText" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP"/>
+							</Layer>
+						</Layers>
+					</Frame>
+				</ScrollChild>
+			</ScrollFrame>		
+
+		</Frames>
+
+		<Scripts>
+			<OnLoad>
+				BUFFWATCHADDON_G.HelpFrame_OnLoad(self);
+			</OnLoad>
+		</Scripts>
+
+	</Frame>
+
+</Ui>

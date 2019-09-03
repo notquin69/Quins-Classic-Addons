@@ -1,0 +1,11 @@
+## Interface: 11302
+## Title: Buffwatch Classic
+## Author: Pup
+## Version: 1.03
+## Notes: Monitors Player/Party/Raid buffs of your choosing
+## SavedVariables: BuffwatchConfig
+## SavedVariablesPerCharacter: BuffwatchPlayerConfig, BuffwatchSaveBuffs
+BuffwatchClassic.lua
+BuffwatchClassic.xml
+BuffwatchClassicOptions.lua
+BuffwatchClassicOptions.xml
