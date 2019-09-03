@@ -1,0 +1,11 @@
+## Interface: 11302
+
+## Title: BiS Tracker
+## Notes: Shows BiS items for every class, and where to get them.
+## Author: Yes
+## Version: 1.2 
+## SavedVariablesPerCharacter: BiS_Settings
+
+Templates.xml
+data\BiSData.lua
+core.lua
