@@ -5,11 +5,15 @@ local _GetNumSubgroupMembers = GetNumSubgroupMembers --> wow api
 local _GetNumGroupMembers = GetNumGroupMembers --> wow api
 local _UnitIsFriend = UnitIsFriend --> wow api
 local _UnitName = UnitName --> wow api
-local _UnitDetailedThreatSituation = UnitDetailedThreatSituation
+--local _UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local _IsInRaid = IsInRaid --> wow api
 local _IsInGroup = IsInGroup --> wow api
-local _UnitGroupRolesAssigned = DetailsFramework.UnitGroupRolesAssigned --> wow api
+--local _UnitGroupRolesAssigned = DetailsFramework.UnitGroupRolesAssigned --> wow api
 local GetUnitName = GetUnitName
+
+local _UnitGroupRolesAssigned = function() return "NONE" end
+
+
 
 local _ipairs = ipairs --> lua api
 local _table_sort = table.sort --> lua api
@@ -25,6 +29,29 @@ local ThreatMeter = _detalhes:NewPluginObject ("Details_TinyThreat")
 local ThreatMeterFrame = ThreatMeter.Frame
 
 ThreatMeter:SetPluginDescription ("Small tool for track the threat you and other raid members have in your current target.")
+
+--threat stuff from: https://github.com/EsreverWoW/ClassicThreatMeter by EsreverWoW
+local ThreatLib = LibStub:GetLibrary ("ThreatClassic-1.0")
+
+local _UnitThreatSituation = function (unit, mob)
+    return ThreatLib:UnitThreatSituation (unit, mob)
+end
+
+local _UnitDetailedThreatSituation = function (unit, mob)
+    return ThreatLib:UnitDetailedThreatSituation (unit, mob)
+end
+
+--[=
+
+	local CheckStatus = function(...)
+		--print (...)
+	end
+
+	ThreatLib:RegisterCallback("Activate", CheckStatus)
+    ThreatLib:RegisterCallback("Deactivate", CheckStatus)
+    ThreatLib:RegisterCallback("ThreatUpdated", CheckStatus)
+    ThreatLib:RequestActiveOnSolo (true)
+--]=]
 
 local _
 
@@ -206,7 +233,14 @@ local function CreatePluginFrames (data)
 			row.texture = instance.row_info.texture
 			row.shadow = instance.row_info.textL_outline
 			
-			row.width = instance.baseframe:GetWidth()-5
+			local rowHeight = instance and instance.row_info.height or 20
+			rowHeight = - ( (row.rowId - 1) * (rowHeight + 1) )
+
+			row:ClearAllPoints()
+			row:SetPoint ("topleft", ThreatMeterFrame, "topleft", 1, rowHeight)
+			row:SetPoint ("topright", ThreatMeterFrame, "topright", -1, rowHeight)
+
+			--row.width = instance.baseframe:GetWidth()-5
 		end
 	end
 	
@@ -217,13 +251,19 @@ local function CreatePluginFrames (data)
 	end
 	
 	function ThreatMeter:NewRow (i)
-		local newrow = DetailsFrameWork:NewBar (ThreatMeterFrame, nil, "DetailsThreatRow"..i, nil, 300, 14)
-		newrow:SetPoint (3, -((i-1)*15))
+
+		local instance = ThreatMeter:GetPluginInstance()
+		local rowHeight = instance and instance.row_info.height or 20
+
+		local newrow = DetailsFrameWork:NewBar (ThreatMeterFrame, nil, "DetailsThreatRow"..i, nil, 300, rowHeight)
+		newrow:SetPoint (3, -((i-1)*(rowHeight+1)))
 		newrow.lefttext = "bar " .. i
 		newrow.color = "skyblue"
 		newrow.fontsize = 9.9
 		newrow.fontface = "GameFontHighlightSmall"
 		newrow:SetIcon ("Interface\\LFGFRAME\\UI-LFG-ICON-PORTRAITROLES", RoleIconCoord ["DAMAGER"])
+		newrow.rowId = i
+
 		ThreatMeter.Rows [#ThreatMeter.Rows+1] = newrow
 		
 		ThreatMeter:RefreshRow (newrow)
@@ -260,6 +300,11 @@ local function CreatePluginFrames (data)
 					end
 				
 					local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("raid"..i, "target")
+
+					isTanking = isTanking or false
+					threatpct = threatpct or 0
+					rawthreatpct = rawthreatpct or 0
+
 					if (status) then
 						threat_table [2] = threatpct
 						threat_table [3] = isTanking
@@ -284,7 +329,14 @@ local function CreatePluginFrames (data)
 						return
 					end
 				
-					local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("party"..i, "target")
+					local isTanking, status, threatpct, rawthreatpct, threatvalue = ThreatLib:UnitDetailedThreatSituation ("party"..i, "target")
+					--returns nil, 0, nil, nil, 0
+				--	print (isTanking, status, threatpct, rawthreatpct, threatvalue)
+
+					isTanking = isTanking or false
+					threatpct = threatpct or 0
+					rawthreatpct = rawthreatpct or 0
+
 					if (status) then
 						threat_table [2] = threatpct
 						threat_table [3] = isTanking
@@ -301,6 +353,13 @@ local function CreatePluginFrames (data)
 				local threat_table = ThreatMeter.player_list_indexes [threat_table_index]
 			
 				local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("player", "target")
+
+				isTanking = isTanking or false
+				threatpct = threatpct or 0
+				rawthreatpct = rawthreatpct or 0
+
+				--print ("player", isTanking, status, threatpct, rawthreatpct, threatvalue)
+
 				if (status) then
 					threat_table [2] = threatpct
 					threat_table [3] = isTanking
@@ -317,8 +376,12 @@ local function CreatePluginFrames (data)
 				local thisplayer_name = GetUnitName ("player", true)
 				local threat_table_index = ThreatMeter.player_list_hash [thisplayer_name]
 				local threat_table = ThreatMeter.player_list_indexes [threat_table_index]
-			
 				local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("player", "target")
+
+				--threatpct, rawthreatpct are nil on single player
+				threatpct = threatpct or 0
+				rawthreatpct = rawthreatpct or 0
+
 				if (status) then
 					threat_table [2] = threatpct
 					threat_table [3] = isTanking
@@ -336,7 +399,13 @@ local function CreatePluginFrames (data)
 					local threat_table = ThreatMeter.player_list_indexes [threat_table_index]
 
 					if (threat_table) then
+
 						local isTanking, status, threatpct, rawthreatpct, threatvalue = _UnitDetailedThreatSituation ("pet", "target")
+
+						--threatpct, rawthreatpct are nil on single player, dunno with pets
+						threatpct = threatpct or 0
+						rawthreatpct = rawthreatpct or 0
+
 						if (status) then
 							threat_table [2] = threatpct
 							threat_table [3] = isTanking
@@ -508,7 +577,9 @@ local function CreatePluginFrames (data)
 					ThreatMeter.player_list_indexes [#ThreatMeter.player_list_indexes+1] = t
 					ThreatMeter.player_list_hash [thisplayer_name] = #ThreatMeter.player_list_indexes
 				end
+
 				
+
 			elseif (_IsInGroup()) then
 				for i = 1, _GetNumGroupMembers()-1, 1 do
 					local thisplayer_name = GetUnitName ("party"..i, true)
@@ -639,11 +710,7 @@ function ThreatMeter:OnEvent (_, event, ...)
 		if (AddonName == "Details_TinyThreat") then
 			
 			if (_G._detalhes) then
-			
-				if (DetailsFramework.IsClassicWow()) then
-					return
-				end
-				
+
 				--> create widgets
 				CreatePluginFrames (data)
 
