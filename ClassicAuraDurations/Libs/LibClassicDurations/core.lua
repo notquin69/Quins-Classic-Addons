@@ -61,7 +61,7 @@ Usage example 2:
 --]================]
 
 
-local MAJOR, MINOR = "LibClassicDurations", 8
+local MAJOR, MINOR = "LibClassicDurations", 15
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -71,7 +71,14 @@ lib.frame = lib.frame or CreateFrame("Frame")
 lib.guids = lib.guids or {}
 lib.spells = lib.spells or {}
 lib.npc_spells = lib.npc_spells or {}
-lib.spellNameToID = lib.npc_spells or {}
+
+lib.spellNameToID = lib.spellNameToID or {}
+local spellNameToID = lib.spellNameToID
+
+local NPCspellNameToID = {}
+if lib.NPCSpellTableTimer then
+    lib.NPCSpellTableTimer:Cancel()
+end
 
 lib.DRInfo = lib.DRInfo or {}
 local DRInfo = lib.DRInfo
@@ -93,7 +100,7 @@ local callbacks = lib.callbacks
 local guids = lib.guids
 local spells = lib.spells
 local npc_spells = lib.npc_spells
-local spellNameToID = lib.spellNameToID
+
 
 local PURGE_INTERVAL = 900
 local PURGE_THRESHOLD = 1800
@@ -113,18 +120,17 @@ f:SetScript("OnEvent", function(self, event, ...)
     return self[event](self, event, ...)
 end)
 
-local SpellDataVersions = {}
+lib.dataVersions = lib.dataVersions or {}
+local SpellDataVersions = lib.dataVersions
 
 function lib:SetDataVersion(dataType, version)
     SpellDataVersions[dataType] = version
     npc_spells = lib.npc_spells
-    spellNameToID = lib.spellNameToID
 end
 
 function lib:GetDataVersion(dataType)
     return SpellDataVersions[dataType] or 0
 end
-
 
 lib.AddAura = function(id, opts)
     if not opts then return end
@@ -136,12 +142,9 @@ lib.AddAura = function(id, opts)
     else
         lastRankID = id
     end
-    local mixin = Spell:CreateFromSpellID(lastRankID)
-    mixin:ContinueOnSpellLoad(function()
-        local spellName = mixin:GetSpellName()
 
-        spellNameToID[spellName] = lastRankID
-    end)
+    local spellName = GetSpellInfo(lastRankID)
+    spellNameToID[spellName] = lastRankID
 
     if type(id) == "table" then
         for _, spellID in ipairs(id) do
@@ -162,6 +165,24 @@ lib.Talent = function (...)
     return 0
 end
 
+local prevID
+local counter = 0
+local function processNPCSpellTable()
+    local dataTable = lib.npc_spells
+    counter = 0
+    local id = next(dataTable, prevID)
+    while (id and counter < 300) do
+        NPCspellNameToID[GetSpellInfo(id)] = id
+
+        counter = counter + 1
+        prevID = id
+        id = next(dataTable, prevID)
+    end
+    if (id) then
+        C_Timer.After(1, processNPCSpellTable)
+    end
+end
+lib.NPCSpellTableTimer = C_Timer.NewTimer(10, processNPCSpellTable)
 --------------------------
 -- OLD GUIDs PURGE
 --------------------------
@@ -389,13 +410,18 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
 
     if auraType == "BUFF" or auraType == "DEBUFF" then
+        local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+
         if spellID == 0 then
             -- so not to rewrite the whole thing to spellnames after the combat log change
-            -- just treat everything as max/first rank id of that spell name
-            local sid = spellNameToID[spellName]
-            if sid then
-                spellID = sid
+            -- just treat everything as max rank id of that spell name
+            if isSrcPlayer then
+                spellID = spellNameToID[spellName]
             else
+                spellID = NPCspellNameToID[spellName]
+            end
+
+            if not spellID then
                 return
             end
         end
@@ -405,16 +431,16 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
         local isDstFriendly = bit_band(dstFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) > 0
 
         local opts = spells[spellID]
-        --[[
+
         if not opts then
             local npc_aura_duration = npc_spells[spellID]
             if npc_aura_duration then
                 opts = { duration = npc_aura_duration }
-            elseif enableEnemyBuffTracking and not isDstFriendly and auraType == "BUFF" then
-                opts = { duration = 0 } -- it'll be accepted but as an indefinite aura
+            -- elseif enableEnemyBuffTracking and not isDstFriendly and auraType == "BUFF" then
+                -- opts = { duration = 0 } -- it'll be accepted but as an indefinite aura
             end
         end
-        ]]
+
         if opts then
             -- print(eventType, srcGUID, "=>", dstName, spellID, spellName, auraType )
             if  eventType == "SPELL_AURA_REFRESH" or
@@ -450,18 +476,24 @@ end
 ---------------------------
 -- ENEMY BUFFS
 ---------------------------
-local makeBuffInfo = function(spellID, bt)
-    local name, rank, icon, castTime, minRange, maxRange, spellId = GetSpellInfo(spellID)
-    local duration = bt[1]
-    local expirationTime = duration == 0 and 0 or bt[2]
-    -- buffName, icon, count, debuffType, duration, expirationTime, caster, canStealOrPurge, _ , spellId
-    return { name, icon, 1, nil, duration, expirationTime, nil, nil, nil, spellID }
+local makeBuffInfo = function(spellID, applicationTable, dstGUID, srcGUID)
+    local name, rank, icon, castTime, minRange, maxRange, _spellId = GetSpellInfo(spellID)
+    local durationFunc, startTime = unpack(applicationTable)
+    local duration = cleanDuration(durationFunc, spellID, srcGUID) -- srcGUID isn't needed actually
+    -- no DRs on buffs
+    local expirationTime = startTime + duration
+    if duration == 0 then
+        expirationTime = 0
+    end
+    local now = GetTime()
+    if expirationTime > now then
+        return { name, icon, 1, nil, duration, expirationTime, nil, nil, nil, spellID }
+    end
 end
 
 local shouldDisplayAura = function(auraTable)
     if auraTable[3] == "BUFF" then
         local now = GetTime()
-        -- local duration = auraTable[1]
         local expirationTime = auraTable[2]
         return expirationTime > now
     end
@@ -478,13 +510,19 @@ local function RegenerateBuffList(dstGUID)
     for spellID, t in pairs(guidTable) do
         if t.applications then
             for srcGUID, auraTable in pairs(t.applications) do
-                if shouldDisplayAura(auraTable) then
-                    tinsert(buffs, makeBuffInfo(spellID, auraTable))
+                if auraTable[3] == "BUFF" then
+                    local buffInfo = makeBuffInfo(spellID, auraTable, dstGUID, srcGUID)
+                    if buffInfo then
+                        tinsert(buffs, buffInfo)
+                    end
                 end
             end
         else
-            if shouldDisplayAura(t) then
-                tinsert(buffs, makeBuffInfo(spellID, t))
+            if t[3] == "BUFF" then
+                local buffInfo = makeBuffInfo(spellID, t, dstGUID)
+                if buffInfo then
+                    tinsert(buffs, buffInfo)
+                end
             end
         end
     end
@@ -495,7 +533,7 @@ end
 
 local FillInDuration = function(unit, buffName, icon, count, debuffType, duration, expirationTime, caster, canStealOrPurge, nps, spellId, ...)
     if buffName then
-        local durationNew, expirationTimeNew = GetAuraDurationByUnitDirect(unit, spellId, caster)
+        local durationNew, expirationTimeNew = GetAuraDurationByUnitDirect(unit, spellId, caster, buffName)
         if duration == 0 and durationNew then
             duration = durationNew
             expirationTime = expirationTimeNew
@@ -507,6 +545,7 @@ end
 function lib.UnitAuraDirect(unit, index, filter)
     if enableEnemyBuffTracking and filter == "HELPFUL" and not UnitIsFriend("player", unit) and not UnitAura(unit, 1, filter) then
         local unitGUID = UnitGUID(unit)
+        if not unitGUID then return end
         if not buffCacheValid[unitGUID] then
             RegenerateBuffList(unitGUID)
         end
@@ -521,6 +560,10 @@ function lib.UnitAuraDirect(unit, index, filter)
     else
         return FillInDuration(unit, UnitAura(unit, index, filter))
     end
+end
+
+function lib.UnitAuraWrapper(unit, ...)
+    return FillInDuration(unit, UnitAura(unit, ...))
 end
 
 function lib:UnitAura(...)
@@ -562,9 +605,9 @@ local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
         if spellTable then
             local applicationTable
             if isStacking then
-                if srcGUID then
+                if srcGUID and spellTable.applications then
                     applicationTable = spellTable.applications[srcGUID]
-                else -- return some duration
+                elseif spellTable.applications then -- return some duration
                     applicationTable = select(2,next(spellTable.applications))
                 end
             else
@@ -599,10 +642,11 @@ function lib:GetAuraDurationByUnit(...)
     return self.GetAuraDurationByUnitDirect(...)
 
 end
-function lib:GetAuraDurationByGUID(dstGUID, spellID, srcGUID)
+function lib:GetAuraDurationByGUID(dstGUID, spellID, srcGUID, spellName)
     local opts = spells[spellID]
     if not opts then return end
-    return GetGUIDAuraTime(dstGUID, spellID, srcGUID, opts.stacking)
+    if not spellName then spellName = GetSpellInfo(spellID) end
+    return GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, opts.stacking)
 end
 
 function lib:GetLastRankSpellIDByName(spellName)

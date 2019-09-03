@@ -5,7 +5,7 @@ Description: Provides information about spell lock status after successful inter
 --]================]
 
 
-local MAJOR, MINOR = "LibSpellLocks", 1.0
+local MAJOR, MINOR = "LibSpellLocks", 3
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -44,44 +44,55 @@ local function Interrupt( id, name, duration )
     end
 end
 
-if not next(interrupts) then
-    local isClassic = select(4,GetBuildInfo()) <= 19999
+local isClassic = select(4,GetBuildInfo()) <= 19999
 
-    if not isClassic then
-        -------------------
-        -- LIVE
-        -------------------
-        Interrupt(212619, "Call Felhunter", 6) -- pvp talent
-        Interrupt(119910, "Spell Lock", 6) -- Felhunter spell from action bar
-        Interrupt(19647, "Spell Lock", 6) -- Felhunter spell from pet bar
-        Interrupt(132409, "Spell Lock", 6) -- Command Demon after sacrificing Felhunter
-        Interrupt(1766, "Kick", 5)
-        Interrupt(6552, "Pummel", 4)
-        Interrupt(116705, "Spear Hand Strike", 4)
-        Interrupt(47528, "Mind Freeze", 3)
-        Interrupt(2139, "Counterspell", 6)
-        Interrupt(96231, "Rebuke", 4)
-        Interrupt(106839, "Skull Bash", 4)
-        Interrupt(183752, "Disrupt", 3)
-        Interrupt(187707, "Muzzle", 3)
-        Interrupt(147362, "Counter Shot", 3)
-        Interrupt(57994, "Wind Shear", 3)
+if not isClassic then
+    -------------------
+    -- LIVE
+    -------------------
+    Interrupt(212619, "Call Felhunter", 6) -- pvp talent
+    Interrupt(119910, "Spell Lock", 6) -- Felhunter spell from action bar
+    Interrupt(19647, "Spell Lock", 6) -- Felhunter spell from pet bar
+    Interrupt(132409, "Spell Lock", 6) -- Command Demon after sacrificing Felhunter
+    Interrupt(1766, "Kick", 5)
+    Interrupt(6552, "Pummel", 4)
+    Interrupt(116705, "Spear Hand Strike", 4)
+    Interrupt(47528, "Mind Freeze", 3)
+    Interrupt(2139, "Counterspell", 6)
+    Interrupt(96231, "Rebuke", 4)
+    Interrupt(106839, "Skull Bash", 4)
+    Interrupt(183752, "Disrupt", 3)
+    Interrupt(187707, "Muzzle", 3)
+    Interrupt(147362, "Counter Shot", 3)
+    Interrupt(57994, "Wind Shear", 3)
 
-        -- Trial of Crusader Champions
-        -- Interrupt(65973, "Earth Shock", 3)
-    else
-        -------------------
-        -- CLASSIC
-        -------------------
-        Interrupt(19244, "Spell Lock", 6) -- Rank 1
-        Interrupt(19647, "Spell Lock", 8) -- Rank 2
-        Interrupt({ 8042, 8044, 8045, 8046, 10412, 10413, 10414 }, "Earth Shock", 2)
-        Interrupt(16979, "Feral Charge", 4)
-        Interrupt(2139, "Counterspell", 10)
-        Interrupt({ 1766, 1767, 1768, 1769 }, "Kick", 5)
-        Interrupt({ 6552, 6554 }, "Pummel", 4)
-        Interrupt({ 72, 1671, 1672 }, "Shield Bash", 6)
-    end
+    -- PVE
+    Interrupt(240448, "QuakingAffix", 5)
+    Interrupt(257732, "Shattering Bellow", 5) -- Freehold
+    Interrupt(266106, "Sonic Screech", 5) -- Underrot, Feral Bloodswarmer
+    Interrupt(267257, "Thundering Crash", 4) -- King's Rest
+    Interrupt(296084, "Mind Fracture", 1.5) -- Za'qul, The Eternal Palace
+
+    -- Interrupt(288917, "Deafening Screech", 5) -- Screeching Phantasm, Battle of Dazar'Alor
+    -- Interrupt(146367, "Rumbling Stomp", 3) -- Char'golm, Battle of Dazar'Alor
+    -- Interrupt(263307, "Mind-Numbing Chatter", 5) -- Uldir
+
+
+
+    -- Trial of Crusader Champions
+    -- Interrupt(65973, "Earth Shock", 3)
+else
+    -------------------
+    -- CLASSIC
+    -------------------
+    Interrupt(19244, "Spell Lock", 6) -- Rank 1
+    Interrupt(19647, "Spell Lock", 8) -- Rank 2
+    Interrupt({ 8042, 8044, 8045, 8046, 10412, 10413, 10414 }, "Earth Shock", 2)
+    Interrupt(16979, "Feral Charge", 4)
+    Interrupt(2139, "Counterspell", 10)
+    Interrupt({ 1766, 1767, 1768, 1769 }, "Kick", 5)
+    Interrupt({ 6552, 6554 }, "Pummel", 4)
+    Interrupt({ 72, 1671, 1672 }, "Shield Bash", 6)
 end
 
 
