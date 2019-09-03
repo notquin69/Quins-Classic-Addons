@@ -148,13 +148,21 @@ function addon:GetBindingKeyComboText(binding)
     end
 end
 
+function addon:SpellTextWithSubName(binding)
+    if binding.spellSubName then
+        return string.format("%s(%s)", binding.spell, binding.spellSubName)
+    else
+        return binding.spell
+    end
+end
+
 function addon:GetBindingActionText(btype, binding)
     if btype == "menu" then
         return L["Show unit menu"]
     elseif btype == "target" then
         return L["Target clicked unit"]
     elseif btype == "spell" then
-        return L["Cast %s"]:format(tostring(binding.spell))
+        return L["Cast %s"]:format(addon:SpellTextWithSubName(binding))
     elseif btype == "macro" and type(binding) == "table" then
         return L["Run macro '%s'"]:format(tostring(binding.macrotext))
     elseif btype == "macro" then

@@ -1,7 +1,7 @@
-## Interface: 80000
+## Interface: 11302
 ## Title: Clique
 ## Author: Cladhaire
-## Version: v80000-1.0.0
+## Version: v1.0.3-classic
 ## Notes: Simply powerful click-casting interface
 ## SavedVariables: CliqueDB, CliqueDB3
 

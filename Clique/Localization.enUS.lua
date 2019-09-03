@@ -49,6 +49,7 @@ local baseLocale = {
 	["Options"] = "Options",
 	["Out-of-combat (ONLY)"] = "Out-of-combat (ONLY)",
 	["Profile Management:"] = "Profile Management:",
+	["Remove spell rank"] = "Remove spell rank",
 	["Run custom macro"] = "Run custom macro",
 	["Save"] = "Save",
 	["Select a binding type"] = "Select a binding type",

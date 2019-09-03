@@ -1,18 +1,12 @@
-tag 66f5ead355abf32c8f304fe1ec62625428b91237 v80000-1.0.0
+tag 02fae18dc759c40c8071627021839bc271257c7d v1.0.3-classic
 Author:	Jim Whitehead <jnwhiteh@gmail.com>
-Date:	Mon Jul 16 22:39:25 2018 +0200
+Date:	Tue Sep 3 07:56:39 2019 +0200
 
-Tagging v80000-1.0.0
+Tagging v1.0.3-classic
 
-commit df0343b4264ad303d8fc3899a7ff3052de60bc78
+commit 553c5d58ee393eadd459caffdda114f92855f3ad
 Author: Jim Whitehead <jnwhiteh@gmail.com>
-Date:   Sun Jul 15 11:29:44 2018 +0200
+Date:   Tue Sep 3 07:56:15 2019 +0200
 
-    Update TOC for BfA
-
-commit 9da260085dce8d6c124c716d22c745509600faad
-Author: Jim Whitehead <jnwhiteh@gmail.com>
-Date:   Sun Jul 15 11:29:25 2018 +0200
-
-    Fix option panel initialization
+    Update version for classic
 

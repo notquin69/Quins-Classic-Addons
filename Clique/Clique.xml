@@ -78,7 +78,7 @@
     <Button name="CliqueColumnTemplate" inherits="WhoFrameColumnHeaderTemplate" virtual="true">
         <Scripts>
             <OnClick>
-                PlaySound("igMainMenuOptionCheckBoxOn");
+                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
                 CliqueConfig:Column_OnClick(self, button)
             </OnClick>
         </Scripts>

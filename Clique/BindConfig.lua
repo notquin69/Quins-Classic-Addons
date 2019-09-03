@@ -47,12 +47,20 @@ function CliqueConfig:OnHide()
     self:UpdateAlert()
 end
 
-function CliqueConfig:SetupGUI()
-    self.talents = {}
-    for i = 1, 1 do
-        local id, name = "Default"
-        self.talents[i] = name
+function CliqueConfig:SetupTalents()
+    if addon.compatRelease then
+        self.talents = {}
+        for i = 1, GetNumSpecializations() do
+            local id, name = GetSpecializationInfo(i)
+            self.talents[i] = name
+        end
+    else
+        self.talents = {L["Default"]}
     end
+end
+
+function CliqueConfig:SetupGUI()
+    self:SetupTalents()
 
     self.rows = {}
     for i = 1, MAX_ROWS do
@@ -179,8 +187,12 @@ function CliqueConfig:Spellbook_OnBinding(button, key)
     end
 
     local slot = SpellBook_GetSpellBookSlot(button:GetParent());
-    local name, subtype = GetSpellBookItemName(slot, SpellBookFrame.bookType)
+    local name, spellSubName, subtype = GetSpellBookItemName(slot, SpellBookFrame.bookType)
     local texture = GetSpellBookItemTexture(slot, SpellBookFrame.bookType)
+
+    if spellSubName == "" then
+        spellSubName = nil
+    end
 
     local key = addon:GetCapturedKey(key)
     if not key then
@@ -191,6 +203,7 @@ function CliqueConfig:Spellbook_OnBinding(button, key)
         key = key,
         type = "spell",
         spell = name,
+        spellSubName = spellSubName,
         icon = texture
     }
 
@@ -541,6 +554,20 @@ function CliqueConfig:Row_OnClick(frame, button)
             notCheckable = true,
         },
     }
+
+    if binding.type == "spell" and binding.spellSubName then
+        -- Enable a 'Remove Rank' option
+        table.insert(menu, {
+            text = L["Remove spell rank"],
+            func = function()
+                local binding = frame.binding
+                binding.spellSubName = null
+                self:UpdateList()
+                addon:FireMessage("BINDINGS_CHANGED")
+            end,
+            notCheckable = true,
+        })
+    end
 
     if binding.type == "macro" then
         -- Replace 'Change Binding' with 'Edit macro'
