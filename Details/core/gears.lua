@@ -2049,7 +2049,10 @@ local can_start_loop = function()
 	if ((_detalhes:GetZoneType() ~= "raid" and _detalhes:GetZoneType() ~= "party") or ilvl_core.loop_process or _detalhes.in_combat or not _detalhes.track_item_level) then
 		return false
 	end
-	return true
+
+	--looks like data feed is getting some issues, disabling for further investigating
+	return false
+	--return true
 end
 
 function ilvl_core:LeaveCombat()
@@ -2086,9 +2089,20 @@ end
 
 --> ilvl API
 function _detalhes.ilevel:IsTrackerEnabled()
+	--looks like data feed is getting some issues, disabling for further investigating
+	if (true) then
+		return false
+	end
+	
 	return _detalhes.track_item_level
 end
 function _detalhes.ilevel:TrackItemLevel (bool)
+
+	--looks like data feed is getting some issues, disabling for further investigating
+	if (true) then
+		return false
+	end
+
 	if (type (bool) == "boolean") then
 		if (bool) then
 			_detalhes.track_item_level = true
@@ -2163,6 +2177,257 @@ if (LibGroupInSpecT) then
 	LibGroupInSpecT.RegisterCallback (_detalhes, "GroupInSpecT_Update", "LibGroupInSpecT_UpdateReceived")
 end
 
+--talents
+local talentWatchClassic = CreateFrame ("frame")
+talentWatchClassic:RegisterEvent ("CHARACTER_POINTS_CHANGED")
+talentWatchClassic:RegisterEvent ("SPELLS_CHANGED")
+talentWatchClassic:RegisterEvent ("PLAYER_ENTERING_WORLD")
+talentWatchClassic:RegisterEvent ("GROUP_ROSTER_UPDATE")
+
+talentWatchClassic:SetScript ("OnEvent", function (self, event, ...)
+	if (talentWatchClassic.delayedUpdate and not talentWatchClassic.delayedUpdate._cancelled) then
+		return
+	else
+		talentWatchClassic.delayedUpdate = C_Timer.NewTimer (10, Details.SendPlayerClassicInformation)
+	end
+end)
+
+function Details:SendPlayerClassicInformation()
+
+	if (talentWatchClassic.delayedUpdate and not talentWatchClassic.delayedUpdate._cancelled) then
+		talentWatchClassic.delayedUpdate:Cancel()
+	end
+
+	talentWatchClassic.delayedUpdate = nil
+
+	--amount of tabs existing
+	local numTabs = GetNumTalentTabs() or 3
+
+	--store the background textures for each tab
+	local pointsPerSpec = {}
+	local talentsSelected = {}
+
+	for i = 1, (MAX_TALENT_TABS or 3) do
+		if (i <= numTabs) then
+			--tab information
+			local name, iconTexture, pointsSpent, fileName = GetTalentTabInfo (i)
+			if (name) then
+				tinsert (pointsPerSpec, {name, pointsSpent, fileName})
+			end
+
+			--talents information
+			local numTalents = GetNumTalents (i) or 20
+			local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 20
+
+			for talentIndex = 1, MAX_NUM_TALENTS do
+				if (talentIndex <= numTalents) then
+					local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo (i, talentIndex)
+					if (name and rank and type (rank) == "number") then
+						tinsert (talentsSelected, {iconTexture, rank, tier, column})
+					end
+				end
+			end
+		end
+	end
+
+	local MIN_SPECS = 4
+
+	--put the spec with more talent point to the top
+	table.sort (pointsPerSpec, function (t1, t2) return t1[2] > t2[2] end)
+
+	--get the spec with more points spent
+	local spec = pointsPerSpec [1]
+	if (spec and spec [2] >= MIN_SPECS) then
+
+		local specName = spec [1]
+		local spentPoints = spec [2]
+		local specTexture = spec [3]
+
+		--print (specName, spentPoints, specTexture)
+
+		--player spec stored here?
+		Details.playerClassicSpec = {}
+		Details.playerClassicSpec.specs = Details.GetClassicSpecByTalentTexture (specTexture)
+		Details.playerClassicSpec.talents = talentsSelected
+
+		--cache the player specId
+		_detalhes.cached_specs [UnitGUID ("player")] = Details.playerClassicSpec.specs
+		--cache the player talents
+		_detalhes.cached_talents [UnitGUID ("player")] = talentsSelected
+
+		local CONST_ITEMLEVEL_DATA = "IL"
+
+		if (IsInRaid()) then
+			_detalhes:SendRaidData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, talentsSelected, Details.playerClassicSpec.specs)
+			if (_detalhes.debug) then
+				_detalhes:Msg ("(debug) sent ilevel data to Raid")
+			end
+			
+		elseif (IsInGroup()) then
+			_detalhes:SendPartyData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, talentsSelected, Details.playerClassicSpec.specs)
+			if (_detalhes.debug) then
+				_detalhes:Msg ("(debug) sent ilevel data to Party")
+			end
+		end
+	end
+end
+
+function Details:ClassicSpecFromNetwork (player, realm, core, serialNumber, itemLevel, talentsSelected, currentSpec)
+	if (_detalhes.debug) then
+		local talents = "Invalid Talents"
+		if (type (talentsSelected) == "table") then
+			talents = ""
+			for i = 1, #talentsSelected do
+				talents = talents .. talentsSelected [i] .. ","
+			end
+		end
+		_detalhes:Msg ("(debug) Received PlayerInfo Data: " .. (player or "Invalid Player Name") .. " | " .. (itemLevel or "Invalid Item Level") .. " | " .. (currentSpec or "Invalid Spec") .. " | " .. talents  .. " | " .. (serialNumber or "Invalid Serial"))
+	end
+
+
+	if (not player) then
+		return
+	end
+
+	--> older versions of details wont send serial nor talents nor spec
+	if (not serialNumber or not itemLevel or not talentsSelected or not currentSpec) then
+		--if any data is invalid, abort
+		return
+	end
+
+	if (type (serialNumber) ~= "string") then
+		return
+	end
+
+	--> won't inspect this actor
+	_detalhes.trusted_characters [serialNumber] = true
+
+	--store the item level
+	if (type (itemLevel) == "number") then
+		_detalhes.item_level_pool [serialNumber] = {name = player, ilvl = itemLevel, time = time()}
+	end
+	
+	--store talents
+	if (type (talentsSelected) == "table") then
+		if (talentsSelected [1]) then
+			_detalhes.cached_talents [serialNumber] = talentsSelected
+		end
+	end
+	
+	--store the spec the player is playing
+	if (type (currentSpec) == "number") then
+		_detalhes.cached_specs [serialNumber] = currentSpec
+	end
+end
+
+Details.validSpecIds = {
+	[250] = true,
+	[252] = true,
+	[251] = true,
+	[102] = true,
+	[103] = true,
+	[104] = true,
+	[105] = true,
+	[253] = true,
+	[254] = true,
+	[255] = true,
+	[62] = true,
+	[63] = true,
+	[64] = true,
+	[70] = true,
+	[65] = true,
+	[66] = true,
+	[257] = true,
+	[256] = true,
+	[258] = true,
+	[259] = true,
+	[260] = true,
+	[261] = true,
+	[262] = true,
+	[263] = true,
+	[264] = true,
+	[265] = true,
+	[266] = true,
+	[267] = true,
+	[71] = true,
+	[72] = true,
+	[73] = true,
+}
+
+Details.textureToSpec = {
+
+	DruidBalance = 102,
+	DruidFeralCombat = 103,
+	DruidRestoration = 105,
+
+	HunterBeastMaster = 253,
+	HunterMarksmanship = 254,
+	HunterSurvival = 255,
+
+	MageArcane = 62,
+	MageFrost = 64,
+	MageFire = 63,
+
+	PaladinCombat = 70,
+	PaladinHoly = 65,
+	PaladinProtection = 66,
+
+	PriestHoly = 257,
+	PriestDiscipline = 256,
+	PriestShadow = 258,
+
+	RogueAssassination = 259,
+	RogueCombat = 260,
+	RogueSubtlety = 261,
+
+	ShamanElementalCombat = 262,
+	ShamanEnhancement = 263,
+	ShamanRestoration = 264,
+
+	WarlockCurses = 265,
+	WarlockDestruction = 266,
+	WarlockSummoning = 267,
+
+	WarriorArm = 71,
+	WarriorArms = 71,
+	WarriorFury = 72,
+	WarriorProtection = 73,
+}
+
+function Details.IsValidSpecId (specId)
+	return Details.validSpecIds [specId]
+end
+
+function Details.GetClassicSpecByTalentTexture (talentTexture)
+	return Details.textureToSpec [talentTexture] or 0
+end
+
+
+
+--[=[
+function (...)
+    local search = "talent"
+    
+    for key, value in pairs (_G) do
+
+--    if (string.lower (key) == search) then                
+--    	print (key, value)                
+--    end        
+
+	  if type (key) == "string" then
+		if string.lower (key):find (search) then
+			if type (value) == "table" then
+				for key, value in pairs (value) do
+					print (key, value)             
+				end
+			end   
+		end
+	  end
+    end
+end
+
+
+--]=]
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 --compress data
@@ -2231,4 +2496,3 @@ function Details:DecompressData (data, dataType)
 		return data
 	end
 end
-

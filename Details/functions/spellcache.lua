@@ -190,12 +190,12 @@ do
 		for i = #_detalhes.savedCustomSpells, 1, -1 do
 			local spelltable = _detalhes.savedCustomSpells [i]
 			local spellid = spelltable [1]
-			if (spellid > 10) then
+			
 				local exists = _GetSpellInfo (spellid)
 				if (not exists) then
 					tremove (_detalhes.savedCustomSpells, i)
 				end
-			end
+			
 		end
 	end
 	
@@ -220,7 +220,9 @@ do
 		if (t) then
 			local spellid = t [1]
 			local name, _, icon = _GetSpellInfo (spellid)
-			_rawset (_detalhes.spellcache, spellid, {name, 1, icon})
+			if (name) then
+				_rawset (_detalhes.spellcache, spellid, {name, 1, icon})
+			end
 			return tremove (_detalhes.savedCustomSpells, index)
 		end
 		
@@ -231,10 +233,15 @@ do
 	_detalhes.getspellinfo = function (spellid) return _unpack (_detalhes.spellcache[spellid]) end 
 	_detalhes.GetSpellInfo = _detalhes.getspellinfo
 
-	--> overwrite SpellInfo if spell is a Dot, so GetSpellInfo will return the name modified
+	--> overwrite SpellInfo if the spell is a DoT, so Details.GetSpellInfo will return the name modified
 	function _detalhes:SpellIsDot (spellid)
-		local nome, rank, icone = _GetSpellInfo (spellid)
-		_rawset (_detalhes.spellcache, spellid, {nome .. Loc ["STRING_DOT"], rank, icone})
+		local spellName, rank, spellIcon = _GetSpellInfo (spellid)
+		
+		if (spellName) then
+			_rawset (_detalhes.spellcache, spellid, {spellName .. Loc ["STRING_DOT"], rank, spellIcon})
+		else
+			_rawset (_detalhes.spellcache, spellid, {"Unknown DoT Spell? " .. Loc ["STRING_DOT"], rank, [[Interface\InventoryItems\WoWUnknownItem01]]})
+		end
 	end
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,3 +342,22 @@ do
 
 	
 end
+
+
+--[=[
+function (...)
+    
+    local F = CreateFrame ("frame", UIParent)
+    F:SetSize (64, 64)
+    F:SetPoint ("center")
+    
+    local T = F:CreateTexture (nil, "overlay")
+    T:SetPoint ("center")
+    T:SetSize (224, 224)
+    
+    local _, _, icon = GetSpellInfo (1)
+    T:SetTexture ([[Interface\ICONS\INV_Sword_04]])
+    T:SetTexture (    [[Interface\ICONS\INV_Weapon_Bow_07]])
+    
+end
+--]=]

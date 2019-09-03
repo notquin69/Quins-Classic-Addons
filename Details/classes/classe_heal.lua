@@ -14,8 +14,8 @@ local _bit_band = bit.band
 local _math_min = math.min
 local _math_ceil = math.ceil
 --api locals
-local GetSpellInfo = GetSpellInfo
-local _GetSpellInfo = _detalhes.getspellinfo
+local GetSpellInfo = Details.GetSpellInfoC or GetSpellInfo
+local _GetSpellInfo = Details.GetSpellInfoC or _detalhes.getspellinfo
 local _IsInRaid = IsInRaid
 local _IsInGroup = IsInGroup
 local _UnitName = UnitName

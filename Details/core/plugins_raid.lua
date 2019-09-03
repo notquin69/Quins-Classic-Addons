@@ -284,12 +284,7 @@
 			local next = _detalhes.announce_interrupts.next
 			local custom = _detalhes.announce_interrupts.custom
 			
-			local spellname
-			if (spellid > 10) then
-				spellname = GetSpellLink (extraSpellID)
-			else
-				spellname = _GetSpellInfo (extraSpellID)
-			end
+			local spellname = Details.GetSpellInfoC (extraSpellID)
 
 			if (channel == "RAID") then
 				local zone = _detalhes:GetZoneType()
@@ -325,13 +320,7 @@
 		elseif (channel == "PRINT") then
 
 			local custom = _detalhes.announce_interrupts.custom
-			
-			local spellname
-			if (spellid > 10) then
-				spellname = GetSpellLink (extraSpellID)
-			else
-				spellname = _GetSpellInfo (extraSpellID)
-			end
+			local spellname = Details.GetSpellInfoC (extraSpellID)
 
 			if (custom ~= "") then
 				custom = custom:gsub ("{spell}", spellname)
@@ -400,13 +389,7 @@
 				end
 			end
 
-			local spellname
-			if (spellid > 10) then
-				spellname = GetSpellLink (spellid)
-			else
-				spellname = _GetSpellInfo (spellid)
-			end
-
+			local spellname = Details.GetSpellInfoC (spellid)
 			local custom = _detalhes.announce_cooldowns.custom
 			
 			if (custom ~= "") then
@@ -462,13 +445,8 @@
 				alvo_name = ""
 			end
 			
-			local spellname
-			if (spellid > 10) then
-				spellname = GetSpellLink (spellid)
-			else
-				spellname = _GetSpellInfo (spellid)
-			end
-			
+			local spellname Details.GetSpellInfoC (spellid)
+		
 			if (second < 10) then
 				second = "0" .. second
 			end

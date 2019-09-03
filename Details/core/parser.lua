@@ -300,13 +300,16 @@
 	--> DAMAGE 	serach key: ~damage											|
 -----------------------------------------------------------------------------------------------------------------------------------------
 
+	local meleeString = "!Melee" --GetSpellInfo (6603)
+	local autoShotString = "!Autoshot"
+
 	function parser:swing (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand)
-		return parser:spell_dmg (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, 1, "Corpo-a-Corpo", 00000001, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand) --> localize-me
+		return parser:spell_dmg (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, 1, meleeString, 00000001, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand) --> localize-me
 																		--spellid, spellname, spelltype
 	end
 
 	function parser:range (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand)
-		return parser:spell_dmg (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand)  --> localize-me
+		return parser:spell_dmg (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, spellid, autoShotString, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand)  --> localize-me
 	end
 
 --	/run local f=CreateFrame("frame");f:RegisterAllEvents();f:SetScript("OnEvent", function(self, ...)print (...);end)
@@ -415,11 +418,12 @@
 [15]=1
 --]=]	
 	
-	
 	function parser:spell_dmg (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, spellid, spellname, spelltype, amount, overkill, school, resisted, blocked, absorbed, critical, glacing, crushing, isoffhand)
-	
+
 	------------------------------------------------------------------------------------------------
 	--> early checks and fixes
+
+		spellid = spellname
 
 		if (who_serial == "") then
 			if (who_flags and _bit_band (who_flags, OBJECT_TYPE_PETS) ~= 0) then --> � um pet
@@ -450,76 +454,6 @@
 		--	return
 		--end
 		
-		--rules of specific encounters
-		
-		if (_current_encounter_id == 2273) then --Uu'nat  --REMOVE ON 9.0 LAUNCH
-			if (spellname == SPELLANAME_STORM_OF_ANNIHILATION or spellid == 284601) then
-				--return --this is parsed as friendly fire
-			end
-		
-		elseif (_current_encounter_id == 2263 or _current_encounter_id == 2284) then --grong --REMOVE ON 9.0 LAUNCH
-			if (spellid == 285660 or spellname == SPELLNAME_GRONG_CORE or spellid == 286435 or spellname == SPELLNAME_GRONG_CORE_ALLIANCE) then
-				return
-			end
-		
-		elseif (_current_encounter_id == 2272) then --king rastakhan --REMOVE ON 9.0 LAUNCH
-			if (alvo_serial) then
-				local npcid = _select (6, _strsplit ("-", alvo_serial))
-				if (npcid == "145644") then --Bwonsamdi
-					--Bwonsamdi has two buffs: unliving and aura of death, checking the two first buff indexes
-					local hasUnlivingBuff1 = _UnitBuff ("boss2", 1)
-					local hasUnlivingBuff2 = _UnitBuff ("boss2", 2)
-					if (hasUnlivingBuff1 == SPELLNAME_UNLIVING or hasUnlivingBuff2 == SPELLNAME_UNLIVING) then
-						--> ignore the damage while Bwonsamdi is immune
-						return
-					end
-				end
-			end
-		
-		elseif (_current_encounter_id == 2087) then --Yazma - Atal'Dazar --REMOVE ON 9.0 LAUNCH
-			--rename the add created by the soulrend ability
-			if (alvo_serial) then
-				local npcid = _select (6, _strsplit ("-", alvo_serial))
-				if (npcid == "125828") then --soulrend add
-					alvo_name = "Soulrend Add"
-				end
-			end
-			
-			if (who_serial) then
-				local npcid = _select (6, _strsplit ("-", who_serial))
-				if (npcid == "125828") then --soulrend add
-					who_name = "Soulrend Add"
-				end
-			end
-		
-		
-		elseif (_current_encounter_id == 2122 or _current_encounter_id == 2135) then --g'huun and mythrax --REMOVE ON 9.0 LAUNCH
-			--if (alvo_serial:match ("^Creature%-0%-%d+%-%d+%-%d+%-103679%-%w+$")) then --soul effigy (warlock) --50% more slow than the method below
-		
-			--check if the target is the amorphous cyst
-			--for some reason, mythrax fights has some sort of damage on amorphous cyst as well, dunno why
-			if (alvo_serial) then
-				local npcid = _select (6, _strsplit ("-", alvo_serial)) -- cost 3 / 1000000
-				if (npcid) then
-					if (ignored_npc_ids [npcid]) then
-						--print ("IGNORED:", alvo_name, npcid)
-						return
-					end
-					
-					if (_track_ghuun_bloodshield and npcid == "132998") then
-						local hasBloodShield = _UnitBuff ("boss1", 1)
-						if (not hasBloodShield or hasBloodShield ~= SPELLNAME_BLOODSHIELD) then
-							--print ("Details Shuting down damage filter on ghuun", hasBloodShield)
-							_track_ghuun_bloodshield = nil
-						else
-							--print ("Details Ghuun Has Blood Shield Damage Ignored", hasBloodShield)
-							return
-						end
-					end
-				end
-			end
-		end
-
 		--> if the parser are allowed to replace spellIDs
 		if (is_using_spellId_override) then
 			spellid = override_spellId [spellid] or spellid
@@ -557,13 +491,6 @@
 			) then 
 				--> n�o entra em combate se for DOT
 				if (_detalhes.encounter_table.id and _detalhes.encounter_table ["start"] >= _GetTime() - 3 and _detalhes.announce_firsthit.enabled) then
-					local link
-					if (spellid <= 10) then
-						link = _GetSpellInfo (spellid)
-					else
-						link = GetSpellLink (spellid)
-					end
-					
 					if (_detalhes.WhoAggroTimer) then
 						_detalhes.WhoAggroTimer:Cancel()
 					end
@@ -617,7 +544,7 @@
 						if (who_name:find ("%[")) then
 							damage_cache [who_name] = este_jogador
 							local _, _, icon = _GetSpellInfo (spellid or 1)
-							este_jogador.spellicon = icon
+							este_jogador.spellicon = icon or ""
 							--print ("no serial actor", spellname, who_name, "added to cache.")
 						else
 							--_detalhes:Msg ("Unknown actor with unknown serial ", spellname, who_name)
@@ -669,7 +596,9 @@
 		end
 		if (_is_in_instance) then
 			if (overkill and overkill > 0) then
-				amount = amount - overkill
+				--if enabled it'll cut the amount of overkill from the last hit (which killed the actor)
+				--when disabled it'll show the total damage done for the latest hit
+				--amount = amount - overkill
 			end
 		end
 		
@@ -716,12 +645,6 @@
 				
 				overall ["ALL"] = overall ["ALL"] + 1  --> qualtipo de hit ou absorb
 				mob ["ALL"] = mob ["ALL"] + 1  --> qualtipo de hit ou absorb
-				
-				if (spellid < 3) then
-					--> overall
-					overall ["HITS"] = overall ["HITS"] + 1
-					mob ["HITS"] = mob ["HITS"] + 1
-				end
 				
 				if (blocked and blocked > 0) then
 					overall ["BLOCKED_HITS"] = overall ["BLOCKED_HITS"] + 1
@@ -1616,6 +1539,8 @@
 	------------------------------------------------------------------------------------------------
 	--> early checks and fixes
 	
+		spellid = spellname
+
 		--> only capture heal if is in combat
 		if (not _in_combat) then
 			return
@@ -1899,6 +1824,9 @@
 
 	function parser:buff (token, time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags, alvo_flags2, spellid, spellname, spellschool, tipo, amount, arg1, arg2, arg3)
 
+		
+		spellid = spellname
+
 	--> not yet well know about unnamed buff casters
 		if (not alvo_name) then
 			alvo_name = "[*] Unknown shield target"
@@ -1909,13 +1837,15 @@
 			who_serial = ""
 		end 
 
+		spellid = spellname
+
 	------------------------------------------------------------------------------------------------
 	--> handle shields
 
 		if (tipo == "BUFF") then
 			------------------------------------------------------------------------------------------------
 			--> buff uptime
-				
+
 				if (spellid == 27827) then --> spirit of redemption (holy priest)
 					parser:dead ("UNIT_DIED", time, who_serial, who_name, who_flags, alvo_serial, alvo_name, alvo_flags)
 					ignore_death [who_name] = true
@@ -2557,6 +2487,8 @@
 	--> early checks and fixes
 		
 		_current_misc_container.need_refresh = true
+
+		spellid = spellname
 		
 	------------------------------------------------------------------------------------------------
 	--> get actors
@@ -2595,6 +2527,8 @@
 	------------------------------------------------------------------------------------------------
 	--> early checks and fixes
 		
+		spellid = spellname
+
 		_current_misc_container.need_refresh = true
 		
 	------------------------------------------------------------------------------------------------
@@ -2793,11 +2727,15 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 
 		--print (who_name, alvo_name, spellid, spellname, spelltype, amount, powertype)
 	
+		spellid = spellname
+
 		if (not who_name) then
 			who_name = "[*] "..spellname
 		elseif (not alvo_name) then
 			return
 		end
+
+		spellid = spellname
 
 	------------------------------------------------------------------------------------------------
 	--> check if is energy or resource
@@ -2922,6 +2860,8 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 	------------------------------------------------------------------------------------------------
 	--> early checks and fixes
 		
+		spellid = spellname
+
 		_current_misc_container.need_refresh = true
 		
 	------------------------------------------------------------------------------------------------
@@ -3030,6 +2970,9 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 		elseif (not alvo_name) then
 			return
 		end
+
+		spellid = spellname
+		extraSpellID = extraSpellName
 		
 		_current_misc_container.need_refresh = true
 
@@ -3138,6 +3081,8 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 			who_name = "[*] " .. spellname
 		end
 
+		spellid = spellname
+
 	------------------------------------------------------------------------------------------------
 	--> get actors
 
@@ -3231,6 +3176,9 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 		if (not alvo_name) then
 			alvo_name = "[*] "..spellid
 		end
+
+		spellid = spellname
+		extraSpellID = extraSpellName
 		
 		_current_misc_container.need_refresh = true
 		
@@ -3420,6 +3368,9 @@ local SPELL_POWER_PAIN = SPELL_POWER_PAIN or (PowerEnum and PowerEnum.Pain) or 1
 		if (not spellname) then
 			spellname = "Melee"
 		end
+
+		spellid = spellname
+		extraSpellID = extraSpellName
 
 		if (not alvo_name) then
 			--> no target name, just quit

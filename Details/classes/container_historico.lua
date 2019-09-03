@@ -548,6 +548,7 @@ function historico:resetar()
 	
 	_detalhes:SendEvent ("DETAILS_DATA_RESET", nil, nil)
 	
+	Details:SendPlayerClassicInformation()
 end
 
 function _detalhes.refresh:r_historico (este_historico)

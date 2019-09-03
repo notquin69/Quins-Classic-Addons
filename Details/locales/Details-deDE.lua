@@ -1487,8 +1487,7 @@ L["STRING_SEGMENTS_LIST_OVERALL"] = "insgesamt"
 L["STRING_SEGMENTS_LIST_TIMEINCOMBAT"] = "Zeit im Kampf"
 L["STRING_SEGMENTS_LIST_TOTALTIME"] = "Insgesamte Zeit"
 L["STRING_SEGMENTS_LIST_TRASH"] = "Trash"
---[[Translation missing --]]
---[[ L["STRING_SEGMENTS_LIST_WASTED_TIME"] = ""--]] 
+L["STRING_SEGMENTS_LIST_WASTED_TIME"] = "Nicht im Kampf"
 L["STRING_SHIELD_HEAL"] = "verhindert"
 L["STRING_SHIELD_OVERHEAL"] = "Vergeudet"
 L["STRING_SHORTCUT_RIGHTCLICK"] = "Rechtsklick, um zu schließen"

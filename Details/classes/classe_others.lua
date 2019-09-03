@@ -16,7 +16,11 @@ local _bit_band = bit.band
 local _unpack = unpack
 local _type = type
 --api locals
-local _GetSpellInfo = _detalhes.getspellinfo
+
+local GetSpellInfo = Details.GetSpellInfoC
+local _GetSpellInfo = Details.GetSpellInfoC
+
+
 local GameTooltip = GameTooltip
 local _IsInRaid = IsInRaid
 local _IsInGroup = IsInGroup
@@ -235,7 +239,13 @@ function _detalhes:ToolTipDead (instancia, morte, esta_barra, keydown)
 					
 					local overkill = event [10] or 0
 					if (overkill > 0) then
-						amount = amount - overkill
+						--check the type of overkill that should be shown
+						--if show_totalhitdamage_on_overkill is true it'll show the total damage of the hit
+						--if false it shows the total damage of the hit minus the overkill
+						if (not _detalhes.show_totalhitdamage_on_overkill) then
+							amount = amount - overkill
+						end
+						
 						overkill = " (" .. _detalhes:ToK (overkill) .. " |cFFFF8800overkill|r)"
 						GameCooltip:AddLine ("" .. _cstr ("%.1f", time - hora_da_morte) .. "s |cFFFFFF00" .. spellname .. "|r (|cFFC6B0D9" .. source .. "|r)", "-" .. _detalhes:ToK (amount) .. overkill .. " (" .. hp .. "%)", 1, "white", "white")
 					else
@@ -1343,6 +1353,7 @@ function _detalhes:CatchRaidDebuffUptime (in_or_out) -- "DEBUFF_UPTIME_IN"
 						if (realmName and realmName ~= "") then
 							playerName = playerName .. "-" .. realmName
 						end
+
 						_detalhes.parser:add_debuff_uptime (nil, GetTime(), playerGUID, playerName, 0x00000417, his_target, _UnitName ("playertarget"), 0x842, nil, spellid, name, in_or_out)
 					end
 				end
@@ -1402,7 +1413,9 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 				for buffIndex = 1, 41 do
 					local name, _, _, _, _, _, unitCaster, _, _, spellid  = _UnitAura (RaidIndex, buffIndex, nil, "HELPFUL")
 					if (name and unitCaster == RaidIndex) then
+
 						_detalhes.parser:add_buff_uptime (nil, cacheGetTime, playerGUID, playerName, 0x00000514, playerGUID, playerName, 0x00000514, 0x0, spellid, name, in_or_out)
+
 						if (in_or_out == "BUFF_UPTIME_IN") then
 							if (_detalhes.PotionList [spellid]) then
 								pot_usage [playerName] = spellid
@@ -1414,8 +1427,6 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 				end
 			end
 		end
-		
---		/run print (GetNumSubgroupMembers());for i=1,GetNumSubgroupMembers()do print (UnitName("party"..i))end
 		
 		--> player sub group
 		for partyIndex = 1, _GetNumSubgroupMembers() do
@@ -1510,7 +1521,6 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 								focus_augmentation [playerName] = true
 							end
 						end
-					
 						_detalhes.parser:add_buff_uptime (nil, GetTime(), playerGUID, playerName, 0x00000417, playerGUID, playerName, 0x00000417, 0x0, spellid, name, in_or_out)
 					end
 				end
@@ -1530,7 +1540,7 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 							focus_augmentation [playerName] = true
 						end
 					end
-				
+
 					_detalhes.parser:add_buff_uptime (nil, GetTime(), playerGUID, playerName, 0x00000417, playerGUID, playerName, 0x00000417, 0x0, spellid, name, in_or_out)
 				end
 			end
@@ -1553,7 +1563,7 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 			_detalhes:SendEvent ("COMBAT_PREPOTION_UPDATED", nil, pot_usage, focus_augmentation)
 		end
 		
-	else
+	else --player by him self
 	
 		local pot_usage = {}
 		local focus_augmentation = {}
@@ -1563,7 +1573,7 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 			if (name and unitCaster == "player") then
 				local playerName = _UnitName ("player")
 				local playerGUID = _UnitGUID ("player")
-				
+
 				if (playerGUID) then
 					if (in_or_out == "BUFF_UPTIME_IN") then
 						if (_detalhes.PotionList [spellid]) then
@@ -1572,6 +1582,7 @@ function _detalhes:CatchRaidBuffUptime (in_or_out)
 							focus_augmentation [playerName] = true
 						end
 					end
+
 					_detalhes.parser:add_buff_uptime (nil, GetTime(), playerGUID, playerName, 0x00000417, playerGUID, playerName, 0x00000417, 0x0, spellid, name, in_or_out)
 				end
 			end

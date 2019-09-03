@@ -28,6 +28,8 @@
 	
 	--templates
 	
+	local GetSpellInfo = Details.GetSpellInfoC
+	
 	local UnitGroupRolesAssigned = DetailsFramework.UnitGroupRolesAssigned
 	
 	_detalhes:GetFramework():InstallTemplate ("button", "DETAILS_FORGE_TEXTENTRY_TEMPLATE", {
@@ -3368,7 +3370,7 @@
 					local SpellPoll = _detalhes.spell_pool
 					for spellID, className in pairs (SpellPoll) do
 						
-						if (type (spellID) == "number" and spellID > 12) then
+
 
 							local can_add = true
 							
@@ -3407,7 +3409,7 @@
 								tinsert (t, {spellID, _detalhes.classid_to_classstring [className] or className})
 							end
 							
-						end
+					
 					end
 					
 					return t
@@ -3508,7 +3510,7 @@
 					
 					local SpellPoll = _detalhes.encounter_spell_pool
 					for spellID, spellTable in pairs (SpellPoll) do
-						if (spellID > 12) then
+
 
 							local encounterID = spellTable [1]
 							local enemyName = spellTable [2]
@@ -3549,7 +3551,7 @@
 							if (can_add) then
 								tinsert (t, {spellID, encounterID, enemyName, bossDetails and bossDetails.boss or "--x--x--"})
 							end
-						end
+					
 					end
 					
 					return t

@@ -13,8 +13,11 @@ local _math_max = math.max
 local _bit_band = bit.band
 local _unpack = unpack
 local _type = type
+
 --api locals
-local _GetSpellInfo = _detalhes.getspellinfo
+local _GetSpellInfo = Details.GetSpellInfoC
+local GetSpellInfo = Details.GetSpellInfoC
+
 local GameTooltip = GameTooltip
 local _IsInRaid = IsInRaid
 local _IsInGroup = IsInGroup

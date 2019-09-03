@@ -247,7 +247,7 @@ L["STRING_FORGE_HEADER_TIMER"] = "Таймер"
 L["STRING_FORGE_TUTORIAL_DESC"] = [=[Просматривайте заклинания и босс мод таймеры, чтобы создать ауры, нажмите по
 
 '|cFFFFFF00Создать ауру|r'.]=]
-L["STRING_FORGE_TUTORIAL_TITLE"] = "Добро пожаловать в Details! в ковательную"
+L["STRING_FORGE_TUTORIAL_TITLE"] = "Добро пожаловать в кузницу Details!"
 L["STRING_FORGE_TUTORIAL_VIDEO"] = "Пример ауры с использованием босс мод таймерами:"
 L["STRING_FREEZE"] = "Этот сегмент на данный момент недоступен"
 L["STRING_FROM"] = "От"
