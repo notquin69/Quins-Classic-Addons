@@ -25,7 +25,7 @@ end
 
 local function CreateUnitTabGroup(unitID, localizedUnit, order)
     return {
-        name = format("%s Castbar", localizedUnit), -- TODO: localize 'Castbar'
+        name = format("%s %s", L.CASTBAR, localizedUnit),
         order = order,
         type = "group",
         get = function(info)
@@ -90,13 +90,6 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                         end,
                         get = function() return ClassicCastbarsDB.pushbackDetect end,
                     },
-                    simpleStyle = {
-                        order = 7,
-                        width = "full",
-                        name = L.SIMPLE_STYLE,
-                        desc = L.SIMPLE_STYLE_TOOLTIP,
-                        type = "toggle",
-                    },
                 },
             },
 
@@ -129,15 +122,6 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                         step = 1,
                         bigStep = 10,
                     },
-                    iconSize = {
-                        order = 2,
-                        name = L.ICON_SIZE,
-                        desc = L.ICON_SIZE_TOOLTIP,
-                        type = "range",
-                        min = 0.1,
-                        max = 60,
-                        bigStep = 1,
-                    },
                     castFontSize = {
                         order = 3,
                         name = L.FONT_SIZE,
@@ -152,8 +136,100 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
 
             ----------------------------------------------------
 
-            sharedMedia = {
+            castIcon = {
                 order = 3,
+                name = L.CASTBAR_ICON,
+                type = "group",
+                inline = false,
+                args = {
+                    iconSize = {
+                        order = 1,
+                        name = L.ICON_SIZE,
+                        desc = L.ICON_SIZE_TOOLTIP,
+                        type = "range",
+                        width = "double",
+                        min = 0.1,
+                        max = 60,
+                        bigStep = 1,
+                    },
+                    iconPositionX = {
+                        order = 2,
+                        name = L.ICON_POS_X,
+                        desc = L.ICON_POS_TOOLTIP,
+                        type = "range",
+                        min = -1000,
+                        max = 1000,
+                        bigStep = 5,
+                    },
+                    iconPositionY = {
+                        order = 3,
+                        name = L.ICON_POS_Y,
+                        desc = L.ICON_POS_TOOLTIP,
+                        type = "range",
+                        min = -1000,
+                        max = 1000,
+                        bigStep = 5,
+                    },
+                    hideIconBorder = {
+                        order = 4,
+                        width = "full",
+                        name = L.ICON_HIDE_BORDER,
+                        type = "toggle",
+                    },
+                },
+            },
+
+            ----------------------------------------------------
+
+            colors = {
+                order = 4,
+                name = L.CASTBAR_COLORS,
+                type = "group",
+                inline = false,
+                get = function(info)
+                    return unpack(ClassicCastbarsDB[info[1]][info[3]])
+                end,
+                set = function(info, r, g, b, a)
+                    local cfg = ClassicCastbarsDB[info[1]][info[3]]
+                    cfg[1] = r -- overwrite values here instead of creating
+                    cfg[2] = g -- a new table, so we can save memory. This function
+                    cfg[3] = b -- is ran very frequently when picking colors
+                    cfg[4] = a
+                    ClassicCastbars_TestMode:OnOptionChanged(unitID)
+                end,
+
+                args = {
+                    borderColor = {
+                        name = L.BORDER_COLOR,
+                        order = 1,
+                        hasAlpha = true,
+                        type = "color",
+                    },
+                    textColor = {
+                        name = L.TEXT_COLOR,
+                        order = 2,
+                        hasAlpha = true,
+                        type = "color",
+                    },
+                    statusColor = {
+                        name = L.STATUS_COLOR,
+                        order = 3,
+                        hasAlpha = true,
+                        type = "color",
+                    },
+                    statusColorChannel = {
+                        name = L.STATUS_CHANNEL_COLOR,
+                        order = 4,
+                        hasAlpha = true,
+                        type = "color",
+                    },
+                },
+            },
+
+            ----------------------------------------------------
+
+            sharedMedia = {
+                order = 5,
                 name = L.CASTBAR_TEXTURE_FONT,
                 type = "group",
                 inline = false,
