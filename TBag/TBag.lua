@@ -1043,6 +1043,8 @@ function TBag:SetDefLayout(cfg, bagarr, row1offset, reset)
   self:SetCatBar(cfg, string.format("EMPTY_%s_SLOTS","REAG"), 16, reset);
   self:SetCatBar(cfg, string.format("EMPTY_%s_SLOTS","FRIDGE"), 16, reset);
   self:SetCatBar(cfg, string.format("EMPTY_%s_SLOTS","UNKNOWN"), 16, reset);
+  self:SetCatBar(cfg, "AMMO", 16, reset);
+
 
   self:SetCatBar(cfg, "COOKING", 15, reset);
 

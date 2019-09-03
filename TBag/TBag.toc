@@ -3,7 +3,7 @@
 ## Notes: The last bag addon you'll ever need.  Autosorting, viewable anywhere, easy to use yet amazingly configurable.
 ## Notes-deDE: Das einzige Taschenaddon was du jemals brauchen wirst. Automatisches Sortieren, überall einsehbar, Benutzerfreundlich, dabei aber unglaublich gut Konfigurierbar.
 ## Notes-ruRU: Модификация сумок. Возможности - авто-сортировка, просмотр сумок и банка в любом месте, легок в использовании, гибкие настройки.
-## Version: 1.13.2.1
+## Version: 1.13.2.2
 ## X-Category: Inventory
 ## Author: Talos, Modified by Shefki, Modified by GagStv
 ## X-Email: shefki@shefki.org, gagst6@gmail.com

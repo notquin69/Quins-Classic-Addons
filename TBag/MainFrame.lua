@@ -82,7 +82,7 @@ end
 function MainFrame:OnMouseDown(button)
   if button == "LeftButton" then
     self:DragStart()
-  elseif button == "RightButton" then
+  elseif button == "RightButton" and IsControlKeyDown() then
     HideDropDownMenu(1)
     self.RightClickMenu_mode = "mainwindow"
     self.RightClickMenu_opts = {}
