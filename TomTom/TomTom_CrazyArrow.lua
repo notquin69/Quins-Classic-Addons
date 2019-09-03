@@ -39,7 +39,6 @@ local twopi = math.pi * 2
 local wayframe = CreateFrame("Button", "TomTomCrazyArrow", UIParent)
 wayframe:SetHeight(42)
 wayframe:SetWidth(56)
-wayframe:SetPoint("CENTER", 0, 0)
 wayframe:EnableMouse(true)
 wayframe:SetMovable(true)
 wayframe:SetClampedToScreen(true)
@@ -48,9 +47,9 @@ wayframe:Hide()
 -- Frame used to control the scaling of the title and friends
 local titleframe = CreateFrame("Frame", nil, wayframe)
 
-wayframe.title = titleframe:CreateFontString("OVERLAY", nil, "GameFontHighlightSmall")
-wayframe.status = titleframe:CreateFontString("OVERLAY", nil, "GameFontNormalSmall")
-wayframe.tta = titleframe:CreateFontString("OVERLAY", nil, "GameFontNormalSmall")
+wayframe.title = titleframe:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+wayframe.status = titleframe:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+wayframe.tta = titleframe:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 wayframe.title:SetPoint("TOP", wayframe, "BOTTOM", 0, 0)
 wayframe.status:SetPoint("TOP", wayframe.title, "BOTTOM", 0, 0)
 wayframe.tta:SetPoint("TOP", wayframe.status, "BOTTOM", 0, 0)
@@ -63,12 +62,25 @@ end
 
 local function OnDragStop(self, button)
 	self:StopMovingOrSizing()
+	self:SetUserPlaced(false)
+	-- point, relativeTo, relativePoint, xOfs, yOfs
+	TomTom.profile.arrow.position = { self:GetPoint() }
+	TomTom.profile.arrow.position[2] = nil  -- Note we are relative to UIParent
 end
 
 local function OnEvent(self, event, ...)
 	if (event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED") and TomTom.profile.arrow.enable then
 		self:Show()
+		return
 	end
+	if (event == "PLAYER_ENTERING_WORLD") then
+        wayframe:ClearAllPoints()
+        if not TomTom.profile.arrow.position then
+            TomTom.profile.arrow.position = {"CENTER", nil , "CENTER", 0, 0}
+        end
+        local pos = TomTom.profile.arrow.position
+        wayframe:SetPoint(pos[1], UIParent, pos[3], pos[4], pos[5])
+    end
 end
 
 wayframe:SetScript("OnDragStart", OnDragStart)
@@ -76,6 +88,7 @@ wayframe:SetScript("OnDragStop", OnDragStop)
 wayframe:RegisterForDrag("LeftButton")
 wayframe:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 wayframe:RegisterEvent("ZONE_CHANGED")
+wayframe:RegisterEvent("PLAYER_ENTERING_WORLD")
 wayframe:SetScript("OnEvent", OnEvent)
 
 wayframe.arrow = wayframe:CreateTexture(nil, "OVERLAY")
@@ -259,6 +272,12 @@ function TomTom:ShowHideCrazyArrow()
 		-- Do not allow the arrow to be invisible
 		if TomTom.db.profile.arrow.alpha < 0.1 then
 		    TomTom.db.profile.arrow.alpha = 1.0
+		end
+		-- Set the stratum
+		if TomTom.db.profile.arrow.highstrata then
+		    wayframe:SetFrameStrata("HIGH")
+		else
+		    wayframe:SetFrameStrata("MEDIUM")
 		end
 		wayframe:SetAlpha(TomTom.db.profile.arrow.alpha)
 		local width = TomTom.db.profile.arrow.title_width
@@ -498,7 +517,7 @@ local function wayframe_OnEvent(self, event, arg1, ...)
 	end
 end
 
-wayframe:SetScript("OnEvent", wayframe_OnEvent)
+wayframe:HookScript("OnEvent", wayframe_OnEvent)
 
 --[[-------------------------------------------------------------------------
 --  API for manual control of Crazy Arrow
