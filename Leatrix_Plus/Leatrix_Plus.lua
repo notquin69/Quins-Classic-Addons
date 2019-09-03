@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
--- 	Leatrix Plus 1.13.18 (9th August 2019, www.leatrix.com)
+-- 	Leatrix Plus 1.13.26 (28th August 2019, www.leatrix.com)
 ----------------------------------------------------------------------
 
 --	01:Functions	20:Live			50:RunOnce		70:Logout			
@@ -20,7 +20,7 @@
 	local void
 
 --	Version
-	LeaPlusLC["AddonVer"] = "1.13.18"
+	LeaPlusLC["AddonVer"] = "1.13.26"
 	LeaPlusLC["RestartReq"] = nil
 
 --	If client restart is required and has not been done, show warning and quit
@@ -51,6 +51,7 @@
 	local LpEvt = CreateFrame("FRAME")
 	LpEvt:RegisterEvent("ADDON_LOADED")
 	LpEvt:RegisterEvent("PLAYER_LOGIN")
+	LpEvt:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 ----------------------------------------------------------------------
 --	L01: Functions
@@ -405,6 +406,8 @@
 		or	(LeaPlusLC["CharAddonList"]			~= LeaPlusDB["CharAddonList"])			-- Show character addons
 		or	(LeaPlusLC["FasterLooting"]			~= LeaPlusDB["FasterLooting"])			-- Faster auto loot
 		or	(LeaPlusLC["FasterMovieSkip"]		~= LeaPlusDB["FasterMovieSkip"])		-- Faster movie skip
+		or	(LeaPlusLC["StandAndDismount"]		~= LeaPlusDB["StandAndDismount"])		-- Stand and dismount
+		or	(LeaPlusLC["ShowVendorPrice"]		~= LeaPlusDB["ShowVendorPrice"])		-- Show vendor price
 
 		-- Settings
 		or	(LeaPlusLC["EnableHotkey"]			~= LeaPlusDB["EnableHotkey"])			-- Enable hotkey
@@ -787,10 +790,24 @@
 
 			-- Function to skip gossip
 			local function SkipGossip()
-				if not IsAltKeyDown() then return end
+				if IsShiftKeyDown() then return end
 				local void, gossipType = GetGossipOptions()
-				if gossipType and gossipType == "gossip" then
-					SelectGossipOption(1)
+				if gossipType then
+					-- Completely automate gossip
+					if gossipType == "banker"
+					or gossipType == "taxi"
+					or gossipType == "trainer"
+					or gossipType == "vendor"
+					then
+						SelectGossipOption(1)
+					end
+					-- Automate gossip with ALT key
+					if IsAltKeyDown() then
+						if gossipType == "gossip"
+						then
+							SelectGossipOption(1)
+						end
+					end
 				end
 			end
 
@@ -900,12 +917,67 @@
 					if npcID then
 						-- Ignore specific NPCs for selecting, accepting and turning-in quests (required if automation has consequences)
 						if npcID == "15192"	-- Anachronos (Caverns of Time)
+						or npcID == "3430" 	-- Mangletooth (Blood Shard quests, Barrens)
 						then
 							return true
 						end
 						-- Ignore specific NPCs for selecting quests only (only used for items that have no other purpose)
 						if actionType == "Select" then
 							if npcID == "12944" -- Lokhtos Darkbargainer (Thorium Brotherhood, Blackrock Depths)
+							-- Ahn'Qiraj War Effort (Alliance, Ironforge)
+							or npcID == "15446" -- Bonnie Stoneflayer (Light Leather Collector)
+							or npcID == "15458" -- Commander Stronghammer (Alliance Ambassador)
+							or npcID == "15431" -- Corporal Carnes (Iron Bar Collector)
+							or npcID == "15432" -- Dame Twinbraid (Thorium Bar Collector)
+							or npcID == "15453" -- Keeper Moonshade (Runecloth Bandage Collector)
+							or npcID == "15457" -- Huntress Swiftriver (Spotted Yellowtail Collector)
+							or npcID == "15450" -- Marta Finespindle (Thick Leather Collector)
+							or npcID == "15437" -- Master Nightsong (Purple Lotus Collector)
+							or npcID == "15452" -- Nurse Stonefield (Silk Bandage Collector)
+							or npcID == "15434" -- Private Draxlegauge (Stranglekelp Collector)
+							or npcID == "15448" -- Private Porter (Medium Leather Collector)
+							or npcID == "15456" -- Sarah Sadwhistle (Roast Raptor Collector)
+							or npcID == "15451" -- Sentinel Silversky (Linen Bandage Collector)
+							or npcID == "15445" -- Sergeant Major Germaine (Arthas' Tears Collector)
+							or npcID == "15383" -- Sergeant Stonebrow (Copper Bar Collector)
+							or npcID == "15455" -- Slicky Gastronome (Rainbow Fin Albacore Collector)
+							-- Ahn'Qiraj War Effort (Horde, Orgrimmar)
+							or npcID == "15512" -- Apothecary Jezel (Purple Lotus Collector)
+							or npcID == "15508" -- Batrider Pele'keiki (Firebloom Collector)
+							or npcID == "15533" -- Bloodguard Rawtar (Lean Wolf Steak Collector)
+							or npcID == "15535" -- Chief Sharpclaw (Baked Salmon Collector)
+							or npcID == "15525" -- Doctor Serratus (Rugged Leather Collector)
+							or npcID == "15534" -- Fisherman Lin'do (Spotted Yellowtail Collector)
+							or npcID == "15539" -- General Zog (Horde Ambassador)
+							or npcID == "15460" -- Grunt Maug (Tin Bar Collector)
+							or npcID == "15528" -- Healer Longrunner (Wool Bandage Collector)
+							or npcID == "15477" -- Herbalist Proudfeather (Peacebloom Collector)
+							or npcID == "15529" -- Lady Callow (Mageweave Bandage Collector)
+							or npcID == "15459" -- Miner Cromwell (Copper Bar Collector)
+							or npcID == "15469" -- Senior Sergeant T'kelah (Mithril Bar Collector)
+							or npcID == "15522" -- Sergeant Umala (Thick Leather Collector)
+							or npcID == "15515" -- Skinner Jamani (Heavy Leather Collector)
+							or npcID == "15532" -- Stoneguard Clayhoof (Runecloth Bandage Collector)
+							-- Alliance Cloth Quartermasters
+							or npcID == "14724" -- Bubulo Acerbus (Ironforge)
+							or npcID == "14722" -- Clavicus Knavingham (Stormwind)
+							or npcID == "14723" -- Mistina Steelshield (Ironforge)
+							or npcID == "14725" -- Raedon Duskstriker (Darnassus)
+							-- Horde Cloth Quartermasters
+							or npcID == "14729" -- Ralston Farnsley (Undercity)
+							or npcID == "14728" -- Rumstag Proudstrider (Thunder Bluff)
+							or npcID == "14726" -- Rashona Straglash (Orgrimmar)
+							or npcID == "14727" -- Vehena (Orgrimmar)
+							-- Alliance Commendations
+							or npcID == "15764" -- Officer Ironbeard (Ironforge Commendations)
+							or npcID == "15762" -- Officer Lunalight (Darnassus Commendations)
+							or npcID == "15766" -- Officer Maloof (Stormwind Commendations)
+							or npcID == "15763" -- Officer Porterhouse (Gnomeregan Commendations)
+							-- Horde Commendations
+							or npcID == "15768" -- Officer Gothena (Undercity Commendations)
+							or npcID == "15765" -- Officer Redblade (Orgrimmar Commendations)
+							or npcID == "15767" -- Officer Thunderstrider (Thunder Bluff Commendations)
+							or npcID == "15761" -- Officer Vu'Shalay (Darkspear Commendations)
 							then
 								return true
 							end
@@ -914,26 +986,17 @@
 				end
 			end
 
-			-- Function to check if quest requires currency or a crafting reagent
-			local function QuestRequiresCurrency()
+			-- Function to check if quest requires a blocked item
+			local function QuestRequiresBlockedItem()
 				for i = 1, 6 do
 					local progItem = _G["QuestProgressItem" ..i] or nil
 					if progItem and progItem:IsShown() and progItem.type == "required" then
-						if progItem.objectType == "currency" then
-							-- Quest requires currency so do nothing
-							return true
-						elseif progItem.objectType == "item" then
-							-- Quest requires an item
+						if progItem.objectType == "item" then
 							local name, texture, numItems = GetQuestItemInfo("required", i)
 							if name then
 								local itemID = GetItemInfoInstant(name)
 								if itemID then
-									local void, void, void, void, void, void, void, void, void, void, void, void, void, void, void, void, isCraftingReagent = GetItemInfo(itemID)
-									if isCraftingReagent then
-										-- Item is a crafting reagent so do nothing
-										return true
-									end
-									if itemID == 5075 then -- Blood Shard (Barrens)
+									if itemID == 9999999999 then -- Reserved for future use
 										return true
 									end
 								end
@@ -1018,8 +1081,8 @@
 				if event == "QUEST_PROGRESS" and IsQuestCompletable() then
 					-- Don't continue quests for blocked NPCs
 					if isNpcBlocked("Complete") then return end
-					-- Don't continue if quest requires currency
-					if QuestRequiresCurrency() then return end
+					-- Don't continue if quest requires blocked item
+					if QuestRequiresBlockedItem() then return end
 					-- Don't continue if quest requires gold
 					if QuestRequiresGold() then return end
 					-- Continue quest
@@ -1030,8 +1093,8 @@
 				if event == "QUEST_COMPLETE" then
 					-- Don't complete quests for blocked NPCs
 					if isNpcBlocked("Complete") then return end
-					-- Don't complete if quest requires currency
-					if QuestRequiresCurrency() then return end
+					-- Don't complete if quest requires blocked item
+					if QuestRequiresBlockedItem() then return end
 					-- Don't complete if quest requires gold
 					if QuestRequiresGold() then return end
 					-- Complete quest
@@ -2059,6 +2122,71 @@
 	function LeaPlusLC:Player()
 
 		----------------------------------------------------------------------
+		--	Show vendor price
+		----------------------------------------------------------------------
+
+		if LeaPlusLC["ShowVendorPrice"] == "On" then
+
+			-- Function to add vendor price to tooltips
+			local function ShowVendorPrice(tooltip)
+				-- Do nothing if money frame is already showing
+				if tooltip.shownMoneyFrames then return end
+				-- Get item sell price
+				local void, link = tooltip:GetItem()
+				if not link then return end
+				local void, void, void, void, void, void, void, void, void, void, itemSellPrice = GetItemInfo(link)
+				if not itemSellPrice or itemSellPrice <= 0 then return end
+				local container = GetMouseFocus()
+				if not container then return end
+				-- Get item quantity
+				local buttonName = container:GetName() and (container:GetName() .. "Count")
+				local count = container.count or (container.Count and container.Count:GetText()) or (container.Quantity and container.Quantity:GetText()) or (buttonName and _G[buttonName] and _G[buttonName]:GetText())
+				count = tonumber(count) or 1
+				if count <= 1 then count = 1 end
+				-- Show sell price in tooltip
+				SetTooltipMoney(tooltip, count * itemSellPrice, "STATIC", SELL_PRICE .. ":")
+			end
+
+			-- Run function for regular tooltips and chat link tooltips
+			GameTooltip:HookScript("OnTooltipSetItem", ShowVendorPrice)
+			ItemRefTooltip:HookScript("OnTooltipSetItem", ShowVendorPrice)
+
+		end
+
+		----------------------------------------------------------------------
+		--	Stand and dismount
+		----------------------------------------------------------------------
+
+		if LeaPlusLC["StandAndDismount"] == "On" then
+
+			local eFrame = CreateFrame("FRAME")
+			eFrame:RegisterEvent("UI_ERROR_MESSAGE")
+			eFrame:SetScript("OnEvent", function(self, event, messageType, msg)
+				-- Auto stand
+				if msg == SPELL_FAILED_NOT_STANDING
+				or msg == ERR_CANTATTACK_NOTSTANDING
+				or msg == ERR_LOOT_NOTSTANDING
+				or msg == ERR_TAXINOTSTANDING
+				then
+					DoEmote("stand")
+					UIErrorsFrame:Clear()
+				-- Auto dismount
+				elseif msg == ERR_ATTACK_MOUNTED
+				or msg == ERR_MOUNT_ALREADYMOUNTED
+				or msg == ERR_NOT_WHILE_MOUNTED
+				or msg == ERR_TAXIPLAYERALREADYMOUNTED
+				or msg == SPELL_FAILED_NOT_MOUNTED
+				then
+					if IsMounted() then
+						Dismount()
+						UIErrorsFrame:Clear()
+					end
+				end
+			end)
+
+		end
+
+		----------------------------------------------------------------------
 		--	Show vanity controls
 		----------------------------------------------------------------------
 
@@ -2179,27 +2307,6 @@
 			-- Set screen effects when option is clicked and on startup (if enabled)
 			LeaPlusCB["NoScreenEffects"]:HookScript("OnClick", SetEffects)
 			if LeaPlusLC["NoScreenEffects"] == "On" then SetEffects() end
-
-		end
-
-		----------------------------------------------------------------------
-		--	Max camera zoom (no reload required)
-		----------------------------------------------------------------------
-
-		do
-
-			-- Function to set camera zoom
-			local function SetZoom()
-				if LeaPlusLC["MaxCameraZoom"] == "On" then
-					SetCVar("cameraDistanceMaxZoomFactor", 4.0)
-				else
-					SetCVar("cameraDistanceMaxZoomFactor", 1.9)
-				end
-			end
-
-			-- Set camera zoom when option is clicked and on startup (if enabled)
-			LeaPlusCB["MaxCameraZoom"]:HookScript("OnClick", SetZoom)
-			if LeaPlusLC["MaxCameraZoom"] == "On" then SetZoom() end
 
 		end
 
@@ -3198,17 +3305,9 @@
 
 			-- Create editbox
 			local editBox = editFrame.EditBox
-			editBox:SetFontObject("ChatFontNormal")
-			editBox:SetFont(editBox:GetFont(), 18 * UIParent:GetEffectiveScale())
 			editBox:SetAltArrowKeyMode(false)
 			editBox:SetTextInsets(4, 4, 4, 4)
 			editBox:SetWidth(editFrame:GetWidth() - 30)
-
-			-- Set font size when UI scale is changed
-			editFrame:RegisterEvent("UI_SCALE_CHANGED")
-			editFrame:SetScript("OnEvent", function()
-				editBox:SetFont(editBox:GetFont(), 18 * UIParent:GetEffectiveScale())
-			end)
 
 			-- Close frame with right-click of editframe or editbox
 			local function CloseRecentChatWindow()
@@ -3223,11 +3322,6 @@
 
 			editBox:SetScript("OnMouseDown", function(self, btn)
 				if btn == "RightButton" then CloseRecentChatWindow() end
-			end)
-
-			-- Maintain editbox effective height
-			editFrame:HookScript("OnVerticalScroll", function(self, offset)
-				editBox:SetHitRectInsets(0, 0, offset, editBox:GetHeight() - offset - editBox:GetHeight())
 			end)
 
 			-- Disable text changes while still allowing editing controls to work
@@ -3706,9 +3800,10 @@
 			-- Add controls
 			LeaPlusLC:MakeTx(SideTip, "Settings", 16, -72)
 			LeaPlusLC:MakeCB(SideTip, "TipMoveTip", "Reposition the tooltip", 16, -92, false, "If checked, you will be able to reposition the tooltip.")
-			LeaPlusLC:MakeCB(SideTip, "TipShowTarget", "Show the unit's target", 16, -112, false, "If checked, unit targets will be shown.")
-			LeaPlusLC:MakeCB(SideTip, "TipBackSimple", "Color the backdrops based on faction", 16, -132, false, "If checked, backdrops will be tinted blue (friendly) or red (hostile).")
-			LeaPlusLC:MakeCB(SideTip, "TipHideInCombat", "Hide tooltips for world units during combat", 16, -152, false, "If checked, tooltips for world units will be hidden during combat.|n|nYou can hold the shift key down to override this setting.")
+			LeaPlusLC:MakeCB(SideTip, "TipShowGuild", "Show guild names", 16, -112, false, "If checked, guild names will be shown.  Guild ranks will also be shown for players in your guild.")
+			LeaPlusLC:MakeCB(SideTip, "TipShowTarget", "Show the unit's target", 16, -132, false, "If checked, unit targets will be shown.")
+			LeaPlusLC:MakeCB(SideTip, "TipBackSimple", "Color the backdrops based on faction", 16, -152, false, "If checked, backdrops will be tinted blue (friendly) or red (hostile).")
+			LeaPlusLC:MakeCB(SideTip, "TipHideInCombat", "Hide tooltips for world units during combat", 16, -172, false, "If checked, tooltips for world units will be hidden during combat.|n|nYou can hold the shift key down to override this setting.")
 
 			LeaPlusLC:MakeTx(SideTip, "Scale", 356, -72)
 			LeaPlusLC:MakeSL(SideTip, "LeaPlusTipSize", "Drag to set the tooltip scale.", 0.50, 2.00, 0.05, 356, -92, "%.2f")
@@ -3730,6 +3825,7 @@
 			-- Reset button handler
 			SideTip.r:SetScript("OnClick", function()
 				LeaPlusLC["TipMoveTip"] = "On";
+				LeaPlusLC["TipShowGuild"] = "On";
 				LeaPlusLC["TipShowTarget"] = "On";
 				LeaPlusLC["TipBackSimple"] = "Off";
 				LeaPlusLC["TipHideInCombat"] = "Off";
@@ -3782,6 +3878,7 @@
 				if IsShiftKeyDown() and IsControlKeyDown() then
 					-- Preset profile
 					LeaPlusLC["TipMoveTip"] = "On";
+					LeaPlusLC["TipShowGuild"] = "On";
 					LeaPlusLC["TipShowTarget"] = "On";
 					LeaPlusLC["TipBackSimple"] = "On";
 					LeaPlusLC["TipHideInCombat"] = "Off";
@@ -4148,6 +4245,21 @@
 				end
 
 				----------------------------------------------------------------------
+				-- Show guild
+				----------------------------------------------------------------------
+
+				if LeaPlusLC["TipShowGuild"] == "On" and LT["TipIsPlayer"] then
+					local unitGuild, unitRank = GetGuildInfo(LT["Unit"])
+					if unitGuild and unitRank then
+						if UnitIsInMyGuild(LT["Unit"]) then
+							GameTooltip:AddLine("|c00aaaaff" .. unitGuild .. " - " .. unitRank .. "|r")
+						else
+							GameTooltip:AddLine("|c00aaaaff" .. unitGuild .. "|cffffffff|r")
+						end
+					end
+				end
+
+				----------------------------------------------------------------------
 				--	Show target
 				----------------------------------------------------------------------
 
@@ -4434,6 +4546,35 @@
 
 		-- Release memory
 		LeaPlusLC.Player = nil
+
+	end
+
+----------------------------------------------------------------------
+--	L45: World
+----------------------------------------------------------------------
+
+	function LeaPlusLC:World()
+
+		----------------------------------------------------------------------
+		--	Max camera zoom (no reload required)
+		----------------------------------------------------------------------
+
+		do
+
+			-- Function to set camera zoom
+			local function SetZoom()
+				if LeaPlusLC["MaxCameraZoom"] == "On" then
+					SetCVar("cameraDistanceMaxZoomFactor", 4.0)
+				else
+					SetCVar("cameraDistanceMaxZoomFactor", 1.9)
+				end
+			end
+
+			-- Set camera zoom when option is clicked and on startup (if enabled)
+			LeaPlusCB["MaxCameraZoom"]:HookScript("OnClick", SetZoom)
+			if LeaPlusLC["MaxCameraZoom"] == "On" then SetZoom() end
+
+		end
 
 	end
 
@@ -5384,6 +5525,7 @@
 
 				LeaPlusLC:LoadVarChk("TipModEnable", "Off")					-- Manage tooltip
 				LeaPlusLC:LoadVarChk("TipMoveTip", "On")					-- Reposition the tooltip
+				LeaPlusLC:LoadVarChk("TipShowGuild", "On")					-- Show guild
 				LeaPlusLC:LoadVarChk("TipShowTarget", "On")					-- Show target
 				LeaPlusLC:LoadVarChk("TipBackSimple", "Off")				-- Color backdrops
 				LeaPlusLC:LoadVarChk("TipHideInCombat", "Off")				-- Hide tooltips during combat
@@ -5435,6 +5577,8 @@
 				LeaPlusLC:LoadVarChk("NoConfirmLoot", "Off")				-- Disable loot warnings
 				LeaPlusLC:LoadVarChk("FasterLooting", "Off")				-- Faster auto loot
 				LeaPlusLC:LoadVarChk("FasterMovieSkip", "Off")				-- Faster movie skip
+				LeaPlusLC:LoadVarChk("StandAndDismount", "Off")				-- Stand and dismount
+				LeaPlusLC:LoadVarChk("ShowVendorPrice", "Off")				-- Show vendor price
 
 				-- Settings
 				LeaPlusLC:LoadVarChk("ShowMinimapIcon", "On")				-- Show minimap button
@@ -5465,6 +5609,12 @@
 		if event == "PLAYER_LOGIN" then
 			LeaPlusLC:Player()
 			collectgarbage()
+			return
+		end
+
+		if event == "PLAYER_ENTERING_WORLD" then
+			LeaPlusLC:World()
+			LpEvt:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			return
 		end
 
@@ -5526,6 +5676,7 @@
 
 			LeaPlusDB["TipModEnable"]			= LeaPlusLC["TipModEnable"]
 			LeaPlusDB["TipMoveTip"]				= LeaPlusLC["TipMoveTip"]
+			LeaPlusDB["TipShowGuild"]			= LeaPlusLC["TipShowGuild"]
 			LeaPlusDB["TipShowTarget"]			= LeaPlusLC["TipShowTarget"]
 			LeaPlusDB["TipBackSimple"]			= LeaPlusLC["TipBackSimple"]
 			LeaPlusDB["TipHideInCombat"]		= LeaPlusLC["TipHideInCombat"]
@@ -5577,6 +5728,8 @@
 			LeaPlusDB["NoConfirmLoot"] 			= LeaPlusLC["NoConfirmLoot"]
 			LeaPlusDB["FasterLooting"] 			= LeaPlusLC["FasterLooting"]
 			LeaPlusDB["FasterMovieSkip"] 		= LeaPlusLC["FasterMovieSkip"]
+			LeaPlusDB["StandAndDismount"] 		= LeaPlusLC["StandAndDismount"]
+			LeaPlusDB["ShowVendorPrice"] 		= LeaPlusLC["ShowVendorPrice"]
 
 			-- Settings
 			LeaPlusDB["ShowMinimapIcon"] 		= LeaPlusLC["ShowMinimapIcon"]
@@ -5825,7 +5978,7 @@
 		Slider:SetWidth(100)
 		Slider:SetHeight(20)
 		Slider:SetHitRectInsets(0, 0, 0, 0);
-		Slider.tiptext = caption
+		Slider.tiptext = L[caption]
 		Slider:SetScript("OnEnter", LeaPlusLC.TipSee)
 		Slider:SetScript("OnLeave", GameTooltip_Hide)
 
@@ -6880,6 +7033,8 @@
 				LeaPlusDB["NoConfirmLoot"] = "On"				-- Disable loot warnings
 				LeaPlusDB["FasterLooting"] = "On"				-- Faster auto loot
 				LeaPlusDB["FasterMovieSkip"] = "On"				-- Faster movie skip
+				LeaPlusDB["StandAndDismount"] = "On"			-- Stand and dismount
+				LeaPlusDB["ShowVendorPrice"] = "On"				-- Show vendor price
 
 				-- Settings
 				LeaPlusDB["EnableHotkey"] = "On"				-- Enable hotkey
@@ -7063,7 +7218,7 @@
 	LeaPlusLC:MakeWD(LeaPlusLC[pg], "To begin, choose an options page.", 146, -92);
 
 	LeaPlusLC:MakeTx(LeaPlusLC[pg], "Support", 146, -132);
-	LeaPlusLC:MakeWD(LeaPlusLC[pg], "www.leatrix.com", 146, -152);
+	LeaPlusLC:MakeWD(LeaPlusLC[pg], "www.curseforge.com/wow/addons/leatrix-plus-classic", 146, -152);
 
 ----------------------------------------------------------------------
 -- 	LC1: Automation
@@ -7072,8 +7227,8 @@
 	pg = "Page1";
 
 	LeaPlusLC:MakeTx(LeaPlusLC[pg], "Character"					, 	146, -72);
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutomateQuests"			,	"Automate quests"				,	146, -92, 	false,	"If checked, quests will be selected, accepted and turned-in automatically.|n|nQuests which have a gold, currency or crafting reagent requirement will not be turned-in automatically.|n|nYou can hold the shift key down when you talk to a quest giver to override this setting.")
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutomateGossip"			,	"Automate gossip"				,	146, -112, 	false,	"If checked, you can hold down the alt key while opening a gossip window to automatically select a single gossip option.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutomateQuests"			,	"Automate quests"				,	146, -92, 	false,	"If checked, quests will be selected, accepted and turned-in automatically.|n|nQuests which have a gold requirement will not be turned-in automatically.|n|nYou can hold the shift key down when you talk to a quest giver to override this setting.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutomateGossip"			,	"Automate gossip"				,	146, -112, 	false,	"If checked, you can hold down the alt key while opening a gossip window to automatically select a single gossip item.|n|nIf the gossip item type is banker, taxi, trainer or vendor, gossip will be skipped without needing to hold the alt key.  You can hold the shift key down to prevent this.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutoAcceptSummon"			,	"Accept summon"					, 	146, -132, 	false,	"If checked, summon requests will be accepted automatically unless you are in combat.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutoAcceptRes"				,	"Accept resurrection"			, 	146, -152, 	false,	"If checked, resurrection requests will be accepted automatically as long as the player resurrecting you is not in combat.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AutoReleasePvP"			,	"Release in PvP"				, 	146, -172, 	false,	"If checked, you will release automatically after you die in a battleground.|n|nYou will not release automatically if you have the ability to self-resurrect.")
@@ -7199,6 +7354,8 @@
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "NoConfirmLoot"				, 	"Disable loot warnings"			,	340, -132, 	false,	"If checked, confirmations will no longer appear when you choose a loot roll option or attempt to sell or mail a tradable item.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "FasterLooting"				, 	"Faster auto loot"				,	340, -152, 	true,	"If checked, the amount of time it takes to auto loot creatures will be significantly reduced.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "FasterMovieSkip"			, 	"Faster movie skip"				,	340, -172, 	true,	"If checked, you will be able to cancel cinematics without being prompted for confirmation.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "StandAndDismount"			, 	"Stand and dismount"			,	340, -192, 	true,	"If checked, your character will automatically stand or dismount when an action is prevented because you are either seated or mounted.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVendorPrice"			, 	"Show vendor price"				,	340, -212, 	true,	"If checked, the vendor price will be shown in item tooltips.")
 
 	LeaPlusLC:CfgBtn("ModViewportBtn", LeaPlusCB["ViewPortEnable"])
 
