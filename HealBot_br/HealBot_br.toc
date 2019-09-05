@@ -1,9 +1,0 @@
-## Interface: 11302
-## Title: HealBot Brazilian Localization
-## Author: Required
-## Notes: HealBot Localization for ptBR
-## RequiredDeps: HealBot
-## LoadOnDemand: 1
-## Version: 1.13.2.0
-
-HealBot_Localization.br.lua

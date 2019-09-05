@@ -1,9 +1,0 @@
-## Interface: 11302
-## Title: HealBot Tooltips
-## Author: Strife
-## Notes: HealBot Tooltips, only loads if Tooltips are used
-## RequiredDeps: HealBot
-## LoadOnDemand: 1
-## Version: 1.13.2.0
-
-HealBot_Tooltip.lua
