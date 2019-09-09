@@ -1,0 +1,6 @@
+﻿## Interface: 80200
+## Author: Sylvanaar
+## X-License: GPLv3
+
+
+eventfilters.lua
