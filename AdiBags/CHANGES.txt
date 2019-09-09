@@ -1,0 +1,12 @@
+tag bde5c0d6cae8e905382186b87580ad95b856fd91 v1.9.17-classic
+Author:	Talyrius <contact@talyrius.net>
+Date:	Fri Aug 30 09:41:56 2019 -0700
+
+Tagging as v1.9.17-classic.
+
+commit 04851f20cad5b2474a0c87430d1179a4d942bab7
+Author: Joe Thompson <joebjt@gmail.com>
+Date:   Sat Aug 10 12:00:32 2019 +0100
+
+    Move Event Handlers back to where they were and remove vestigial comment
+
