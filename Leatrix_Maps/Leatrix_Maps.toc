@@ -1,0 +1,13 @@
+﻿## Interface: 11302
+
+## Title: Leatrix Maps
+## Notes: Enhancements for your maps.
+
+## Version: 1.13.28
+## Author: Leatrix
+## SavedVariables: LeaMapsDB
+
+Leatrix_Maps_Locale.lua
+Leatrix_Maps.xml
+Leatrix_Maps_Reveal.lua
+Leatrix_Maps.lua
