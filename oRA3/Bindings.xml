@@ -1,0 +1,6 @@
+<Bindings>
+	<Binding name="TOGGLEORA3" header="oRA3" category="ADDONS">
+		oRA3:ToggleFrame()
+	</Binding>
+</Bindings>
+
