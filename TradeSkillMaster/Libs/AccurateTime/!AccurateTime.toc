@@ -1,0 +1,8 @@
+## Interface: 50400
+## Title: AccurateTime
+## Notes: Provides accurate, millisecond-level timing.
+## Author: Sapu94
+## Version: @project-version@
+
+
+AccurateTime.lua

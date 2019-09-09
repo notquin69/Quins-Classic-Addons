@@ -1,0 +1,19 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<FontFamily name="TSM4FrizQT" virtual="true">
+		<Member alphabet="roman">
+			<Font font="Fonts\FRIZQT__.ttf" height="12"/>
+		</Member>
+		<Member alphabet="korean">
+			<Font font="Fonts\2002.ttf" height="12"/>
+		</Member>
+		<Member alphabet="simplifiedchinese">
+			<Font font="Fonts\ARKai_C.ttf" height="14"/>
+		</Member>
+		<Member alphabet="traditionalchinese">
+			<Font font="Fonts\ARKai_C.ttf" height="14"/>
+		</Member>
+		<Member alphabet="russian">
+			<Font font="Fonts\FRIZQT___CYR.ttf" height="12"/>
+		</Member>
+	</FontFamily>
+</Ui>
