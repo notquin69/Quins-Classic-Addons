@@ -1,0 +1,66 @@
+<Ui>
+	<Script file="ServerFriendsOnly.lua"/>
+	<Button name = "ServerFriendsOnlyEntryTemplate" virtual="true">
+		<Size>
+		  <AbsDimension x="295" y="35" />
+		</Size>
+		<NormalFont style="GameFontHighlightLeft"/>
+	</Button>
+
+  
+  <Frame name="ServerFriendsOnlyFrame" parent="FriendsFrame" enableMouse="true" movable="true" hidden="true">
+    <Size>
+      <AbsDimension x="196" y="96"/>
+    </Size>
+    <Anchors>
+      <Anchor point="TOPRIGHT">
+		<Offset>
+              <AbsDimension x="-4" y="-85"/>
+		</Offset>
+	  </Anchor>
+    </Anchors>
+    <Scripts>
+      <!--
+	  <OnLoad>
+        ServerFriendsOnly_OnLoad()
+      </OnLoad>
+	  -->
+    </Scripts>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" tile="true">
+	<!--edgeFile="Interface\Tooltips\UI-Tooltip-Border"-->
+      <BackgroundInsets>
+        <AbsInset left="0" right="0" top="0" bottom="0" />
+      </BackgroundInsets>
+      <TileSize>
+        <AbsValue val="16" />
+      </TileSize>
+      <EdgeSize>
+        <AbsValue val="16" />
+      </EdgeSize>
+    </Backdrop>
+    <Frames>
+      <ScrollFrame name="ServerFriendsOnlyScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="2" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="-30" y="8"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(self, offset, 16, ServerFriendsOnlyScrollBar_Update);
+          </OnVerticalScroll>
+          <OnShow>
+            ServerFriendsOnlyScrollBar_Update()
+          </OnShow>
+        </Scripts>
+      </ScrollFrame>
+    </Frames>
+  </Frame>
+</Ui>

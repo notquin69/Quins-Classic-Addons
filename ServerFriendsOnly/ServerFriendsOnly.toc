@@ -1,0 +1,8 @@
+## Interface: 11302
+## Title: Server Friends Only
+## Notes: Adds a tab for only server friends
+## Author: Nitrak
+## SavedVariables: ServerFriendsOnlyDB
+## Version: 1.1.14
+
+ServerFriendsOnly.xml
