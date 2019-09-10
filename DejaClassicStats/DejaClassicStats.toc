@@ -1,0 +1,26 @@
+## Interface: 11302
+## Version: 1302r021
+## Title: |cff00c0ffDejaClassicStats|r
+## Author: Dejablue, Kakjens, loudsoul
+## Notes: Dejablue's improved character stats panel view.
+## SavedVariables: DejaClassicStatsDB
+## SavedVariables: DCS_ClassSpecDB
+## SavedVariablesPerCharacter: DejaClassicStatsDBPC
+
+Localization\localization.core.lua
+Localization\localization.deDE.lua
+Localization\localization.enGB.lua
+Localization\localization.enUS.lua
+Localization\localization.esES.lua
+Localization\localization.esMX.lua
+Localization\localization.frFR.lua
+Localization\localization.itIT.lua
+Localization\localization.koKR.lua
+Localization\localization.ptBR.lua
+Localization\localization.ruRU.lua
+Localization\localization.zhCN.lua
+Localization\localization.zhTW.lua
+
+DejaClassicStats.lua
+DCSDuraRepair.lua
+DCSExpand.lua

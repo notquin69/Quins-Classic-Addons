@@ -1,0 +1,25 @@
+## Interface: 11302
+## Title: RealMobHealth v2.9
+## Version: 2.9
+## X-APIVersion: 3.2
+## Author: SDPhantom
+
+## SavedVariables: RealMobHealth_Options,RealMobHealth_CreatureHealthCache, RealMobHealth_PeerHealthCache
+
+## Notes: Mob Health for Classic
+
+Localization.lua
+SharedFuncs.lua
+Events.lua
+Comms.lua
+
+Blacklist.lua
+Overrides.lua
+Core.lua
+Options.lua
+Commands.lua
+
+UITweaks.lua
+
+BlacklistData.lua
+OverrideData.lua
