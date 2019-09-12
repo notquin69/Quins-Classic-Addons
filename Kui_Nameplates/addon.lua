@@ -8,9 +8,9 @@
 _G['KuiNameplates'] = CreateFrame('Frame')
 local addon = KuiNameplates
 local kui = LibStub('Kui-1.0')
-addon.MAJOR,addon.MINOR = 2,4
+addon.MAJOR,addon.MINOR = 2,5
 
---[[@debug@
+--[===[@debug@
 addon.debug = true
 --addon.debug_config = true
 --addon.debug_units = true
@@ -18,7 +18,7 @@ addon.debug = true
 --addon.debug_events = true
 --addon.debug_callbacks = true
 --addon.draw_frames = true
---@debug@]]
+--@end-debug@]===]
 addon.DEBUG_IGNORE = {
     ['m:Create'] = true,
     ['m:Show'] = true,
@@ -60,11 +60,24 @@ end
 function addon:Frames()
     return ipairs(framelist)
 end
+function addon:GetNameplateForUnit(unit)
+    -- return nameplate.kui for unit if it exists
+    assert(unit)
+    local f = C_NamePlate.GetNamePlateForUnit(unit)
+    if f and f.kui then return f.kui end
+end
 function addon:GetActiveNameplateForUnit(unit)
     -- return nameplate.kui for unit, if extant, visible and maybe functional
-    local f = C_NamePlate.GetNamePlateForUnit(unit)
-    if f and f.kui and f.kui.unit and f.kui:IsShown() then
-        return f.kui
+    assert(unit)
+    local f = self:GetNameplateForUnit(unit)
+    if f and f.unit and f:IsShown() then return f end
+end
+function addon:GetNameplateForGuid(guid)
+    assert(guid)
+    for _,f in self:Frames() do
+        if f.unit and f.guid == guid and f:IsShown() then
+            return f
+        end
     end
 end
 --------------------------------------------------------------------------------
@@ -77,7 +90,8 @@ function addon:NAME_PLATE_CREATED(frame)
 end
 function addon:NAME_PLATE_UNIT_ADDED(unit)
     local f = C_NamePlate.GetNamePlateForUnit(unit)
-    if not f then return end
+    if not f or not f.kui then return end
+    f = f.kui
 
     if addon.debug_units then
         self:print('unit |cff88ff88added|r: '..unit..' ('..UnitName(unit)..')')
@@ -85,7 +99,7 @@ function addon:NAME_PLATE_UNIT_ADDED(unit)
 
     if not self.USE_BLIZZARD_PERSONAL or not UnitIsUnit(unit,'player') then
         -- don't process anything for the personal nameplate if disabled
-        f.kui.handler:OnUnitAdded(unit)
+        f.handler:OnUnitAdded(unit)
     end
 end
 function addon:NAME_PLATE_UNIT_REMOVED(unit)

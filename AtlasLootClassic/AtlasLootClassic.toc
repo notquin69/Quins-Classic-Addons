@@ -1,6 +1,6 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.8-beta
+## Version: v1.1.9-beta
 ## SavedVariables: AtlasLootClassicDB
 ## OptionalDeps: Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, LibDBIcon-1.0, LibDataBroker-1.1, LibClassicItemSets-1.0
 ## DefaultState: Enabled
@@ -9,7 +9,7 @@
 ## Title: AtlasLootClassic |cFF22B14C[Core]|r
 ## Notes: Shows the possible loot from the bosses
 
-## Title-deDE: AtlasLoot Classic |cFF22B14C[Kern]|r
+## Title-deDE: AtlasLootClassic |cFF22B14C[Kern]|r
 ## Title-esES: AtlasLoot Classic |cFF22B14C[Core]|r
 ## Title-esMX: AtlasLoot Classic |cFF22B14C[Core]|r
 ## Title-frFR: AtlasLoot Classic |cFF22B14C[Core]|r
@@ -19,7 +19,7 @@
 ## Title-ruRU: AtlasLoot Classic |cFF22B14C[Ядро]|r
 ## Title-zhCN: AtlasLoot Classic |cFF22B14C[Core]|r
 ## Title-zhTW: AtlasLoot Classic |cFF22B14C[Core]|r
-## Notes-deDE: Shows the possible loot from the bosses
+## Notes-deDE: Zeigt die mögliche Boss-Beute.
 ## Notes-esES: Shows the possible loot from the bosses
 ## Notes-esMX: Shows the possible loot from the bosses
 ## Notes-frFR: Shows the possible loot from the bosses

@@ -1,6 +1,6 @@
 ﻿
 	----------------------------------------------------------------------
-	-- 	Leatrix Maps 1.13.28 (4th September 2019)
+	-- 	Leatrix Maps 1.13.30 (11th September 2019)
 	----------------------------------------------------------------------
 
 	-- 10:Func, 20:Comm, 30:Evnt, 40:Panl
@@ -12,8 +12,8 @@
 	local LeaMapsLC, LeaMapsCB, LeaConfigList = {}, {}, {}
 
 	-- Version
-	LeaMapsLC["AddonVer"] = "1.13.28"
-	LeaMapsLC["RestartReq"] = nil
+	LeaMapsLC["AddonVer"] = "1.13.30"
+	LeaMapsLC["RestartReq"] = true
 
 	-- Get locale table
 	local void, Leatrix_Maps = ...
@@ -41,10 +41,10 @@
 		local playerFaction = UnitFactionGroup("player")
 
 		----------------------------------------------------------------------
-		-- Show scale handle (must be before remove map border)
+		-- Lock map frame (must be before remove map border)
 		----------------------------------------------------------------------
 
-		do
+		if LeaMapsLC["UseDefaultMap"] == "Off" then
 
 			-- Replace function to account for frame scale
 			WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -104,7 +104,7 @@
 				moveDistance = GetScaleDistance()
 				frame:SetScript("OnUpdate", function()
 					local scale = GetScaleDistance() / moveDistance * mapNormalScale
-					if scale < 0.5 then	scale = 0.5	elseif scale > 2.0 then	scale = 2.0	end
+					if scale < 0.2 then	scale = 0.2	elseif scale > 3.0 then	scale = 3.0	end
 					WorldMapFrame:SetScale(scale)
 					local s = mapNormalScale / WorldMapFrame:GetScale()
 					local x = mapX * s
@@ -125,7 +125,7 @@
 
 			-- Function to set scale handle
 			local function SetScaleHandle()
-				if LeaMapsLC["ShowScaleHandle"] == "On" then
+				if LeaMapsLC["UnlockMapFrame"] == "On" then
 					scaleHandle:Show(); scaleMouse:Show()
 				else
 					scaleHandle:Hide(); scaleMouse:Hide()
@@ -134,73 +134,80 @@
 			end
 
 			-- Set scale handle when option is clicked and on startup
-			LeaMapsCB["ShowScaleHandle"]:HookScript("OnClick", SetScaleHandle)
+			LeaMapsCB["UnlockMapFrame"]:HookScript("OnClick", SetScaleHandle)
 			SetScaleHandle()
 
 		end
 
 		----------------------------------------------------------------------
-		-- Remove map border (must be after show scale handle)
+		-- Remove map border (must be after show scale and before coordinates)
 		----------------------------------------------------------------------
 
-		if LeaMapsLC["NoMapBorder"] == "On" then
+		if LeaMapsLC["UseDefaultMap"] == "Off" then
 
-			-- Hide border frame
-			WorldMapFrame.BorderFrame:Hide()
+			if LeaMapsLC["NoMapBorder"] == "On" then
 
-			-- Hide dropdown menus
-			WorldMapZoneDropDown:Hide()
-			WorldMapContinentDropDown:Hide()
+				-- Hide border frame
+				WorldMapFrame.BorderFrame:Hide()
 
-			-- Hide zoom out button
-			WorldMapZoomOutButton:Hide()
+				-- Hide dropdown menus
+				WorldMapZoneDropDown:Hide()
+				WorldMapContinentDropDown:Hide()
 
-			-- Hide right-click to zoom out text
-			WorldMapMagnifyingGlassButton:Hide()
+				-- Hide zoom out button
+				WorldMapZoomOutButton:Hide()
 
-			-- Move close button inside scroll container
-			WorldMapFrameCloseButton:ClearAllPoints()
-			WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapFrame.ScrollContainer, "TOPRIGHT", 0, 0)
-			WorldMapFrameCloseButton:SetFrameLevel(5000)
+				-- Hide right-click to zoom out text
+				WorldMapMagnifyingGlassButton:Hide()
 
-			-- Set click to move area around the map frame border
-			WorldMapFrame:SetHitRectInsets(-20, -20, 38, 0)
+				-- Move close button inside scroll container
+				WorldMapFrameCloseButton:ClearAllPoints()
+				WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapFrame.ScrollContainer, "TOPRIGHT", 0, 0)
+				WorldMapFrameCloseButton:SetFrameLevel(5000)
 
-			-- Create black border around map
-			local border = WorldMapFrame.ScrollContainer:CreateTexture(nil, "BACKGROUND")
-			border:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
-			border:SetPoint("TOPLEFT", -5, 5)
-			border:SetPoint("BOTTOMRIGHT", 5, -5)
-			border:SetVertexColor(0, 0, 0, 0.5)
+				-- Set click to move area around the map frame border
+				WorldMapFrame:SetHitRectInsets(-20, -20, 38, 0)
 
-			-- Create drag button
-			local moveMap = LeaMapsLC:CreateButton("MoveMapButton", WorldMapFrame.ScrollContainer, "Drag", "TOPLEFT", 10, -10, 25)
-			moveMap:SetPushedTextOffset(0, 0)
-			moveMap:SetAlpha(0.8)
-			moveMap:RegisterForDrag("LeftButton")
-			moveMap:SetScript("OnDragStart", function()
-				WorldMapFrame:GetScript("OnDragStart")()
-			end)
-			moveMap:SetScript("OnDragStop", function()
-				WorldMapFrame:GetScript("OnDragStop")()
-			end)
+				-- Create black border around map
+				local border = WorldMapFrame.ScrollContainer:CreateTexture(nil, "BACKGROUND")
+				border:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+				border:SetPoint("TOPLEFT", -5, 5)
+				border:SetPoint("BOTTOMRIGHT", 5, -5)
+				border:SetVertexColor(0, 0, 0, 0.5)
 
-			-- Hide drag button if map is locked
-			local function ShowDragButton()
-				if LeaMapsLC["LockMapFrame"] == "On" then
-					moveMap:Hide()
-				else
-					moveMap:Show()
+				-- Assign file level scope to border (it's used for show coordinates)
+				LeaMapsLC.NoBorderTexture = border
+
+				-- Create drag button
+				local moveMap = LeaMapsLC:CreateButton("MoveMapButton", WorldMapFrame.ScrollContainer, "Drag", "TOPLEFT", 10, -10, 25, "")
+				moveMap:SetPushedTextOffset(0, 0)
+				moveMap:SetAlpha(0.8)
+				moveMap:RegisterForDrag("LeftButton")
+				moveMap:SetScript("OnDragStart", function()
+					WorldMapFrame:GetScript("OnDragStart")()
+				end)
+				moveMap:SetScript("OnDragStop", function()
+					WorldMapFrame:GetScript("OnDragStop")()
+				end)
+
+				-- Show drag button if map is unlocked
+				local function ShowDragButton()
+					if LeaMapsLC["UnlockMapFrame"] == "On" then
+						moveMap:Show()
+					else
+						moveMap:Hide()
+					end
 				end
+
+				-- Set drag button when unlock map frame option is clicked and on startup
+				LeaMapsCB["UnlockMapFrame"]:HookScript("OnClick", ShowDragButton)
+				ShowDragButton()
+
+				-- Move scale handle
+				LeaMapsLC.scaleHandle:ClearAllPoints()
+				LeaMapsLC.scaleHandle:SetPoint("BOTTOMRIGHT", WorldMapFrame, "BOTTOMRIGHT", -10, 28)
+
 			end
-
-			-- Set drag button when lock map frame option is clicked and on startup
-			LeaMapsCB["LockMapFrame"]:HookScript("OnClick", ShowDragButton)
-			ShowDragButton()
-
-			-- Move scale handle
-			LeaMapsLC.scaleHandle:ClearAllPoints()
-			LeaMapsLC.scaleHandle:SetPoint("BOTTOMRIGHT", WorldMapFrame, "BOTTOMRIGHT", -10, 28)
 
 		end
 
@@ -365,7 +372,7 @@
 		end
 
 		----------------------------------------------------------------------
-		-- Show coordinates
+		-- Show coordinates (must be after remove map border)
 		----------------------------------------------------------------------
 
 		do
@@ -422,17 +429,56 @@
 				cPlayerTime = cPlayerTime + elapsed
 			end)
 
-			-- Function to show or hide coordinates frames
+			-- Function to show or hide coordinates
 			local function SetupCoords()
 				if LeaMapsLC["ShowCoords"] == "On" then
+					-- Show coordinaes
 					cCursor:Show(); cPlayer:Show()
 				else
 					cCursor:Hide(); cPlayer:Hide()
 				end
 			end
 
+			-- Set coordinates when option is clicked and on startp
 			LeaMapsCB["ShowCoords"]:HookScript("OnClick", SetupCoords)
 			SetupCoords()
+
+			-- If remove map border is enabled, create background frame and move coordinates into it
+			if LeaMapsLC["NoMapBorder"] == "On" then
+
+				-- Create background frame
+				local cFrame = CreateFrame("FRAME", nil, WorldMapFrame.ScrollContainer)
+				cFrame:SetSize(WorldMapFrame:GetWidth(), 17)
+				cFrame:SetPoint("BOTTOMLEFT", 17)
+				cFrame:SetPoint("BOTTOMRIGHT", 0)
+
+				cFrame.t = cFrame:CreateTexture(nil, "BACKGROUND")
+				cFrame.t:SetAllPoints()
+				cFrame.t:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+				cFrame.t:SetVertexColor(0, 0, 0, 0.5)
+
+				-- Move coordinates up into the background frame
+				cCursor:SetParent(cFrame)
+				cCursor:ClearAllPoints()
+				cCursor:SetPoint("BOTTOMLEFT", 102, 0)
+				cPlayer:SetParent(cFrame)
+				cPlayer:ClearAllPoints()
+				cPlayer:SetPoint("BOTTOMRIGHT", -82, 0)
+
+				-- Function to toggle background frame
+				local function SetCoordsBackground()
+					if LeaMapsLC["ShowCoords"] == "On" then
+						cFrame:Show()
+					else
+						cFrame:Hide()
+					end
+				end
+
+				-- Set background frame when option is clicked and startup
+				LeaMapsCB["ShowCoords"]:HookScript("OnClick", SetCoordsBackground)
+				SetCoordsBackground()
+
+			end
 
 		end
 
@@ -492,7 +538,7 @@
 		-- Map position
 		----------------------------------------------------------------------
 
-		do
+		if LeaMapsLC["UseDefaultMap"] == "Off" then
 
 			-- Remove frame management
 			WorldMapFrame:SetAttribute("UIPanelLayout-area", "center")
@@ -517,7 +563,7 @@
 			WorldMapFrame:RegisterForDrag("LeftButton")
 
 			WorldMapFrame:SetScript("OnDragStart", function()
-				if LeaMapsLC["LockMapFrame"] == "Off" then
+				if LeaMapsLC["UnlockMapFrame"] == "On" then
 					WorldMapFrame:StartMoving()
 				end
 			end)
@@ -536,23 +582,73 @@
 		end
 
 		----------------------------------------------------------------------
-		-- Fade map while moving
+		-- Set map opacity
 		----------------------------------------------------------------------
 
 		do
 
-			-- Function to set fade level
-			local function SetFadeLevel()
-				if LeaMapsLC["FadeMap"] == "On" then
-					PlayerMovementFrameFader.AddDeferredFrame(WorldMapFrame, 0.5, 1.0, 0.5)
+			-- Create configuraton panel
+			local alphaFrame = LeaMapsLC:CreatePanel("Set Map Opacity", "alphaFrame")
+
+			-- Add controls
+			LeaMapsLC:MakeTx(alphaFrame, "Settings", 16, -72)
+			LeaMapsLC:MakeWD(alphaFrame, "Set map opacity while stationary and while moving.", 16, -92)
+			LeaMapsLC:MakeSL(alphaFrame, "stationaryOpacity", "Stationary", "Drag to set the map opacity for when your character is stationary.", 0.1, 1, 0.1, 36, -142, "%.1f")
+			LeaMapsLC:MakeSL(alphaFrame, "movingOpacity", "Moving", "Drag to set the map opacity for when your character is moving.", 0.1, 1, 0.1, 36, -192, "%.1f")
+
+			-- Function to set map opacity
+			local function SetMapOpacity()
+				LeaMapsCB["stationaryOpacity"].f:SetFormattedText("%.0f%%", LeaMapsLC["stationaryOpacity"] * 100)
+				LeaMapsCB["movingOpacity"].f:SetFormattedText("%.0f%%", LeaMapsLC["movingOpacity"] * 100)
+				if LeaMapsLC["SetMapOpacity"] == "On" then
+					-- Set opacity level as frame fader only takes effect when player moves
+					if IsPlayerMoving() then
+						WorldMapFrame:SetAlpha(LeaMapsLC["movingOpacity"])
+					else
+						WorldMapFrame:SetAlpha(LeaMapsLC["stationaryOpacity"])
+					end
+					-- Setup frame fader
+					PlayerMovementFrameFader.AddDeferredFrame(WorldMapFrame, LeaMapsLC["movingOpacity"], LeaMapsLC["stationaryOpacity"], 0.5)
 				else
-					PlayerMovementFrameFader.AddDeferredFrame(WorldMapFrame, 1, 1.0, 0.5)
+					-- Remove frame fader and set map to full opacity
+					PlayerMovementFrameFader.RemoveFrame(WorldMapFrame)
+					WorldMapFrame:SetAlpha(1)
 				end
 			end
 
-			-- Set fade properties when option is clicked and on startup
-			LeaMapsCB["FadeMap"]:HookScript("OnClick", SetFadeLevel)
-			SetFadeLevel()
+			-- Set map opacity when options are changed and on startup
+			LeaMapsCB["stationaryOpacity"]:HookScript("OnValueChanged", SetMapOpacity)
+			LeaMapsCB["movingOpacity"]:HookScript("OnValueChanged", SetMapOpacity)
+			LeaMapsCB["SetMapOpacity"]:HookScript("OnClick", SetMapOpacity)
+			SetMapOpacity()
+
+			-- Back to Main Menu button click
+			alphaFrame.b:HookScript("OnClick", function()
+				alphaFrame:Hide()
+				LeaMapsLC["PageF"]:Show()
+			end)
+
+			-- Reset button click
+			alphaFrame.r:HookScript("OnClick", function()
+				LeaMapsLC["stationaryOpacity"] = 1.0
+				LeaMapsLC["movingOpacity"] = 0.5
+				SetMapOpacity()
+				alphaFrame:Hide(); alphaFrame:Show()
+			end)
+
+			-- Show configuration panel when configuration button is clicked
+			LeaMapsCB["SetMapOpacityBtn"]:HookScript("OnClick", function()
+				if IsShiftKeyDown() and IsControlKeyDown() then
+					-- Preset profile
+					LeaMapsLC["stationaryOpacity"] = 1.0
+					LeaMapsLC["movingOpacity"] = 0.5
+					SetMapOpacity()
+					if alphaFrame:IsShown() then alphaFrame:Hide(); alphaFrame:Show(); end
+				else
+					alphaFrame:Show()
+					LeaMapsLC["PageF"]:Hide()
+				end
+			end)
 
 		end
 
@@ -580,14 +676,14 @@
 					{73.1, 32.7, L["Hammerfall"] .. ", " .. L["Arathi Highlands"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Badlands]] [1418] = {
-					{44.6, 12.1, L["Uldaman"], L["Dungeon"], dnTex, nil, nil, 35, 45},
+					{44.6, 12.1, L["Uldaman"], L["Dungeon"], dnTex, nil, nil, 41, 51},
 					{4.0, 44.8, L["Kargath"] .. ", " .. L["Badlands"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Blasted Lands]] [1419] = {
 					{65.5, 24.3, L["Nethergarde Keep"] .. ", " .. L["Blasted Lands"], nil, tATex, nil, nil, nil, nil},
 				},
 				--[[Tirisfal Glades]] [1420] = {
-					{82.6, 33.8, L["Scarlet Monastery"], L["Dungeon"], dnTex, nil, nil, 26, 45},
+					{82.6, 33.8, L["Scarlet Monastery"], L["Dungeon"], dnTex, nil, nil, 34, 45},
 				},
 				--[[Silverpine Forest]] [1421] = {
 					{44.8, 67.8, L["Shadowfang Keep"], L["Dungeon"], dnTex, nil, nil, 22, 30},
@@ -611,7 +707,7 @@
 					{81.7, 81.8, L["Revantusk Village"] .. ", " .. L["The Hinterlands"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Dun Morogh]] [1426] = {
-					{24.3, 39.8, L["Gnomeregan"], L["Dungeon"], dnTex, nil, nil, 24, 34},
+					{24.3, 39.8, L["Gnomeregan"], L["Dungeon"], dnTex, nil, nil, 29, 38},
 				},
 				--[[Searing Gorge]] [1427] = {
 					{34.8, 85.3, L["Blackrock Mountain"], L["Blackrock Depths"] .. ", " .. L["Lower Blackrock Spire"] .. ", " .. L["Upper Blackrock Spire"] .. ", " .. L["Molten Core"] --[[.. ", " .. L["Blackwing Lair"] ]], dnTex, nil, nil, 52, 60},
@@ -636,20 +732,21 @@
 					-- {53.9, 17.6, L["Zul'Gurub"], L["Raid"], rdTex, nil, nil, 60, 60},
 					{27.5, 77.8, L["Booty Bay"] .. ", " .. L["Stranglethorn Vale"], nil, tATex, nil, nil, nil, nil},
 					{26.9, 77.1, L["Booty Bay"] .. ", " .. L["Stranglethorn Vale"], nil, tHTex, nil, nil, nil, nil},
+					{32.5, 29.4, L["Grom'gol Base Camp"] .. ", " .. L["Stranglethorn Vale"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Swamp of Sorrows]] [1435] = {
-					{69.9, 53.6, L["Temple of Atal'Hakkar"], L["Dungeon"], dnTex, nil, nil, 55, 60},
+					{69.9, 53.6, L["Temple of Atal'Hakkar"], L["Dungeon"], dnTex, nil, nil, 50, 56},
 					{46.1, 54.8, L["Stonard"] .. ", " .. L["Swamp of Sorrows"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Westfall]] [1436] = {
-					{42.5, 71.7, L["The Deadmines"], L["Dungeon"], dnTex, nil, nil, 18, 23},
+					{42.5, 71.7, L["The Deadmines"], L["Dungeon"], dnTex, nil, nil, 17, 26},
 					{56.6, 52.6, L["Sentinel Hill"] .. ", " .. L["Westfall"], nil, tATex, nil, nil, nil, nil},
 				},
 				--[[Wetlands]] [1437] = {
 					{9.5, 59.7, L["Menethil Harbor"] .. ", " .. L["Wetlands"], nil, tATex, nil, nil, nil, nil},
 				},
 				--[[Stormwind City]] [1453] = {
-					{42.3, 59.0, L["The Stockade"], L["Dungeon"], dnTex, nil, nil, 22, 30},
+					{42.3, 59.0, L["The Stockade"], L["Dungeon"], dnTex, nil, nil, 24, 32},
 					{66.3, 62.1, L["Trade District"] .. ", " .. L["Stormwind"], nil, tATex, nil, nil, nil, nil}
 				},
 				--[[Ironforge]] [1455] = {
@@ -664,7 +761,7 @@
 				----------------------------------------------------------------------
 
 				--[[The Barrens]] [1413] = {
-					{46.0, 36.4, L["Wailing Caverns"], L["Dungeon"], dnTex, nil, nil, 15, 25}, {42.9, 90.2, L["Razorfen Kraul"], L["Dungeon"], dnTex, nil, nil, 30, 40}, {49.0, 93.9, L["Razorfen Downs"], L["Dungeon"], dnTex, nil, nil, 40, 50},
+					{46.0, 36.4, L["Wailing Caverns"], L["Dungeon"], dnTex, nil, nil, 17, 24}, {42.9, 90.2, L["Razorfen Kraul"], L["Dungeon"], dnTex, nil, nil, 29, 38}, {49.0, 93.9, L["Razorfen Downs"], L["Dungeon"], dnTex, nil, nil, 37, 46},
 					{63.1, 37.2, L["Ratchet"] .. ", " .. L["The Barrens"], nil, tNTex, nil, nil, nil, nil},
 					{51.5, 30.3, L["The Crossroads"] .. ", " .. L["The Barrens"], nil, tHTex, nil, nil, nil, nil},
 					{44.4, 59.2, L["Camp Taurajo"] .. ", " .. L["The Barrens"], nil, tHTex, nil, nil, nil, nil},
@@ -673,7 +770,7 @@
 					{36.3, 45.6, L["Auberdine"] .. ", " .. L["Darkshore"], nil, tATex, nil, nil, nil, nil},
 				},
 				--[[Ashenvale]] [1440] = {
-					{14.5, 14.2, L["Blackfathom Deeps"], L["Dungeon"], dnTex, nil, nil, 20, 30},
+					{14.5, 14.2, L["Blackfathom Deeps"], L["Dungeon"], dnTex, nil, nil, 24, 32},
 					{34.4, 48.0, L["Astranaar"] .. ", " .. L["Ashenvale"], nil, tATex, nil, nil, nil, nil},
 					{73.2, 61.6, L["Splintertree Post"] .. ", " .. L["Ashenvale"], nil, tHTex, nil, nil, nil, nil},
 					{12.2, 33.8, L["Zoram'gar Outpost"] .. ", " .. L["Ashenvale"], nil, tHTex, nil, nil, nil, nil},
@@ -702,7 +799,7 @@
 					{35.6, 31.9, L["Brackenwall Village"] .. ", " .. L["Dustwallow Marsh"], nil, tHTex, nil, nil, nil, nil},
 				},
 				--[[Tanaris]] [1446] = {
-					{38.7, 20.0, L["Zul'Farrak"], L["Dungeon"], dnTex, nil, nil, 44, 54},
+					{38.7, 20.0, L["Zul'Farrak"], L["Dungeon"], dnTex, nil, nil, 42, 46},
 					{51.0, 29.3, L["Gadgetzan"] .. ", " .. L["Tanaris"], nil, tATex, nil, nil, nil, nil},
 					{51.6, 25.4, L["Gadgetzan"] .. ", " .. L["Tanaris"], nil, tHTex, nil, nil, nil, nil},
 				},
@@ -829,6 +926,12 @@
 
 			function LeaMapsGlobalPinMixin:OnAcquired(myInfo)
 				BaseMapPoiPinMixin.OnAcquired(self, myInfo)
+			end
+
+			function LeaMapsGlobalPinMixin:OnMouseUp(btn)
+				if btn == "RightButton" then
+					WorldMapFrame:NavigateToParentMap()
+				end
 			end
 
 			WorldMapFrame:AddDataProvider(LeaMix)
@@ -963,20 +1066,20 @@
 			end)
 
 			-- Create tint frame
-			local tintFrame = LeaMapsLC:CreatePanel("Reveal Map", "tintFrame")
+			local tintFrame = LeaMapsLC:CreatePanel("Show Unexplored Areas", "tintFrame")
 
 			-- Add controls
 			LeaMapsLC:MakeTx(tintFrame, "Settings", 16, -72)
-			LeaMapsLC:MakeCB(tintFrame, "RevTint", "Tint unexplored areas", 16, -92, false)
-			LeaMapsLC:MakeSL(tintFrame, "tintRed", "Red", "", 0, 1, 0.1, 36, -142, "%.1f")
-			LeaMapsLC:MakeSL(tintFrame, "tintGreen", "Green", "", 0, 1, 0.1, 36, -192, "%.1f")
-			LeaMapsLC:MakeSL(tintFrame, "tintBlue", "Blue", "", 0, 1, 0.1, 36, -242, "%.1f")
-			LeaMapsLC:MakeSL(tintFrame, "tintAlpha", "Transparency", "", 0.1, 1, 0.1, 36, -292, "%.1f")
+			LeaMapsLC:MakeCB(tintFrame, "RevTint", "Tint unexplored areas", 16, -92, false, "If checked, unexplored areas will be tinted.")
+			LeaMapsLC:MakeSL(tintFrame, "tintRed", "Red", "Drag to set the amount of red.", 0, 1, 0.1, 36, -142, "%.1f")
+			LeaMapsLC:MakeSL(tintFrame, "tintGreen", "Green", "Drag to set the amount of green.", 0, 1, 0.1, 36, -192, "%.1f")
+			LeaMapsLC:MakeSL(tintFrame, "tintBlue", "Blue", "Drag to set the amount of blue.", 0, 1, 0.1, 206, -142, "%.1f")
+			LeaMapsLC:MakeSL(tintFrame, "tintAlpha", "Opacity", "Drag to set the opacity.", 0.1, 1, 0.1, 206, -192, "%.1f")
 
 			-- Add preview color block
-			local prvTitle = LeaMapsLC:MakeWD(tintFrame, "Preview", 216, -130)
+			local prvTitle = LeaMapsLC:MakeWD(tintFrame, "Preview", 386, -130); prvTitle:Hide()
 			tintFrame.preview = tintFrame:CreateTexture(nil, "ARTWORK")
-			tintFrame.preview:SetSize(100, 50)
+			tintFrame.preview:SetSize(50, 50)
 			tintFrame.preview:SetPoint("TOPLEFT", prvTitle, "TOPLEFT", 0, -20)
 
 			-- Function to set tint color
@@ -1059,6 +1162,57 @@
 		end
 
 		----------------------------------------------------------------------
+		-- Show minimap icon
+		----------------------------------------------------------------------
+
+		do
+
+			-- Minimap button click function
+			local function MiniBtnClickFunc(arg1)
+				-- Prevent options panel from showing if Blizzard options panel is showing
+				if InterfaceOptionsFrame:IsShown() or VideoOptionsFrame:IsShown() or ChatConfigFrame:IsShown() then return end
+				-- No modifier key toggles the options panel
+				if LeaMapsLC:IsMapsShowing() then
+					LeaMapsLC["PageF"]:Hide()
+					LeaMapsLC:HideConfigPanels()
+				else
+					LeaMapsLC["PageF"]:Show()
+				end
+
+			end
+
+			-- Create minimap button using LibDBIcon
+			local ldb = LibStub("LibDataBroker-1.1", true)
+			local miniButton = ldb:NewDataObject("Leatrix_Maps", {
+				type = "launcher",
+				icon = "Interface\\Worldmap\\UI-World-Icon",
+				OnClick = function(self, btn)
+					MiniBtnClickFunc(btn)
+				end,
+				OnTooltipShow = function(tooltip)
+					if not tooltip or not tooltip.AddLine then return end
+					tooltip:AddLine("Leatrix Maps")
+				end,
+			})
+			local icon = LibStub("LibDBIcon-1.0", true)
+			icon:Register("Leatrix_Maps", miniButton, LeaMapsDB)
+
+			-- Function to toggle LibDBIcon
+			local function SetLibDBIconFunc()
+				if LeaMapsLC["ShowMinimapIcon"] == "On" then
+					icon:Show("Leatrix_Maps")
+				else
+					icon:Hide("Leatrix_Maps")
+				end
+			end
+
+			-- Set LibDBIcon when option is clicked and on startup
+			LeaMapsCB["ShowMinimapIcon"]:HookScript("OnClick", SetLibDBIconFunc)
+			SetLibDBIconFunc()
+
+		end
+
+		----------------------------------------------------------------------
 		-- Show memory usage
 		----------------------------------------------------------------------
 
@@ -1102,8 +1256,23 @@
 
 			end
 
-			ShowMemoryUsage(LeaMapsLC["PageF"], "TOPLEFT", 16, -382)
+			-- ShowMemoryUsage(LeaMapsLC["PageF"], "TOPLEFT", 16, -262)
 
+		end
+
+		----------------------------------------------------------------------
+		-- Use default map
+		----------------------------------------------------------------------
+
+		if LeaMapsLC["UseDefaultMap"] == "On" then
+			-- Maximise world map and set to 100% scale
+			MaximizeUIPanel(WorldMapFrame)
+			WorldMapFrame:SetScale(1)
+			-- Lock some incompatible options
+			LeaMapsLC:LockItem(LeaMapsCB["NoMapBorder"], true)
+			LeaMapsLC:LockItem(LeaMapsCB["UnlockMapFrame"], true)
+			-- Lock reset map layout button
+			LeaMapsLC:LockItem(LeaMapsCB["resetMapPosBtn"], true)
 		end
 
 		----------------------------------------------------------------------
@@ -1147,7 +1316,7 @@
 
 		-- Show first run message
 		if not LeaMapsDB["FirstRunMessageSeen"] then
-			LeaMapsLC:Print(L["Enter"] .. " |cff00ff00" .. "/ltm" .. "|r " .. L["to open Leatrix Maps."])
+			LeaMapsLC:Print(L["Enter"] .. " |cff00ff00" .. "/ltm" .. "|r " .. L["or click the minimap button to open Leatrix Maps."])
 			LeaMapsDB["FirstRunMessageSeen"] = true
 		end
 
@@ -1187,7 +1356,7 @@
 
 		-- Set frame parameters
 		Side:Hide()
-		Side:SetSize(370, 480)
+		Side:SetSize(470, 340)
 		Side:SetClampedToScreen(true)
 		Side:SetFrameStrata("FULLSCREEN_DIALOG")
 		Side:SetFrameLevel(20)
@@ -1204,11 +1373,11 @@
 		Side.c:SetScript("OnClick", function() Side:Hide() end)
 
 		-- Add reset, help and back buttons
-		Side.r = LeaMapsLC:CreateButton("ResetButton", Side, "Reset", "BOTTOMLEFT", 16, 60, 25)
-		Side.b = LeaMapsLC:CreateButton("BackButton", Side, "Back to Main Menu", "BOTTOMRIGHT", -16, 60, 25)
+		Side.r = LeaMapsLC:CreateButton("ResetButton", Side, "Reset", "BOTTOMLEFT", 16, 60, 25, "Click to reset the settings on this page.")
+		Side.b = LeaMapsLC:CreateButton("BackButton", Side, "Back to Main Menu", "BOTTOMRIGHT", -16, 60, 25, "Click to return to the main menu.")
 
 		-- Add a reload button and synchronise it with the main panel reload button
-		local reloadb = LeaMapsLC:CreateButton("ConfigReload", Side, "Reload", "BOTTOMRIGHT", -16, 10, 25)
+		local reloadb = LeaMapsLC:CreateButton("ConfigReload", Side, "Reload", "BOTTOMRIGHT", -16, 10, 25, LeaMapsCB["ReloadUIButton"].tiptext)
 		LeaMapsLC:LockItem(reloadb, true)
 		reloadb:SetScript("OnClick", ReloadUI)
 
@@ -1229,8 +1398,8 @@
 		end)
 
 		-- Set textures
-		LeaMapsLC:CreateBar("FootTexture", Side, 370, 48, "BOTTOM", 0.5, 0.5, 0.5, 1.0, "Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
-		LeaMapsLC:CreateBar("MainTexture", Side, 370, 433, "TOPRIGHT", 0.7, 0.7, 0.7, 0.7,  "Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
+		LeaMapsLC:CreateBar("FootTexture", Side, 470, 48, "BOTTOM", 0.5, 0.5, 0.5, 1.0, "Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
+		LeaMapsLC:CreateBar("MainTexture", Side, 470, 293, "TOPRIGHT", 0.7, 0.7, 0.7, 0.7,  "Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
 
 		-- Allow movement
 		Side:EnableMouse(true)
@@ -1320,6 +1489,40 @@
 		end
 	end
 
+	-- Show tooltips for checkboxes
+	function LeaMapsLC:TipSee()
+		if not self:IsEnabled() then return end
+		GameTooltip:SetOwner(self, "ANCHOR_NONE")
+		local parent = self:GetParent()
+		local pscale = parent:GetEffectiveScale()
+		local gscale = UIParent:GetEffectiveScale()
+		local tscale = GameTooltip:GetEffectiveScale()
+		local gap = ((UIParent:GetRight() * gscale) - (parent:GetRight() * pscale))
+		if gap < (250 * tscale) then
+			GameTooltip:SetPoint("TOPRIGHT", parent, "TOPLEFT", 0, 0)
+		else
+			GameTooltip:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
+		end
+		GameTooltip:SetText(self.tiptext, nil, nil, nil, nil, true)
+	end
+
+	-- Show tooltips for configuration buttons and dropdown menus
+	function LeaMapsLC:ShowTooltip()
+		if not self:IsEnabled() then return end
+		GameTooltip:SetOwner(self, "ANCHOR_NONE")
+		local parent = LeaMapsLC["PageF"]
+		local pscale = parent:GetEffectiveScale()
+		local gscale = UIParent:GetEffectiveScale()
+		local tscale = GameTooltip:GetEffectiveScale()
+		local gap = ((UIParent:GetRight() * gscale) - (LeaMapsLC["PageF"]:GetRight() * pscale))
+		if gap < (250 * tscale) then
+			GameTooltip:SetPoint("TOPRIGHT", parent, "TOPLEFT", 0, 0)
+		else
+			GameTooltip:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
+		end
+		GameTooltip:SetText(self.tiptext, nil, nil, nil, nil, true)
+	end
+
 	-- Print text
 	function LeaMapsLC:Print(text)
 		DEFAULT_CHAT_FRAME:AddMessage(L[text], 1.0, 0.85, 0.0)
@@ -1348,10 +1551,11 @@
 	-- Set lock state for configuration buttons
 	function LeaMapsLC:SetDim()
 		LeaMapsLC:LockOption("RevealMap", "RevTintBtn") -- Reveal map
+		LeaMapsLC:LockOption("SetMapOpacity", "SetMapOpacityBtn") -- Set map opacity
 	end
 
 	-- Create a standard button
-	function LeaMapsLC:CreateButton(name, frame, label, anchor, x, y, height)
+	function LeaMapsLC:CreateButton(name, frame, label, anchor, x, y, height, tip)
 		local mbtn = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 		LeaMapsCB[name] = mbtn
 		mbtn:SetHeight(height)
@@ -1363,6 +1567,11 @@
 		mbtn.f = mbtn:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
 		mbtn.f:SetText(L[label])
 		mbtn:SetWidth(mbtn.f:GetStringWidth() + 20)
+
+		-- Tooltip handler
+		mbtn.tiptext = L[tip]
+		mbtn:SetScript("OnEnter", LeaMapsLC.TipSee)
+		mbtn:SetScript("OnLeave", GameTooltip_Hide)
 
 		-- Set skinned button textures
 		mbtn:SetNormalTexture("Interface\\AddOns\\Leatrix_Maps\\Leatrix_Maps.blp")
@@ -1382,7 +1591,8 @@
 
 	-- Set reload button status
 	function LeaMapsLC:ReloadCheck()
-		if	(LeaMapsLC["NoMapBorder"] ~= LeaMapsDB["NoMapBorder"])	-- Remove map border
+		if	(LeaMapsLC["NoMapBorder"] ~= LeaMapsDB["NoMapBorder"])		-- Remove map border
+		or	(LeaMapsLC["UseDefaultMap"] ~= LeaMapsDB["UseDefaultMap"])	-- Use default map
 		then
 			-- Enable the reload button
 			LeaMapsLC:LockItem(LeaMapsCB["ReloadUIButton"], false)
@@ -1413,20 +1623,26 @@
 	end
 
 	-- Create a checkbox control
-	function LeaMapsLC:MakeCB(parent, field, caption, x, y, reload)
+	function LeaMapsLC:MakeCB(parent, field, caption, x, y, reload, tip)
 
 		-- Create the checkbox
 		local Cbox = CreateFrame('CheckButton', nil, parent, "ChatConfigCheckButtonTemplate")
 		LeaMapsCB[field] = Cbox
 		Cbox:SetPoint("TOPLEFT",x, y)
+		Cbox:SetScript("OnEnter", LeaMapsLC.TipSee)
+		Cbox:SetScript("OnLeave", GameTooltip_Hide)
 
 		-- Add label and tooltip
 		Cbox.f = Cbox:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
 		Cbox.f:SetPoint('LEFT', 24, 0)
 		if reload then
+			-- Checkbox requires UI reload
 			Cbox.f:SetText(L[caption] .. "*")
+			Cbox.tiptext = L[tip] .. "|n|n* " .. L["Requires UI reload."]
 		else
+			-- Checkbox does not require UI reload
 			Cbox.f:SetText(L[caption])
+			Cbox.tiptext = L[tip]
 		end
 
 		-- Set label parameters
@@ -1434,15 +1650,28 @@
 		Cbox.f:SetWordWrap(false)
 
 		-- Set maximum label width
-		if Cbox.f:GetWidth() > 292 then
-			Cbox.f:SetWidth(292)
-		end
-
-		-- Set checkbox click width
-		if Cbox.f:GetStringWidth() > 292 then
-			Cbox:SetHitRectInsets(0, -272, 0, 0)
+		if parent == LeaMapsLC["PageF"] then
+			-- Main panel checkbox labels
+			if Cbox.f:GetWidth() > 172 then
+				Cbox.f:SetWidth(172)
+			end
+			-- Set checkbox click width
+			if Cbox.f:GetStringWidth() > 172 then
+				Cbox:SetHitRectInsets(0, -162, 0, 0)
+			else
+				Cbox:SetHitRectInsets(0, -Cbox.f:GetStringWidth() + 4, 0, 0)
+			end
 		else
-			Cbox:SetHitRectInsets(0, -Cbox.f:GetStringWidth() + 4, 0, 0)
+			-- Configuration panel checkbox labels (other checkboxes either have custom functions or blank labels)
+			if Cbox.f:GetWidth() > 322 then
+				Cbox.f:SetWidth(322)
+			end
+			-- Set checkbox click width
+			if Cbox.f:GetStringWidth() > 322 then
+				Cbox:SetHitRectInsets(0, -312, 0, 0)
+			else
+				Cbox:SetHitRectInsets(0, -Cbox.f:GetStringWidth() + 4, 0, 0)
+			end
 		end
 
 		-- Set default checkbox state and click area
@@ -1481,7 +1710,11 @@
 		CfgBtn.t:SetVertexColor(1.0, 0.82, 0, 1.0)
 
 		CfgBtn:SetHighlightTexture("Interface\\WorldMap\\Gear_64.png")
-		CfgBtn:GetHighlightTexture():SetTexCoord(0, 0.50, 0, 0.50);
+		CfgBtn:GetHighlightTexture():SetTexCoord(0, 0.50, 0, 0.50)
+
+		CfgBtn.tiptext = L["Click to configure the settings for this option."]
+		CfgBtn:SetScript("OnEnter", LeaMapsLC.ShowTooltip)
+		CfgBtn:SetScript("OnLeave", GameTooltip_Hide)
 	end
 
 	-- Create a slider control
@@ -1497,6 +1730,9 @@
 		Slider:SetWidth(100)
 		Slider:SetHeight(20)
 		Slider:SetHitRectInsets(0, 0, 0, 0)
+		Slider.tiptext = L[caption]
+		Slider:SetScript("OnEnter", LeaMapsLC.TipSee)
+		Slider:SetScript("OnLeave", GameTooltip_Hide)
 
 		-- Remove slider text
 		_G[Slider:GetName().."Low"]:SetText('')
@@ -1582,7 +1818,7 @@
 	LeaMapsLC:MakeWD(stopFrame, "A stop error has occurred but no need to worry.  It can happen from time to time.  Click the reload button to resolve it.", 16, -32, 338)
 
 	-- Add reload UI Button
-	local stopRelBtn = LeaMapsLC:CreateButton("StopReloadButton", stopFrame, "Reload", "BOTTOMRIGHT", -16, 10, 25)
+	local stopRelBtn = LeaMapsLC:CreateButton("StopReloadButton", stopFrame, "Reload", "BOTTOMRIGHT", -16, 10, 25, "")
 	stopRelBtn:SetScript("OnClick", ReloadUI)
 	stopRelBtn.f = stopRelBtn:CreateFontString(nil, 'ARTWORK', 'GameFontNormalSmall')
 	stopRelBtn.f:SetHeight(32)
@@ -1617,27 +1853,38 @@
 			elseif str == "admin" then
 				-- Preset profile (reload required)
 				wipe(LeaMapsDB)
+
+				-- Mechanics
+				LeaMapsLC["NoMapBorder"] = "On"
+				LeaMapsLC["RememberZoom"] = "On"
+				LeaMapsLC["EnlargePlayerArrow"] = "On"
+				LeaMapsLC["UnlockMapFrame"] = "On"
+				LeaMapsLC["MapPosA"] = "CENTER"
+				LeaMapsLC["MapPosR"] = "CENTER"
+				LeaMapsLC["MapPosX"] = 0
+				LeaMapsLC["MapPosY"] = 0
+				LeaMapsLC["MapScale"] = 0.9
+				LeaMapsLC["SetMapOpacity"] = "Off"
+				LeaMapsLC["stationaryOpacity"] = 1.0
+				LeaMapsLC["movingOpacity"] = 0.5
+				LeaMapsLC["UseDefaultMap"] = "Off"
+
+				-- Elements
 				LeaMapsLC["RevealMap"] = "On"
 				LeaMapsLC["RevTint"] = "On"
 				LeaMapsLC["tintRed"] = 0.6
 				LeaMapsLC["tintGreen"] = 0.6
 				LeaMapsLC["tintBlue"] = 1.0
 				LeaMapsLC["tintAlpha"] = 1.0
-				LeaMapsLC["ShowScaleHandle"] = "On"
-				LeaMapsLC["MapScale"] = 0.9
-				LeaMapsLC["FadeMap"] = "Off"
-				LeaMapsLC["RememberZoom"] = "On"
-				LeaMapsLC["EnlargePlayerArrow"] = "On"
-				LeaMapsLC["NoMapBorder"] = "On"
-				LeaMapsLC["LockMapFrame"] = "Off"
 				LeaMapsLC["ShowDungeonIcons"] = "On"
 				LeaMapsLC["ShowFlightPoints"] = "On"
 				LeaMapsLC["ShowZoneLevels"] = "On"
 				LeaMapsLC["ShowCoords"] = "On"
-				LeaMapsLC["MapPosA"] = "CENTER"
-				LeaMapsLC["MapPosR"] = "CENTER"
-				LeaMapsLC["MapPosX"] = 0
-				LeaMapsLC["MapPosY"] = 0
+
+				-- Settings
+				LeaMapsLC["ShowMinimapIcon"] = "On"
+				LeaMapsDB["minimapPos"] = 204 -- LeaMapsDB
+
 				ReloadUI()
 			elseif str == "help" then
 				-- Show available commands
@@ -1689,33 +1936,49 @@
 	eFrame:SetScript("OnEvent", function(self, event, arg1)
 
 		if event == "ADDON_LOADED" and arg1 == "Leatrix_Maps" then
-			-- Load settings or set defaults
+
+			-- Mechanics
+			LeaMapsLC:LoadVarChk("NoMapBorder", "On")					-- Remove map border
+			LeaMapsLC:LoadVarChk("RememberZoom", "On")					-- Remember zoom level
+			LeaMapsLC:LoadVarChk("EnlargePlayerArrow", "On")			-- Enlarge player arrow
+			LeaMapsLC:LoadVarChk("UnlockMapFrame", "On")				-- Unlock map frame
+			LeaMapsLC:LoadVarAnc("MapPosA", "CENTER")					-- Map anchor
+			LeaMapsLC:LoadVarAnc("MapPosR", "CENTER")					-- Map relative
+			LeaMapsLC:LoadVarNum("MapPosX", 0, -5000, 5000)				-- Map X axis
+			LeaMapsLC:LoadVarNum("MapPosY", 20, -5000, 5000)			-- Map Y axis
+			LeaMapsLC:LoadVarNum("MapScale", 0.9, 0.2, 3)				-- Map scale
+			LeaMapsLC:LoadVarChk("SetMapOpacity", "Off")				-- Set map opacity
+			LeaMapsLC:LoadVarNum("stationaryOpacity", 1, 0.1, 1)		-- Stationary opacity
+			LeaMapsLC:LoadVarNum("movingOpacity", 0.5, 0.1, 1)			-- Moving opacity
+			LeaMapsLC:LoadVarChk("UseDefaultMap", "Off")				-- Use default map
+
+			-- Elements
 			LeaMapsLC:LoadVarChk("RevealMap", "On")						-- Reveal unexplored areas
 			LeaMapsLC:LoadVarChk("RevTint", "On")						-- Tint revealed unexplored areas
 			LeaMapsLC:LoadVarNum("tintRed", 0.6, 0, 1)					-- Tint red
 			LeaMapsLC:LoadVarNum("tintGreen", 0.6, 0, 1)				-- Tint green
 			LeaMapsLC:LoadVarNum("tintBlue", 1, 0, 1)					-- Tint blue
-			LeaMapsLC:LoadVarNum("tintAlpha", 1, 0, 1)					-- Tint transparency
-			LeaMapsLC:LoadVarChk("ShowScaleHandle", "On")				-- Show scale handle
-			LeaMapsLC:LoadVarNum("MapScale", 0.9, 0.5, 2)				-- Map scale
-			LeaMapsLC:LoadVarChk("FadeMap", "Off")						-- Fade map while moving
-			LeaMapsLC:LoadVarChk("RememberZoom", "On")					-- Remember zoom level
-			LeaMapsLC:LoadVarChk("EnlargePlayerArrow", "On")			-- Enlarge player arrow
-			LeaMapsLC:LoadVarChk("NoMapBorder", "Off")					-- Remove map border
-			LeaMapsLC:LoadVarChk("LockMapFrame", "Off")					-- Lock map frame
+			LeaMapsLC:LoadVarNum("tintAlpha", 1, 0, 1)					-- Tint opacity
 			LeaMapsLC:LoadVarChk("ShowDungeonIcons", "On")				-- Show dungeons and raids
 			LeaMapsLC:LoadVarChk("ShowFlightPoints", "On")				-- Show flight points
 			LeaMapsLC:LoadVarChk("ShowZoneLevels", "On")				-- Show zone levels
 			LeaMapsLC:LoadVarChk("ShowCoords", "On")					-- Show coordinates
-			LeaMapsLC:LoadVarAnc("MapPosA", "CENTER")					-- Map anchor
-			LeaMapsLC:LoadVarAnc("MapPosR", "CENTER")					-- Map relative
-			LeaMapsLC:LoadVarNum("MapPosX", 0, -5000, 5000)				-- Map X axis
-			LeaMapsLC:LoadVarNum("MapPosY", 0, -5000, 5000)				-- Map Y axis
+
+			-- Settings
+			LeaMapsLC:LoadVarChk("ShowMinimapIcon", "On")				-- Show minimap icon
+
+			-- Panel
 			LeaMapsLC:LoadVarAnc("MainPanelA", "CENTER")				-- Panel anchor
 			LeaMapsLC:LoadVarAnc("MainPanelR", "CENTER")				-- Panel relative
 			LeaMapsLC:LoadVarNum("MainPanelX", 0, -5000, 5000)			-- Panel X axis
 			LeaMapsLC:LoadVarNum("MainPanelY", 0, -5000, 5000)			-- Panel Y axis
+
 			LeaMapsLC:SetDim()
+
+			-- Set initial minimum button position
+			if not LeaMapsDB["minimapPos"] then
+				LeaMapsDB["minimapPos"] = 204
+			end
 
 		elseif event == "PLAYER_ENTERING_WORLD" then
 			-- Run main function
@@ -1723,28 +1986,37 @@
 			eFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
 		elseif event == "PLAYER_LOGOUT" and not LeaMapsLC["NoSaveSettings"] then
-			-- Save settings
+			-- Mechanics
+			LeaMapsDB["NoMapBorder"] = LeaMapsLC["NoMapBorder"]
+			LeaMapsDB["RememberZoom"] = LeaMapsLC["RememberZoom"]
+			LeaMapsDB["EnlargePlayerArrow"] = LeaMapsLC["EnlargePlayerArrow"]
+			LeaMapsDB["UnlockMapFrame"] = LeaMapsLC["UnlockMapFrame"]
+			LeaMapsDB["MapPosA"] = LeaMapsLC["MapPosA"]
+			LeaMapsDB["MapPosR"] = LeaMapsLC["MapPosR"]
+			LeaMapsDB["MapPosX"] = LeaMapsLC["MapPosX"]
+			LeaMapsDB["MapPosY"] = LeaMapsLC["MapPosY"]
+			LeaMapsDB["MapScale"] = LeaMapsLC["MapScale"]
+			LeaMapsDB["SetMapOpacity"] = LeaMapsLC["SetMapOpacity"]
+			LeaMapsDB["stationaryOpacity"] = LeaMapsLC["stationaryOpacity"]
+			LeaMapsDB["movingOpacity"] = LeaMapsLC["movingOpacity"]
+			LeaMapsDB["UseDefaultMap"] = LeaMapsLC["UseDefaultMap"]
+
+			-- Elements
 			LeaMapsDB["RevealMap"] = LeaMapsLC["RevealMap"]
 			LeaMapsDB["RevTint"] = LeaMapsLC["RevTint"]
 			LeaMapsDB["tintRed"] = LeaMapsLC["tintRed"]
 			LeaMapsDB["tintGreen"] = LeaMapsLC["tintGreen"]
 			LeaMapsDB["tintBlue"] = LeaMapsLC["tintBlue"]
 			LeaMapsDB["tintAlpha"] = LeaMapsLC["tintAlpha"]
-			LeaMapsDB["ShowScaleHandle"] = LeaMapsLC["ShowScaleHandle"]
-			LeaMapsDB["MapScale"] = LeaMapsLC["MapScale"]
-			LeaMapsDB["FadeMap"] = LeaMapsLC["FadeMap"]
-			LeaMapsDB["RememberZoom"] = LeaMapsLC["RememberZoom"]
-			LeaMapsDB["EnlargePlayerArrow"] = LeaMapsLC["EnlargePlayerArrow"]
-			LeaMapsDB["NoMapBorder"] = LeaMapsLC["NoMapBorder"]
-			LeaMapsDB["LockMapFrame"] = LeaMapsLC["LockMapFrame"]
 			LeaMapsDB["ShowDungeonIcons"] = LeaMapsLC["ShowDungeonIcons"]
 			LeaMapsDB["ShowFlightPoints"] = LeaMapsLC["ShowFlightPoints"]
 			LeaMapsDB["ShowZoneLevels"] = LeaMapsLC["ShowZoneLevels"]
 			LeaMapsDB["ShowCoords"] = LeaMapsLC["ShowCoords"]
-			LeaMapsDB["MapPosA"] = LeaMapsLC["MapPosA"]
-			LeaMapsDB["MapPosR"] = LeaMapsLC["MapPosR"]
-			LeaMapsDB["MapPosX"] = LeaMapsLC["MapPosX"]
-			LeaMapsDB["MapPosY"] = LeaMapsLC["MapPosY"]
+
+			-- Settings
+			LeaMapsDB["ShowMinimapIcon"] = LeaMapsLC["ShowMinimapIcon"]
+
+			-- Panel
 			LeaMapsDB["MainPanelA"] = LeaMapsLC["MainPanelA"]
 			LeaMapsDB["MainPanelR"] = LeaMapsLC["MainPanelR"]
 			LeaMapsDB["MainPanelX"] = LeaMapsLC["MainPanelX"]
@@ -1771,7 +2043,7 @@
 
 	-- Set frame parameters
 	LeaMapsLC["PageF"] = PageF
-	PageF:SetSize(370, 480)
+	PageF:SetSize(470, 340)
 	PageF:Hide()
 	PageF:SetFrameStrata("FULLSCREEN_DIALOG")
 	PageF:SetFrameLevel(20)
@@ -1795,14 +2067,14 @@
 	-- Add textures
 	local MainTexture = PageF:CreateTexture(nil, "BORDER")
 	MainTexture:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
-	MainTexture:SetSize(370, 433)
+	MainTexture:SetSize(470, 293)
 	MainTexture:SetPoint("TOPRIGHT")
 	MainTexture:SetVertexColor(0.7, 0.7, 0.7, 0.7)
 	MainTexture:SetTexCoord(0.09, 1, 0, 1)
 
 	local FootTexture = PageF:CreateTexture(nil, "BORDER")
 	FootTexture:SetTexture("Interface\\ACHIEVEMENTFRAME\\UI-GuildAchievement-Parchment-Horizontal-Desaturated.png")
-	FootTexture:SetSize(370, 48)
+	FootTexture:SetSize(470, 48)
 	FootTexture:SetPoint("BOTTOM")
 	FootTexture:SetVertexColor(0.5, 0.5, 0.5, 1.0)
 
@@ -1826,7 +2098,7 @@
 	PageF.v:SetNonSpaceWrap(true); PageF.v:SetText(L["Classic"] .. " " .. LeaMapsLC["AddonVer"])
 
 	-- Add reload UI Button
-	local reloadb = LeaMapsLC:CreateButton("ReloadUIButton", PageF, "Reload", "BOTTOMRIGHT", -16, 10, 25)
+	local reloadb = LeaMapsLC:CreateButton("ReloadUIButton", PageF, "Reload", "BOTTOMRIGHT", -16, 10, 25, "Your UI needs to be reloaded for some of the changes to take effect.|n|nYou don't have to click the reload button immediately but you do need to click it when you are done making changes and you want the changes to take effect.")
 	LeaMapsLC:LockItem(reloadb, true)
 	reloadb:SetScript("OnClick", ReloadUI)
 
@@ -1842,28 +2114,36 @@
 	CloseB:SetPoint("TOPRIGHT", 0, 0)
 
 	-- Add content
-	LeaMapsLC:MakeTx(PageF, "Settings", 16, -72)
-	LeaMapsLC:MakeCB(PageF, "RevealMap", "Reveal unexplored areas", 16, -92, false)
-	LeaMapsLC:MakeCB(PageF, "FadeMap", "Fade map while moving", 16, -112, false)
-	LeaMapsLC:MakeCB(PageF, "RememberZoom", "Remember zoom level", 16, -132, false)
-	LeaMapsLC:MakeCB(PageF, "EnlargePlayerArrow", "Enlarge player arrow", 16, -152, false)
-	LeaMapsLC:MakeCB(PageF, "NoMapBorder", "Remove map border", 16, -172, true)
-	LeaMapsLC:MakeCB(PageF, "LockMapFrame", "Lock map frame", 16, -192, false)
+	LeaMapsLC:MakeTx(PageF, "Mechanics", 16, -72)
+	LeaMapsLC:MakeCB(PageF, "NoMapBorder", "Remove map border", 16, -92, true, "If checked, the map border will be removed.")
+	LeaMapsLC:MakeCB(PageF, "RememberZoom", "Remember zoom level", 16, -112, false, "If checked, opening the map will use the same zoom level from when you last closed it as long as the map zone has not changed.")
+	LeaMapsLC:MakeCB(PageF, "EnlargePlayerArrow", "Enlarge player arrow", 16, -132, false, "If checked, the player arrow will be larger.")
+	LeaMapsLC:MakeCB(PageF, "UnlockMapFrame", "Unlock map frame", 16, -152, false, "If checked, you will be able to scale and move the map.|n|nScale the map by dragging the scale handle in the bottom-right corner.|n|nMove the map by dragging the border and frame edges.  If you have removed the map border, a drag button will be shown in the top-left corner.")
+	LeaMapsLC:MakeCB(PageF, "SetMapOpacity", "Set map opacity", 16, -172, false, "If checked, you will be able to set the opacity of the map.")
+	LeaMapsLC:MakeCB(PageF, "UseDefaultMap", "Use default map", 16, -192, true, "If checked, the default fullscreen map will be used.|n|nNote that enabling this option will prevent you from unlocking the map or removing the map border.")
 
-	LeaMapsLC:MakeTx(PageF, "Elements", 16, -232)
-	LeaMapsLC:MakeCB(PageF, "ShowDungeonIcons", "Show dungeons and raids", 16, -252, false)
-	LeaMapsLC:MakeCB(PageF, "ShowFlightPoints", "Show flight points", 16, -272, false)
-	LeaMapsLC:MakeCB(PageF, "ShowZoneLevels", "Show zone levels", 16, -292, false)
-	LeaMapsLC:MakeCB(PageF, "ShowCoords", "Show coordinates", 16, -312, false)
-	LeaMapsLC:MakeCB(PageF, "ShowScaleHandle", "Show scale handle", 16, -332, false)
+	LeaMapsLC:MakeTx(PageF, "Elements", 225, -72)
+	LeaMapsLC:MakeCB(PageF, "RevealMap", "Show unexplored areas", 225, -92, false, "If checked, unexplored areas of the map will be shown.")
+	LeaMapsLC:MakeCB(PageF, "ShowDungeonIcons", "Show dungeons and raids", 225, -112, false, "If checked, dungeon and raid locations will be shown.")
+	LeaMapsLC:MakeCB(PageF, "ShowFlightPoints", "Show flight points", 225, -132, false, "If checked, flight points will be shown.")
+	LeaMapsLC:MakeCB(PageF, "ShowZoneLevels", "Show zone levels", 225, -152, false, "If checked, zone and dungeon levels will be shown.")
+	LeaMapsLC:MakeCB(PageF, "ShowCoords", "Show coordinates", 225, -172, false, "If checked, coordinates will be shown.")
+
+	LeaMapsLC:MakeTx(PageF, "Settings", 225, -212)
+	LeaMapsLC:MakeCB(PageF, "ShowMinimapIcon", "Show minimap button", 225, -232, false, "If checked, the minimap button will be shown.")
 
  	LeaMapsLC:CfgBtn("RevTintBtn", LeaMapsCB["RevealMap"])
+ 	LeaMapsLC:CfgBtn("SetMapOpacityBtn", LeaMapsCB["SetMapOpacity"])
 
 	-- Add reset map position button
-	local resetMapPosBtn = LeaMapsLC:CreateButton("resetMapPosBtn", PageF, "Reset Map Layout", "BOTTOMRIGHT", -16, 60, 25)
+	local resetMapPosBtn = LeaMapsLC:CreateButton("resetMapPosBtn", PageF, "Reset Map Layout", "BOTTOMLEFT", 16, 10, 25, "Click to reset the position and scale of the map frame.")
 	resetMapPosBtn:HookScript("OnClick", function()
 		-- Reset map position
-		LeaMapsLC["MapPosA"], LeaMapsLC["MapPosR"], LeaMapsLC["MapPosX"], LeaMapsLC["MapPosY"] = "CENTER", "CENTER", 0, 0
+		if LeaMapsLC["NoMapBorder"] == "On" then
+			LeaMapsLC["MapPosA"], LeaMapsLC["MapPosR"], LeaMapsLC["MapPosX"], LeaMapsLC["MapPosY"] = "CENTER", "CENTER", 0, 20
+		else
+			LeaMapsLC["MapPosA"], LeaMapsLC["MapPosR"], LeaMapsLC["MapPosX"], LeaMapsLC["MapPosY"] = "CENTER", "CENTER", 0, 0
+		end
 		WorldMapFrame:ClearAllPoints()
 		WorldMapFrame:SetPoint(LeaMapsLC["MapPosA"], UIParent, LeaMapsLC["MapPosR"], LeaMapsLC["MapPosX"], LeaMapsLC["MapPosY"])
 		-- Reset map scale

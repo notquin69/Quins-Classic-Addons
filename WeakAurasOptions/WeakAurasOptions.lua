@@ -1799,6 +1799,7 @@ WeakAuras.getAll = getAll
 
 local function setAll(data, info, ...)
   WeakAuras.pauseOptionsProcessing(true);
+  WeakAuras.PauseAllDynamicGroups()
   local before = getAll(data, info, ...)
   for index, childId in ipairs(data.controlledChildren) do
     local childData = WeakAuras.GetData(childId);
@@ -1827,10 +1828,10 @@ local function setAll(data, info, ...)
     end
   end
 
+  WeakAuras.ResumeAllDynamicGroups()
   WeakAuras.pauseOptionsProcessing(false);
   WeakAuras.ScanForLoads();
   WeakAuras.SortDisplayButtons();
-
 end
 WeakAuras.setAll = setAll
 
@@ -2667,6 +2668,8 @@ function WeakAuras.AddOption(id, data)
   else
     regionOption = {
       [data.regionType] = {
+        __title = "|cFFFFFF00" .. data.regionType,
+        __order = 1,
         unsupported = {
           type = "description",
           name = L["This region of type \"%s\" is not supported."]:format(data.regionType),
@@ -3388,6 +3391,8 @@ function WeakAuras.ReloadTriggerOptions(data)
     else
       regionOption = {
         [data.regionType] = {
+          __title = "|cFFFFFF00" .. data.regionType,
+          __order = 1,
           unsupported = {
             type = "description",
             name = L["This region of type \"%s\" is not supported."]:format(data.regionType)

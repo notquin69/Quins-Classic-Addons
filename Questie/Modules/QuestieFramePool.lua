@@ -27,14 +27,18 @@ ICON_TYPE_BLACK = _QuestieFramePool.addonPath.."Icons\\black.blp"
 StaticPopupDialogs["QUESTIE_CONFIRMHIDE"] = {
     text = "", -- set before showing
     QuestID = 0, -- set before showing
-    button1 = "Yes",
-    button2 = "No",
+    button1 = QuestieLocale:GetUIString("CONFIRM_HIDE_YES"),
+    button2 = QuestieLocale:GetUIString("CONFIRM_HIDE_NO"),
     OnAccept = function()
         QuestieQuest:HideQuest(StaticPopupDialogs["QUESTIE_CONFIRMHIDE"].QuestID)
     end,
     SetQuest = function(self, id)
         self.QuestID = id
         self.text = QuestieLocale:GetUIString("CONFIRM_HIDE_QUEST", QuestieDB:GetQuest(self.QuestID):GetColoredQuestName())
+        
+        -- locale might not be loaded when this is first created (this does happen almost always)
+        self.button1 = QuestieLocale:GetUIString("CONFIRM_HIDE_YES")
+        self.button2 = QuestieLocale:GetUIString("CONFIRM_HIDE_NO")
     end,
     OnShow = function(self)
         self:SetFrameStrata("TOOLTIP")
@@ -149,7 +153,6 @@ function _QuestieFramePool:UnloadFrame(frame)
   frame.loaded = nil;
     table.insert(unusedframes, frame)
 end]]--
-
 function _QuestieFramePool:QuestieCreateFrame()
     qNumberOfFrames = qNumberOfFrames + 1
     local f = CreateFrame("Button", "QuestieFrame"..qNumberOfFrames, nil)
@@ -206,11 +209,23 @@ function _QuestieFramePool:QuestieCreateFrame()
 
     f:SetScript("OnEnter", function(self) _QuestieFramePool:Questie_Tooltip(self) end); --Script Toolip
     f:SetScript("OnLeave", function() if(WorldMapTooltip) then WorldMapTooltip:Hide(); WorldMapTooltip._rebuild = nil; end if(GameTooltip) then GameTooltip:Hide(); GameTooltip._rebuild = nil; end end) --Script Exit Tooltip
-    f:SetScript("OnClick", function(self)
+    f:RegisterForClicks("RightButtonUp", "LeftButtonUp")
+    f:SetScript("OnClick", function(self, button)
         --_QuestieFramePool:Questie_Click(self)
         if self and self.data and self.data.UiMapID and WorldMapFrame and WorldMapFrame:IsShown() then
-            if self.data.UiMapID ~= WorldMapFrame:GetMapID() then
-                WorldMapFrame:SetMapID(self.data.UiMapID);
+            if button == "RightButton" then
+                -- zoom out if possible
+                local currentMapParent = WorldMapFrame:GetMapID()
+                if currentMapParent then
+                    currentMapParent = QuestieZoneToParentTable[currentMapParent];
+                    if currentMapParent and currentMapParent > 0 then
+                        WorldMapFrame:SetMapID(currentMapParent)
+                    end
+                end
+            else
+                if self.data.UiMapID ~= WorldMapFrame:GetMapID() then
+                    WorldMapFrame:SetMapID(self.data.UiMapID);
+                end
             end
             if self.data.Type == "available" and IsShiftKeyDown() then
                 StaticPopupDialogs["QUESTIE_CONFIRMHIDE"]:SetQuest(self.data.QuestData.Id)
@@ -219,6 +234,16 @@ function _QuestieFramePool:QuestieCreateFrame()
                 StaticPopup_Show ("QUESTIE_CONFIRMHIDE")
                 
             end
+        end
+        if self and self.data and self.data.UiMapID and IsControlKeyDown() and TomTom and TomTom.AddWaypoint then
+            -- tomtom integration (needs more work, will come with tracker
+            if Questie.db.char._tom_waypoint and TomTom.RemoveWaypoint then -- remove old waypoint
+                TomTom:RemoveWaypoint(Questie.db.char._tom_waypoint)
+            end
+            Questie.db.char._tom_waypoint = TomTom:AddWaypoint(self.data.UiMapID, self.x/100, self.y/100,  {title = self.data.Name, crazy = true})
+        elseif self.miniMapIcon then
+            local _, _, _, x, y = self:GetPoint()
+            Minimap:PingLocation(x, y)
         end
     end);
     f.glowUpdate = function(self)--f:HookScript("OnUpdate", function(self)
@@ -277,7 +302,8 @@ function _QuestieFramePool:QuestieCreateFrame()
         end
         self.miniMapIcon = nil;
         self:SetScript("OnUpdate", nil)
-        self:Hide();
+        self:Hide()
+        self.glow:Hide()
         --self.glow:Hide()
         self.data = nil; -- Just to be safe
         self.loaded = nil;
@@ -289,6 +315,35 @@ function _QuestieFramePool:QuestieCreateFrame()
     end
     f.data = {}
     f:Hide()
+    
+    -- functions for fake hide/unhide
+    function f:FakeHide()
+        if not self.hidden then
+            self.shouldBeShowing = self:IsShown();
+            self._show = self.Show;
+            self.Show = function()
+                self.shouldBeShowing = true;
+            end
+            self:Hide();
+            self._hide = self.Hide;
+            self.Hide = function()
+                self.shouldBeShowing = false;
+            end
+            self.hidden = true
+        end
+    end
+    function f:FakeUnhide()
+        if self.hidden then
+            self.hidden = false
+            self.Show = self._show;
+            self.Hide = self._hide;
+            self._show = nil
+            self._hide = nil
+            if self.shouldBeShowing then
+                self:Show();
+            end
+        end
+    end
     --f.glow:Hide()
     table.insert(allframes, f)
     return f
@@ -388,9 +443,9 @@ function _QuestieFramePool:Questie_Tooltip(self)
                         end
                         local dat = {};
                         if icon.data.Type == "complete" then
-                            dat.type = "(Complete)";
+                            dat.type = QuestieLocale:GetUIString("TOOLTIP_QUEST_COMPLETE");
                         else
-                            dat.type = "(Available)";
+                            dat.type = QuestieLocale:GetUIString("TOOLTIP_QUEST_AVAILABLE");
                         end
                         dat.title = icon.data.QuestData:GetColoredQuestName()
                         dat.subData = icon.data.QuestData.Description
@@ -418,6 +473,8 @@ function _QuestieFramePool:Questie_Tooltip(self)
                             end
                             --table.insert(questOrder[key], text);--questOrder[key][icon.data.ObjectiveData.Description] = tostring(icon.data.ObjectiveData.Collected) .. "/" .. tostring(icon.data.ObjectiveData.Needed) .. " " .. icon.data.ObjectiveData.Description--table.insert(questOrder[key], tostring(icon.data.ObjectiveData.Collected) .. "/" .. tostring(icon.data.ObjectiveData.Needed) .. " " .. icon.data.ObjectiveData.Description);
                         end
+                    elseif icon.data.CustomTooltipData then
+                        questOrder[icon.data.CustomTooltipData.Title] = icon.data.CustomTooltipData.Body
                     end
                 end
             end
@@ -437,8 +494,13 @@ function _QuestieFramePool:Questie_Tooltip(self)
                     self:AddDoubleLine("   " .. v2.title, v2.type);
                 end
                 if v2.subData and shift then
-                    for _,line in pairs(v2.subData) do
-                        self:AddLine("      |cFFDDDDDD" .. line);
+                    local dataType = type(v2.subData)
+                    if dataType == "table" then
+                        for _,line in pairs(v2.subData) do
+                            self:AddLine("      |cFFDDDDDD" .. line);
+                        end
+                    elseif dataType == "string" then
+                        self:AddLine("      |cFFDDDDDD" .. v2.subData);
                     end
                 end
             end
@@ -446,17 +508,20 @@ function _QuestieFramePool:Questie_Tooltip(self)
         for k, v in pairs(self.questOrder) do -- this logic really needs to be improved
             if haveGiver then
                 self:AddLine(" ")
-                self:AddDoubleLine(k, "(Active)");
+                self:AddDoubleLine(k, QuestieLocale:GetUIString("TOOLTIP_QUEST_ACTIVE"));
                 haveGiver = false -- looks better when only the first one shows (active)
             else
                 self:AddLine(k);
             end
             if shift then
                 for k2, v2 in pairs(v) do
-                    if type(v2) == "table" then
+                    local dataType = type(v2)
+                    if dataType == "table" then
                         for k3 in pairs(v2) do
                             self:AddLine("   |cFFDDDDDD" .. k3);
                         end
+                    elseif dataType == "string" then
+                        self:AddLine("   |cFFDDDDDD" .. v2);
                     end
                     self:AddLine("      |cFF33FF33" .. k2);
                 end

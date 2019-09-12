@@ -1,4 +1,13 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
     <Script file="LibStub.lua"/>
     <Script file="Kui/Kui.lua"/>
+
+    <!--@non-retail@-->
+    <Script file="LibClassicCasterino\LibClassicCasterino.lua"/>
+    <Include file="LibClassicDurations\LibClassicDurations.xml"/>
+    <!--@end-non-retail@-->
+    <!--@debug
+    <Script file="LibClassicCasterino\LibClassicCasterino.lua"/>
+    <Include file="LibClassicDurations\LibClassicDurations.xml"/>
+    @end-debug@-->
 </Ui>

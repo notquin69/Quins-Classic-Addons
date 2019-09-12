@@ -4317,7 +4317,7 @@ function _detalhes:SetBarSpecIconSettings (enabled, iconfile, fulltrack)
 		end
 		if (not have_enabled) then
 			_detalhes.track_specs = false
-			_detalhes:ResetSpecCache (true) --> for�ar
+			--_detalhes:ResetSpecCache (true) --> 
 		end
 	end
 	

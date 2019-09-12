@@ -1,4 +1,5 @@
 ## Interface: 11302
+
 ## Author: Kesava
 ## Title: Kui |cff9966ffNameplates:|r |cffffffffCore|r
 ## Notes: The official layout for Kui Nameplates.

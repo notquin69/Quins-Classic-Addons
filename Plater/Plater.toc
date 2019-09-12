@@ -1,0 +1,33 @@
+## Interface: 11302
+## Title: Plater
+## Notes: Nameplate addon designed for advanced users.
+## SavedVariables: PlaterDB
+## SavedVariablesPerCharacter: PlaterDBChr
+
+#@no-lib-strip@
+libs\libs.xml
+#@end-no-lib-strip@
+
+locales\enUS.lua
+locales\deDE.lua
+locales\esES.lua
+locales\esMX.lua
+locales\frFR.lua
+locales\itIT.lua
+locales\koKR.lua
+locales\ptBR.lua
+locales\ruRU.lua
+locales\zhCN.lua
+locales\zhTW.lua
+
+Plater.xml
+
+Plater_DefaultSettings.lua
+
+Plater.lua
+Plater_OptionsPanel.lua
+Plater_ScriptingPanels.lua
+Plater_ScriptLibrary.lua
+Plater_AnimationEditor.lua
+Plater_ChangeLog.lua
+Plater_Docs.lua

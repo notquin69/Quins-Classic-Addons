@@ -279,7 +279,6 @@ L.Area_PullTimer			= "開怪計時器過濾選項"
 L.DontShowPTNoID			= "阻擋與你不同區域ID送出的開怪倒數計時條"
 L.DontShowPT				= "不要顯示開怪/休息倒數計時條"
 L.DontShowPTText			= "不要顯示開怪/休息提示文字"
-L.DontShowPTCountdownText	= "不要顯示開怪計時器倒數文字"
 L.DontPlayPTCountdown		= "完全不要使用開怪/休息/開戰/自訂計時器倒數音效"
 L.PT_Threshold				= "不要使用高於%d秒以上的開怪/休息/開戰/自訂倒數計時器音效"
 
@@ -306,7 +305,6 @@ L.MythicRaider				= "傳奇團隊"--Basically anything below 385
 L.Panel_ExtraFeatures		= "額外功能"
 --
 L.Area_ChatAlerts			= "文字警告選項"
-L.RoleSpecAlert				= "當你加入團隊時捨取專精不符合你目前專精顯示警告訊息"
 L.CheckGear					= "開怪時顯示裝備警告訊息 (當你裝備的裝備等級低於包包裡40等以上或主手武器沒有裝備時顯示警告訊息)"
 L.WorldBossAlert			= "當你的工會成員或是朋友可能在你的伺服器上開戰世界首領時顯示警告訊息(如果發送者是被戰復的會不準確)"
 --

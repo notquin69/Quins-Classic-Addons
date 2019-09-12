@@ -24,6 +24,7 @@ function ProgressBarModule:Load()
 	end
 
 	-- common events
+	self:RegisterEvent("ADDON_LOADED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("UPDATE_EXHAUSTION")
 	self:RegisterEvent("PLAYER_UPDATE_RESTING")
@@ -114,10 +115,10 @@ function ProgressBarModule:HONOR_LEVEL_UPDATE()
 end
 
 function ProgressBarModule:ADDON_LOADED(event, addonName)
-	if addonName == "Dominos_Config" then
-		self:AddOptionsPanel()
-		self:UnregisterEvent("ADDON_LOADED")
-	end
+	if addonName ~= "Dominos_Config" then return end
+
+	self:AddOptionsPanel()
+	self:UnregisterEvent("ADDON_LOADED")
 end
 
 function ProgressBarModule:OnMediaUpdated(event, ...)
@@ -144,6 +145,20 @@ function ProgressBarModule:AddOptionsPanel()
 
 	oneBarModeToggle:SetPoint("TOPLEFT", 0, -2)
 
+	local skipInactiveModesToggle = panel:Add("CheckButton", {
+		name = L.SkipInactiveModes,
+
+		get = function()
+			return Addon.Config:SkipInactiveModes()
+		end,
+
+		set = function(_, enable)
+			Addon.Config:SetSkipInactiveModes(enable)
+		end
+	})
+
+	skipInactiveModesToggle:SetPoint("TOPLEFT", oneBarModeToggle, "BOTTOMLEFT", 0, -2)
+
 	for _, key in ipairs {"xp", "xp_bonus", "honor", "artifact", "azerite"} do
 		local picker = panel:Add("ColorPicker", {
 			name = L["Color_" .. key],
@@ -163,7 +178,7 @@ function ProgressBarModule:AddOptionsPanel()
 			end
 		})
 
-		picker:SetPoint("TOP", prev or oneBarModeToggle, "BOTTOM", 0, -6)
+		picker:SetPoint("TOP", prev or skipInactiveModesToggle, "BOTTOM", 0, -6)
 		prev = picker
 	end
 end

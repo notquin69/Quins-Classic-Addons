@@ -6,7 +6,7 @@ local L = AceLocale:GetLocale("Spy")
 local _
 
 Spy = LibStub("AceAddon-3.0"):NewAddon("Spy", "AceConsole-3.0", "AceEvent-3.0", "AceComm-3.0", "AceTimer-3.0")
-Spy.Version = "1.0.3"
+Spy.Version = "1.0.5"
 Spy.DatabaseVersion = "1.1"
 Spy.Signature = "[Spy]"
 Spy.ButtonLimit = 15
@@ -1171,7 +1171,7 @@ local Default_Profile = {
 		MinimapDetails=true,
 		DisplayOnMap=true,
 		SwitchToZone=true,
-		MapDisplayLimit="None",
+		MapDisplayLimit="SameZone",
 		DisplayWinLossStatistics=true,
 		DisplayKOSReason=true,
 		DisplayLastSeen=true,
@@ -1182,11 +1182,11 @@ local Default_Profile = {
 		InvertSpy=false,
 		ResizeSpy=true,
 		ResizeSpyLimit=15,	
-		Announce="Self",
+		Announce="None",
 		OnlyAnnounceKoS=false,
 		WarnOnStealth=true,
 		WarnOnKOS=true,
-		WarnOnKOSGuild=true,
+		WarnOnKOSGuild=false,
 		WarnOnRace=false,
 		SelectWarnRace="None",		
 		DisplayWarningsInErrorsFrame=false,
@@ -1198,8 +1198,8 @@ local Default_Profile = {
 		PurgeData="NinetyDays",
 		PurgeKoS=false,
 		PurgeWinLossData=false,
-		ShareData=true,
-		UseData=true,
+		ShareData=false,
+		UseData=false,
 		ShareKOSBetweenCharacters=true,
 		AppendUnitNameCheck=false,
 		AppendUnitKoSCheck=false,		
@@ -1441,7 +1441,7 @@ function Spy:OnEnable(first)
 	Spy:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "CombatLogEvent")
 	Spy:RegisterEvent("PLAYER_REGEN_ENABLED", "LeftCombatEvent")
 	Spy:RegisterEvent("PLAYER_DEAD", "PlayerDeadEvent")
-	Spy:RegisterEvent("CHAT_MSG_CHANNEL_NOTICE", "ChannelNoticeEvent")		
+--	Spy:RegisterEvent("CHAT_MSG_CHANNEL_NOTICE", "ChannelNoticeEvent")		
 	Spy:RegisterComm(Spy.Signature, "CommReceived")
 	Spy.IsEnabled = true
 	Spy:RefreshCurrentList()
@@ -1566,9 +1566,9 @@ function Spy:OnInitialize()
 
 	Spy:LockWindows(Spy.db.profile.Locked)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", Spy.FilterNotInParty)
-	DEFAULT_CHAT_FRAME:AddMessage(L["LoadDescription"])
+--	DEFAULT_CHAT_FRAME:AddMessage(L["LoadDescription"])
 end
-
+--[[
 function Spy:ChannelNoticeEvent(_, chStatus, _, _, Channel)
 	if chStatus ~= "SUSPENDED" then
 	Spy.zName = strsub(Channel, 14)
@@ -1577,7 +1577,7 @@ function Spy:ChannelNoticeEvent(_, chStatus, _, _, Channel)
 			Spy.EnabledInZone = false
 		end	
 	end	
-end
+end ]]--
 
 function Spy:PlayerEnteringWorldEvent()
  	local zone = GetZoneText()

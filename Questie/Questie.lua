@@ -19,6 +19,17 @@ DEBUG_DEVELOP = "|cff7c83ff[DEVELOP]|r"
 DEBUG_SPAM = "|cffff8484[SPAM]|r"
 
 
+-- check if user has updated but not restarted the game (todo: add future new source files to this)
+if not QuestieTracker then
+	if QuestieLocale.locale['enUS'] and QuestieLocale.locale['enUS']['QUESTIE_UPDATED_RESTART'] then -- sometimes locale doesnt update without restarting also
+		print(QuestieLocale:GetUIString('QUESTIE_UPDATED_RESTART'))
+	else
+		print("|cFFFF0000WARNING!|r You have updated questie without restarting the game, this will likely cause problems. Please restart the game before continuing")
+	end
+end
+
+
+
 -- get option value
 local function GetGlobalOptionLocal(info)
     return Questie.db.global[info[#info]]
@@ -422,11 +433,6 @@ local options = {
                                 QuestieMap:rescaleIcons()
                                 SetGlobalOptionLocal(info, value)
                             end,
-                },
-                fade_options = {
-                    type = "header",
-                    order = 10,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_FADE') end,
                 },
                 fadeLevel = {
                     type = "range",
@@ -1029,6 +1035,9 @@ local minimapIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("MinimapIcon",
                     _QuestieOptions.configFrame:Hide();
                 end
                 return;
+            elseif IsControlKeyDown() then
+                QuestieQuest:SmoothReset()
+                return
             end
 
             _QuestieOptions.OpenConfigWindow()
@@ -1061,6 +1070,7 @@ local minimapIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("MinimapIcon",
         tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_SHIFTLEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE_QUESTIE'));
         tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_RIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_JOURNEY'));
         tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLRIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_HIDE'));
+        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLLEFT_CLICK'),   'gray') .. ": ".. QuestieLocale:GetUIString('ICON_RELOAD'));
     end,
 });
 
@@ -1183,6 +1193,11 @@ function Questie:QuestieSlash(input)
              _QuestieOptions.configFrame:Hide();
         end
         return;
+    end
+	
+    if input == "reload" then
+        QuestieQuest:SmoothReset()
+        return
     end
 
     -- /questie minimap

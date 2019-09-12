@@ -1,0 +1,7 @@
+TBag 1.13.2.2
+- AMMO now have a category
+- Right-click context menu now works with Ctrl + Right-Click
+
+TBag 1.13.2.3
+- Problem with special bags resolved
+- Attempt to index global ..._TokenFrame resolved

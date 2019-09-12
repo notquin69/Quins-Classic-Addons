@@ -1,6 +1,6 @@
 
 	----------------------------------------------------------------------
-	-- Leatrix Plus Sound File Listing (www.leatrix.com)
+	-- Leatrix Plus Sound File Listing
 	-- Community CSV for wow_classic_beta (WOW-31446patch1.13.2_Beta)
 	----------------------------------------------------------------------
 

@@ -90,6 +90,17 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                         end,
                         get = function() return ClassicCastbarsDB.pushbackDetect end,
                     },
+                    movementDetect = {
+                        order = 7,
+                        width = "full",
+                        name = L.MOVEMENT_DETECT,
+                        desc = L.MOVEMENT_DETECT_TOOLTIP,
+                        type = "toggle",
+                        set = function(_, value)
+                            ClassicCastbarsDB.movementDetect = value
+                        end,
+                        get = function() return ClassicCastbarsDB.movementDetect end,
+                    },
                 },
             },
 
@@ -127,8 +138,27 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                         name = L.FONT_SIZE,
                         desc = L.FONT_SIZE_TOOLTIP,
                         type = "range",
+                        width = "double",
                         min = 6,
                         max = 30,
+                        bigStep = 1,
+                    },
+                    textPositionX = {
+                        order = 4,
+                        name = L.TEXT_POS_X,
+                        desc = L.POSXY_TOOLTIP,
+                        type = "range",
+                        min = -1000,
+                        max = 1000,
+                        bigStep = 1,
+                    },
+                    textPositionY = {
+                        order = 5,
+                        name = L.TEXT_POS_Y,
+                        desc = L.POSXY_TOOLTIP,
+                        type = "range",
+                        min = -1000,
+                        max = 1000,
                         bigStep = 1,
                     },
                 },
@@ -155,7 +185,7 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                     iconPositionX = {
                         order = 2,
                         name = L.ICON_POS_X,
-                        desc = L.ICON_POS_TOOLTIP,
+                        desc = L.POSXY_TOOLTIP,
                         type = "range",
                         min = -1000,
                         max = 1000,
@@ -164,7 +194,7 @@ local function CreateUnitTabGroup(unitID, localizedUnit, order)
                     iconPositionY = {
                         order = 3,
                         name = L.ICON_POS_Y,
-                        desc = L.ICON_POS_TOOLTIP,
+                        desc = L.POSXY_TOOLTIP,
                         type = "range",
                         min = -1000,
                         max = 1000,

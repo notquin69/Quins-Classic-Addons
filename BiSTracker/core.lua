@@ -4,10 +4,10 @@ MainFrame:RegisterEvent("CHAT_MSG_LOOT");
 MainFrame:RegisterEvent("ADDON_LOADED");
 
 local addonVersion = "1.2.0";
-local contributors = "Wiz-Firemaw PvP";
+local contributors = "Wizm-Mograine PvP";
 
 local loadMessageStart = "|cFF00FFB0" .. "BiSTracker" .. ": |r";
-local loadMessage = loadMessageStart .. "|cff00cc66Version |r" .. addonVersion .. "|cff00cc66, developed and maintained by|r Yekru-Firemaw PvP";
+local loadMessage = loadMessageStart .. "|cff00cc66Version |r" .. addonVersion .. "|cff00cc66, developed and maintained by|r Yekru-Mograine PvP";
 local contributorMessage = loadMessageStart .. "|cff00cc66Contributors: |r" .. contributors;
 
 
@@ -1089,59 +1089,82 @@ local function updateItemList()
 				item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
 				item.title:SetTextColor(0.86, 0.64, 0, 1);
 				if (tostring(itemMinLevel) ~= "nil") then
-					MainFrame.tooltip:Show();
-					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					MainFrame.tooltip.weaponDamage:SetText("");
-					MainFrame.tooltip.weaponSpeed:SetText("");
-					MainFrame.tooltip.dps:SetText("");
-					MainFrame.tooltip.weaponStats:SetText("");
-					MainFrame.tooltip.gearStats:SetText("");
-					MainFrame.tooltip.icon:SetTexture(itemIcon);
-					MainFrame.tooltip.title:SetText(itemName);
-					MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-					MainFrame.tooltip.acquire:SetText("");
-					MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
-					MainFrame.tooltip.type:SetText(itemType);
-					MainFrame.tooltip.subType:SetText(itemSubType);
 
-					MainFrame.tooltip.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
-					MainFrame.tooltip.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
-					MainFrame.tooltip.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+					MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
+					MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
+					MainFrame.tip:SetHyperlink(itemLink);
+					MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
+					if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type)
+;						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
+					else
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
+					end
 					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tooltip.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
 					else
-						MainFrame.tooltip.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
+					end
+					MainFrame.tip:Show();
+					--MainFrame.tooltip:Show();
+					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--MainFrame.tooltip.weaponDamage:SetText("");
+					--MainFrame.tooltip.weaponSpeed:SetText("");
+					--MainFrame.tooltip.dps:SetText("");
+					--MainFrame.tooltip.weaponStats:SetText("");
+					--MainFrame.tooltip.gearStats:SetText("");
+					--MainFrame.tooltip.icon:SetTexture(itemIcon);
+					--MainFrame.tooltip.title:SetText(itemName);
+					--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+					--MainFrame.tooltip.acquire:SetText("");
+					--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
+					--MainFrame.tooltip.type:SetText(itemType);
+					--MainFrame.tooltip.subType:SetText(itemSubType);
+
+					MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
+					MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
+					MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+						MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+					else
+						MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
 					end
 
-					if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-						MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-					else
-						MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-					end
+					--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+					--else
+					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
+					--end
 
-					local nameLength = string.len(itemName);
-					if (nameLength * 13 < 230) then
-						updateTooltipWindowSize(280, 300);
-					else
-						updateTooltipWindowSize(nameLength * 13 + 50, 300);
-					end
+					--local nameLength = string.len(itemName);
+					--if (nameLength * 13 < 230) then
+					--	updateTooltipWindowSize(280, 300);
+					--else
+					--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
+					--end
 
-					if itemType == "Weapon" then
-						local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
-						MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
-						MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
-						MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					else
-						MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					end
+					--if itemType == "Weapon" then
+					--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
+					--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
+					--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
+					--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--else
+					--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--end
 				end
 			end);
 
 			item:SetScript("OnLeave", function(self) 
 				item:SetBackdropColor(1, 1, 1, 0.1);
 				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-				MainFrame.tooltip:Hide();
+				--MainFrame.tooltip:Hide();
+				MainFrame.tip:Hide();
+				MainFrame.tooltipObtain:Hide();
 			end);
+			
+			item:SetScript("OnMouseDown", function(self)
+				SetItemRef(itemLink, itemLink, "LeftButton");
+			end)
 
 			item:Show();
 
@@ -1205,58 +1228,83 @@ local function updateItemList()
 				item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
 				item.title:SetTextColor(0.86, 0.64, 0, 1);
 				if (tostring(itemMinLevel) ~= "nil") then
-					MainFrame.tooltip:Show();
-					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					MainFrame.tooltip.weaponDamage:SetText("");
-					MainFrame.tooltip.weaponSpeed:SetText("");
-					MainFrame.tooltip.dps:SetText("");
-					MainFrame.tooltip.weaponStats:SetText("");
-					MainFrame.tooltip.gearStats:SetText("");
-					MainFrame.tooltip.icon:SetTexture(itemIcon);
-					MainFrame.tooltip.title:SetText(itemName);
-					MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-					MainFrame.tooltip.acquire:SetText("");
-					MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
-					MainFrame.tooltip.type:SetText(itemType);
-					MainFrame.tooltip.subType:SetText(itemSubType);
+					
 
-					MainFrame.tooltip.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
-					MainFrame.tooltip.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
-					MainFrame.tooltip.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+					
+
+					MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
+					MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
+					MainFrame.tip:SetHyperlink(itemLink);
+					MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
+					if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type)
+;						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
+					else
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
+					end
 					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tooltip.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
 					else
-						MainFrame.tooltip.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
+					end
+					MainFrame.tip:Show();
+					--MainFrame.tooltip:Show();
+					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--MainFrame.tooltip.weaponDamage:SetText("");
+					--MainFrame.tooltip.weaponSpeed:SetText("");
+					--MainFrame.tooltip.dps:SetText("");
+					--MainFrame.tooltip.weaponStats:SetText("");
+					--MainFrame.tooltip.gearStats:SetText("");
+					--MainFrame.tooltip.icon:SetTexture(itemIcon);
+					--MainFrame.tooltip.title:SetText(itemName);
+					--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+					--MainFrame.tooltip.acquire:SetText("");
+					--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
+					--MainFrame.tooltip.type:SetText(itemType);
+					--MainFrame.tooltip.subType:SetText(itemSubType);
+
+					MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
+					MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
+					MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+						MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+					else
+						MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
 					end
 
-					if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-						MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-					else
-						MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-					end
+					--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+					--else
+					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
+					--end
 
-					local nameLength = string.len(itemName);
-					if (nameLength * 13 < 230) then
-						updateTooltipWindowSize(280, 300);
-					else
-						updateTooltipWindowSize(nameLength * 13 + 50, 300);
-					end
+					--local nameLength = string.len(itemName);
+					--if (nameLength * 13 < 230) then
+					--	updateTooltipWindowSize(280, 300);
+					--else
+					--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
+					--end
 
-					if itemType == "Weapon" then
-						local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
-						MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
-						MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
-						MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					else
-						MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					end
+					--if itemType == "Weapon" then
+					--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
+					--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
+					--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
+					--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--else
+					--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+					--end
 				end
 			end)
 
 			item:SetScript("OnLeave", function(self)
 				item:SetBackdropColor(1, 1, 1, 0.1);
 				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-				MainFrame.tooltip:Hide();
+				--MainFrame.tooltip:Hide();
+				MainFrame.tip:Hide();
+				MainFrame.tooltipObtain:Hide();
+			end)
+			item:SetScript("OnMouseDown", function(self)
+				SetItemRef(itemLink, itemLink, "LeftButton");
 			end)
 			if itemName ~= nil then
 				if string.len(itemName) > 23 then
@@ -1265,6 +1313,7 @@ local function updateItemList()
 					listItemName = itemName;
 				end
 			end
+
 			item.title:SetText(listItemName);
 			item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
 			item.icon:SetTexture(itemIcon);
@@ -1606,6 +1655,12 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
 		ToastFrame.itemName:SetText("[Some random item]");
 		ToastFrame.itemName:SetFont("Fonts\\FRIZQT__.TTF", 17);
 
+
+		MainFrame.tip = CreateFrame("GAMETOOLTIP", "$parentToolTip", UIParent, "GameTooltipTemplate");
+		MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
+		MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
+
+
 		MainFrame.tooltip = CreateFrame("Frame", "BiSTooltip", MainFrame, "BiSFrameTemplate");
 		MainFrame.tooltip:SetSize(250, 300);
 		MainFrame.tooltip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
@@ -1635,18 +1690,19 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
 		MainFrame.tooltip.weaponStats = createTooltipString(13, 8, -120, "WeaponStats", "260 Armor \n +11 Stamina", 1, 1, 1, MainFrame.tooltip);
 		MainFrame.tooltip.gearStats = createTooltipString(13, 8, -88, "GearStats", "260 Armor\n+11 Stamina\n+5 Agility\n+50 intellect\n+5 Agility", 1, 1, 1, MainFrame.tooltip);
 
-		MainFrame.tooltip.tooltipObtain = CreateFrame("Frame", "BiSTooltipObtain", MainFrame.tooltip, "BiSFrameTemplate");
-		MainFrame.tooltip.tooltipObtain:SetSize(250, 100);
-		MainFrame.tooltip.tooltipObtain:SetPoint("TOPLEFT", MainFrame.tooltip.BottomLeft, "BOTTOMLEFT", 3, 2);
-		MainFrame.tooltip.tooltipObtain:SetBackdrop(backdrop);
-		MainFrame.tooltip.tooltipObtain:SetBackdropBorderColor(1, 1, 1, 1);
-		MainFrame.tooltip.tooltipObtain:SetBackdropColor(0, 0, 0, 1);
+		MainFrame.tooltipObtain = CreateFrame("Frame", "BiSTooltipObtain", MainFrame, "BiSFrameTemplate");
+		MainFrame.tooltipObtain:SetSize(250, 100);
+		MainFrame.tooltipObtain:SetPoint("TOPLEFT", MainFrame.BottomLeft, "BOTTOMLEFT", 3, 2);
+		MainFrame.tooltipObtain:SetBackdrop(backdrop);
+		MainFrame.tooltipObtain:SetBackdropBorderColor(1, 1, 1, 1);
+		MainFrame.tooltipObtain:SetBackdropColor(0, 0, 0, 1);
 
-		MainFrame.tooltip.tooltipObtain.title = createTooltipString(13, 8, -8, "ObtainTitle", "This item is acquired in:", 0.54, 0, 0.32, MainFrame.tooltip.tooltipObtain);
-		MainFrame.tooltip.tooltipObtain.zone = createTooltipString(13, 8, -28, "ObtainZone", "Hillsbrad Foothills", 0, 0.87, 0, MainFrame.tooltip.tooltipObtain);
-		MainFrame.tooltip.tooltipObtain.Type = createTooltipString(13, 8, -42, "ObtainType", "By Quest:", 0, 0.87, 0, MainFrame.tooltip.tooltipObtain);
-		MainFrame.tooltip.tooltipObtain.Method = createTooltipString(13, 8, -58, "ObtainType", "Some Quest", 0, 0.87, 0, MainFrame.tooltip.tooltipObtain);
-		MainFrame.tooltip.tooltipObtain.Drop = createTooltipString(13, 8, -74, "ObtainType", "Drop Chance: Guaranteed", 0, 0.87, 0, MainFrame.tooltip.tooltipObtain);
+		MainFrame.tooltipObtain.title = createTooltipString(13, 8, -8, "ObtainTitle", "This item is acquired in:", 0.54, 0, 0.32, MainFrame.tooltipObtain);
+		MainFrame.tooltipObtain.zone = createTooltipString(13, 8, -28, "ObtainZone", "Hillsbrad Foothills", 0, 0.87, 0, MainFrame.tooltipObtain);
+		MainFrame.tooltipObtain.Type = createTooltipString(13, 8, -42, "ObtainType", "By Quest:", 0, 0.87, 0, MainFrame.tooltipObtain);
+		MainFrame.tooltipObtain.Method = createTooltipString(13, 8, -58, "ObtainType", "Some Quest", 0, 0.87, 0, MainFrame.tooltipObtain);
+		MainFrame.tooltipObtain.Drop = createTooltipString(13, 8, -74, "ObtainType", "Drop Chance: Guaranteed", 0, 0.87, 0, MainFrame.tooltipObtain);
+		MainFrame.tooltipObtain:Hide();
 
 
 		MainFrame.reload = CreateFrame("Button", "BiSReloadButton", MainFrame);

@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
---> global name declaration
+--global name declaration
 		
 		_ = nil
 		_detalhes = LibStub("AceAddon-3.0"):NewAddon("_detalhes", "AceTimer-3.0", "AceComm-3.0", "AceSerializer-3.0", "NickTag-1.0")
 		
-		_detalhes.build_counter = 146
+		_detalhes.build_counter = 153
 		_detalhes.alpha_build_counter = 76 --if this is higher than the regular counter, use it instead
 		_detalhes.game_version = "v1.13.2"
 		_detalhes.userversion = "v1.13.2." .. _detalhes.build_counter

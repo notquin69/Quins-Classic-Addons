@@ -286,7 +286,6 @@ L.DontShowPTNoID			= "不显示不同区域发送的倒计时"
 L.DontShowPT				= "不显示开怪和倒计时条"
 L.DontShowPTText			= "不显示开怪和倒计时文字"
 L.DontPlayPTCountdown		= "不播放开怪倒计时语音"
-L.DontShowPTCountdownText	= "不显示开怪倒计时动画"
 L.PT_Threshold				= "不显示高于%d秒的倒计时动画"
 
 L.Panel_HideBlizzard		= "隐藏游戏自带内容"
@@ -311,7 +310,6 @@ L.MythicRaider				= "M副本"--Basically anything below 385
 L.Panel_ExtraFeatures		= "其他功能"
 --
 L.Area_ChatAlerts			= "文字提示警告选项"
-L.RoleSpecAlert				= "当进入团队时，如果拾取专精与当前角色专精不同，则显示警告。"
 L.CheckGear					= "当你身上的装备装等低于背包装等40点时显示警告。(可能没有装备某物品或装备了低等级的任务道具或没有装备主武器)"
 L.WorldBossAlert			= "当世界Boss进入战斗后发送警告，这个信息可能是你的朋友或者同工会成员发送的。 (由于跨服，卡位面等因素，可能不准确)"
 --

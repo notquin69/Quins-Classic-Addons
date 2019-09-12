@@ -1,6 +1,6 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.8-beta
+## Version: v1.1.9-beta
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -16,7 +16,7 @@
 ## Title-zhCN: AtlasLootClassic |cFF0099FF[PvP]|r
 ## Title-zhTW: AtlasLootClassic |cFF0099FF[PvP]|r
 ## Notes: AtlasLoot loot tables from PvP
-## Notes-deDE: PvP Modul
+## Notes-deDE: AtlasLoot Beuteverzeichnis für PvP
 ## Notes-esES: AtlasLoot loot tables from PvP
 ## Notes-esMX: AtlasLoot loot tables from PvP
 ## Notes-frFR: AtlasLoot loot tables from PvP

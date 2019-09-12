@@ -107,9 +107,9 @@ end
 ----------------------------------------------------- core message dispatcher --
 function addon:DispatchMessage(msg,...)
     if listeners[msg] then
-        --[[@debug@
+        --[===[@debug@
         TraceStart('m:'..msg)
-        --@debug@]]
+        --@end-debug@]===]
 
         for _,listener_tbl in ipairs(listeners[msg]) do
             local listener,func = unpack(listener_tbl)
@@ -131,9 +131,9 @@ function addon:DispatchMessage(msg,...)
             end
         end
 
-        --[[@debug@
+        --[===[@debug@
         TraceEnd('m:'..msg)
-        --@debug@]]
+        --@end-debug@]===]
     end
 end
 ------------------------------------------------------------- event functions --
@@ -143,9 +143,9 @@ local event_index = {}
 
 -- iterate plugins/elements which have registered the given event
 local function DispatchEventToListeners(event,unit,unit_frame,...)
-    --[[@debug@
+    --[===[@debug@
     TraceStart('e:'..event)
-    --@debug@]]
+    --@end-debug@]===]
 
     for _,listener_tbl in ipairs(event_index[event]) do
         local table,func = unpack(listener_tbl)
@@ -173,9 +173,9 @@ local function DispatchEventToListeners(event,unit,unit_frame,...)
         end
     end
 
-    --[[@debug@
+    --[===[@debug@
     TraceEnd('e:'..event)
-    --@debug@]]
+    --@end-debug@]===]
 end
 ------------------------------------------------------------ unit event frame --
 -- a "unit event" by this definition relies on the event returning a unit,
@@ -468,27 +468,27 @@ function messages.RunCallback(table,name,...)
     if addon.debug_callbacks then
         PrintDebugForCallback(table,name,...)
     end
-    --[[@debug@
+    --[===[@debug@
     TraceStart('c:'..name)
-    --@debug@]]
+    --@end-debug@]===]
 
     if table.__CALLBACKS[name] == 2 then
         -- inherit return from forced single callback
-        --[[@debug@
+        --[===[@debug@
         if addon.profiling then
             local r = {table.callbacks[name][1](...)}
             TraceEnd('c:'..name)
             return unpack(r)
         end
-        --@debug@]]
+        --@end-debug@]===]
         return table.callbacks[name][1](...)
     else
         for _,cb in ipairs(table.callbacks[name]) do
             cb[1](...)
         end
-        --[[@debug@
+        --[===[@debug@
         TraceEnd('c:'..name)
-        --@debug@]]
+        --@end-debug@]===]
         return true
     end
 end

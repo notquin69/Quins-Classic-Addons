@@ -931,14 +931,14 @@ function core:InitialiseConfig()
             end
         end
     end
-    --[[@alpha@
+    --[===[@alpha@
     if not KuiNameplatesCoreSaved or not KuiNameplatesCoreSaved.SHUT_UP then
         addon:ui_print('You are using an alpha release;')
         print('    Please report issues to www.github.com/kesava-wow/kuinameplates2')
         print('    And include the output of: /knp dump')
         print('    Thanks!')
     end
-    --@alpha@]]
+    --@end-alpha@]===]
 
     self.config = kc:Initialise('KuiNameplatesCore',default_config)
     self.profile = self.config:GetConfig()

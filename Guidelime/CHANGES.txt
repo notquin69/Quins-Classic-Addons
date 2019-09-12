@@ -1,0 +1,48 @@
+tag 6c07116e743eb23ee558acdb192e5899a31a8fa0 v1.021
+Author:	max-ri <max_r_@web.de>
+Date:	Tue Sep 10 17:22:10 2019 +0200
+
+v1.021
+
+commit 72d49bd14d8d7c2c3c9c851ab6cd111bc7bf1840
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 10 17:22:09 2019 +0200
+
+    v1.021
+
+commit f2cf80cb97b286aec5b4d8643411fa6d4c03bc1c
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 10 17:21:36 2019 +0200
+
+    bugfix: changing color for skip quests was not displayed correctly in options dialog
+
+commit 4a6cc394d08275dfddbcac0e31f4860ce7ce7148
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 10 17:20:51 2019 +0200
+
+    bugfix: whitespace was removed from guide unintentionally
+
+commit d6489d4738f3f4993b32e9aaecc6895453a26b5d
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 10 14:11:18 2019 +0200
+
+    added option to change arrow size
+
+commit d6489d4738f3f4993b32e9aaecc6895453a26b5d
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 10 14:11:18 2019 +0200
+
+    added option to change arrow size
+
+commit aa5d6a215ced9dc4afea7b285b511dfb91ee2358
+Author: Borick <51713394+max-ri@users.noreply.github.com>
+Date:   Mon Sep 9 14:53:11 2019 +0200
+
+    Update README.md
+
+commit 4fbcf56336715f04326ac7434327bd92227b6015
+Author: max-ri <max_r_@web.de>
+Date:   Mon Sep 9 14:49:19 2019 +0200
+
+    Update .gitignore
+

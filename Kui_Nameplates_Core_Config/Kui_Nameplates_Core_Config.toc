@@ -1,4 +1,5 @@
 ## Interface: 11302
+
 ## Author: Kesava
 ## Title: Kui |cff9966ffNameplates:|r |cffffffffCore Config|r
 ## Notes: Load-on-demand configuration interface for Kui Nameplates Core.

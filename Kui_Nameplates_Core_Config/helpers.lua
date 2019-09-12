@@ -1216,7 +1216,7 @@ function opt:Initialise()
     version:SetPoint('BOTTOMRIGHT',self,'TOPRIGHT',-10,4)
     version:SetText(format(
         L.titles.version,
-        'Kui Nameplates','Kesava','classic-5'
+        'Kui Nameplates','Kesava','classic-6'
     ))
 
     self.TabList = tablist

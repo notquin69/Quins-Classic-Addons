@@ -1,5 +1,29 @@
 # Dominos Changelog
 
+8.2.25
+
+* Added a workaround for cases where the progress bar mode update updated failed
+* Added druid travel form paging options
+* Set statehidden = true on all Blizzard action buttons by default
+* Classic - Added counts to action buttons for abilities that consume reagents
+
+8.2.24
+
+* Add a new progress bar mode setting: Skip Inactive modes. Enabling this skip any inactive progress bar mode when you
+click a progress bar to switch the next mode
+
+8.2.23
+
+* Revert one bar mode being the default setting for the progress bar.
+
+8.2.22
+
+* Fix an issue preventing the main options panel for the progress bar from loading
+
+8.2.21
+
+* Fix an issue causing druid form states to not work properly if the player has a bar set for Moonkin form without having the form
+
 8.2.20
 
 * Skipped version 8.2.19

@@ -1,6 +1,6 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.8-beta
+## Version: v1.1.9-beta
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -16,7 +16,7 @@
 ## Title-zhCN: AtlasLootClassic |cFF0099FF[Factions]|r
 ## Title-zhTW: AtlasLootClassic |cFF0099FF[Factions]|r
 ## Notes: AtlasLoot loot tables from Factions
-## Notes-deDE: AtlasLoot loot tables from Factions
+## Notes-deDE: AtlasLoot Beuteverzeichnis der Fraktionen
 ## Notes-esES: AtlasLoot loot tables from Factions
 ## Notes-esMX: AtlasLoot loot tables from Factions
 ## Notes-frFR: AtlasLoot loot tables from Factions

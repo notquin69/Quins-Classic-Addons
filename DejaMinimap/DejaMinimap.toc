@@ -1,0 +1,9 @@
+## Interface: 80200
+## Version: 820r203
+## Title: DejaMinimap
+## Authors: Dejablue, Bõb, Ertkal and Eurytus
+## Notes: Dejablue's simple minimap.
+## SavedVariables: DejaMinimapDB
+## SavedVariablesPerCharacter: DejaMinimapDBPC
+
+DejaMinimap.lua

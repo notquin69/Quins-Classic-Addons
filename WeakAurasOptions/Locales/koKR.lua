@@ -53,12 +53,10 @@ local L = WeakAuras.L
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"] = "|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r"
 	--[[Translation missing --]]
 	L["|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"] = "|cFFffcc00Anchors:|r Anchored to frame's |cFFFF0000%s|r with offset |cFFFF0000%s/%s|r"
-	--[[Translation missing --]]
-	L["|cFFffcc00Extra Options:|r"] = "|cFFffcc00Extra Options:|r"
+	L["|cFFffcc00Extra Options:|r"] = "|cFFffcc00추가 옵션:|r"
 	--[[Translation missing --]]
 	L["|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r %s"] = "|cFFffcc00Font Flags:|r |cFFFF0000%s|r and shadow |c%sColor|r with offset |cFFFF0000%s/%s|r %s"
-	--[[Translation missing --]]
-	L["|cFFffcc00Font:|r %s %s"] = "|cFFffcc00Font:|r %s %s"
+	L["|cFFffcc00Font:|r %s %s"] = "|cFFffcc00글꼴:|r %s %s"
 	L["1 Match"] = "1개 일치"
 	L["A 20x20 pixels icon"] = "20x20 픽셀 아이콘"
 	L["A 32x32 pixels icon"] = "32x32 픽셀 아이콘"
@@ -68,14 +66,12 @@ local L = WeakAuras.L
 	L["A group that dynamically controls the positioning of its children"] = "포함된 개체들의 배열을 유동적으로 조절하는 그룹"
 	L["A Unit ID (e.g., party1)."] = "유닛 ID (예 : party1)."
 	L["Actions"] = "동작"
-	--[[Translation missing --]]
-	L["Add %s"] = "Add %s"
+	L["Add %s"] = "%s 추가"
 	L["Add a new display"] = "새로운 디스플레이 추가"
 	L["Add Condition"] = "조건 추가"
 	--[[Translation missing --]]
 	L["Add Entry"] = "Add Entry"
-	--[[Translation missing --]]
-	L["Add Extra Elements"] = "Add Extra Elements"
+	L["Add Extra Elements"] = "추가 요소 추가"
 	L["Add Option"] = "옵션 추가"
 	L["Add Overlay"] = "오버레이 추가"
 	L["Add Property Change"] = "속성 변경 추가"
@@ -233,8 +229,7 @@ local L = WeakAuras.L
 	L["Copy to all auras"] = "모든 효과에 복사"
 	L["Copy URL"] = "URL 복사"
 	L["Count"] = "횟수"
-	--[[Translation missing --]]
-	L["Counts the number of matches over all units."] = "Counts the number of matches over all units."
+	L["Counts the number of matches over all units."] = "모든 유닛에 대해 일치 횟수를 계산합니다."
 	L["Creating buttons: "] = "버튼 생성:"
 	L["Creating options: "] = "옵션 생성:"
 	L["Crop X"] = "X 자르기"
@@ -363,8 +358,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Fire Orb"] = "화염 구슬"
 	L["Font"] = "글꼴"
 	L["Font Size"] = "글꼴 크기"
-	--[[Translation missing --]]
-	L["Foreground"] = "Foreground"
+	L["Foreground"] = "전경"
 	L["Foreground Color"] = "전경 색상"
 	L["Foreground Texture"] = "전경 텍스쳐"
 	L["Frame"] = "프레임"
@@ -411,8 +405,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Height"] = "높이"
 	L["Hide"] = "숨기기"
 	L["Hide Cooldown Text"] = "재사용 대기시간 문자 숨기기"
-	--[[Translation missing --]]
-	L["Hide Extra Options"] = "Hide Extra Options"
+	L["Hide Extra Options"] = "추가 옵션 숨기기"
 	L["Hide on"] = "숨기기"
 	L["Hide this group's children"] = "이 그룹의 자식 숨기기"
 	L["Hide When Not In Group"] = "파티에 없을 때 숨기기"
@@ -424,8 +417,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Icon"] = "아이콘"
 	L["Icon Info"] = "아이콘 정보"
 	L["Icon Inset"] = "아이템 축소"
-	--[[Translation missing --]]
-	L["Icon Position"] = "Icon Position"
+	L["Icon Position"] = "아이콘 위치"
 	L["Icon Settings"] = "아이콘 설정"
 	--[[Translation missing --]]
 	L["If"] = "If"
@@ -484,7 +476,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Low Mana"] = "마나 낮음"
 	L["Main"] = "메인"
 	L["Manage displays defined by Addons"] = "애드온에 의해 정의된 디스플레이 관리"
-	L["Match Count"] = "일치 수치"
+	L["Match Count"] = "일치 횟수"
 	L["Max"] = "최대"
 	L["Max Length"] = "최대 길이"
 	L["Medium Icon"] = "보통 아이콘"
@@ -662,12 +654,9 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Show all matches (Auto-clone)"] = "모든 일치 표시 (자동 복제)"
 	L["Show Border"] = "테두리 표시"
 	L["Show Cooldown"] = "재사용 대기시간 표시"
-	--[[Translation missing --]]
-	L["Show Extra Options"] = "Show Extra Options"
-	--[[Translation missing --]]
-	L["Show Glow"] = "Show Glow"
-	--[[Translation missing --]]
-	L["Show Icon"] = "Show Icon"
+	L["Show Extra Options"] = "추가 옵션 표시"
+	L["Show Glow"] = "반짝임 표시"
+	L["Show Icon"] = "아이콘 표시"
 	--[[Translation missing --]]
 	L["Show If Unit Does Not Exist"] = "Show If Unit Does Not Exist"
 	L["Show If Unit Is Invalid"] = "유닛이 유효하지 않은 경우 표시"
@@ -677,8 +666,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Show model of unit "] = "유닛의 모델 표시"
 	--[[Translation missing --]]
 	L["Show On"] = "Show On"
-	--[[Translation missing --]]
-	L["Show Spark"] = "Show Spark"
+	L["Show Spark"] = "섬광 표시"
 	--[[Translation missing --]]
 	L["Show Text"] = "Show Text"
 	L["Show this group's children"] = "이 그룹의 자식 표시"
@@ -742,8 +730,7 @@ UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
 	L["Sub Option %i"] = "Sub Option %i"
 	L["Temporary Group"] = "임시 그룹"
 	L["Text"] = "문자"
-	--[[Translation missing --]]
-	L["Text %s"] = "Text %s"
+	L["Text %s"] = "문자 %s"
 	L["Text Color"] = "문자 색상"
 	L["Text Settings"] = "문자 설정"
 	L["Texture"] = "텍스쳐"

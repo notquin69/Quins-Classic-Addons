@@ -6,7 +6,7 @@ BiSData = {
 					itemID = 14539,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Rattlegore",
 						Drop = "10%",
 					}
@@ -15,7 +15,7 @@ BiSData = {
 					itemID = 13177,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "War Master Voone",
 						Drop = "1.5%",
 					}
@@ -24,7 +24,7 @@ BiSData = {
 					itemID = 10783,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gasher",
 						Drop = "3%",
 					}
@@ -33,7 +33,7 @@ BiSData = {
 					itemID = 12551,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -51,7 +51,7 @@ BiSData = {
 					itemID = 12966,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Beast",
 						Drop = "19%",
 					}
@@ -60,7 +60,7 @@ BiSData = {
 					itemID = 13258,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Urok Doomhowl",
 						Drop = "16%",
 					}
@@ -69,7 +69,7 @@ BiSData = {
 					itemID = 13252,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "11%",
 					}
@@ -78,7 +78,7 @@ BiSData = {
 					itemID = 11821,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Angerforge",
 						Drop = "11%",
 					}
@@ -87,7 +87,7 @@ BiSData = {
 					itemID = 16711,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Rattlegore",
 						Drop = "12%",
 					}
@@ -105,7 +105,7 @@ BiSData = {
 					itemID = 11669,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "27%",
 					}
@@ -132,7 +132,7 @@ BiSData = {
 					itemID = 943,
 					Obtain = {
 						Zone = "Zul'Farrak",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -182,7 +182,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -191,7 +191,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -200,7 +200,7 @@ BiSData = {
 					itemID = 14637,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "5%",
 					}
@@ -209,7 +209,7 @@ BiSData = {
 					itemID = 16710,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Scholomance Occultist",
 						Drop = "8%",
 					}
@@ -227,7 +227,7 @@ BiSData = {
 					itemID = 13252,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "11%",
 					}
@@ -245,7 +245,7 @@ BiSData = {
 					itemID = 12553,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Moira Bronzebeard",
 						Drop = "14%",
 					}
@@ -254,7 +254,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -281,7 +281,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -290,7 +290,7 @@ BiSData = {
 					itemID = 13167,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "7%",
 					}
@@ -331,7 +331,7 @@ BiSData = {
 					itemID = 12103,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Grand Crusader Dathrohan",
 						Drop = "18%",
 					}
@@ -340,7 +340,7 @@ BiSData = {
 					itemID = 13013,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -349,7 +349,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -358,7 +358,7 @@ BiSData = {
 					itemID = 11924,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "16%",
 					}
@@ -367,7 +367,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -376,7 +376,7 @@ BiSData = {
 					itemID = 13258,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Urok Doomhowl",
 						Drop = "16%",
 					}
@@ -385,7 +385,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -394,7 +394,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -403,7 +403,7 @@ BiSData = {
 					itemID = 11822,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "22%",
 					}
@@ -421,7 +421,7 @@ BiSData = {
 					itemID = 13001,
 					Obtain = {
 						Zone = "Feralas",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Razza",
 						Drop = "9%",
 					}
@@ -430,7 +430,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -448,7 +448,7 @@ BiSData = {
 					itemID = 13964,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Darkmaster Gandling",
 						Drop = "9%",
 					}
@@ -457,7 +457,7 @@ BiSData = {
 					itemID = 10796,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dreamscythe",
 						Drop = "5%",
 					}
@@ -480,7 +480,7 @@ BiSData = {
 					itemID = 13102,
 					Obtain = {
 						Zone = "Alterac Mountains",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Narillasanz",
 						Drop = "~0.1%",
 					}
@@ -489,7 +489,7 @@ BiSData = {
 					itemID = 18723,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ramstein the Gorger",
 						Drop = "7%",
 					}
@@ -507,7 +507,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 					    Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -516,7 +516,7 @@ BiSData = {
 					itemID = 13346,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "10%",
 					}
@@ -525,7 +525,7 @@ BiSData = {
 					itemID = 13208,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gizul the Slavener",
 						Drop = "19%",
 					}
@@ -534,7 +534,7 @@ BiSData = {
 					itemID = 10787,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gasher, Hukku, Loro",
 						Drop = "5%",
 					}
@@ -543,7 +543,7 @@ BiSData = {
 					itemID = 14553,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -552,7 +552,7 @@ BiSData = {
 					itemID = 11841,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Fineous Darkvire",
 						Drop = "26%",
 					}
@@ -561,7 +561,7 @@ BiSData = {
 					itemID = 13954,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "29%",
 					}
@@ -570,7 +570,7 @@ BiSData = {
 					itemID = 13178,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Urok Doomhowl",
 						Drop = "9%",
 					}
@@ -588,7 +588,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -597,7 +597,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -606,7 +606,7 @@ BiSData = {
 					itemID = 11923,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dope'rel",
 						Drop = "33%",
 					}
@@ -615,7 +615,7 @@ BiSData = {
 					itemID = 11928,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "14%",
 					}
@@ -640,7 +640,7 @@ BiSData = {
 					itemID = 13404,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Unforgiven",
 						Drop = "18%",
 					}
@@ -658,7 +658,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -667,7 +667,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -676,7 +676,7 @@ BiSData = {
 					itemID = 11726,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gorosh the Dervish",
 						Drop = "11%",
 					}
@@ -685,7 +685,7 @@ BiSData = {
 					itemID = 13211,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Crimson Defender",
 						Drop = "2%",
 					}
@@ -703,7 +703,7 @@ BiSData = {
 					itemID = 14502,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ras Frostwhisper",
 						Drop = "10%",
 					}
@@ -721,7 +721,7 @@ BiSData = {
 					itemID = 13967,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Kirtonos the Herald",
 						Drop = "14%",
 					}
@@ -730,7 +730,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -739,7 +739,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -757,7 +757,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -766,7 +766,7 @@ BiSData = {
 					itemID = 12940,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "4%",
 					}
@@ -775,7 +775,7 @@ BiSData = {
 					itemID = 12939,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "8%",
 					}
@@ -784,7 +784,7 @@ BiSData = {
 					itemID = 2099,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -809,7 +809,7 @@ BiSData = {
 					itemID = 12103,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Grand Crusader Dathrohan",
 						Drop = "18%",
 					}
@@ -818,7 +818,7 @@ BiSData = {
 					itemID = 11782,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warder Stilgiss",
 						Drop = "22%",
 					}
@@ -827,7 +827,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -845,7 +845,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -854,7 +854,7 @@ BiSData = {
 					itemID = 13253,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "7%",
 					}
@@ -863,7 +863,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -872,7 +872,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -881,7 +881,7 @@ BiSData = {
 					itemID = 11822,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "22%",
 					}
@@ -890,7 +890,7 @@ BiSData = {
 					itemID = 942,
 					Obtain = {
 						Zone = "",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Random 48-58 mob",
 						Drop = "~0.1%",
 					}
@@ -899,7 +899,7 @@ BiSData = {
 					itemID = 942,
 					Obtain = {
 						Zone = "",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Random 48-58 mob",
 						Drop = "~0.1%",
 					}
@@ -908,7 +908,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -926,7 +926,7 @@ BiSData = {
 					itemID = 13964,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Darkmaster Gandling",
 						Drop = "9%",
 					}
@@ -935,7 +935,7 @@ BiSData = {
 					itemID = 10796,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dreamscythe",
 						Drop = "5%",
 					}
@@ -944,7 +944,7 @@ BiSData = {
 					itemID = 13938,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Darkmaster Gandling",
 						Drop = "8%",
 					}
@@ -969,7 +969,7 @@ BiSData = {
 					itemID = 18723,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ramstein the Gorger",
 						Drop = "7%",
 					}
@@ -978,7 +978,7 @@ BiSData = {
 					itemID = 18720,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Balnazzar",
 						Drop = "8%",
 					}
@@ -987,7 +987,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -996,7 +996,7 @@ BiSData = {
 					itemID = 13346,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "10%",
 					}
@@ -1005,7 +1005,7 @@ BiSData = {
 					itemID = 13969,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Kirtonos the Herald",
 						Drop = "14%",
 					}
@@ -1014,7 +1014,7 @@ BiSData = {
 					itemID = 10787,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gasher, Hukku, Loro",
 						Drop = "5%",
 					}
@@ -1023,7 +1023,7 @@ BiSData = {
 					itemID = 18702,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -1032,7 +1032,7 @@ BiSData = {
 					itemID = 11841,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Fineous Darkvire",
 						Drop = "26%",
 					}
@@ -1041,7 +1041,7 @@ BiSData = {
 					itemID = 13954,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "29%",
 					}
@@ -1059,7 +1059,7 @@ BiSData = {
 					itemID = 18103,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "9%",
 					}
@@ -1068,7 +1068,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -1077,7 +1077,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -1086,7 +1086,7 @@ BiSData = {
 					itemID = 11923,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dope'rel",
 						Drop = "33%",
 					}
@@ -1095,7 +1095,7 @@ BiSData = {
 					itemID = 11928,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "14%",
 					}
@@ -1118,7 +1118,7 @@ BiSData = {
 					itemID = 13404,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Unforgiven",
 						Drop = "18%",
 					}
@@ -1136,7 +1136,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -1145,7 +1145,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -1154,7 +1154,7 @@ BiSData = {
 					itemID = 11726,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gorosh the Dervish",
 						Drop = "11%",
 					}
@@ -1163,7 +1163,7 @@ BiSData = {
 					itemID = 12936,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "11%",
 					}
@@ -1172,7 +1172,7 @@ BiSData = {
 					itemID = 13957,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Kirtonos the Herald",
 						Drop = "14%",
 					}
@@ -1190,7 +1190,7 @@ BiSData = {
 					itemID = 14554,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -1199,7 +1199,7 @@ BiSData = {
 					itemID = 14616,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -1208,7 +1208,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -1235,7 +1235,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -1276,7 +1276,7 @@ BiSData = {
 					itemID = 12952,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gyth",
 						Drop = "13%",
 					}
@@ -1285,7 +1285,7 @@ BiSData = {
 					itemID = 13091,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Qiraji Brigadier General Pax-lish",
 						Drop = "8%",
 					}
@@ -1294,7 +1294,7 @@ BiSData = {
 					itemID = 14552,
 					Obtain = {
 						Zone = "",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "random 48-58 mob",
 						Drop = "~0.1%",
 					}
@@ -1303,7 +1303,7 @@ BiSData = {
 					itemID = 13397,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "20%",
 					}
@@ -1312,7 +1312,7 @@ BiSData = {
 					itemID = 14624,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "4%",
 					}
@@ -1321,7 +1321,7 @@ BiSData = {
 					itemID = 12550,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -1330,7 +1330,7 @@ BiSData = {
 					itemID = 14622,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -1339,7 +1339,7 @@ BiSData = {
 					itemID = 14620,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -1348,7 +1348,7 @@ BiSData = {
 					itemID = 14623,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -1357,7 +1357,7 @@ BiSData = {
 					itemID = 14621,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -1366,7 +1366,7 @@ BiSData = {
 					itemID = 11669,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "27%",
 					}
@@ -1375,7 +1375,7 @@ BiSData = {
 					itemID = 10795,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Morphaz",
 						Drop = "5%",
 					}
@@ -1384,7 +1384,7 @@ BiSData = {
 					itemID = 11810,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Angerforge",
 						Drop = "8%",
 					}
@@ -1402,7 +1402,7 @@ BiSData = {
 					itemID = 11784,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warder Stilgiss",
 						Drop = "17%",
 					}
@@ -1411,7 +1411,7 @@ BiSData = {
 					itemID = 12602,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "12%",
 					}
@@ -1436,7 +1436,7 @@ BiSData = {
 					itemID = 13102,
 					Obtain = {
 						Zone = "Alterac Mountains",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Narillasanz",
 						Drop = "~0.1%",
 					}
@@ -1445,7 +1445,7 @@ BiSData = {
 					itemID = 18723,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ramstein the Gorger",
 						Drop = "7%",
 					}
@@ -1454,7 +1454,7 @@ BiSData = {
 					itemID = 13013,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -1463,7 +1463,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -1481,7 +1481,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -1490,7 +1490,7 @@ BiSData = {
 					itemID = 10787,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gasher, Hukku, Loro",
 						Drop = "5%",
 					}
@@ -1508,7 +1508,7 @@ BiSData = {
 					itemID = 11841,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Fineous Darkvire",
 						Drop = "26%",
 					}
@@ -1517,7 +1517,7 @@ BiSData = {
 					itemID = 11822,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "22%",
 					}
@@ -1535,7 +1535,7 @@ BiSData = {
 					itemID = 13178,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Urok Doomhowl",
 						Drop = "9%",
 					}
@@ -1544,7 +1544,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -1553,7 +1553,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -1562,7 +1562,7 @@ BiSData = {
 					itemID = 11923,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dope'rel",
 						Drop = "33%",
 					}
@@ -1571,7 +1571,7 @@ BiSData = {
 					itemID = 11928,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "14%",
 					}
@@ -1603,7 +1603,7 @@ BiSData = {
 					itemID = 18691,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Vectus",
 						Drop = "4%",
 					}
@@ -1612,7 +1612,7 @@ BiSData = {
 					itemID = 13013,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -1621,7 +1621,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -1630,7 +1630,7 @@ BiSData = {
 					itemID = 14136,
 					Obtain = {
 						Zone = "Winterspring",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Cobalt Mageweaver",
 						Drop = "2%",
 					}
@@ -1639,7 +1639,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -1648,7 +1648,7 @@ BiSData = {
 					itemID = 13253,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "7%",
 					}
@@ -1657,7 +1657,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -1666,7 +1666,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -1675,7 +1675,7 @@ BiSData = {
 					itemID = 11822,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "22%",
 					}
@@ -1693,7 +1693,7 @@ BiSData = {
 					itemID = 13001,
 					Obtain = {
 						Zone = "Dire Maul",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Razza",
 						Drop = "9%",
 					}
@@ -1702,7 +1702,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -1711,7 +1711,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -1720,7 +1720,7 @@ BiSData = {
 					itemID = 13349,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "10%",
 					}
@@ -1729,7 +1729,7 @@ BiSData = {
 					itemID = 10796,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dreamscythe",
 						Drop = "5%",
 					}
@@ -1738,7 +1738,7 @@ BiSData = {
 					itemID = 13396,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Skul",
 						Drop = "21%",
 					}
@@ -1761,7 +1761,7 @@ BiSData = {
 					itemID = 18691,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Vectus",
 						Drop = "4%",
 					}
@@ -1770,7 +1770,7 @@ BiSData = {
 					itemID = 14112,
 					Obtain = {
 						Zone = "Molten Core",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ragnaros",
 						Drop = "3%",
 					}
@@ -1779,7 +1779,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -1788,7 +1788,7 @@ BiSData = {
 					itemID = 14136,
 					Obtain = {
 						Zone = "Winterspring",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Cobalt Mageweaver",
 						Drop = "2%",
 					}
@@ -1797,7 +1797,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -1806,7 +1806,7 @@ BiSData = {
 					itemID = 13253,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "7%",
 					}
@@ -1815,7 +1815,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -1824,7 +1824,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -1833,7 +1833,7 @@ BiSData = {
 					itemID = 18735,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "25%",
 					}
@@ -1851,7 +1851,7 @@ BiSData = {
 					itemID = 13001,
 					Obtain = {
 						Zone = "Dire Maul",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Razza",
 						Drop = "9%",
 					}
@@ -1860,7 +1860,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -1869,7 +1869,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -1878,7 +1878,7 @@ BiSData = {
 					itemID = 13349,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "10%",
 					}
@@ -1887,7 +1887,7 @@ BiSData = {
 					itemID = 10796,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dreamscythe",
 						Drop = "5%",
 					}
@@ -1896,7 +1896,7 @@ BiSData = {
 					itemID = 13396,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Skul",
 						Drop = "21%",
 					}
@@ -1912,7 +1912,7 @@ BiSData = {
 					itemID = 13404,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Unforgiven",
 						Drop = "18%",
 					}
@@ -1930,7 +1930,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -1939,7 +1939,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -1948,7 +1948,7 @@ BiSData = {
 					itemID = 14637,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "5%",
 					}
@@ -1957,7 +1957,7 @@ BiSData = {
 					itemID = 13120,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -1975,7 +1975,7 @@ BiSData = {
 					itemID = 13252,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "11%",
 					}
@@ -1993,7 +1993,7 @@ BiSData = {
 					itemID = 12553,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Moira Bronzebeard",
 						Drop = "14%",
 					}
@@ -2002,7 +2002,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -2011,7 +2011,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -2029,7 +2029,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -2038,7 +2038,7 @@ BiSData = {
 					itemID = 12940,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "4%",
 					}
@@ -2047,7 +2047,7 @@ BiSData = {
 					itemID = 12939,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "8%",
 					}
@@ -2056,7 +2056,7 @@ BiSData = {
 					itemID = 12651,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Shadow Hunter Vosh'gajin",
 						Drop = "6%",
 					}
@@ -2070,7 +2070,7 @@ BiSData = {
 					itemID = 13404,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Unforgiven",
 						Drop = "18%",
 					}
@@ -2088,7 +2088,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -2097,7 +2097,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -2106,7 +2106,7 @@ BiSData = {
 					itemID = 14637,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "5%",
 					}
@@ -2115,7 +2115,7 @@ BiSData = {
 					itemID = 13120,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -2133,7 +2133,7 @@ BiSData = {
 					itemID = 13252,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "11%",
 					}
@@ -2151,7 +2151,7 @@ BiSData = {
 					itemID = 12553,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Moira Bronzebeard",
 						Drop = "14%",
 					}
@@ -2160,7 +2160,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -2169,7 +2169,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -2187,7 +2187,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -2205,7 +2205,7 @@ BiSData = {
 					itemID = 14555,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lieutenant General Nokhor",
 						Drop = "11%",
 					}
@@ -2214,7 +2214,7 @@ BiSData = {
 					itemID = 12651,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Shadow Hunter Vosh'gajin",
 						Drop = "6%",
 					}
@@ -2240,7 +2240,7 @@ BiSData = {
 					itemID = 12103,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Grand Crusader Dathrohan",
 						Drop = "18%",
 					}
@@ -2249,7 +2249,7 @@ BiSData = {
 					itemID = 13013,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -2267,7 +2267,7 @@ BiSData = {
 					itemID = 11924,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "16%",
 					}
@@ -2276,7 +2276,7 @@ BiSData = {
 					itemID = 11765,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "13%",
 					}
@@ -2285,7 +2285,7 @@ BiSData = {
 					itemID = 13253,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "7%",
 					}
@@ -2294,7 +2294,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -2303,7 +2303,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -2312,7 +2312,7 @@ BiSData = {
 					itemID = 13954,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "29%",
 					}
@@ -2330,7 +2330,7 @@ BiSData = {
 					itemID = 13001,
 					Obtain = {
 						Zone = "Dire Maul",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Razza",
 						Drop = "9%",
 					}
@@ -2339,7 +2339,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -2357,7 +2357,7 @@ BiSData = {
 					itemID = 13964,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Darkmaster Gandling",
 						Drop = "9%",
 					}
@@ -2389,7 +2389,7 @@ BiSData = {
 					itemID = 12587,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "14%",
 					}
@@ -2407,7 +2407,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -2416,7 +2416,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -2425,7 +2425,7 @@ BiSData = {
 					itemID = 11726,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gorosh the Dervish",
 						Drop = "11%",
 					}
@@ -2434,7 +2434,7 @@ BiSData = {
 					itemID = 13211,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Crimson Defender",
 						Drop = "2%",
 					}
@@ -2443,7 +2443,7 @@ BiSData = {
 					itemID = 13957,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Kirtonos the Herald",
 						Drop = "14%",
 					}
@@ -2452,7 +2452,7 @@ BiSData = {
 					itemID = 13252,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "11%",
 					}
@@ -2470,7 +2470,7 @@ BiSData = {
 					itemID = 14616,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -2479,7 +2479,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -2488,7 +2488,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -2506,7 +2506,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -2556,7 +2556,7 @@ BiSData = {
 					itemID = 18723,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ramstein the Gorger",
 						Drop = "7%",
 					}
@@ -2574,7 +2574,7 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
@@ -2583,7 +2583,7 @@ BiSData = {
 					itemID = 13346,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "10%",
 					}
@@ -2592,7 +2592,7 @@ BiSData = {
 					itemID = 13969,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Kirtonos the Herald",
 						Drop = "14%",
 					}
@@ -2601,7 +2601,7 @@ BiSData = {
 					itemID = 10787,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gasher, Hukku, Loro",
 						Drop = "5%",
 					}
@@ -2610,7 +2610,7 @@ BiSData = {
 					itemID = 14553,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -2619,7 +2619,7 @@ BiSData = {
 					itemID = 11841,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Fineous Darkvire",
 						Drop = "26%",
 					}
@@ -2628,7 +2628,7 @@ BiSData = {
 					itemID = 13954,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "29%",
 					}
@@ -2646,7 +2646,7 @@ BiSData = {
 					itemID = 13178,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Urok Doomhowl",
 						Drop = "9%",
 					}
@@ -2655,7 +2655,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -2664,7 +2664,7 @@ BiSData = {
 					itemID = 11819,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "6%",
 					}
@@ -2673,7 +2673,7 @@ BiSData = {
 					itemID = 11923,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dope'rel",
 						Drop = "33%",
 					}
@@ -2682,7 +2682,7 @@ BiSData = {
 					itemID = 11928,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "14%",
 					}
@@ -2717,7 +2717,7 @@ BiSData = {
 					itemID = 18691,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Vectus",
 						Drop = "4%",
 					}
@@ -2726,7 +2726,7 @@ BiSData = {
 					itemID = 14112,
 					Obtain = {
 						Zone = "Molten Core",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ragnaros",
 						Drop = "3%",
 					}
@@ -2735,13 +2735,13 @@ BiSData = {
 					itemID = 13386,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Archivist Galford",
 						Drop = "19%",
 					}
 				},
 				Chest = {
-					itemID = 18458,
+					itemID = 14153,
 					Obtain = {
 						Zone = "Scholomance",
 						Type = "by Profession (Tailoring)",
@@ -2753,7 +2753,7 @@ BiSData = {
 					itemID = 11766,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Incendius",
 						Drop = "14%",
 					}
@@ -2762,7 +2762,7 @@ BiSData = {
 					itemID = 13253,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Quartermaster Zigris",
 						Drop = "7%",
 					}
@@ -2771,7 +2771,7 @@ BiSData = {
 					itemID = 11662,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Ok'thor the Breaker",
 						Drop = "27%",
 					}
@@ -2780,7 +2780,7 @@ BiSData = {
 					itemID = 13170,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Highlord Omokk",
 						Drop = "8%",
 					}
@@ -2789,7 +2789,7 @@ BiSData = {
 					itemID = 18735,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "25%",
 					}
@@ -2807,7 +2807,7 @@ BiSData = {
 					itemID = 13001,
 					Obtain = {
 						Zone = "Dire Maul",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Razza",
 						Drop = "9%",
 					}
@@ -2816,7 +2816,7 @@ BiSData = {
 					itemID = 12930,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Jed Runewatcher",
 						Drop = "20%",
 					}
@@ -2834,7 +2834,7 @@ BiSData = {
 					itemID = 13964,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Darkmaster Gandling",
 						Drop = "9%",
 					}
@@ -2843,7 +2843,7 @@ BiSData = {
 					itemID = 10796,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Dreamscythe",
 						Drop = "5%",
 					}
@@ -2852,7 +2852,7 @@ BiSData = {
 					itemID = 13396,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Skul",
 						Drop = "21%",
 					}
@@ -2869,7 +2869,7 @@ BiSData = {
 					itemID = 13404,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "The Unforgiven",
 						Drop = "18%",
 					}
@@ -2887,7 +2887,7 @@ BiSData = {
 					itemID = 12927,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Pyroguard Emberseer",
 						Drop = "11%",
 					}
@@ -2896,7 +2896,7 @@ BiSData = {
 					itemID = 13340,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Baron Rivendare",
 						Drop = "7%",
 					}
@@ -2905,7 +2905,7 @@ BiSData = {
 					itemID = 11726,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gorosh the Dervish",
 						Drop = "11%",
 					}
@@ -2914,7 +2914,7 @@ BiSData = {
 					itemID = 12936,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "11%",
 					}
@@ -2950,7 +2950,7 @@ BiSData = {
 					itemID = 12555,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -2959,7 +2959,7 @@ BiSData = {
 					itemID = 17713,
 					Obtain = {
 						Zone = "Maraudon",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Princess Theradras",
 						Drop = "5%",
 					}
@@ -2968,7 +2968,7 @@ BiSData = {
 					itemID = 13098,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "15%",
 					}
@@ -2986,7 +2986,7 @@ BiSData = {
 					itemID = 11815,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Emperor Dagran Thaurissan",
 						Drop = "4%",
 					}
@@ -2995,7 +2995,7 @@ BiSData = {
 					itemID = 12940,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "4%",
 					}
@@ -3004,7 +3004,7 @@ BiSData = {
 					itemID = 12939,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Warchief Rend Blackhand",
 						Drop = "8%",
 					}
@@ -3013,7 +3013,7 @@ BiSData = {
 					itemID = 12651,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Shadow Hunter Vosh'gajin",
 						Drop = "6%",
 					}
@@ -3027,7 +3027,7 @@ BiSData = {
 					itemID = 12952,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Gyth",
 						Drop = "13%",
 					}
@@ -3036,7 +3036,7 @@ BiSData = {
 					itemID = 13091,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Qiraji Brigadier General Pax-lish",
 						Drop = "8%",
 					}
@@ -3045,7 +3045,7 @@ BiSData = {
 					itemID = 14552,
 					Obtain = {
 						Zone = "",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "random 48-58 mob",
 						Drop = "~0.1%",
 					}
@@ -3054,7 +3054,7 @@ BiSData = {
 					itemID = 13397,
 					Obtain = {
 						Zone = "Stratholme",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Stonespine",
 						Drop = "20%",
 					}
@@ -3063,7 +3063,7 @@ BiSData = {
 					itemID = 14624,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "4%",
 					}
@@ -3072,7 +3072,7 @@ BiSData = {
 					itemID = 12550,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Trash",
 						Drop = "~0.1%",
 					}
@@ -3081,7 +3081,7 @@ BiSData = {
 					itemID = 13072,
 					Obtain = {
 						Zone = "Silithus",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Colossus of Ashi, Regal, Zora",
 						Drop = "10%",
 					}
@@ -3090,7 +3090,7 @@ BiSData = {
 					itemID = 14620,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Doctor Theolen Krastinov",
 						Drop = "3%",
 					}
@@ -3108,7 +3108,7 @@ BiSData = {
 					itemID = 14621,
 					Obtain = {
 						Zone = "Scholomance",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Lord Alexei Barov",
 						Drop = "4%",
 					}
@@ -3117,7 +3117,7 @@ BiSData = {
 					itemID = 11669,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Golem Lord Argelmach",
 						Drop = "27%",
 					}
@@ -3126,7 +3126,7 @@ BiSData = {
 					itemID = 10795,
 					Obtain = {
 						Zone = "The Temple of Atal'Hakkar",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Morphaz",
 						Drop = "5%",
 					}
@@ -3135,7 +3135,7 @@ BiSData = {
 					itemID = 11810,
 					Obtain = {
 						Zone = "Blackrock Depths",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Angerforge",
 						Drop = "8%",
 					}
@@ -3162,7 +3162,7 @@ BiSData = {
 					itemID = 12602,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "General Drakkisath",
 						Drop = "12%",
 					}
@@ -3171,7 +3171,7 @@ BiSData = {
 					itemID = 12651,
 					Obtain = {
 						Zone = "Blackrock Spire",
-						Type = "by Kill",
+						Type = "By Killing",
 						Method = "Shadow Hunter Vosh'gajin",
 						Drop = "6%",
 					}

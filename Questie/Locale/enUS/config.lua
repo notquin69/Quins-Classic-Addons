@@ -35,7 +35,6 @@ QuestieLocale.locale['enUS'] = {
     ['MINIMAP_HEADER'] = "Mini-Map Note Options",
     ['MINIMAP_GLOBAL_SCALE'] = "Global Scale for Mini-Map Icons",
     ['MINIMAP_GLOBAL_SCALE_DESC'] = "How large the Mini-Map icons are. ( Default: %s )",
-    ['MINIMAP_FADE'] = "Mini-Map Note Fading",
     ['MINIMAP_FADING'] = "Fade objective distance",
     ['MINIMAP_FADING_DESC'] = "How much objective icons should fade depending on distance. ( Default: %s )",
     ['MINIMAP_FADE_PLAYER'] = "Fade Icons over Player",
@@ -99,7 +98,6 @@ QuestieLocale.locale['enUS'] = {
     ['TARGET_RESET_BTN'] = "Reset Target Frame",
     ['TARGET_RESET_BTN_DESC'] = "Reset to Default Target Frame Positions and Scale",
 
-
     ['ADV_TAB'] = "Advanced",
     ['DEV_OPTIONS'] = "Developer Options",
     ['ENABLE_DEBUG'] = "Enable debug",
@@ -114,7 +112,6 @@ QuestieLocale.locale['enUS'] = {
     ['RESET_QUESTIE_BTN_DESC'] = "Reset Questie to the default values for all settings.",
     ['QUESTIE_DEV_MESSAGE'] = "Questie is under active development for World of Warcraft: Classic. Please check GitHub for the latest alpha builds or to report issues. Or join us on our discord! (( https://github.com/AeroScripts/QuestieDev/ ))",
 
-
     -- UI Elements
     ['QUESTIE_MAP_BUTTON_SHOW'] = "Show Questie",
     ['QUESTIE_MAP_BUTTON_HIDE'] = "Hide Questie",
@@ -123,11 +120,17 @@ QuestieLocale.locale['enUS'] = {
     ['ICON_SHIFTLEFT_CLICK'] = "Shift + Left Click",
     ['ICON_TOGGLE_QUESTIE'] = "Toggle Questie",
     ['ICON_CTRLRIGHT_CLICK'] = "Ctrl + Right Click",
+    ['ICON_CTRLLEFT_CLICK'] = "Ctrl + Left Click",
     ['ICON_HIDE'] = "Hide Minimap Button",
     ['ICON_RIGHT_CLICK'] = "Right Click",
     ['ICON_JOURNEY'] = "Toggle My Journey",
+    ['ICON_RELOAD'] = "Reload Questie",
     ['CONFIRM_HIDE_QUEST'] = "Are you sure you want to hide the quest \"%s\"?\nIf this quest isn't actually available, please report it to us!",
-
+    ['CONFIRM_HIDE_YES'] = "Yes",
+    ['CONFIRM_HIDE_NO'] = "No",
+    ['TOOLTIP_QUEST_COMPLETE'] = "(Complete)",
+    ['TOOLTIP_QUEST_AVAILABLE'] = "(Available)",
+    ['TOOLTIP_QUEST_ACTIVE'] = "(Active)",
 
     -- Slash Commands
     ['SLASH_INVALID'] = "Invalid command. For a list of options please type: ",
@@ -136,7 +139,6 @@ QuestieLocale.locale['enUS'] = {
     ['SLASH_TOGGLE_QUESTIE'] = "/questie toggle -- Toggles showing questie on the map and minimap",
     ['SLASH_JOURNEY'] = "/questie journey -- Toggles the My Journey window",
     ['SLASH_MINIMAP'] = "/questie minimap -- Toggles the Minimap Button for Questie",
-
 
     -- Journey Window
     ['JOURNEY_TITLE'] = "%s's Journey",
@@ -197,9 +199,6 @@ QuestieLocale.locale['enUS'] = {
     ['JOURNEY_SEARCH_RESULTS'] = "Search Results",
     ['JOURNEY_SEARCH_NOMATCH'] = "No Match for Search Results: %s",
 
-
-
-
     -- Debug Messages
     ['DEBUG_LOWLEVEL'] = "Gray Quests toggled to:",
     ['DEBUG_MINLEVEL'] = "minLevelFilter set to %s",
@@ -222,6 +221,6 @@ QuestieLocale.locale['enUS'] = {
     ['DEBUG_DRAW'] = "%s available quests drawn. PlayerLevel = %s",
     ['DEBUG_UNLOAD_QFRAMES'] = "Unloading quest frames: %s",
     ['DEBUG_UNLOAD_ALL'] = "Unloading all frames, count: %s",
-
+    ['QUESTIE_UPDATED_RESTART'] = "|cFFFF0000WARNING!|r You have updated questie without restarting the game, this will likely cause problems. Please restart the game before continuing",
 
 };

@@ -25,7 +25,7 @@ local BarStates = {
 		return getStateIterator, type, 0
 	end,
 	get = function(self, id)
-		for i, v in pairs(states) do
+		for _, v in pairs(states) do
 			if v.id == id then
 				return v
 			end
@@ -33,7 +33,7 @@ local BarStates = {
 	end,
 	map = function(self, f)
 		local results = {}
-		for k, v in ipairs(states) do
+		for _, v in ipairs(states) do
 			if f(v) then
 				table.insert(results, v)
 			end
@@ -69,34 +69,75 @@ end
 
 -- class
 do
-	local class = select(2, UnitClass("player"))
+    local class = select(2, UnitClass("player"))
+
+    local function newFormConditionLookup(spellID)
+        return function()
+            for i = 1, GetNumShapeshiftForms() do
+                local _, _, _, formSpellID = GetShapeshiftFormInfo(i)
+
+                if spellID == formSpellID then
+                    return ("[form:%d]"):format(i)
+                end
+            end
+        end
+    end
 
 	if class == "DRUID" then
+		addState("class", "bear", "[bonusbar:3]", GetSpellInfo(5487))
+		addState("class", "prowl", "[bonusbar:1,stealth]", GetSpellInfo(5215))
+		addState("class", "cat", "[bonusbar:1]", GetSpellInfo(768))
+
 		if Addon:IsBuild("classic") then
 			addState(
 				"class",
-				"moonkin",
-				function()
-					return ("[form:%d]"):format(GetNumShapeshiftForms())
-				end,
+                "moonkin",
+                newFormConditionLookup(24858),
 				GetSpellInfo(24858)
 			)
-		else
-			addState("class", "moonkin", "[bonusbar:4]", GetSpellInfo(24858))
+
 			addState(
 				"class",
-				"tree",
-				function()
-					return ("[form:%d]"):format(GetNumShapeshiftForms() + 1)
-				end,
-				GetSpellInfo(33891)
+                "travel",
+                newFormConditionLookup(783),
+				GetSpellInfo(783)
+			)
+
+			addState(
+				"class",
+                "aquatic",
+                newFormConditionLookup(1066),
+				GetSpellInfo(1066)
+			)
+		else
+			addState(
+				"class",
+				"moonkin",
+				"[bonusbar:4]",
+				GetSpellInfo(24858)
+			)
+
+			addState(
+				"class",
+                "tree",
+                newFormConditionLookup(114282),
+				GetSpellInfo(114282)
+			)
+
+			addState(
+				"class",
+                "travel",
+                newFormConditionLookup(783),
+				GetSpellInfo(783)
+			)
+
+			addState(
+				"class",
+                "stag",
+                newFormConditionLookup(210053),
+				GetSpellInfo(210053)
 			)
 		end
-
-		addState("class", "bear", "[bonusbar:3]", GetSpellInfo(5487))
-
-		addState("class", "prowl", "[bonusbar:1,stealth]", GetSpellInfo(5215))
-		addState("class", "cat", "[bonusbar:1]", GetSpellInfo(768))
 	elseif class == "ROGUE" then
 		if GetSpellInfo(185313) then
 			addState("class", "shadowdance", "[form:2]", GetSpellInfo(185313))

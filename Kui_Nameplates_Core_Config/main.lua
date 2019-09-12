@@ -214,7 +214,7 @@ function command_func.debug()
     knp.debug_callbacks = knp.debug_messages
 end
 function command_func.trace(command,...)
-    --[[@debug@
+    --[===[@debug@
     local script_profile = GetCVarBool('scriptProfile')
     local args = table.concat({...},' ')
     if command == 'p' then
@@ -233,7 +233,7 @@ function command_func.trace(command,...)
         knp.profiling = not knp.profiling
         knp:print('Profiling '..(knp.profiling and 'started' or 'stopped'))
     end
-    --@debug@]]
+    --@end-debug@]===]
     return
 end
 function command_func.dump()
@@ -259,7 +259,7 @@ function command_func.dump()
     end
 
     d:AddText(format('%s %d.%d%s%s%s%s',
-        'classic-5',knp.MAJOR,knp.MINOR,
+        'classic-6',knp.MAJOR,knp.MINOR,
         debug,custom,barauras,extras))
     d:AddText(format('%s %s',locale,class))
 

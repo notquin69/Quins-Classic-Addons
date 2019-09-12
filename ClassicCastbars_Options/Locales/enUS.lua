@@ -30,7 +30,6 @@ L["GENERAL"] = "General Settings"
 L["HEIGHT"] = "Castbar Height"
 L["HEIGHT_TOOLTIP"] = "Sets the castbar height."
 L["ICON_HIDE_BORDER"] = "Hide Icon Border"
-L["ICON_POS_TOOLTIP"] = "Adjust the XY offset for the spell icon."
 L["ICON_POS_X"] = "Icon Position X"
 L["ICON_POS_Y"] = "Icon Position Y"
 L["ICON_SIZE"] = "Icon Size"
@@ -38,7 +37,13 @@ L["ICON_SIZE_TOOLTIP"] = "Sets the size for the castbar spell icon."
 L["LSM_TEXTURE_NOTE"] = [=[
 
 Note: If you use a custom third-party texture/font and delete it later on from your PC, you'll need to manually reset the texture or font here for the addon to continue working.]=]
+L["MOVEMENT_DETECT"] = "Stop Castbar on Movement"
+L["MOVEMENT_DETECT_TOOLTIP"] = [=[Enable this to stop the castbar when the unit is moving their character.
+
+You might want to disable this if you play with high latency as it can sometimes incorrectly stop the castbar for laggy players.
+]=]
 L["NAMEPLATE"] = "Nameplate"
+L["POSXY_TOOLTIP"] = "Adjust the XY offset values to move the frame."
 L["PUSHBACK"] = "Detect Cast Pushbacks"
 L["PUSHBACK_TOOLTIP"] = [=[Enables detection for cast pushback and modifiers (i.e Curse of Tongues).
 
@@ -63,6 +68,8 @@ L["TEST_TARGET_TOOLTIP"] = [=[Show the target frame castbar for testing. You can
 You'll need to target someone first to see the test castbar.
 ]=]
 L["TEXT_COLOR"] = "Select Text Color"
+L["TEXT_POS_X"] = "Text Position X"
+L["TEXT_POS_Y"] = "Text Position Y"
 L["TOGGLE_CASTBAR"] = "Enable Castbar"
 L["TOGGLE_CASTBAR_TOOLTIP"] = "Enables or disables castbar for this specific unit frame."
 L["WIDTH"] = "Castbar Width"

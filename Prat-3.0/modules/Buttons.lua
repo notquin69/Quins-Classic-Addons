@@ -477,18 +477,14 @@ L = {
 		["Show Chat%d Arrows"] = "显示聊天%d箭头",
 		["showbnet_desc"] = "显示社交菜单",
 		["showbnet_name"] = "显示社交菜单",
-		--[[Translation missing --]]
-		["showchannel_desc"] = "Show Channel Button",
-		--[[Translation missing --]]
-		["showchannel_name"] = "Show Channel Button",
+		["showchannel_desc"] = "显示频道按钮",
+		["showchannel_name"] = "显示频道按钮",
 		["showmenu_desc"] = "显示聊天菜单",
 		["showmenu_name"] = "显示菜单",
 		["showminimize_desc"] = "显示最小化按钮",
 		["showminimize_name"] = "显示最小化按钮",
-		--[[Translation missing --]]
-		["showvoice_desc"] = "Show Voice Buttons",
-		--[[Translation missing --]]
-		["showvoice_name"] = "Show Voice Buttons",
+		["showvoice_desc"] = "显示声音按钮",
+		["showvoice_name"] = "显示声音按钮",
 		["Toggle showing chat arrows for each chat window."] = "为各个聊天窗口显示上下翻页箭头",
 		["Toggles navigation arrows on and off."] = "切换导航箭头开与关",
 	}

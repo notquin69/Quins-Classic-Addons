@@ -2184,6 +2184,10 @@ talentWatchClassic:RegisterEvent ("SPELLS_CHANGED")
 talentWatchClassic:RegisterEvent ("PLAYER_ENTERING_WORLD")
 talentWatchClassic:RegisterEvent ("GROUP_ROSTER_UPDATE")
 
+C_Timer.NewTicker (600, function()
+	Details:SendPlayerClassicInformation()
+end)
+
 talentWatchClassic:SetScript ("OnEvent", function (self, event, ...)
 	if (talentWatchClassic.delayedUpdate and not talentWatchClassic.delayedUpdate._cancelled) then
 		return

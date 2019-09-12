@@ -1,0 +1,42 @@
+## Title: Guidelime
+## Author: Borick of Arthas(EU)
+## Version: 1.021
+## Interface: 11302
+## SavedVariables: GuidelimeData
+## SavedVariablesPerCharacter: GuidelimeDataChar
+## Notes: Leveling guides with automatic progress updates 
+## OptionalDeps: Questie, HereBeDragons
+
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\HereBeDragons\HereBeDragons-2.0.lua
+Libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
+
+Localization.lua
+Data\Guidelime_Data.lua
+Guidelime.lua
+Guidelime_Events.lua
+Guidelime_Frames.lua
+Guidelime_Guides.lua
+Guidelime_Options.lua
+Guidelime_Editor.lua
+Guidelime_EditorTools.lua
+Guidelime_Parser.lua
+Guidelime_Map.lua
+Guidelime_Import.lua
+Data\Guidelime_MapDB.lua
+Data\Guidelime_QuestsDB.lua
+Data\Guidelime_CreaturesDB.lua
+Data\Guidelime_ObjectsDB.lua
+Data\Guidelime_ItemsDB.lua
+Data\Guidelime_QuestsDB_Locales.lua
+Data\Guidelime_CreaturesDB_Locales.lua
+Data\Guidelime_ObjectsDB_Locales.lua
+Data\Guidelime_ItemsDB_Locales.lua
+Data\Guidelime_QuestsTools.lua
+Data\Guidelime_Questie.lua
+Data\Guidelime_FlightmasterDB.lua
+Data\Guidelime_FlightmasterDB_Locales.lua
+
+DemoGuides\DemoGuides.xml
+

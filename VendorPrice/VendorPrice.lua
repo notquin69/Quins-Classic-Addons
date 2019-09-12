@@ -1,128 +1,148 @@
+VendorPrice = {}
+local VP = VendorPrice
+
 local SELL_PRICE_TEXT = format("%s:", SELL_PRICE)
-local f = CreateFrame("Frame")
+local COUNT_TEXT = " |cffAAAAFFx%d|r"
 
-local function SetBagItemGlow(bagId, slot)
-	local item = nil
-	if IsAddOnLoaded("OneBag3") then
-		item = _G["OneBagFrameBag"..bagId.."Item"..slot]
-	else
-		for i = 1, NUM_CONTAINER_FRAMES, 1 do
-			local frame = _G["ContainerFrame"..i]
-			if frame:GetID() == bagId and frame:IsShown() then
-				item = _G["ContainerFrame"..i.."Item"..(GetContainerNumSlots(bagId) + 1 - slot)]
-			end
+local function ShouldShowPrice(tt)
+	if MerchantFrame:IsShown() then
+		local name = tt:GetOwner():GetName()
+		if name then -- bagnon sanity check
+			return name:find("Character") or name:find("TradeSkill")
 		end
 	end
-	if item then
-		item.NewItemTexture:SetAtlas("bags-glow-orange")
-		item.NewItemTexture:Show()
-		item.flashAnim:Play()
-		item.newitemglowAnim:Play()
-	end
+	return true
 end
 
-local function GlowCheapestGrey()
-	local lastPrice = nil
-	local bagNum = nil
-	local slotNum = nil
-	for bag = 0, NUM_BAG_SLOTS do
-		for bagSlot = 1, GetContainerNumSlots(bag) do
-			local itemid = GetContainerItemID(bag, bagSlot)
-			if itemid then
-				local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount,
-				itemEquipLoc, itemIcon, vendorPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID,
-				isCraftingReagent = GetItemInfo(itemid)
-				if itemRarity == 0 and vendorPrice > 0 then
-					local _, itemCount = GetContainerItemInfo(bag, bagSlot)
-					local totalVendorPrice = vendorPrice * itemCount
-					if lastPrice == nil then
-						lastPrice = totalVendorPrice
-						bagNum = bag
-						slotNum = bagSlot
-					elseif lastPrice > totalVendorPrice then
-						lastPrice = totalVendorPrice
-						bagNum = bag
-						slotNum = bagSlot
-					end
+-- OnTooltipSetItem fires twice for recipes
+local function CheckRecipe(tt, classID, isOnTooltipSetItem)
+	if classID == LE_ITEM_CLASS_RECIPE and isOnTooltipSetItem then
+		tt.isFirstMoneyLine = not tt.isFirstMoneyLine
+		return not tt.isFirstMoneyLine
+	end
+	return true
+end
+
+local function GetAmountString(count, isShift)
+	local spacing = count < 10 and "  " or ""
+	return (count > 1 or isShift) and COUNT_TEXT:format(count)..spacing or ""
+end
+
+function VP:SetPrice(tt, count, item, isOnTooltipSetItem)
+	if ShouldShowPrice(tt) then
+		count = count or 1
+		item = item or select(2, tt:GetItem())
+		if item then
+			local sellPrice, classID = select(11, GetItemInfo(item))
+			if sellPrice and sellPrice > 0 and CheckRecipe(tt, classID, isOnTooltipSetItem) then
+				if IsShiftKeyDown() and count > 1 then
+					SetTooltipMoney(tt, sellPrice, nil, SELL_PRICE_TEXT..GetAmountString(1, true))
+				else
+					SetTooltipMoney(tt, sellPrice * count, nil, SELL_PRICE_TEXT..GetAmountString(count))
 				end
+				tt:Show()
 			end
 		end
 	end
-	if bagNum and slotNum then
-		SetBagItemGlow(bagNum, slotNum)
-	end
 end
 
-function f:OnEvent(event, key, state)
-	if key == "LCTRL" and state == 1 then
-		local bagOpen = false
-		if IsAddOnLoaded("OneBag3") then
-			bagOpen = OneBagFrame:IsShown()
+local SetItem = {
+	SetAction = function(tt, slot)
+		if GetActionInfo(slot) == "item" then
+			VP:SetPrice(tt, GetActionCount(slot))
+		end
+	end,
+	SetAuctionItem = function(tt, auctionType, index)
+		local _, _, count = GetAuctionItemInfo(auctionType, index)
+		VP:SetPrice(tt, count)
+	end,
+	SetAuctionSellItem = function(tt)
+		local _, _, count = GetAuctionSellItemInfo()
+		VP:SetPrice(tt, count)
+	end,
+	SetBagItem = function(tt, bag, slot)
+		local _, count = GetContainerItemInfo(bag, slot)
+		VP:SetPrice(tt, count)
+	end,
+	--SetBagItemChild
+	--SetBuybackItem -- already shown
+	--SetCompareItem
+	SetCraftItem = function(tt, index, reagent)
+		local _, _, count = GetCraftReagentInfo(index, reagent)
+		 -- otherwise returns an empty link
+		local itemLink = GetCraftReagentItemLink(index, reagent)
+		VP:SetPrice(tt, count, itemLink)
+	end,
+	SetCraftSpell = function(tt)
+		VP:SetPrice(tt)
+	end,
+	--SetHyperlink -- item information is not readily available
+	SetInboxItem = function(tt, messageIndex, attachIndex)
+		local count, itemID
+		if attachIndex then
+			count = select(4, GetInboxItem(messageIndex, attachIndex))
 		else
-			for bag = 0, NUM_BAG_SLOTS do
-				if IsBagOpen(bag) then
-					bagOpen = true
-					break
-				end
-			end
+			count, itemID = select(14, GetInboxHeaderInfo(messageIndex))
 		end
-		if bagOpen then
-			GlowCheapestGrey()
+		VP:SetPrice(tt, count, itemID)
+	end,
+	SetInventoryItem = function(tt, unit, slot)
+		local count = GetInventoryItemCount(unit, slot)
+		VP:SetPrice(tt, count == 0 and 1 or count) -- equipped bags return 0
+	end,
+	--SetInventoryItemByID
+	--SetItemByID
+	SetLootItem = function(tt, slot)
+		local _, _, count = GetLootSlotInfo(slot)
+		VP:SetPrice(tt, count)
+	end,
+	SetLootRollItem = function(tt, rollID)
+		local _, _, count = GetLootRollItemInfo(rollID)
+		VP:SetPrice(tt, count)
+	end,
+	--SetMerchantCostItem -- alternate currency
+	--SetMerchantItem -- already shown
+	SetQuestItem = function(tt, questType, index)
+		local _, _, count = GetQuestItemInfo(questType, index)
+		VP:SetPrice(tt, count)
+	end,
+	SetQuestLogItem = function(tt, _, index)
+		local _, _, count = GetQuestLogRewardInfo(index)
+		VP:SetPrice(tt, count)
+	end,
+	SetSendMailItem = function(tt, index)
+		local count = select(4, GetSendMailItem(index))
+		VP:SetPrice(tt, count)
+	end,
+	SetTradePlayerItem = function(tt, index)
+		local _, _, count = GetTradePlayerItemInfo(index)
+		VP:SetPrice(tt, count)
+	end,
+	SetTradeSkillItem = function(tt, index, reagent)
+		local count
+		if reagent then
+			count = select(3, GetTradeSkillReagentInfo(index, reagent))
+		else -- show minimum instead of maximum count
+			count = GetTradeSkillNumMade(index)
 		end
-	end
+		VP:SetPrice(tt, count)
+	end,
+	SetTradeTargetItem = function(tt, index)
+		local _, _, count = GetTradeTargetItemInfo(index)
+		VP:SetPrice(tt, count)
+	end,
+}
+
+for method, func in pairs(SetItem) do
+	hooksecurefunc(GameTooltip, method, func)
 end
 
-local function SetGameToolTipPrice(tt)
-	local container = GetMouseFocus()
-	if container and container.GetName then -- Auctionator sanity check
-		local name = container:GetName()
-		-- price is already shown at vendor for bag items
-		if not MerchantFrame:IsShown() or name:find("Character") or name:find("TradeSkill") then
-			local itemLink = select(2, tt:GetItem())
-			if itemLink then
-				local itemSellPrice = select(11, GetItemInfo(itemLink))
-				if itemSellPrice and itemSellPrice > 0 then
-					local name = container:GetName()
-					local object = container:GetObjectType()
-					local count
-					if object == "Button" then -- ContainerFrameItem, QuestInfoItem, PaperDollItem
-						if IsAddOnLoaded("Bagnon") then -- Bagnon support
-							if container.info then
-								count = container.info.count
-							elseif container:GetParent().info then
-								count = container:GetParent().info.count
-							else
-								count = container.count
-							end
-						else
-							count = container.count
-						end
-					elseif object == "CheckButton" then -- MailItemButton or ActionButton
-						if name:find("CharacterBag") then
-							count = 1 -- count is 0 for character bags
-						else
-							count = container.count or tonumber(container.Count:GetText())
-						end
-					end
-					local cost = (type(count) == "number" and count or 1) * itemSellPrice
-					SetTooltipMoney(tt, cost, nil, SELL_PRICE_TEXT)
-				end
-			end
+ItemRefTooltip:HookScript("OnTooltipSetItem", function(tt)
+	local item = select(2, tt:GetItem())
+	if item then
+		local sellPrice, classID = select(11, GetItemInfo(item))
+		if sellPrice and sellPrice > 0 and CheckRecipe(tt, classID, true) then
+			SetTooltipMoney(tt, sellPrice, nil, SELL_PRICE_TEXT)
 		end
 	end
-end
-
-local function SetItemRefToolTipPrice(tt)
-	local itemLink = select(2, tt:GetItem())
-	if itemLink then
-		local itemSellPrice = select(11, GetItemInfo(itemLink))
-		if itemSellPrice and itemSellPrice > 0 then
-			SetTooltipMoney(tt, itemSellPrice, nil, SELL_PRICE_TEXT)
-		end
-	end
-end
-
-GameTooltip:HookScript("OnTooltipSetItem", SetGameToolTipPrice)
-ItemRefTooltip:HookScript("OnTooltipSetItem", SetItemRefToolTipPrice)
-f:RegisterEvent("MODIFIER_STATE_CHANGED")
-f:SetScript("OnEvent", f.OnEvent)
+end)

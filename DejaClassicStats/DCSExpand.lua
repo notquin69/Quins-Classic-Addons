@@ -139,7 +139,7 @@ end
 local DCS_ExpandButtonCheck = CreateFrame("CheckButton", "DCS_ExpandButtonCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
 	DCS_ExpandButtonCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_ExpandButtonCheck:ClearAllPoints()
-	DCS_ExpandButtonCheck:SetPoint("LEFT", 30, -205)
+	DCS_ExpandButtonCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -55)
 	DCS_ExpandButtonCheck:SetScale(1)
 	DCS_ExpandButtonCheck.tooltipText = L['Displays the Expand button for the character stats frame.'] --Creates a tooltip on mouseover.
 	_G[DCS_ExpandButtonCheck:GetName() .. "Text"]:SetText(L["Expand"])
@@ -173,10 +173,10 @@ local DCS_ExpandButtonCheck = CreateFrame("CheckButton", "DCS_ExpandButtonCheck"
 local DCS_ExpandButtonAltPlacementCheck = CreateFrame("CheckButton", "DCS_ExpandButtonAltPlacementCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
 	DCS_ExpandButtonAltPlacementCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_ExpandButtonAltPlacementCheck:ClearAllPoints()
-	DCS_ExpandButtonAltPlacementCheck:SetPoint("LEFT", 30, -185)
+	DCS_ExpandButtonAltPlacementCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -75)
 	DCS_ExpandButtonAltPlacementCheck:SetScale(1)
-	DCS_ExpandButtonAltPlacementCheck.tooltipText = L["Moves the Expand button for the character stats frame above the gloves' item slot."] --Creates a tooltip on mouseover.
-	_G[DCS_ExpandButtonAltPlacementCheck:GetName() .. "Text"]:SetText(L["Expand Alternate Placement"])
+	DCS_ExpandButtonAltPlacementCheck.tooltipText = L["Displays the Expand button above the hands item slot."] --Creates a tooltip on mouseover.
+	_G[DCS_ExpandButtonAltPlacementCheck:GetName() .. "Text"]:SetText(L["Alternate Expand"])
 	
 	DCS_ExpandButtonAltPlacementCheck:SetScript("OnEvent", function(self, event)
 		if event == "PLAYER_LOGIN" then

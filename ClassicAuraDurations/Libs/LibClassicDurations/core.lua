@@ -61,7 +61,7 @@ Usage example 2:
 --]================]
 
 
-local MAJOR, MINOR = "LibClassicDurations", 15
+local MAJOR, MINOR = "LibClassicDurations", 18
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -399,6 +399,14 @@ local function NotifyGUIDBuffChange(dstGUID)
     end
 end
 
+local lastSpellCastName
+local lastSpellCastTime = 0
+function f:UNIT_SPELLCAST_SUCCEEDED(event, unit, castID, spellID)
+    lastSpellCastName = GetSpellInfo(spellID)
+    lastSpellCastTime = GetTime()
+end
+
+local SunderArmorName = GetSpellInfo(11597)
 ---------------------------
 -- COMBAT LOG HANDLER
 ---------------------------
@@ -408,6 +416,13 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     srcGUID, srcName, srcFlags, srcFlags2,
     dstGUID, dstName, dstFlags, dstFlags2,
     spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
+
+    if spellName == SunderArmorName then
+        if eventType == "SPELL_CAST_SUCCESS" then
+            eventType = "SPELL_AURA_REFRESH"
+            auraType = "DEBUFF"
+        end
+    end
 
     if auraType == "BUFF" or auraType == "DEBUFF" then
         local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
@@ -442,17 +457,24 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
         end
 
         if opts then
+            local isEnemyBuff = not isDstFriendly and auraType == "BUFF"
             -- print(eventType, srcGUID, "=>", dstName, spellID, spellName, auraType )
             if  eventType == "SPELL_AURA_REFRESH" or
                 eventType == "SPELL_AURA_APPLIED" or
-                eventType == "SPELL_AURA_APPLIED_DOSE" then
-                SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType)
+                eventType == "SPELL_AURA_APPLIED_DOSE"
+            then
+                if not opts.castFilter or
+                    (lastSpellCastName == spellName and lastSpellCastTime + 1 > GetTime()) or
+                    isEnemyBuff
+                then
+                    SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType)
+                end
             elseif eventType == "SPELL_AURA_REMOVED" then
                 SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType, true)
             -- elseif eventType == "SPELL_AURA_REMOVED_DOSE" then
                 -- self:RemoveDose(srcGUID, dstGUID, spellID, spellName, auraType, amount)
             end
-            if enableEnemyBuffTracking and not isDstFriendly and auraType == "BUFF" then
+            if enableEnemyBuffTracking and isEnemyBuff then
                 -- invalidate buff cache
                 buffCacheValid[dstGUID] = nil
 
@@ -666,6 +688,7 @@ function lib:RegisterFrame(frame)
     activeFrames[frame] = true
     if next(activeFrames) then
         f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
         if playerClass == "ROGUE" then
             f:RegisterEvent("PLAYER_TARGET_CHANGED")
             f:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
@@ -678,6 +701,7 @@ function lib:UnregisterFrame(frame)
     activeFrames[frame] = nil
     if not next(activeFrames) then
         f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        f:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
         if playerClass == "ROGUE" then
             f:UnregisterEvent("PLAYER_TARGET_CHANGED")
             f:UnregisterEvent("UNIT_POWER_UPDATE")

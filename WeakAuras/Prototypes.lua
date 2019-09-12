@@ -2009,7 +2009,7 @@ WeakAuras.event_prototypes = {
       },
       {
         enable = function(trigger)
-          return WeakAuras.IsClassic() and not (trigger.subeventPrefix and (trigger.subeventPrefix:find("SPELL") or trigger.subeventPrefix == "RANGE" or trigger.subeventPrefix:find("DAMAGE")))
+          return WeakAuras.IsClassic() and trigger.subeventPrefix and (trigger.subeventPrefix:find("SPELL") or trigger.subeventPrefix == "RANGE" or trigger.subeventPrefix:find("DAMAGE"))
         end
       }, -- spellId ignored on classic
       {
@@ -3356,7 +3356,7 @@ WeakAuras.event_prototypes = {
                 end
               end
             elseif event == "DBM_TimerStop" and state then
-              local bar_remainingTime = GetTime() - state.expirationTime + state.extend
+              local bar_remainingTime = GetTime() - state.expirationTime + (state.extend or 0)
               if state.extend == 0 or bar_remainingTime > 0.2 then
                 state.show = false
                 state.changed = true
@@ -3368,7 +3368,7 @@ WeakAuras.event_prototypes = {
                 else
                   local state = states[id]
                   if state then
-                    local bar_remainingTime = GetTime() - state.expirationTime + state.extend
+                    local bar_remainingTime = GetTime() - state.expirationTime + (state.extend or 0)
                     if state.extend == 0 or bar_remainingTime > 0.2 then
                       state.show = false
                       state.changed = true
@@ -3403,7 +3403,7 @@ WeakAuras.event_prototypes = {
               end
             else
               if state and state.show then
-                local bar_remainingTime = GetTime() - state.expirationTime + state.extend
+                local bar_remainingTime = GetTime() - state.expirationTime + (state.extend or 0)
                 if state.extend == 0 or bar_remainingTime > 0.2 then
                   state.show = false
                   state.changed = true
@@ -3601,7 +3601,7 @@ WeakAuras.event_prototypes = {
                 end
               end
             elseif event == "BigWigs_StopBar" and state then
-              local bar_remainingTime = GetTime() - state.expirationTime + state.extend
+              local bar_remainingTime = GetTime() - state.expirationTime + (state.extend or 0)
               if state.extend == 0 or bar_remainingTime > 0.2 then
                 state.show = false
                 state.changed = true
@@ -3639,7 +3639,7 @@ WeakAuras.event_prototypes = {
               end
             else
               if state and state.show then
-                local bar_remainingTime = GetTime() - state.expirationTime + state.extend
+                local bar_remainingTime = GetTime() - state.expirationTime + (state.extend or 0)
                 if state.extend == 0 or bar_remainingTime > 0.2 then
                   state.show = false
                   state.changed = true
@@ -4014,12 +4014,12 @@ WeakAuras.event_prototypes = {
         local ret = [[
           local tier = %s;
           local column = %s;
-          local active
+          local active, _, activeName, activeIcon, selected, known, rank
           if WeakAuras.IsClassic() then
-            local _, _, _, _, rank  = GetTalentInfo(tier, column)
+            _, _, _, _, rank  = GetTalentInfo(tier, column)
             active = rank > 0
           else
-            local _, activeName, activeIcon, selected, _, _, _, _, _, _, known  = GetTalentInfo(tier, column, 1)
+            _, activeName, activeIcon, selected, _, _, _, _, _, _, known  = GetTalentInfo(tier, column, 1)
             active = selected or known;
           end
         ]]
@@ -4376,7 +4376,7 @@ WeakAuras.event_prototypes = {
         local form
         local active = false
       ]]
-      if trigger.use_form and trigger.form.single then
+      if trigger.use_form and trigger.form and trigger.form.single then
         -- Single selection
         ret = ret .. [[
           local trigger_form = %d

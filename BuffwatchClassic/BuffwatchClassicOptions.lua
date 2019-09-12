@@ -135,7 +135,7 @@ function BUFFWATCHADDON.Options_Init()
     
     Buffwatch_Options_CooldownTextScale:SetValue(BuffwatchConfig.CooldownTextScale);
 
-    if (framePositioned == true) then
+    if (BUFFWATCHADDON.framePositioned == true) then
         BUFFWATCHADDON.GetAllBuffs();
     end
 end

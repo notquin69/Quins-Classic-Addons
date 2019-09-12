@@ -1003,8 +1003,10 @@ function WeakAuras.GetProperties(data)
   local propertiesFunction = WeakAuras.regionTypes[data.regionType] and WeakAuras.regionTypes[data.regionType].properties;
   if (type(propertiesFunction) == "function") then
     properties = propertiesFunction(data);
-  else
+  elseif propertiesFunction then
     properties = CopyTable(propertiesFunction);
+  else
+    properties = {}
   end
 
   if data.subRegions then
@@ -5473,7 +5475,7 @@ local function startStopTimers(id, cloneId, triggernum, state)
   end
 end
 
-local function ApplyStateToRegion(id, cloneId, region, state, parent)
+local function ApplyStateToRegion(id, cloneId, region, parent)
   region:Update();
 
   if region.subRegions then
@@ -5563,7 +5565,7 @@ local function ApplyStatesToRegions(id, activeTrigger, states)
       region:SetTriggerProvidesTimer(needsTimerTick)
 
       if (applyChanges) then
-        ApplyStateToRegion(id, cloneId, region, state, region.states, parent);
+        ApplyStateToRegion(id, cloneId, region, parent);
         if (checkConditions[id]) then
           checkConditions[id](region, not state.show);
         end

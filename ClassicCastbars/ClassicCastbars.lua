@@ -59,19 +59,15 @@ function addon:StartCast(unitGUID, unitID)
     self:CheckCastModifier(unitID, unitGUID)
 end
 
-function addon:StopCast(unitID)
+function addon:StopCast(unitID, noFadeOut)
     local castbar = activeFrames[unitID]
     if not castbar then return end
 
-    castbar._data = nil
     if not castbar.isTesting then
-        --[[if not noFadeOut then
-            -- TODO: verify this doesn't cause side effects or performance issues
-            UIFrameFadeOut(castbar, 0.1, 1, 0)
-        else]]
-            castbar:Hide()
-        --end
+        self:HideCastbar(castbar, noFadeOut)
     end
+
+    castbar._data = nil
 end
 
 function addon:StartAllCasts(unitGUID)
@@ -92,7 +88,7 @@ function addon:StopAllCasts(unitGUID)
     end
 end
 
-function addon:StoreCast(unitGUID, spellName, iconTexturePath, castTime, isChanneled)
+function addon:StoreCast(unitGUID, spellName, iconTexturePath, castTime, isPlayer, isChanneled)
     local currTime = GetTime()
 
     if not activeTimers[unitGUID] then
@@ -107,17 +103,20 @@ function addon:StoreCast(unitGUID, spellName, iconTexturePath, castTime, isChann
     cast.isChanneled = isChanneled
     cast.unitGUID = unitGUID
     cast.timeStart = currTime
+    cast.isPlayer = isPlayer
     cast.prevCurrTimeModValue = nil
     cast.currTimeModValue = nil
     cast.pushbackValue = nil
     cast.showCastInfoOnly = nil
+    cast.isInterrupted = nil
 
     self:StartAllCasts(unitGUID)
 end
 
 -- Delete cast data for unit, and stop any active castbars
-function addon:DeleteCast(unitGUID)
+function addon:DeleteCast(unitGUID, isInterrupted)
     if unitGUID and activeTimers[unitGUID] then
+        activeTimers[unitGUID].isInterrupted = isInterrupted -- just so we can avoid passing it as an arg for every function call
         self:StopAllCasts(unitGUID)
         activeTimers[unitGUID] = nil
     end
@@ -201,7 +200,7 @@ function addon:CastPushback(unitGUID)
         cast.pushbackValue = cast.pushbackValue or 1.0
         cast.maxValue = cast.maxValue + cast.pushbackValue
         cast.endTime = cast.endTime + cast.pushbackValue
-        cast.pushbackValue = max(cast.pushbackValue - 0.2, 0.2)
+        cast.pushbackValue = max(cast.pushbackValue - 0.5, 0.2)
     else
         -- channels are reduced by 25% per hit afaik
         cast.maxValue = cast.maxValue - (cast.maxValue * 25) / 100
@@ -357,22 +356,23 @@ function addon:COMBAT_LOG_EVENT_UNFILTERED()
         local _, _, icon, castTime = GetSpellInfo(spellID)
         if not castTime or castTime == 0 then return end
 
-        -- Reduce cast time for certain spells
+        local isPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+
+        -- Use talent reduced cast time for certain player spells
         local reducedTime = castTimeTalentDecreases[spellName]
-        if reducedTime then
-            if bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then -- only reduce cast time for player casted ability
-                castTime = castTime - (reducedTime * 1000)
-            end
+        if reducedTime and isPlayer then
+            castTime = reducedTime
         end
 
         -- using return here will make the next function (StoreCast) reuse the current stack frame which is slightly more performant
-        return self:StoreCast(srcGUID, spellName, icon, castTime)
+        return self:StoreCast(srcGUID, spellName, icon, castTime, isPlayer)
     elseif eventType == "SPELL_CAST_SUCCESS" then -- spell finished
         -- Channeled spells are started on SPELL_CAST_SUCCESS instead of stopped
         -- Also there's no castTime returned from GetSpellInfo for channeled spells so we need to get it from our own list
         local channelData = channeledSpells[spellName]
         if channelData then
-            return self:StoreCast(srcGUID, spellName, GetSpellTexture(channelData[2]), channelData[1] * 1000, true)
+            local isPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+            return self:StoreCast(srcGUID, spellName, GetSpellTexture(channelData[2]), channelData[1] * 1000, isPlayer, true)
         end
 
         -- non-channeled spell, finish it.
@@ -392,7 +392,7 @@ function addon:COMBAT_LOG_EVENT_UNFILTERED()
     elseif eventType == "SPELL_AURA_REMOVED" then
         -- Channeled spells has no SPELL_CAST_* event for channel stop,
         -- so check if aura is gone instead since most (all?) channels has an aura effect.
-        if channeledSpells[spellName] then
+        if channeledSpells[spellName] and srcGUID == dstGUID then
             return self:DeleteCast(srcGUID)
         elseif castTimeIncreases[spellName] then
             -- Aura that slows casting speed was removed.
@@ -408,7 +408,7 @@ function addon:COMBAT_LOG_EVENT_UNFILTERED()
             return self:DeleteCast(srcGUID)
         end
     elseif eventType == "PARTY_KILL" or eventType == "UNIT_DIED" or eventType == "SPELL_INTERRUPT" then
-        return self:DeleteCast(dstGUID)
+        return self:DeleteCast(dstGUID, eventType == "SPELL_INTERRUPT")
     elseif eventType == "SWING_DAMAGE" or eventType == "ENVIRONMENTAL_DAMAGE" or eventType == "RANGE_DAMAGE" or eventType == "SPELL_DAMAGE" then
 
         if bit_band(dstFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then -- is player
@@ -420,26 +420,27 @@ end
 local refresh = 0
 addon:SetScript("OnUpdate", function(self, elapsed)
     if not next(activeTimers) then return end
-
     local currTime = GetTime()
-    refresh = refresh - elapsed
+    local pushbackEnabled = self.db.pushbackDetect
 
-    -- Check if unit is moving to stop castbar, thanks to LibClassicCasterino for this idea
-    if refresh < 0 then
-        if next(activeGUIDs) then
-            for unitID, unitGUID in pairs(activeGUIDs) do
-                local cast = activeTimers[unitGUID]
-                if cast and currTime - cast.timeStart > 0.2 then
-                    if GetUnitSpeed(unitID) ~= 0 then
-                        self:DeleteCast(unitGUID)
+    if self.db.movementDetect then
+        refresh = refresh - elapsed
+
+        -- Check if unit is moving to stop castbar, thanks to LibClassicCasterino for this idea
+        if refresh < 0 then
+            if next(activeGUIDs) then
+                for unitID, unitGUID in pairs(activeGUIDs) do
+                    local cast = activeTimers[unitGUID]
+                    if cast and cast.isPlayer and currTime - cast.timeStart > 0.25 then
+                        if GetUnitSpeed(unitID) ~= 0 then
+                            self:DeleteCast(unitGUID)
+                        end
                     end
                 end
             end
+            refresh = 0.1
         end
-        refresh = 0.1
     end
-
-    local pushbackEnabled = self.db.pushbackDetect
 
     -- Update all shown castbars in a single OnUpdate call
     for unit, castbar in pairs(activeFrames) do

@@ -1,11 +1,11 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.8-beta
+## Version: v1.1.9-beta
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
 ## Title: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
-## Title-deDE: AtlasLootClassic |cFF0099FF[Instanzen and Raids]|r
+## Title-deDE: AtlasLootClassic |cFF0099FF[Instanzen und Raids]|r
 ## Title-esES: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
 ## Title-esMX: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
 ## Title-frFR: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
@@ -16,7 +16,7 @@
 ## Title-zhCN: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
 ## Title-zhTW: AtlasLootClassic |cFF0099FF[Dungeons and Raids]|r
 ## Notes: AtlasLoot loot tables from Dungeons and Raids
-## Notes-deDE: AtlasLoot loot tables from Dungeons and Raids
+## Notes-deDE: AtlasLoot Beuteverzeichnis der Instanzen und Raids
 ## Notes-esES: AtlasLoot loot tables from Dungeons and Raids
 ## Notes-esMX: AtlasLoot loot tables from Dungeons and Raids
 ## Notes-frFR: AtlasLoot loot tables from Dungeons and Raids

@@ -882,17 +882,17 @@ end
 local DCS_SimpleItemColorCheck = CreateFrame("CheckButton", "DCS_SimpleItemColorCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
 	DCS_SimpleItemColorCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_SimpleItemColorCheck:ClearAllPoints()
-	DCS_SimpleItemColorCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -115)
+	DCS_SimpleItemColorCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -135)
 	DCS_SimpleItemColorCheck:SetScale(1)
-	DCS_SimpleItemColorCheck.tooltipText = L["Blacks out item color in PaperDollFrame."] --Creates a tooltip on mouseover.
-	_G[DCS_SimpleItemColorCheck:GetName() .. "Text"]:SetText(L["Black Item Color"])
+	DCS_SimpleItemColorCheck.tooltipText = L["Black item icons to make text more visible."] --Creates a tooltip on mouseover.
+	_G[DCS_SimpleItemColorCheck:GetName() .. "Text"]:SetText(L["Black Item Icons"])
 
 local DCS_DarkerItemColorCheck = CreateFrame("CheckButton", "DCS_DarkerItemColorCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
 	DCS_DarkerItemColorCheck:ClearAllPoints()
-	DCS_DarkerItemColorCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -135)
+	DCS_DarkerItemColorCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -115)
 	DCS_DarkerItemColorCheck:SetScale(1)
-	DCS_DarkerItemColorCheck.tooltipText = L["Darkens item color in PaperDollFrame."] --Creates a tooltip on mouseover.
-	_G[DCS_DarkerItemColorCheck:GetName() .. "Text"]:SetText(L["Darker Item Color"])
+	DCS_DarkerItemColorCheck.tooltipText = L["Darken item icons to make text more visible."] --Creates a tooltip on mouseover.
+	_G[DCS_DarkerItemColorCheck:GetName() .. "Text"]:SetText(L["Darken Item Icons"])
 
 DCS_SimpleItemColorCheck:SetScript("OnEvent", function(self, event, ...)
 	simpleitemcolor = gdbprivate.gdb.gdbdefaults.DejaClassicStatsSimpleItemColorChecked.SimpleItemColorChecked
@@ -2480,7 +2480,7 @@ DCS_ShowEnchantCheck:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 DCS_ShowEnchantCheck:RegisterEvent("UNIT_STATS")
 
 DCS_ShowEnchantCheck:ClearAllPoints()
-	DCS_ShowEnchantCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -220)
+	DCS_ShowEnchantCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -175)
 	DCS_ShowEnchantCheck:SetScale(1)
 	DCS_ShowEnchantCheck.tooltipText = L["Displays each equipped item's enchantment. \n\n\"Enchantment? Enchantment!\" -Sandal Feddic"] --Creates a tooltip on mouseover.
 	_G[DCS_ShowEnchantCheck:GetName() .. "Text"]:SetText(L["Enchants"])
@@ -2512,8 +2512,8 @@ local DCS_AlternateInfoPlacementCheck = CreateFrame("CheckButton", "DCS_Alternat
 	--DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", 30, -255)
 	DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -155)
 	DCS_AlternateInfoPlacementCheck:SetScale(1)
-	DCS_AlternateInfoPlacementCheck.tooltipText = L["Checked puts item info next to the item. Unchecked puts item info on the item."] --Creates a tooltip on mouseover.
-	_G[DCS_AlternateInfoPlacementCheck:GetName() .. "Text"]:SetText(L["Alternate Item Info Placement"])
+	DCS_AlternateInfoPlacementCheck.tooltipText = L["Displays the item's info beside each item's slot."] --Creates a tooltip on mouseover.
+	_G[DCS_AlternateInfoPlacementCheck:GetName() .. "Text"]:SetText(L["Display Info Beside Items"])
 
 DCS_AlternateInfoPlacementCheck:SetScript("OnEvent", function(self, event, ...)
 	otherinfoplacement = gdbprivate.gdb.gdbdefaults.DejaClassicStatsAlternateInfoPlacement.AlternateInfoPlacementChecked

@@ -173,13 +173,20 @@ local dcsresetcheck = CreateFrame("Button", "DCSResetButton", DejaClassicStatsPa
 	--local LOCALE = GetLocale()
 	local LOCALE = namespace.locale
 		--print (LOCALE)
-	local sometable = {
+	local altWidth = {
 		["ptBR"] = {},
 		["frFR"] = {},
 		["deDE"] = {},
+		["ruRU"] = {},
 	}
-	if sometable[LOCALE] then
+	local altWidth2 = {
+		["esES"] = {},
+	}
+
+	if altWidth[LOCALE] then
 		LOCALE = 175
+	elseif altWidth2[LOCALE] then
+		LOCALE = 200
 	else
 		--print ("enUS = 125")
 		LOCALE = 125
@@ -216,10 +223,10 @@ local dcsresetcheck = CreateFrame("Button", "DCSResetButton", DejaClassicStatsPa
 	dcsItemsPanelCategoryFS:SetFontObject("GameFontNormalLarge") --Use instead of SetFont("Fonts\\FRIZQT__.TTF", 15) or Russian, Korean and Chinese characters won't work.
 	
 	-- --Miscellaneous
-	-- local dcsMiscPanelCategoryFS = DejaClassicStatsPanel:CreateFontString("dcsMiscPanelCategoryFS", "OVERLAY", "GameFontNormal")
-	-- dcsMiscPanelCategoryFS:SetText('|cffffffff' .. L["Miscellaneous:"] .. '|r')
-	-- dcsMiscPanelCategoryFS:SetPoint("LEFT", 25, -165)
-	-- dcsMiscPanelCategoryFS:SetFontObject("GameFontNormalLarge") --Use instead of SetFont("Fonts\\FRIZQT__.TTF", 15) or Russian, Korean and Chinese characters won't work.
+	local dcsMiscPanelCategoryFS = DejaClassicStatsPanel:CreateFontString("dcsMiscPanelCategoryFS", "OVERLAY", "GameFontNormal")
+	dcsMiscPanelCategoryFS:SetText('|cffffffff' .. L["Miscellaneous:"] .. '|r')
+	dcsMiscPanelCategoryFS:SetPoint("LEFT", 25, -125)
+	dcsMiscPanelCategoryFS:SetFontObject("GameFontNormalLarge") --Use instead of SetFont("Fonts\\FRIZQT__.TTF", 15) or Russian, Korean and Chinese characters won't work.
 	
 -------------------
 -- Frame Offsets --
@@ -229,6 +236,15 @@ local DCS_HeaderWidth, DCS_HeaderHeight = 192, 28
 local DCS_RframeInset = 25
 local DCS_HeaderInsetX = 0
 local DCS_StatScale = 1.25
+
+------------------
+-- Scroll Frame --
+------------------
+local scrollbarchecked
+
+gdbprivate.gdbdefaults.gdbdefaults.dejacharacterstatsScrollbarChecked = {
+	ScrollbarSetChecked = false,
+}
 
 local DCS_StatScrollFrame = CreateFrame("ScrollFrame", "DCS_StatScrollFrame", CharacterFrame, "UIPanelScrollFrameTemplate")
 	DCS_StatScrollFrame:ClearAllPoints()
@@ -245,33 +261,47 @@ local DCS_StatScrollFrame = CreateFrame("ScrollFrame", "DCS_StatScrollFrame", Ch
 	t:SetColorTexture(0, 0, 0, 1)
 
 	local DCS_TopTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+	local DCS_TopRightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+	local DCS_LeftTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+	local DCS_RightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+	local DCS_BottomRightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+	local DCS_BottomTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
+
+local scrollFrameTextureXinsets
+
+local function DCS_SetScrollTextures()
+	if scrollbarchecked then
+		scrollFrameTextureXinsets = 60
+		-- DCS_StatScrollFrame.ScrollBar:SetShown(floor(yrange) ~= 0)
+		DCS_StatScrollFrame.ScrollBar:Show()
+	else
+		scrollFrameTextureXinsets = 44
+		DCS_StatScrollFrame.ScrollBar:Hide()
+	end
+
 	DCS_TopTexture:SetPoint("TOPLEFT", DCS_StatScrollFrame, "TOPLEFT", -4, 86)
 	DCS_TopTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 	DCS_TopTexture:SetTexCoord(0.69, 0, 1, 0)
 
-	local DCS_TopRightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
-	DCS_TopRightTexture:SetPoint("TOPRIGHT", DCS_StatScrollFrame, "TOPRIGHT", 60, 86)
+	DCS_TopRightTexture:SetPoint("TOPRIGHT", DCS_StatScrollFrame, "TOPRIGHT", scrollFrameTextureXinsets, 86)
 	DCS_TopRightTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 	DCS_TopRightTexture:SetTexCoord(0, 1, 1, 0)
 
-	local DCS_LeftTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
 	DCS_LeftTexture:SetPoint("LEFT", DCS_StatScrollFrame, "LEFT", 0, -20)
 	DCS_LeftTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 	DCS_LeftTexture:SetTexCoord(0, 0.6, 0.6, 0)
 
-	local DCS_RightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
-	DCS_RightTexture:SetPoint("RIGHT", DCS_StatScrollFrame, "RIGHT", 60, 0)
+	DCS_RightTexture:SetPoint("RIGHT", DCS_StatScrollFrame, "RIGHT", scrollFrameTextureXinsets, 0)
 	DCS_RightTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 	DCS_RightTexture:SetTexCoord(0, 1, 0.6, 0)
 
-	local DCS_BottomRightTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
-	DCS_BottomRightTexture:SetPoint("BOTTOMRIGHT", DCS_StatScrollFrame, "BOTTOMRIGHT", 60, -86)
+	DCS_BottomRightTexture:SetPoint("BOTTOMRIGHT", DCS_StatScrollFrame, "BOTTOMRIGHT", scrollFrameTextureXinsets, -86)
 	DCS_BottomRightTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 
-	local DCS_BottomTexture=DCS_StatScrollFrame:CreateTexture(nil,"ARTWORK")
 	DCS_BottomTexture:SetPoint("BOTTOMLEFT", DCS_StatScrollFrame, "BOTTOMLEFT", -4, -86)
 	DCS_BottomTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-Character-General-BottomRight")
 	DCS_BottomTexture:SetTexCoord(0.69, 0, 0, 1)
+end
 
 	local t=DCS_StatScrollFrame.ScrollBar:CreateTexture(nil,"ARTWORK")
 		t:SetAllPoints(DCS_StatScrollFrame.ScrollBar)
@@ -280,6 +310,12 @@ local DCS_StatScrollFrame = CreateFrame("ScrollFrame", "DCS_StatScrollFrame", Ch
 	DCS_StatScrollFrame:HookScript("OnScrollRangeChanged", function(self, xrange, yrange)
 		self.ScrollBar:SetShown(floor(yrange) ~= 0)
 		-- self.ScrollBar:Hide() -- This is what will hide the ScrollBar
+		if scrollbarchecked then
+			self.ScrollBar:SetShown(floor(yrange) ~= 0)
+			self.ScrollBar:Show()
+		else
+			self.ScrollBar:Hide()
+		end
 	end)
 
 local DejaClassicStatsPane = CreateFrame("Frame", "DejaClassicStatsPane", CharacterFrame)
@@ -294,7 +330,33 @@ local DejaClassicStatsPane = CreateFrame("Frame", "DejaClassicStatsPane", Charac
 
 		DCS_StatScrollFrame:SetScrollChild(DejaClassicStatsPane)
 	end)
+
+----------------------------
+-- Scrollbar Check Button --
+----------------------------
+local HideScrollBar
+
+local DCS_ScrollbarCheck = CreateFrame("CheckButton", "DCS_ScrollbarCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_ScrollbarCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_ScrollbarCheck:ClearAllPoints()
+	--DCS_ScrollbarCheck:SetPoint("LEFT", 30, -225)
+	DCS_ScrollbarCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -95)
+	DCS_ScrollbarCheck:SetScale(1)
+	DCS_ScrollbarCheck.tooltipText = L["Displays the DCS scrollbar."] --Creates a tooltip on mouseover.
+	_G[DCS_ScrollbarCheck:GetName() .. "Text"]:SetText(L["Scrollbar"])
 	
+	DCS_ScrollbarCheck:SetScript("OnEvent", function(self, event)
+		scrollbarchecked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsScrollbarChecked.ScrollbarSetChecked
+		self:SetChecked(scrollbarchecked)
+		DCS_SetScrollTextures()	
+	end)
+
+	DCS_ScrollbarCheck:SetScript("OnClick", function(self) 
+		scrollbarchecked = not scrollbarchecked
+		gdbprivate.gdb.gdbdefaults.dejacharacterstatsScrollbarChecked.ScrollbarSetChecked = scrollbarchecked
+		DCS_SetScrollTextures()
+	end)
+
 ------------------
 -- Class Colors --
 ------------------
@@ -1550,10 +1612,10 @@ DejaClassicStatsEventFrame:RegisterEvent("ADDON_LOADED")
 		DCS_ShowHideScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
 		DCS_ShowHideScrollArtBackgroundCheckedCheck:ClearAllPoints()
 		--DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
-		DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -195)
+		DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -15)
 		DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScale(1)
-		DCS_ShowHideScrollArtBackgroundCheckedCheck.tooltipText = L["Checked shows the class talents background art in the sidebar."] --Creates a tooltip on mouseover.
-		_G[DCS_ShowHideScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Show Background Art"])
+		_G[DCS_ShowHideScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Background Art"])
+		DCS_ShowHideScrollArtBackgroundCheckedCheck.tooltipText = L["Displays the class talents background art."] --Creates a tooltip on mouseover.
 	
 	DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
 		ShowHideScrollArt = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked
@@ -1576,10 +1638,10 @@ DejaClassicStatsEventFrame:RegisterEvent("ADDON_LOADED")
 		DCS_DesaturateScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
 		DCS_DesaturateScrollArtBackgroundCheckedCheck:ClearAllPoints()
 		--DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
-		DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -175)
+		DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -35)
 		DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScale(1)
-		DCS_DesaturateScrollArtBackgroundCheckedCheck.tooltipText = L["Checked makes the stat talent background art black and white."] --Creates a tooltip on mouseover.
 		_G[DCS_DesaturateScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Monochrome Background Art"])
+		DCS_DesaturateScrollArtBackgroundCheckedCheck.tooltipText = L["Displays black and white class talents background art."] --Creates a tooltip on mouseover.
 	
 	DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
 		DesaturateScrollArtBackground = gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked

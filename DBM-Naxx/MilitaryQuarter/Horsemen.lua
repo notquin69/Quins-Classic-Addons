@@ -1,8 +1,8 @@
 local mod	= DBM:NewMod("Horsemen", "DBM-Naxx", 4)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20190817015300")
-mod:SetCreatureID(16063, 16064, 16065, 30549)
+mod:SetRevision("20190828054221")
+mod:SetCreatureID(16062, 16063, 16064, 16065)--30549
 mod:SetEncounterID(1121)
 mod:SetModelID(10729)
 mod:SetBossHPInfoToHighest()

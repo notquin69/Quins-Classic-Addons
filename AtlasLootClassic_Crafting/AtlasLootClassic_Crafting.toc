@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Author: Lag
-## Version: v1.1.8-beta
+## Version: v1.1.9-beta
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -16,7 +16,7 @@
 ## Title-zhCN: AtlasLootClassic |cFF0099FF[Crafting]|r
 ## Title-zhTW: AtlasLootClassic |cFF0099FF[Crafting]|r
 ## Notes: AtlasLoot loot tables of Crafting Items
-## Notes-deDE: AtlasLoot loot tables of Crafting Items
+## Notes-deDE: AtlasLoot Beuteverzeichnis der Berufe
 ## Notes-esES: AtlasLoot loot tables of Crafting Items
 ## Notes-esMX: AtlasLoot loot tables of Crafting Items
 ## Notes-frFR: AtlasLoot loot tables of Crafting Items
