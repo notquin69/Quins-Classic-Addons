@@ -22,7 +22,7 @@ local OPERATION_INFO = {
 	keepQuantity = { type = "number", default = 0 },
 	keepQtySources = { type = "table", default = {} },
 	maxExpires = { type = "number", default = 0 },
-	duration = { type = "number", default = 24 },
+	duration = { type = "number", default = 24, customSanitizeFunction = nil },
 	bidPercent = { type = "number", default = 1 },
 	undercut = { type = "string", default = "1c" },
 	minPrice = { type = "string", default = "check(first(crafting,dbmarket,dbregionmarketavg),max(0.25*avg(crafting,dbmarket,dbregionmarketavg),1.5*vendorsell))" },
@@ -44,6 +44,7 @@ local OPERATION_INFO = {
 -- ============================================================================
 
 function Auctioning.OnInitialize()
+	OPERATION_INFO.duration.customSanitizeFunction = private.SanitizeDuration
 	TSM.Operations.Register("Auctioning", L["Auctioning"], OPERATION_INFO, 20, private.GetOperationInfo)
 end
 
@@ -52,6 +53,19 @@ end
 -- ============================================================================
 -- Private Helper Functions
 -- ============================================================================
+
+function private.SanitizeDuration(value)
+	-- convert from 12/24/48 durations to 1/2/3 API values
+	if value == 12 then
+		return 1
+	elseif value == 24 then
+		return 2
+	elseif value == 48 then
+		return 3
+	else
+		return value
+	end
+end
 
 function private.GetOperationInfo(operationSettings)
 	local parts = TSMAPI_FOUR.Util.AcquireTempTable()

@@ -1,9 +1,11 @@
-## v4.8.7 Changes
+## v4.8.8 Changes
 
-* Fixed error caused by a corrupted item cache.
-* Fixed error when trying to create teh TSM macro on classic.
-* Fixed positioning of TSM UI button on default UIs in classic.
-* Fixed bug with cooking not showing properly in classic.
-* Changed gold graph units from 1kg to 1g on classic.
+* Added support for enchanting, smelting, and poisons for Classic
+* Fixed various issues related to Crafting on Classic
+* Updated disenchant values for both Classic and Retail
+* Added more detailed disenchant/mill/prospecting information to the tooltip
+* Fixed various errors seen while using TSM on Classic
+* Fixed auction durations for Classic
+* Fixed a few errors caused by incorrect translations
 
 [Known Issues](http://support.tradeskillmaster.com/display/KB/TSM4+Currently+Known+Issues)

@@ -11,16 +11,18 @@ local AuctionDB = TSM:NewPackage("AuctionDB")
 local L = TSM.L
 local private = {
 	region = nil,
-	realmData = {},
+	appRealmData = {},
+	appRealmTime = nil,
+	scanRealmData = {},
+	scanRealmTime = nil,
 	regionData = nil,
-	realmScanTime = nil,
-	hasAppRealmData = false,
 	scanDB = nil,
 	scanThreadId = nil,
 	ahOpen = false,
 	marketValueDB = nil,
 	marketValueQuery = nil,
 	didScan = false,
+	auctionScan = nil,
 }
 local CSV_KEYS = { "itemString", "minBuyout", "marketValue", "numAuctions", "quantity", "lastScan" }
 
@@ -32,12 +34,7 @@ local CSV_KEYS = { "itemString", "minBuyout", "marketValue", "numAuctions", "qua
 
 function AuctionDB.OnInitialize()
 	private.scanThreadId = TSMAPI_FOUR.Thread.New("AUCTIONDB_SCAN", private.ScanThread)
-	private.scanDB = TSMAPI_FOUR.Database.NewSchema("AUCTIONDB_SCAN")
-		:AddStringField("itemString")
-		:AddNumberField("stackSize")
-		:AddNumberField("itemBuyout")
-		:AddIndex("itemString")
-		:Commit()
+	private.scanDB = TSMAPI_FOUR.Auction.NewDatabase("AUCTIONDB_SCAN")
 	private.marketValueDB = TSMAPI_FOUR.Database.NewSchema("AUCTIONDB_MARKET_VALUE")
 		:AddStringField("itemString")
 		:AddNumberField("itemBuyout")
@@ -82,8 +79,7 @@ function AuctionDB.OnEnable()
 
 	-- check if we can load realm data from the app
 	if realmAppData then
-		private.hasAppRealmData = true
-		private.realmScanTime = realmAppData.downloadTime
+		private.appRealmTime = realmAppData.downloadTime
 		local fields = realmAppData.fields
 		for _, data in ipairs(realmAppData.data) do
 			local itemString
@@ -95,34 +91,34 @@ function AuctionDB.OnEnable()
 					else
 						itemString = gsub(data[i], ":0:", "::")
 					end
-					private.realmData[itemString] = {}
+					private.appRealmData[itemString] = {}
 				else
-					private.realmData[itemString][key] = data[i]
+					private.appRealmData[itemString][key] = data[i]
 				end
 			end
-			private.realmData[itemString].lastScan = realmAppData.downloadTime
+			private.appRealmData[itemString].lastScan = realmAppData.downloadTime
 		end
 	end
 
-	for itemString in pairs(private.realmData) do
+	for itemString in pairs(private.appRealmData) do
 		TSMAPI_FOUR.Item.FetchInfo(itemString)
 	end
-	if not next(private.realmData) and TSM.db.factionrealm.internalData.auctionDBScanTime > 0 then
+	if TSM.db.factionrealm.internalData.auctionDBScanTime > 0 then
 		private.LoadSVRealmData()
 	end
-	if not next(private.realmData) then
+	if not next(private.appRealmData) and not next(private.scanRealmData) then
 		TSM:Print(L["TSM doesn't currently have any AuctionDB pricing data for your realm. We recommend you download the TSM Desktop Application from |cff99ffffhttp://tradeskillmaster.com|r to automatically update your AuctionDB data (and auto-backup your TSM settings)."])
 	end
 	collectgarbage()
 end
 
 function AuctionDB.OnDisable()
-	if not private.didScan or private.hasAppRealmData then
+	if not private.didScan then
 		return
 	end
 
 	local encodeContext = TSMAPI_FOUR.CSV.EncodeStart(CSV_KEYS)
-	for itemString, data in pairs(private.realmData) do
+	for itemString, data in pairs(private.scanRealmData) do
 		TSMAPI_FOUR.CSV.EncodeAddRowDataRaw(encodeContext, itemString, data.minBuyout, data.marketValue, data.numAuctions, data.quantity, data.lastScan)
 	end
 	TSMAPI_FOUR.CSV.EncodeSortLines(encodeContext)
@@ -131,7 +127,10 @@ function AuctionDB.OnDisable()
 end
 
 function AuctionDB.GetLastCompleteScanTime()
-	return private.realmScanTime
+	if not private.appRealmTime and not private.scanRealmTime then
+		return nil
+	end
+	return max(private.appRealmTime or 0, private.scanRealmTime or 0)
 end
 
 function AuctionDB.LastScanIteratorThreaded()
@@ -139,8 +138,10 @@ function AuctionDB.LastScanIteratorThreaded()
 	local itemMinBuyout = TSMAPI_FOUR.Thread.AcquireSafeTempTable()
 	local baseItems = TSMAPI_FOUR.Thread.AcquireSafeTempTable()
 
-	for itemString, data in pairs(private.realmData) do
-		if data.lastScan >= private.realmScanTime then
+	local realmData = private.didScan and private.scanRealmData or private.appRealmData
+	local lastScanTime = AuctionDB.GetLastCompleteScanTime()
+	for itemString, data in pairs(realmData) do
+		if data.lastScan >= lastScanTime then
 			itemString = TSMAPI_FOUR.Item.ToItemString(itemString)
 			local baseItemString = TSMAPI_FOUR.Item.ToBaseItemString(itemString)
 			if baseItemString ~= itemString then
@@ -175,7 +176,15 @@ function AuctionDB.LastScanIteratorThreaded()
 end
 
 function AuctionDB.GetRealmItemData(itemString, key)
-	return private.GetItemDataHelper(private.realmData, key, itemString)
+	local realmData = nil
+	if private.didScan and (key == "minBuyout" or key == "numAuctions" or key == "lastScan") then
+		-- always use scanRealmData for minBuyout/numAuctions/lastScan if we've done a scan
+		realmData = private.scanRealmData
+	else
+		-- use appRealmData if available
+		realmData = next(private.appRealmData) and private.appRealmData or private.scanRealmData
+	end
+	return private.GetItemDataHelper(realmData, key, itemString)
 end
 
 function AuctionDB.GetRegionItemData(itemString, key)
@@ -189,9 +198,7 @@ function AuctionDB.GetRegionSaleInfo(itemString, key)
 end
 
 function AuctionDB.RunScan()
-	if private.hasAppRealmData then
-		TSM:Print(L["ERROR: Realm data is already available from the TSM Desktop App."])
-	elseif not private.ahOpen then
+	if not private.ahOpen then
 		TSM:Print(L["ERROR: The auction house must be open in order to do a scan."])
 		return
 	end
@@ -203,7 +210,7 @@ function AuctionDB.RunScan()
 		TSM:Print(L["ERROR: A full AH scan has recently been performed and is on cooldown. Log out to reset this cooldown."])
 		return
 	end
-	TSM:Print(L["Starting full AH scan. Please note that this scan may cause your game client to lag or crash."])
+	TSM:Print(L["Starting full AH scan. Please note that this scan may cause your game client to lag or crash. This scan generally takes 1-2 minutes."])
 	TSMAPI_FOUR.Thread.Start(private.scanThreadId)
 end
 
@@ -214,21 +221,34 @@ end
 -- ============================================================================
 
 function private.ScanThread()
-	private.scanDB:Truncate()
-	if not private.DoScanThreaded() then
-		TSM:Printf(L["Failed to scan the AH. Please try again."])
-		return
+	-- release the previous scan if needed
+	if private.auctionScan then
+		private.auctionScan:Release()
 	end
 
+	-- clear out any prior results
+	private.scanDB:Truncate()
+
+	-- start the new scan
+	private.auctionScan = TSMAPI_FOUR.Auction.NewAuctionScan(private.scanDB)
+		:SetResolveSellers(false)
+		:SetIgnoreItemLevel(false)
+		:SetScript("OnFilterDone", private.OnFullScanDone)
+	private.auctionScan:NewAuctionFilter()
+		:SetGetAll(true)
+	private.auctionScan:StartScanThreaded()
+end
+
+function private.OnFullScanDone()
 	TSM:Printf(L["Processing scan results..."])
-	wipe(private.realmData)
-	for _, data in pairs(private.realmData) do
+	wipe(private.scanRealmData)
+	for _, data in pairs(private.scanRealmData) do
 		data.minBuyout = 0
 		data.numAuctions = 0
 		data.quantity = 0
 	end
 	local scannedItems = TSMAPI_FOUR.Thread.AcquireSafeTempTable()
-	private.realmScanTime = time()
+	private.scanRealmTime = time()
 	TSM.db.factionrealm.internalData.auctionDBScanTime = time()
 	private.marketValueDB:TruncateAndBulkInsertStart()
 	local scanQuery = private.scanDB:NewQuery()
@@ -238,14 +258,14 @@ function private.ScanThread()
 		private.ProcessScanResultItem(itemString, itemBuyout, stackSize)
 		scannedItems[itemString] = true
 	end
+	local numScannedAuctions = scanQuery:Count()
 	scanQuery:Release()
-	local numScannedAuctions = private.scanDB:GetNumRows()
 	private.scanDB:Truncate()
 	private.marketValueDB:BulkInsertEnd()
 	TSMAPI_FOUR.Thread.Yield()
 
 	for itemString in pairs(scannedItems) do
-		local data = private.realmData[itemString]
+		local data = private.scanRealmData[itemString]
 		data.marketValue = private.CalculateItemMarketValue(itemString, data.quantity)
 		assert(data.minBuyout == 0 or data.marketValue >= data.minBuyout)
 		TSMAPI_FOUR.Thread.Yield()
@@ -258,75 +278,9 @@ function private.ScanThread()
 	private.didScan = true
 end
 
-function private.DoScanThreaded()
-	-- wait for the AH to be ready
-	TSMAPI_FOUR.Thread.WaitForFunction(CanSendAuctionQuery)
-	if not select(2, CanSendAuctionQuery()) or not private.ahOpen then
-		-- can't do a getall scan right now
-		TSM:LOG_ERR("AH closed or can't do GetAll")
-		return false
-	end
-	-- query the AH
-	QueryAuctionItems(nil, nil, nil, 0, nil, nil, true)
-	-- wait for the update event
-	TSMAPI_FOUR.Thread.WaitForEvent("AUCTION_ITEM_LIST_UPDATE")
-	-- wait a bit for things to settle
-	local settleStartTime = GetTime()
-	while not CanSendAuctionQuery() do
-		if not private.ahOpen then
-			TSM:LOG_ERR("AH closed")
-			return false
-		end
-		TSMAPI_FOUR.Thread.Yield(true)
-	end
-	TSM:LOG_INFO("Took %d seconds for AH to settle", GetTime() - settleStartTime)
-
-	local startTime = GetTime()
-	local lastSuccessTime = GetTime()
-	local lastProgressTime = GetTime()
-	local index = 1
-	while true do
-		local numAuctions, totalAuctions = GetNumAuctionItems("list")
-		TSM:LOG_INFO("Scanning %d/%d", index, numAuctions)
-		if totalAuctions <= NUM_AUCTION_ITEMS_PER_PAGE or numAuctions ~= totalAuctions then
-			-- we're no longer on the getall results
-			TSM:LOG_ERR("Switched off GetAll results")
-			return false
-		end
-		local maxIndex = min(numAuctions, index + NUM_AUCTION_ITEMS_PER_PAGE)
-		private.scanDB:BulkInsertStart()
-		while index <= maxIndex do
-			local _, _, stackSize, _, _, _, _, _, _, buyout, _, _, _, _, _, _, itemId = GetAuctionItemInfo("list", index)
-			if stackSize and buyout and itemId then
-				local itemBuyout = (buyout > 0) and floor(buyout / stackSize) or 0
-				private.scanDB:BulkInsertNewRow("i:"..itemId, stackSize, itemBuyout)
-				index = index + 1
-				lastSuccessTime = GetTime()
-			else
-				break
-			end
-		end
-		private.scanDB:BulkInsertEnd()
-		if index > numAuctions then
-			return true
-		elseif GetTime() > startTime + 300 then
-			TSM:LOG_ERR("Timed out on entire scan")
-			return false
-		elseif GetTime() > lastSuccessTime + 30 then
-			TSM:LOG_ERR("Timed out on index (%d)", index)
-			return false
-		end
-		if GetTime() > lastProgressTime + 1 then
-			TSM:Printf(L["Scan progress: %d%%"], TSMAPI_FOUR.Util.Round(index * 100 / numAuctions))
-			lastProgressTime = GetTime()
-		end
-		TSMAPI_FOUR.Thread.Yield(true)
-	end
-end
-
 function private.ProcessScanResultItem(itemString, itemBuyout, stackSize)
-	private.realmData[itemString] = private.realmData[itemString] or { numAuctions = 0, quantity = 0, minBuyout = 0 }
-	local data = private.realmData[itemString]
+	private.scanRealmData[itemString] = private.scanRealmData[itemString] or { numAuctions = 0, quantity = 0, minBuyout = 0 }
+	local data = private.scanRealmData[itemString]
 	data.lastScan = time()
 	if itemBuyout > 0 then
 		data.minBuyout = min(data.minBuyout > 0 and data.minBuyout or math.huge, itemBuyout)
@@ -373,7 +327,7 @@ function private.CalculateItemMarketValue(itemString, quantity)
 
 	-- calculate the market value as the average of all data within 1.5 stdev of our previous average
 	private.marketValueQuery:BindParams(itemString, 1, num, avg - stdev * 1.5, avg + stdev * 1.5)
-	return private.marketValueQuery:Avg("itemBuyout")
+	return floor(private.marketValueQuery:Avg("itemBuyout"))
 end
 
 
@@ -389,7 +343,7 @@ function private.LoadSVRealmData()
 		return
 	end
 	for itemString, minBuyout, marketValue, numAuctions, quantity, lastScan in TSMAPI_FOUR.CSV.DecodeIterator(decodeContext) do
-		private.realmData[itemString] = {
+		private.scanRealmData[itemString] = {
 			minBuyout = tonumber(minBuyout),
 			marketValue = tonumber(marketValue),
 			numAuctions = tonumber(numAuctions),
@@ -400,7 +354,7 @@ function private.LoadSVRealmData()
 	if not TSMAPI_FOUR.CSV.DecodeEnd(decodeContext) then
 		TSM:LOG_ERR("Failed to decode records")
 	end
-	private.realmScanTime = TSM.db.factionrealm.internalData.auctionDBScanTime
+	private.scanRealmTime = TSM.db.factionrealm.internalData.auctionDBScanTime
 end
 
 function private.ProcessRealmAppData(rawData)
@@ -523,7 +477,7 @@ function private.OnAuctionHouseShow()
 	private.ahOpen = true
 	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or not select(2, CanSendAuctionQuery()) then
 		return
-	elseif private.hasAppRealmData or (private.realmScanTime or 0) > time() - 60 * 60 * 24 then
+	elseif (AuctionDB.GetLastCompleteScanTime() or 0) > time() - 60 * 60 * 6 then
 		return
 	end
 	StaticPopupDialogs["TSM_AUCTIONDB_SCAN"] = StaticPopupDialogs["TSM_AUCTIONDB_SCAN"] or {

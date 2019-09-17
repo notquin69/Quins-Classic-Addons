@@ -615,7 +615,7 @@ function private.FSMCreate()
 						PlaceAuctionBid("list", index, context.findAuction:GetField("buyout"))
 					elseif context.scanType == "bid" then
 						-- bid on the auction
-						PlaceAuctionBid("list", index, context.findAuction:GetField("requiredBid"))
+						PlaceAuctionBid("list", index, TSM.Auction.Util.GetRequiredBidByScanResultRow(context.findAuction))
 					else
 						error("Invalid scanType: "..tostring(context.scanType))
 					end

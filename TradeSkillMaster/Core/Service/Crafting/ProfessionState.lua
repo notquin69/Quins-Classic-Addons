@@ -8,7 +8,7 @@
 
 local _, TSM = ...
 local ProfessionState = TSM.Crafting:NewPackage("ProfessionState")
-local private = { fsm = nil, updateCallbacks = {}, isClosed = true, professionName = nil }
+local private = { fsm = nil, updateCallbacks = {}, isClosed = true, craftOpen = nil, tradeSkillOpen = nil, professionName = nil }
 local WAIT_FRAME_DELAY = 5
 
 
@@ -29,6 +29,10 @@ function ProfessionState.GetIsClosed()
 	return private.isClosed
 end
 
+function ProfessionState.IsClassicCrafting()
+	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and private.craftOpen
+end
+
 function ProfessionState.GetCurrentProfession()
 	return private.professionName
 end
@@ -41,12 +45,16 @@ end
 
 function private.CreateFSM()
 	TSMAPI_FOUR.Event.Register("TRADE_SKILL_SHOW", function()
+		private.tradeSkillOpen = true
 		private.fsm:ProcessEvent("EV_TRADE_SKILL_SHOW")
 		private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGING")
 		private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGED")
 	end)
 	TSMAPI_FOUR.Event.Register("TRADE_SKILL_CLOSE", function()
-		private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSE")
+		private.tradeSkillOpen = false
+		if not private.craftOpen then
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSE")
+		end
 	end)
 	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
 		TSMAPI_FOUR.Event.Register("GARRISON_TRADESKILL_NPC_CLOSED", function()
@@ -57,6 +65,23 @@ function private.CreateFSM()
 		end)
 		TSMAPI_FOUR.Event.Register("TRADE_SKILL_DATA_SOURCE_CHANGING", function()
 			private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGING")
+		end)
+	else
+		TSMAPI_FOUR.Event.Register("CRAFT_SHOW", function()
+			private.craftOpen = true
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_SHOW")
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGING")
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGED")
+		end)
+		TSMAPI_FOUR.Event.Register("CRAFT_CLOSE", function()
+			private.craftOpen = false
+			if not private.tradeSkillOpen then
+				private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSE")
+			end
+		end)
+		TSMAPI_FOUR.Event.Register("CRAFT_UPDATE", function()
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGING")
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_DATA_SOURCE_CHANGED")
 		end)
 	end
 	local function FrameDelayCallback()

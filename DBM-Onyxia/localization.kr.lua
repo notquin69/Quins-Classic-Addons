@@ -20,7 +20,7 @@ L:SetTimerLocalization{
 }
 
 L:SetOptionLocalization{
-	TimerWhelps				= "오닉시아 새끼용 등장 바 보기",
+	TimerWhelps				= "오닉시아 새끼용 등장 타이머 바 보기",
 	WarnWhelpsSoon			= "오닉시아 새끼용 등장 사전 경고 보기",
 	SoundWTF3				= "전설적인 오닉시아 레이드 영상에서 추출한 재미있는 효과음 재생"
 }

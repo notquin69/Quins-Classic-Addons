@@ -820,9 +820,19 @@ function private.FSMCreate()
 		private.fsm:ProcessEvent("EV_PROFESSION_STATE_UPDATE")
 	end)
 
-	local fsmPrivate = {}
+	local fsmPrivate = {
+		success = nil,
+		isDone = nil,
+	}
+	local function CraftCallback()
+		private.fsm:ProcessEvent("EV_SPELLCAST_COMPLETE", fsmPrivate.success, fsmPrivate.isDone)
+		fsmPrivate.success = nil
+		fsmPrivate.isDone = nil
+	end
 	function fsmPrivate.CraftCallback(success, isDone)
-		private.fsm:ProcessEvent("EV_SPELLCAST_COMPLETE", success, isDone)
+		fsmPrivate.success = success
+		fsmPrivate.isDone = isDone
+		TSMAPI_FOUR.Delay.AfterFrame(1, CraftCallback)
 	end
 	function fsmPrivate.QueueUpdateCallback()
 		private.fsm:ProcessEvent("EV_QUEUE_UPDATE")
@@ -963,7 +973,7 @@ function private.FSMCreate()
 		-- engineer tinkers can't be crafted, multi-crafted or queued
 		if not resultItemString then
 			detailsFrame:GetElement("right.buttons.craftBtn")
-				:SetText(L["TINKER"])
+				:SetText(currentProfession == GetSpellInfo(7411) and L["ENCHANT"] or L["TINKER"])
 			detailsFrame:GetElement("right.buttons.queueBtn")
 				:Hide()
 			detailsFrame:GetElement("right.buttons.number")

@@ -489,7 +489,8 @@ end
 function TSMAPI_FOUR.Item.GetVendorSell(item)
 	local itemString = TSMAPI_FOUR.Item.ToItemString(item)
 	if not itemString then return end
-	return private.GetFieldValueHelper(itemString, "vendorSell", false, false, 0)
+	local vendorSell = private.GetFieldValueHelper(itemString, "vendorSell", false, false, 0)
+	return (vendorSell or 0) > 0 and vendorSell or nil
 end
 
 --- Get the class id.

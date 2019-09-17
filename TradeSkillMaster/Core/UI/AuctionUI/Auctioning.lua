@@ -27,11 +27,6 @@ local DEFAULT_TAB_GROUP_CONTEXT = {
 }
 -- TODO: these should eventually go in the saved variables
 private.dividedContainerContext = {}
-local AUCTION_DURATIONS = {
-	AUCTION_DURATION_ONE,
-	AUCTION_DURATION_TWO,
-	AUCTION_DURATION_THREE,
-}
 
 
 
@@ -406,7 +401,7 @@ function private.GetAuctioningScanFrame()
 						:SetStyle("fontHeight", 12)
 						:SetStyle("openFont", TSM.UI.Fonts.RobotoMedium)
 						:SetStyle("openFontHeight", 12)
-						:SetItems(AUCTION_DURATIONS)
+						:SetItems(TSM.CONST.AUCTION_DURATIONS)
 						:SetScript("OnSelectionChanged", private.DurationOnSelectionChanged)
 					)
 				)
@@ -761,7 +756,7 @@ function private.BidBuyoutTextOnValueChanged(text, value)
 end
 
 function private.DurationOnSelectionChanged(dropdown, value)
-	local postTime = TSMAPI_FOUR.Util.GetDistinctTableKey(AUCTION_DURATIONS, value)
+	local postTime = TSMAPI_FOUR.Util.GetDistinctTableKey(TSM.CONST.AUCTION_DURATIONS, value)
 	private.fsm:ProcessEvent("EV_POST_DETAIL_CHANGED", "postTime", postTime)
 end
 
@@ -843,17 +838,7 @@ function private.FSMCreate()
 			ClearCursor()
 		end
 
-		local postTime = detailsHeader2:GetElement("duration.dropdown"):GetSelection()
-		if postTime == AUCTION_DURATION_ONE then
-			postTime = 1
-		elseif postTime == AUCTION_DURATION_TWO then
-			postTime = 2
-		elseif postTime == AUCTION_DURATION_THREE then
-			postTime = 3
-		else
-			error("Invalid post time")
-		end
-
+		local postTime = TSMAPI_FOUR.Util.GetDistinctTableKey(TSM.CONST.AUCTION_DURATIONS, detailsHeader2:GetElement("duration.dropdown"):GetSelection())
 		local bid = TSM.Money.FromString(detailsHeader1:GetElement("bid.text"):GetText())
 		local buyout = TSM.Money.FromString(detailsHeader1:GetElement("buyout.text"):GetText())
 		local stackSize = tonumber(currentRow:GetField("stackSize"))
@@ -931,7 +916,7 @@ function private.FSMCreate()
 					:Draw()
 				detailsHeader2:GetElement("duration.dropdown")
 					:SetDisabled(false)
-					:SetSelection(AUCTION_DURATIONS[currentRow:GetField("postTime")])
+					:SetSelection(TSM.CONST.AUCTION_DURATIONS[currentRow:GetField("postTime")])
 					:Draw()
 
 				if context.itemString ~= itemString then

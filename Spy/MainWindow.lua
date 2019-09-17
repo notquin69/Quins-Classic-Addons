@@ -507,8 +507,8 @@ function Spy:CreateMainWindow()
 	
 		local theFrame = Spy.MainWindow
 		theFrame:SetResizable(true)
---		theFrame:SetMinResize(90, 34)
-		theFrame:SetMinResize(170, 34)		
+		theFrame:SetMinResize(90, 34)
+--		theFrame:SetMinResize(170, 34)		
 		theFrame:SetMaxResize(300, 264)
 		theFrame:SetScript("OnSizeChanged",
 		function(self)

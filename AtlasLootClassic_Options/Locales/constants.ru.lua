@@ -36,7 +36,6 @@ AL["Reset position of the |cff33ff99\"%s\"|r window."] = "Сбросить по�
 AL["Reset position of the |cff33ff99\"Minimap button\"|r."] = "Сбросить положение |cff33ff99\"кнопки на мини-карте\"|r."
 AL["Scale"] = "Масштаб"
 AL["Selected list settings"] = "Настройки выбранного списка"
-AL["Shift + Right Click"] = "Shift + ПКМ"
 AL["Show background image if available."] = "Показать фоновое изображение, если доступно."
 AL["Show content phase in tooltip."] = "Показать фазу содержимого во всплывающей подсказке."
 AL["Show content phase indicator for crafting."] = "Покажите индикатор содержания фазы для профессии."

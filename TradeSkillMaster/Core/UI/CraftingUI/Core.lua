@@ -9,7 +9,7 @@
 local _, TSM = ...
 local CraftingUI = TSM.UI:NewPackage("CraftingUI")
 local L = TSM.L
-local private = { topLevelPages = {}, fsm = nil, defaultUISwitchBtn = nil, isVisible = false }
+local private = { topLevelPages = {}, fsm = nil, craftOpen = nil, tradeSkillOpen = nil, defaultUISwitchBtn = nil, isVisible = false }
 local MIN_FRAME_SIZE = { width = 820, height = 587 }
 
 
@@ -44,8 +44,6 @@ end
 function CraftingUI.IsProfessionIgnored(name)
 	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 		if name == GetSpellInfo(7620) then
-			return true
-		elseif name == GetSpellInfo(2575) then
 			return true
 		elseif name == GetSpellInfo(2366) then
 			return true
@@ -118,18 +116,40 @@ end
 -- ============================================================================
 
 function private.FSMCreate()
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		TSMAPI_FOUR.Event.Register("CRAFT_SHOW", function()
+			CloseTradeSkill()
+			private.craftOpen = true
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_SHOW")
+		end)
+		TSMAPI_FOUR.Event.Register("CRAFT_CLOSE", function()
+			private.craftOpen = false
+			if not private.tradeSkillOpen then
+				private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSED")
+			end
+		end)
+	end
 	TSMAPI_FOUR.Event.Register("TRADE_SKILL_SHOW", function()
+		if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+			CloseCraft()
+		end
+		private.tradeSkillOpen = true
 		private.fsm:ProcessEvent("EV_TRADE_SKILL_SHOW")
 	end)
 	TSMAPI_FOUR.Event.Register("TRADE_SKILL_CLOSE", function()
-		private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSED")
+		private.tradeSkillOpen = false
+		if not private.craftOpen then
+			private.fsm:ProcessEvent("EV_TRADE_SKILL_CLOSED")
+		end
 	end)
 	-- we'll implement UIParent's event handler directly when necessary for TRADE_SKILL_SHOW
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		UIParent:UnregisterEvent("CRAFT_SHOW")
+	end
 	UIParent:UnregisterEvent("TRADE_SKILL_SHOW")
 
 	local fsmContext = {
 		frame = nil,
-		openedTime = 0,
 	}
 	local function DefaultFrameOnHide()
 		private.fsm:ProcessEvent("EV_FRAME_HIDE")
@@ -157,7 +177,11 @@ function private.FSMCreate()
 		)
 		:AddState(TSMAPI_FOUR.FSM.NewState("ST_DEFAULT_OPEN")
 			:SetOnEnter(function(context, isIgnored)
-				UIParent_OnEvent(UIParent, "TRADE_SKILL_SHOW")
+				if private.craftOpen then
+					UIParent_OnEvent(UIParent, "CRAFT_SHOW")
+				else
+					UIParent_OnEvent(UIParent, "TRADE_SKILL_SHOW")
+				end
 				if not private.defaultUISwitchBtn then
 					private.defaultUISwitchBtn = TSMAPI_FOUR.UI.NewElement("ActionButton", "switchBtn")
 						:SetStyle("width", 60)
@@ -169,8 +193,8 @@ function private.FSMCreate()
 						:DisableClickCooldown()
 						:SetText(L["TSM4"])
 						:SetScript("OnClick", private.SwitchBtnOnClick)
-					private.defaultUISwitchBtn:_GetBaseFrame():SetParent(TradeSkillFrame)
 				end
+				private.defaultUISwitchBtn:_GetBaseFrame():SetParent(private.craftOpen and CraftFrame or TradeSkillFrame)
 				if isIgnored then
 					TSM.Crafting.ProfessionScanner.SetDisabled(true)
 					private.defaultUISwitchBtn:Hide()
@@ -178,7 +202,11 @@ function private.FSMCreate()
 					private.defaultUISwitchBtn:Show()
 					private.defaultUISwitchBtn:Draw()
 				end
-				TradeSkillFrame:SetScript("OnHide", DefaultFrameOnHide)
+				if private.craftOpen then
+					CraftFrame:SetScript("OnHide", DefaultFrameOnHide)
+				else
+					TradeSkillFrame:SetScript("OnHide", DefaultFrameOnHide)
+				end
 				if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
 					local linked, linkedName = TSM.Crafting.ProfessionUtil.IsLinkedProfession()
 					if TSM.Crafting.ProfessionUtil.IsDataStable() and not TSM.Crafting.ProfessionUtil.IsGuildProfession() and (not linked or (linked and linkedName == UnitName("player"))) then
@@ -188,19 +216,26 @@ function private.FSMCreate()
 				end
 			end)
 			:SetOnExit(function(context)
-				TradeSkillFrame:SetScript("OnHide", nil)
-				HideUIPanel(TradeSkillFrame)
+				if private.craftOpen then
+					if CraftFrame then
+						CraftFrame:SetScript("OnHide", nil)
+						HideUIPanel(CraftFrame)
+					end
+				else
+					if TradeSkillFrame then
+						TradeSkillFrame:SetScript("OnHide", nil)
+						HideUIPanel(TradeSkillFrame)
+					end
+				end
 			end)
 			:AddTransition("ST_CLOSED")
 			:AddTransition("ST_FRAME_OPEN")
 			:AddEvent("EV_FRAME_HIDE", function(context)
-				TSM.Crafting.ProfessionUtil.CloseTradeSkill()
+				TSM.Crafting.ProfessionUtil.CloseTradeSkill(false, private.craftOpen)
 				return "ST_CLOSED"
 			end)
 			:AddEvent("EV_TRADE_SKILL_CLOSED", TSMAPI_FOUR.FSM.SimpleTransitionEventHandler("ST_CLOSED"))
-			:AddEvent("EV_SWITCH_BTN_CLICKED", function()
-				return "ST_FRAME_OPEN"
-			end)
+			:AddEvent("EV_SWITCH_BTN_CLICKED", TSMAPI_FOUR.FSM.SimpleTransitionEventHandler("ST_FRAME_OPEN"))
 		)
 		:AddState(TSMAPI_FOUR.FSM.NewState("ST_FRAME_OPEN")
 			:SetOnEnter(function(context)
@@ -213,7 +248,6 @@ function private.FSMCreate()
 					context.frame:GetElement("titleFrame.switchBtn"):Hide()
 				end
 				context.frame:Draw()
-				context.openedTime = GetTime()
 				private.isVisible = true
 			end)
 			:SetOnExit(function(context)
@@ -225,26 +259,16 @@ function private.FSMCreate()
 			:AddTransition("ST_CLOSED")
 			:AddTransition("ST_DEFAULT_OPEN")
 			:AddEvent("EV_FRAME_HIDE", function(context)
-				TSM.Crafting.ProfessionUtil.CloseTradeSkill()
+				TSM.Crafting.ProfessionUtil.CloseTradeSkill(true)
 				return "ST_CLOSED"
 			end)
 			:AddEvent("EV_TRADE_SKILL_SHOW", function(context)
 				context.frame:GetElement("titleFrame.switchBtn"):Show()
 				context.frame:GetElement("titleFrame"):Draw()
 			end)
-			:AddEvent("EV_TRADE_SKILL_CLOSED", function(context)
-				context.frame:GetElement("titleFrame.switchBtn"):Hide()
-				context.frame:GetElement("titleFrame"):Draw()
-				if context.openedTime > GetTime() - 2 then
-					return "ST_CLOSED"
-				end
-			end)
-			:AddEvent("EV_SWITCH_BTN_CLICKED", function()
-				return "ST_DEFAULT_OPEN"
-			end)
-			:AddEvent("EV_FRAME_TOGGLE", function(context)
-				return "ST_CLOSED"
-			end)
+			:AddEvent("EV_TRADE_SKILL_CLOSED", TSMAPI_FOUR.FSM.SimpleTransitionEventHandler("ST_CLOSED"))
+			:AddEvent("EV_SWITCH_BTN_CLICKED", TSMAPI_FOUR.FSM.SimpleTransitionEventHandler("ST_DEFAULT_OPEN"))
+			:AddEvent("EV_FRAME_TOGGLE", TSMAPI_FOUR.FSM.SimpleTransitionEventHandler("ST_CLOSED"))
 		)
 		:Init("ST_CLOSED", fsmContext)
 end

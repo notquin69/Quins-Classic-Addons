@@ -81,6 +81,12 @@ L = DBM:GetModLocalization("Majordomo")
 L:SetGeneralLocalization{
 	name = "청지기 이그젝큐투스"
 }
+L:SetTimerLocalization{
+	timerShieldCD		= "다음 보호막"
+}
+L:SetOptionLocalization{
+	timerShieldCD		= "다음 피해/반사 보호막 타이머 바 보기"
+}
 
 ----------------
 --  Ragnaros  --
@@ -95,14 +101,14 @@ L:SetWarningLocalization{
 	WarnEmerge			= "등장"
 }
 L:SetTimerLocalization{
-	TimerSubmerge		= "다음 잠수",
-	TimerEmerge			= "다음 등장"
+	TimerSubmerge		= "잠수",
+	TimerEmerge			= "등장"
 }
 L:SetOptionLocalization{
-	WarnSubmerge		= "잠수 알림 보기",
-	TimerSubmerge		= "다음 잠수 바 보기",
-	WarnEmerge			= "등장 알림 보기",
-	TimerEmerge			= "다음 등장 바 보기"
+	WarnSubmerge		= "잠수 경고 보기",
+	TimerSubmerge		= "잠수 타이머 바 보기",
+	WarnEmerge			= "등장 경고 보기",
+	TimerEmerge			= "등장 타이머 바 보기"
 }
 L:SetMiscLocalization{
 	Submerge	= "나의 종들아! 어서 나와 주인을 돕거라!",

@@ -1,5 +1,19 @@
 # Dominos Changelog
 
+8.2.28
+
+* Fix an error when channeling spells
+
+8.2.27
+
+* Yet more progress bar bugfixes
+* Fix an issue that would cause empty slots to not reappear after switching profiles
+
+8.2.26
+
+* Added a new option Show Count Text - toggles showing item/reagent counts on action buttons
+* Updated the artifact bar display to prioritize the azerite bar
+
 8.2.25
 
 * Added a workaround for cases where the progress bar mode update updated failed

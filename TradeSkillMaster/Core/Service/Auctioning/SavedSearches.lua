@@ -139,6 +139,9 @@ end
 function private.GetSearchName(filter, searchType)
 	local filters = TSMAPI_FOUR.Util.AcquireTempTable()
 	local searchTypeStr, numFiltersStr = nil, nil
+	if filter == "" or string.sub(filter, 1, 1) == FILTER_SEP then
+		tinsert(filters, L["Base Group"])
+	end
 	if searchType == "postGroups" or searchType == "cancelGroups" then
 		for groupPath in gmatch(filter, "[^"..FILTER_SEP.."]+") do
 			local groupName = TSM.Groups.Path.GetName(groupPath)

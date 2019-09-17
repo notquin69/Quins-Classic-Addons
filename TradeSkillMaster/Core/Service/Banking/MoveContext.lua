@@ -52,7 +52,9 @@ end
 
 function BagToBankMoveContext.GetEmptySlotsThreaded(self, emptySlotIds)
 	local sortValue = TSMAPI_FOUR.Thread.AcquireSafeTempTable()
-	private.GetEmptySlotsHelper(REAGENTBANK_CONTAINER, emptySlotIds, sortValue)
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+		private.GetEmptySlotsHelper(REAGENTBANK_CONTAINER, emptySlotIds, sortValue)
+	end
 	private.GetEmptySlotsHelper(BANK_CONTAINER, emptySlotIds, sortValue)
 	for bag = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
 		private.GetEmptySlotsHelper(bag, emptySlotIds, sortValue)
@@ -87,7 +89,7 @@ function BankToBagMoveContext.GetSlotQuantity(self, slotId)
 end
 
 function BankToBagMoveContext.SlotIdIterator(self, itemString)
-	return TSM.Inventory.BagTracking.CreateQuery()
+	local query = TSM.Inventory.BagTracking.CreateQuery()
 		:Select("slotId", "quantity")
 		:Or()
 			:Equal("bag", BANK_CONTAINER)
@@ -95,10 +97,13 @@ function BankToBagMoveContext.SlotIdIterator(self, itemString)
 				:GreaterThan("bag", NUM_BAG_SLOTS)
 				:LessThanOrEqual("bag", NUM_BAG_SLOTS + NUM_BANKBAGSLOTS)
 			:End()
-			:Equal("bag", REAGENTBANK_CONTAINER)
-		:End()
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and IsReagentBankUnlocked() then
+		query:Equal("bag", REAGENTBANK_CONTAINER)
+	end
+	query:End() -- end the Or()
 		:Equal("autoBaseItemString", TSMAPI_FOUR.Item.ToBaseItemString(itemString, true))
-		:IteratorAndRelease()
+
+	return query:IteratorAndRelease()
 end
 
 function BankToBagMoveContext.GetEmptySlotsThreaded(self, emptySlotIds)

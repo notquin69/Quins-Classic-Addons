@@ -64,19 +64,36 @@ end
 
 function Spy:LockWindows(lock)
 	for k, v in pairs(AllWindows) do
-		if v.DragBottomRight then
-			v.isLocked = lock
-			v:EnableMouse(not lock)
-			if lock then
-				v.DragBottomRight:Hide()
-				v.DragBottomLeft:Hide()
+		if not Spy.db.profile.InvertSpy then	
+			if v.DragBottomRight then
+				v.isLocked = lock
+				v:EnableMouse(not lock)
+				if lock then
+					v.DragBottomRight:Hide()
+					v.DragBottomLeft:Hide()
+				else
+					v.DragBottomRight:Show()
+					v.DragBottomLeft:Show()
+				end
 			else
-				v.DragBottomRight:Show()
-				v.DragBottomLeft:Show()
+				v.isLocked = false
+				v:EnableMouse(true)
 			end
 		else
-			v.isLocked = false
-			v:EnableMouse(true)
+			if v.DragTopRight then
+				v.isLocked = lock
+				v:EnableMouse(not lock)
+				if lock then
+					v.DragTopRight:Hide()
+					v.DragTopLeft:Hide()
+				else
+					v.DragTopRight:Show()
+					v.DragTopLeft:Show()
+				end
+			else
+				v.isLocked = false
+				v:EnableMouse(true)	
+			end
 		end
 	end
 end

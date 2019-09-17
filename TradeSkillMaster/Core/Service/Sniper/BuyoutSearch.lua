@@ -43,13 +43,11 @@ function private.ScanThread(auctionScan)
 	return true
 end
 
-function private.ScanFilter(row)
-	local itemBuyout = row:GetField("itemBuyout")
+function private.ScanFilter(itemString, itemBuyout)
 	if itemBuyout == 0 then
 		return true
 	end
 
-	local itemString = row:GetField("itemString")
 	local _, operationSettings = TSM.Operations.GetFirstOperationByItem("Sniper", itemString)
 	if not operationSettings then
 		return true

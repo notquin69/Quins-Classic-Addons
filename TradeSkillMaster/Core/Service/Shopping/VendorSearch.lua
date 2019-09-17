@@ -55,9 +55,8 @@ function private.ScanThread(auctionScan)
 	return true
 end
 
-function private.ScanFilter(row)
-	local itemBuyout = row:GetField("itemBuyout")
-	local vendorSell = TSMAPI_FOUR.Item.GetVendorSell(row:GetField("itemString"))
+function private.ScanFilter(itemString, itemBuyout)
+	local vendorSell = TSMAPI_FOUR.Item.GetVendorSell(itemString)
 	return not vendorSell or itemBuyout == 0 or itemBuyout >= vendorSell
 end
 

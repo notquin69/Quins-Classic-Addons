@@ -1,0 +1,47 @@
+## Author: Potdisc
+## Interface: 11302
+## Notes: RCLootCouncil for WoW Classic v0.0.2
+## Title: RCLootCouncil Classic
+## Version: 0.0.2
+## X-Curse-Project-ID: 332955
+## SavedVariables: RCLootCouncilDB, RCLootCouncilLootDB
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, lib-st, LibWindow-1.1, LibDialog-1.0
+
+API\Deprecations.lua
+
+## RCLootCouncil imports:
+RCLootCouncil\Patches\UiDropDownMenuTaintCommunities.lua
+
+RCLootCouncil\embeds.xml
+RCLootCouncil\Locale\Locales.xml
+
+RCLootCouncil\Core\Defaults.lua
+RCLootCouncil\Core\CoreEvents.lua
+
+RCLootCouncil\core.lua
+RCLootCouncil\ml_core.lua
+
+RCLootCouncil\UI\UI.lua
+RCLootCouncil\UI\Widgets\widgets.xml
+
+RCLootCouncil\Modules\Modules.xml
+
+RCLootCouncil\Utils\BackwardsCompat.lua
+RCLootCouncil\Utils\Utils.lua
+RCLootCouncil\Utils\trinketData.lua
+RCLootCouncil\Utils\tokenData.lua
+RCLootCouncil\Utils\ItemStorage.lua
+RCLootCouncil\Utils\autopass.lua
+RCLootCouncil\Utils\sync.lua
+RCLootCouncil\Utils\popups.lua
+
+## Classic Module
+Locale\Locales.xml
+Core\Module.lua
+Core\Hooks.lua
+Core\Autopass.lua
+
+## Overrides
+API\RCLootCouncilUpdates.lua
+API\VotingFrameUpdates.lua
+API\SessionFrameUpdates.lua

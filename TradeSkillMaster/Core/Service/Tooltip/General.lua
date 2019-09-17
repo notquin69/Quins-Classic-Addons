@@ -60,7 +60,7 @@ function General.LoadTooltip(tooltip, itemString)
 								if deData.itemType == iType and deData.rarity == rarity and ilvl >= deData.minItemLevel and ilvl <= deData.maxItemLevel then
 									local matValue = TSMAPI_FOUR.CustomPrice.GetValue(TSM.db.global.coreOptions.destroyValueSource, targetItem) or 0
 									if matValue > 0 then
-										tooltip:AddSubItemValueLine(targetItem, matValue, deData.amountOfMats)
+										tooltip:AddSubItemValueLine(targetItem, matValue, deData.amountOfMats, deData.matRate, deData.minAmount, deData.maxAmount)
 									end
 								end
 							end

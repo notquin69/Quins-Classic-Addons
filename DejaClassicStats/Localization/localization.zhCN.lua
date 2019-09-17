@@ -96,44 +96,64 @@ L["Weapon DPS"] = "武器伤害"
 L["Primary"] = "Primary"
 L["Melee Enhancements"] = "Melee Enhancements"
 L["Spell Enhancements"] = "Spell Enhancements"
-L["Movement Speed: "] = "Movement Speed: "
-L["Durability: "] = "Durability: "
-L["Repair Total: "] = "Repair Total: "
-L["Melee Crit: "] = "Melee Crit: "
-L["Melee Hit: "] = "Melee Hit: "
-L["Ranged Crit: "] = "Ranged Crit: "	
-L["Melee +Damage: "] = "Melee +Damage: "	
-L["Physical Critical Strike: "] = "Physical Critical Strike: "	
-L["Dodge: "] = "Dodge: "	
-L["Defense: "] = "Defense: "	
-L["Parry: "] = "Parry: "	
-L["Block: "] = "Block: "	
-L["Mana Regen Current: "] = "Mana Regen Current: "	
-L["Mana Regen: "] = "Mana Regen: "	
-L["MP5: "] = "MP5: "	
-L["Spell Crit: "] = "Spell Crit: "	
-L["Spell Hit: "] = "Spell Hit: "	
-L["Spell +Damage: "] = "Spell +Damage: "	
-L["+Healing: "] = "+Healing: "	
 
-L["Darken Item Icons"] = "Darken Item Icons"	
-L["Darken item icons to make text more visible."] = "Darken item icons to make text more visible."	
-L["Black Item Icons"] = "Black Item Icons"
-L["Black item icons to make text more visible."] = "Black item icons to make text more visible."
-L["Display Info Beside Items"] = "Display Info Beside Items"
-L["Displays the item's info beside each item's slot."] = "Displays the item's info beside each item's slot."
-L["Enchants"] = "Enchants"
-L["Displays each equipped item's enchantment."] = "Displays each equipped item's enchantment."
-L["Background Art"] = "Background Art"
-L["Displays the class talents background art."] = "Displays the class talents background art."
-L["Monochrome Background Art"] = "Monochrome Background Art"
-L["Displays black and white class talents background art."] = "Displays black and white class talents background art."
-L["Alternate Expand"] = "Alternate Expand"
-L["Displays the Expand button above the hands item slot."] = "Displays the Expand button above the hands item slot."
-
-L["Base Defense including talents such as Warrior's Anticipation is "] = "Base Defense including talents such as Warrior's Anticipation is "
-L["Bonus Defense from items and enhancements is "] = "Bonus Defense from items and enhancements is "
-L["Total Defense is "] = "Total Defense is "
+L["\"Melee Hit: "] = "近战命中: "
+--[[Translation missing --]]
 L[". Critical Hit immunity for a level 60 player against a raid boss occurs at 440 Defense and requires a defense skill of 140 from items and enhancements to achieve."] = ". Critical Hit immunity for a level 60 player against a raid boss occurs at 440 Defense and requires a defense skill of 140 from items and enhancements to achieve."
+L["+ Healing: "] = "治疗效果: "
+--[[Translation missing --]]
+L["Alternate Expand"] = "Alternate Expand"
+--[[Translation missing --]]
+L["Background Art"] = "Background Art"
+--[[Translation missing --]]
+L["Base Defense including talents such as Warrior's Anticipation is "] = "Base Defense including talents such as Warrior's Anticipation is "
+--[[Translation missing --]]
+L["Black Item Icons"] = "Black Item Icons"
+--[[Translation missing --]]
+L["Black item icons to make text more visible."] = "Black item icons to make text more visible."
+L["Block: "] = "格挡: "
+--[[Translation missing --]]
+L["Bonus Defense from items and enhancements is "] = "Bonus Defense from items and enhancements is "
+--[[Translation missing --]]
+L["Darken Item Icons"] = "Darken Item Icons"
+--[[Translation missing --]]
+L["Darken item icons to make text more visible."] = "Darken item icons to make text more visible."
+L["Defense: "] = "防御: "
+--[[Translation missing --]]
+L["Display Info Beside Items"] = "Display Info Beside Items"
+--[[Translation missing --]]
+L["Displays black and white class talents background art."] = "Displays black and white class talents background art."
+--[[Translation missing --]]
+L["Displays each equipped item's enchantment."] = "Displays each equipped item's enchantment."
+--[[Translation missing --]]
+L["Displays the class talents background art."] = "Displays the class talents background art."
+--[[Translation missing --]]
+L["Displays the Expand button above the hands item slot."] = "Displays the Expand button above the hands item slot."
+--[[Translation missing --]]
+L["Displays the item's info beside each item's slot."] = "Displays the item's info beside each item's slot."
+L["Dodge: "] = "躲闪: "
+L["Durability: "] = "耐久: "
+--[[Translation missing --]]
+L["Enchants"] = "Enchants"
+--[[Translation missing --]]
+L["Mana Regen Current: "] = "Mana Regen Current: "
+--[[Translation missing --]]
+L["Mana Regen: "] = "Mana Regen: "
+L["Melee + Damage: "] = "近战攻击强度: "
+L["Melee Crit: "] = "近战爆击: "
+--[[Translation missing --]]
+L["Monochrome Background Art"] = "Monochrome Background Art"
+L["Movement Speed: "] = "移动速度: "
+L["MP5: "] = "5秒回蓝: "
+L["Parry: "] = "招架: "
+--[[Translation missing --]]
+L["Physical Critical Strike: "] = "Physical Critical Strike: "
+L["Ranged Crit: "] = "远程暴击："
+L["Repair Total: "] = "维修总价："
+L["Spell + Damage: "] = "法术伤害增量："
+L["Spell Crit: "] = "法术爆击: "
+L["Spell Hit: "] = "法术命中："
+--[[Translation missing --]]
+L["Total Defense is "] = "Total Defense is "
 
 return end

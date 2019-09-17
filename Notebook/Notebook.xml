@@ -1,0 +1,123 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ http://wowprogramming.com/FrameXML/UI.xsd">
+
+  <Frame name="Notebook" inherits="ButtonFrameTemplate" parent="UIParent" toplevel="true" frameStrata="MEDIUM" enableMouse="true" movable="true" hidden="true">
+    <Size x="316" y="427"/> <!-- 338, 424 -->
+    <Scripts>
+      <OnLoad function="Notebook_OnLoad"/>
+      <OnShow function="Notebook_OnShow"/>
+      <OnHide function="Notebook_OnHide"/>
+      <OnMouseDown function="Notebook_OnMouseDown"/>
+      <OnMouseWheel function="Notebook_OnMouseWheel"/>
+    </Scripts>
+
+    <Frames>
+
+      <EditBox name="$parentEditBox" parentKey="editBox" letters="512" multiLine="true" enableMouse="true" autoFocus="false">
+        <Anchors>
+          <Anchor point="TOPLEFT" x="7" y="-63"/>
+          <Anchor point="BOTTOMRIGHT" x="-9" y="68"/>
+        </Anchors>
+        <TextInsets>
+          <AbsInset left="22" right="20" top="20" bottom="10"/>
+        </TextInsets>
+        <FontString inherits="MailTextFontNormal"/>
+        <HighlightColor a="1.0" r="0.82" g="0.82" b="0.82"/>
+        <Scripts>
+          <OnEditFocusGained function="NotebookEditBox_OnEditFocusGained"/>
+          <OnEditFocusLost function="NotebookEditBox_OnEditFocusLost"/>
+          <OnTextChanged function="NotebookEditBox_OnTextChanged"/>
+          <OnEscapePressed function="EditBox_ClearFocus"/>
+        </Scripts>
+      </EditBox>
+
+      <Button name="$parentPreviousPageButton" frameStrata="HIGH">
+        <Size>
+          <AbsDimension x="32" y="32"/>
+        </Size>
+        <Anchors>
+          <Anchor point="CENTER" relativeTo="Notebook" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="40" y="50"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick function="NotebookPreviousPageButton_OnClick"/>
+        </Scripts>
+        <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
+        <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
+        <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Disabled"/>
+        <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+      </Button>
+
+      <Button name="$parentNextPageButton" frameStrata="HIGH">
+        <Size>
+          <AbsDimension x="32" y="32"/>
+        </Size>
+        <Anchors>
+          <Anchor point="CENTER" relativeTo="Notebook" relativePoint="BOTTOMRight">
+            <Offset>
+              <AbsDimension x="-40" y="50"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick function="NotebookNextPageButton_OnClick"/>
+        </Scripts>
+        <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
+        <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
+        <DisabledTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Disabled"/>
+        <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+      </Button>
+
+			<Button name="$parentDoneButton" inherits="MagicButtonTemplate" parentKey="doneButton" text="DONE" hidden="true">
+				<Size x="80" y="22"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+				</Anchors>
+				<Scripts>
+					<OnClick function="NotebookDoneButton_OnClick"/>
+				</Scripts>
+			</Button>
+
+    </Frames>
+
+    <Layers>
+
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBg" parentKey="bg" file="Interface\QuestFrame\QuestBG">
+          <Size x="512" y="512"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="7" y="-63"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+
+      <Layer level="OVERLAY">
+
+        <FontString name="$parentPageNumber" parentKey="pageNumber" font="Fonts\MORPHEUS.ttf" outline="NONE" justifyH="CENTER">
+          <FontHeight val="15"/>
+          <Color r="0.50" g="0.30" b="0.15"/>
+					<Size>
+						<AbsDimension x="102" y="0"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOM">
+              <Offset>
+                  <AbsDimension x="0" y="40"/>
+              </Offset>
+            </Anchor>
+				  </Anchors>
+          <!--
+          <Shadow>
+            <Offset x="1" y="1" />
+            <Color r="0.49" g="0.35" b="0.05"/>
+          </Shadow>
+          -->
+        </FontString>
+
+      </Layer>
+
+    </Layers>
+  </Frame>
+</Ui>

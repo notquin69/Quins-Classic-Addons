@@ -602,7 +602,7 @@ function private.GeneratePosts(itemString, operationName, operationSettings, num
 
 	-- insert the posts into our DB
 	local index = private.nextQueueIndex
-	local postTime = (operationSettings.duration == 48 and 3) or (operationSettings.duration == 24 and 2) or 1
+	local postTime = operationSettings.duration
 	private.AddToQueue(itemString, operationName, bid, buyout, perAuction, maxCanPost, postTime)
 	-- check if we can post an extra partial stack
 	local extraStack = (maxCanPost < operationSettings.postCap and operationSettings.stackSizeIsCap and (numHave % perAuction)) or 0

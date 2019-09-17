@@ -1,6 +1,6 @@
 # Prat 3.0
 
-## [3.7.34](https://github.com/sylvanaar/prat-3-0/tree/3.7.34) (2019-09-10)
-[Full Changelog](https://github.com/sylvanaar/prat-3-0/compare/3.7.33...3.7.34)
+## [3.7.36](https://github.com/sylvanaar/prat-3-0/tree/3.7.36) (2019-09-13)
+[Full Changelog](https://github.com/sylvanaar/prat-3-0/compare/3.7.35...3.7.36)
 
-- Remove global class color table stuff, and just special case it for classic  
+- Make the k-strip non-greedy  

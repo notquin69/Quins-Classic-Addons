@@ -99,9 +99,9 @@ function private.GetPostingSettings()
 				:SetStyle("selectedBackground", "#e2e2e2")
 				:SetStyle("height", 24)
 				:SetDisabled(TSM.Operations.HasRelationship("Auctioning", private.currentOperationName, "duration"))
-				:AddOption(AUCTION_DURATION_ONE, operation.duration == 12)
-				:AddOption(AUCTION_DURATION_TWO, operation.duration == 24)
-				:AddOption(AUCTION_DURATION_THREE, operation.duration == 48)
+				:AddOption(TSM.CONST.AUCTION_DURATIONS[1], operation.duration == 1)
+				:AddOption(TSM.CONST.AUCTION_DURATIONS[2], operation.duration == 2)
+				:AddOption(TSM.CONST.AUCTION_DURATIONS[3], operation.duration == 3)
 				:SetScript("OnValueChanged", private.SetAuctioningDuration)
 			)
 		)
@@ -467,15 +467,7 @@ end
 
 function private.SetAuctioningDuration(self, value)
 	local operation = TSM.Operations.GetSettings("Auctioning", private.currentOperationName)
-	if value == AUCTION_DURATION_ONE then
-		operation.duration = 12
-	elseif value == AUCTION_DURATION_TWO then
-		operation.duration = 24
-	elseif value == AUCTION_DURATION_THREE then
-		operation.duration = 48
-	else
-		error("Unknown value: "..tostring(value))
-	end
+	operation.duration = TSMAPI_FOUR.Util.GetDistinctTableKey(TSM.CONST.AUCTION_DURATIONS, value)
 end
 
 function private.BidPercentOnEnterPressed(self)

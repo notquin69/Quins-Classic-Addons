@@ -10,10 +10,10 @@ L:SetGeneralLocalization{
 	name = "폭군 서슬송곳니"
 }
 L:SetTimerLocalization{
-	TimerAddsSpawn	= "추가 병력 등장"
+	TimerAddsSpawn	= "쫄 등장"
 }
 L:SetOptionLocalization{
-	TimerAddsSpawn	= "첫번째 추가 병력 등장 바 보기"
+	TimerAddsSpawn	= "첫번째 쫄 등장 타이머 바 보기"
 }
 L:SetMiscLocalization{
 	Phase2Emote	= "지배의 수정구가 힘을 잃고 작동을 멈춥니다!",
@@ -79,19 +79,16 @@ L = DBM:GetModLocalization("Chromaggus")
 L:SetGeneralLocalization{
 	name = "크로마구스"
 }
-L:SetWarningLocalization{
-	WarnBreath		= "%s",
-}
 L:SetTimerLocalization{
-	TimerBreathCD	= "다음 %s"
+	TimerBreathCD	= "%s 쿨타임"
 }
 L:SetOptionLocalization{
-	WarnBreath		= "숨결 알림 보기",
-	TimerBreathCD	= "다음 숨결 바 보기"
+	WarnBreath		= "크로마구스가 숨결 시전 시 경고 보기",
+	TimerBreathCD	= "숨결 쿨타임 타이머 바 보기"
 }
 L:SetMiscLocalization{
-	Breath1	= "숨결 (1)",
-	Breath2	= "숨결 (2)"
+	Breath1	= "1번 숨결",
+	Breath2	= "2번 숨결"
 }
 
 ----------------
@@ -103,16 +100,14 @@ L:SetGeneralLocalization{
 	name = "네파리안"
 }
 L:SetWarningLocalization{
-	WarnClassCall		= "직업 지목: %s",
-	WarnPhase			= "%s 단계"
+	WarnClassCall		= "%s 지목",
 }
 L:SetTimerLocalization{
-	TimerClassCall		= "직업 지목: %s"
+	TimerClassCall		= "%s 지목 종료"
 }
 L:SetOptionLocalization{
-	TimerClassCall		= "직업 지목 바 보기",
+	TimerClassCall		= "직업 지목 지속 시간 타이머 바 보기",
 	WarnClassCall		= "직업 지목 알림 보기",
-	WarnPhase			= "단계 전환 알림 보기"
 }
 L:SetMiscLocalization{
 	YellP2			= "잘했다! 적들의 사기가 떨어지고 있다! 검은바위 첨탑의 군주에게 도전한 대가를 치르게 해주자!",
@@ -126,6 +121,6 @@ L:SetMiscLocalization{
 	YellWarlock		= "흑마법사",
 	YellHunter		= "사냥꾼",
 	YellMage		= "마법사",
-	YellDeathKnight	= "죽음의 기사",
+	YellDK			= "죽음의 기사",
 	YellMonk		= "수도사"
 }

@@ -1,0 +1,9 @@
+<Bindings>
+  <Binding name="Toggle Notebook" header="NOTEBOOKKEYBINDINGS" default="K">
+    if Notebook:IsShown() then
+      HideUIPanel(Notebook)
+    else
+      ShowUIPanel(Notebook)
+    end
+  </Binding>
+</Bindings>

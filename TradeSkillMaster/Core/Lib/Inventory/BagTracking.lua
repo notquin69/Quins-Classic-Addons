@@ -159,8 +159,10 @@ function BagTracking.GetBankQuantityByAutoBaseItemString(autoBaseItemString, inc
 				:GreaterThan("bag", NUM_BAG_SLOTS)
 				:LessThanOrEqual("bag", NUM_BAG_SLOTS + NUM_BANKBAGSLOTS)
 			:End()
-			:Equal("bag", REAGENTBANK_CONTAINER)
-		:End()
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and IsReagentBankUnlocked() then
+		query:Equal("bag", REAGENTBANK_CONTAINER)
+	end
+	query:End() -- end the Or()
 	if not includeBoP then
 		query:Equal("isBoP", false)
 	end
@@ -303,7 +305,7 @@ function TSMAPI_FOUR.Inventory.BankIterator(autoBaseItems, includeBoP, includeBo
 				:GreaterThan("bag", NUM_BAG_SLOTS)
 				:LessThanOrEqual("bag", NUM_BAG_SLOTS + NUM_BANKBAGSLOTS)
 			:End()
-	if includeReagents and IsReagentBankUnlocked() then
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and includeReagents and IsReagentBankUnlocked() then
 		query:Equal("bag", REAGENTBANK_CONTAINER)
 	end
 	query:End() -- end the Or()

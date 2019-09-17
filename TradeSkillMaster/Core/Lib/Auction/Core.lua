@@ -8,19 +8,26 @@
 
 TSMAPI_FOUR.Auction = {}
 local _, TSM = ...
-TSM:NewPackage("Auction")
+local Auction = TSM:NewPackage("Auction")
+Auction.classes = {}
+local private = {
+	auctionFilters = nil,
+}
 
 
 
 -- ============================================================================
--- TSMAPI Functions
+-- Module Functions
 -- ============================================================================
 
-function TSMAPI_FOUR.Auction.FixSellerName(seller, sellerFull)
-	local realm = GetRealmName()
-	if sellerFull and strjoin("-", seller, realm) ~= sellerFull then
-		return sellerFull
-	else
-		return seller
-	end
+function Auction.OnInitialize()
+	private.auctionFilters = TSMAPI_FOUR.ObjectPool.New("AUCTION_FILTERS", Auction.classes.AuctionFilter, 1)
+end
+
+function Auction.NewAuctionFilter()
+	return private.auctionFilters:Get()
+end
+
+function Auction.RecycleAuctionFilter(filter)
+	private.auctionFilters:Recycle(filter)
 end

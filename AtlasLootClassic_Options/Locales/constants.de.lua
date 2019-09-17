@@ -36,7 +36,6 @@ AL["Reset position of the |cff33ff99\"%s\"|r window."] = "Position des |cff33ff9
 AL["Reset position of the |cff33ff99\"Minimap button\"|r."] = "Position des |cff33ff99\"Minimap Buttons\"|r zurücksetzen."
 AL["Scale"] = "Skalierung"
 AL["Selected list settings"] = "Einstellungen der gewählten Liste"
-AL["Shift + Right Click"] = "Shift + Rechtsklick"
 AL["Show background image if available."] = "Hintergrundbild anzeigen wenn verfügbar."
 AL["Show content phase in tooltip."] = "Zeige Content-Phase im Tooltip."
 AL["Show content phase indicator for crafting."] = "Zeige Content-Phasen Indikator für Berufe."

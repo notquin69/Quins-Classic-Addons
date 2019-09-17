@@ -227,7 +227,14 @@ local dcsresetcheck = CreateFrame("Button", "DCSResetButton", DejaClassicStatsPa
 	dcsMiscPanelCategoryFS:SetText('|cffffffff' .. L["Miscellaneous:"] .. '|r')
 	dcsMiscPanelCategoryFS:SetPoint("LEFT", 25, -125)
 	dcsMiscPanelCategoryFS:SetFontObject("GameFontNormalLarge") --Use instead of SetFont("Fonts\\FRIZQT__.TTF", 15) or Russian, Korean and Chinese characters won't work.
-	
+
+----------------
+-- Loval Vars --
+----------------
+local ShowDefaultStats 
+local MoveResistances
+local ShowModelRotation
+
 -------------------
 -- Frame Offsets --
 -------------------
@@ -318,17 +325,18 @@ end
 		end
 	end)
 
-local DejaClassicStatsPane = CreateFrame("Frame", "DejaClassicStatsPane", CharacterFrame)
-	DejaClassicStatsPane:RegisterEvent("PLAYER_LOGIN")
+local DejaClassicStatsFrame = CreateFrame("Frame", "DejaClassicStatsFrame", CharacterFrame)
+	DejaClassicStatsFrame:RegisterEvent("PLAYER_LOGIN")
+	DejaClassicStatsFrame:SetFrameStrata("BACKGROUND")
 
-	DejaClassicStatsPane:SetScript("OnEvent", function(self, event, ...)
-		DejaClassicStatsPane:SetSize( DCS_FrameWidth, 650 )
-		DejaClassicStatsPane:ClearAllPoints()
-		DejaClassicStatsPane:SetAllPoints("DCS_StatScrollFrame") -- This is (-40, -14) for Classic, different for dry development
-		-- DejaClassicStatsPane:SetFrameStrata("BACKGROUND")
-		DejaClassicStatsPane:Show()
+	DejaClassicStatsFrame:SetScript("OnEvent", function(self, event, ...)
+		DejaClassicStatsFrame:SetSize( DCS_FrameWidth, 650 )
+		DejaClassicStatsFrame:ClearAllPoints()
+		DejaClassicStatsFrame:SetAllPoints("DCS_StatScrollFrame") -- This is (-40, -14) for Classic, different for dry development
+		-- DejaClassicStatsFrame:SetFrameStrata("BACKGROUND")
+		DejaClassicStatsFrame:Show()
 
-		DCS_StatScrollFrame:SetScrollChild(DejaClassicStatsPane)
+		DCS_StatScrollFrame:SetScrollChild(DejaClassicStatsFrame)
 	end)
 
 ----------------------------
@@ -367,11 +375,11 @@ local rPerc, gPerc, bPerc, argbHex = GetClassColor(classFilename)
 --------------------
 -- Primary Header --
 --------------------
-local DCSPrimaryStatsHeader = CreateFrame("Frame", "DCSPrimaryStatsHeader", DejaClassicStatsPane)
+local DCSPrimaryStatsHeader = CreateFrame("Frame", "DCSPrimaryStatsHeader", DejaClassicStatsFrame)
 	DCSPrimaryStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
-	DCSPrimaryStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsPane", "TOPLEFT", DCS_HeaderInsetX, -10)
+	DCSPrimaryStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsFrame", "TOPLEFT", DCS_HeaderInsetX, -10)
 	-- DCSPrimaryStatsHeader:SetFrameStrata("BACKGROUND")
-	-- DCSPrimaryStatsHeader:Show()
+	-- DCSPrimaryStatsHeader:Hide()
 
 local DCSPrimaryStatsFS = DCSPrimaryStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	DCSPrimaryStatsFS:SetText(L["Primary"])
@@ -386,463 +394,36 @@ local t=DCSPrimaryStatsHeader:CreateTexture(nil,"ARTWORK")
 		t:SetTexture("Interface\\PaperDollInfoFrame\\PaperDollInfoPart1")
 		t:SetTexCoord(0, 0.193359375, 0.69921875, 0.736328125)
 
--- Update our primary stats (Strength, Agility, etc.).
-local function DCS_PaperDollFrame_SetPrimaryStats()
-	for i=1, NUM_STATS, 1 do
-		local text = _G["CharacterStatFrame"..i.."StatText"] --Classic = CharacterStatFrame  Retail = CharacterStatsPane
-		local frame = _G["CharacterStatFrame"..i]
-		local stat
-		local effectiveStat
-		local posBuff
-		local negBuff
-		stat, effectiveStat, posBuff, negBuff = UnitStat("player", i)
-
-		-- Set the tooltip text
-		local tooltipText = HIGHLIGHT_FONT_COLOR_CODE.._G["SPELL_STAT"..i.."_NAME"].." "
-		
-		-- Get class specific tooltip for that stat
-		local temp, classFileName = UnitClass("player")
-		local classStatText = _G[strupper(classFileName).."_"..frame.stat.."_".."TOOLTIP"]
-		-- If can't find one use the default
-		if ( not classStatText ) then
-			classStatText = _G["DEFAULT".."_"..frame.stat.."_".."TOOLTIP"]
-		end
-
-		if ( ( posBuff == 0 ) and ( negBuff == 0 ) ) then
-			text:SetText(effectiveStat)
-			frame.tooltip = tooltipText..effectiveStat..FONT_COLOR_CODE_CLOSE
-			frame.tooltip2 = classStatText
-		else 
-			tooltipText = tooltipText..effectiveStat
-			if ( posBuff > 0 or negBuff < 0 ) then
-				tooltipText = tooltipText.." ("..(stat - posBuff - negBuff)..FONT_COLOR_CODE_CLOSE
-			end
-			if ( posBuff > 0 ) then
-				tooltipText = tooltipText..FONT_COLOR_CODE_CLOSE..GREEN_FONT_COLOR_CODE.."+"..posBuff..FONT_COLOR_CODE_CLOSE
-			end
-			if ( negBuff < 0 ) then
-				tooltipText = tooltipText..RED_FONT_COLOR_CODE.." "..negBuff..FONT_COLOR_CODE_CLOSE
-			end
-			if ( posBuff > 0 or negBuff < 0 ) then
-				tooltipText = tooltipText..HIGHLIGHT_FONT_COLOR_CODE..")"..FONT_COLOR_CODE_CLOSE
-			end
-			frame.tooltip = tooltipText
-			frame.tooltip2= classStatText
-			
-			-- If there are any negative buffs then show the main number in red even if there are
-			-- positive buffs. Otherwise show in green.
-			if ( negBuff < 0 ) then
-				text:SetText(RED_FONT_COLOR_CODE..effectiveStat..FONT_COLOR_CODE_CLOSE)
-			else
-				text:SetText(GREEN_FONT_COLOR_CODE..effectiveStat..FONT_COLOR_CODE_CLOSE)
-			end
-		end
-		
-		frame:SetParent(DejaClassicStatsPane)
-		frame:SetScale(DCS_StatScale)
-		frame:SetWidth( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset)
-		if (i==1) then
-			frame:SetPoint("TOPLEFT", DCSPrimaryStatsHeader, "BOTTOMLEFT", 12,0)--Not TOP and BOTTOM becasue of a parenting issue that centers it over the Characterframe...
-		else
-			frame:SetPoint("TOP", _G["CharacterStatFrame"..(i-1)], "BOTTOM", 0,0)
-		end
-		--print(tooltipText)
-	end
-end
-
-local function DCS_PaperDollFrame_SetArmor(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-
-	local base, effectiveArmor, armor, posBuff, negBuff = UnitArmor(unit)
-
-	if (unit ~= "player") then
-		--[[ In 1.12.0, UnitArmor didn't report positive / negative buffs for units that weren't the active player.
-			 This hack replicates that behavior for the UI. ]]
-		base = effectiveArmor
-		armor = effectiveArmor
-		posBuff = 0
-		negBuff = 0
-	end
-
-	local totalBufs = posBuff + negBuff
-
-	local frame = _G[prefix.."ArmorFrame"]
-	local text = _G[prefix.."ArmorFrameStatText"]
-
-	PaperDollFormatStat(ARMOR, base, posBuff, negBuff, frame, text)
-	local playerLevel = UnitLevel(unit)
-	local armorReduction = effectiveArmor/((85 * playerLevel) + 400)
-	armorReduction = 100 * (armorReduction/(armorReduction + 1))
-	
-	frame.tooltip2 = format(ARMOR_TOOLTIP, playerLevel, armorReduction)
-	
-	frame:SetParent(DejaClassicStatsPane)
-	frame:SetScale(DCS_StatScale)
-	frame:SetWidth( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset)
-	frame:SetPoint("TOP", CharacterStatFrame5, "BOTTOM", 0,0)
-	--print("Armor", effectiveArmor)
-end
-
 -----------
 --Offense--
 -----------
-local DCSOffenseStatsHeader = CreateFrame("Frame", "DCSOffenseStatsHeader", DejaClassicStatsPane)
-	DCSOffenseStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
-	DCSOffenseStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsPane", "TOPLEFT", DCS_HeaderInsetX, -180)
-	-- DCSOffenseStatsHeader:SetFrameStrata("BACKGROUND")
-	-- DCSOffenseStatsHeader:Show()
+-- local DCSOffenseStatsHeader = CreateFrame("Frame", "DCSOffenseStatsHeader", DejaClassicStatsFrame)
+-- 	DCSOffenseStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
+-- 	DCSOffenseStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsFrame", "TOPLEFT", DCS_HeaderInsetX, -170)
+-- 	-- DCSOffenseStatsHeader:SetFrameStrata("BACKGROUND")
+-- 	-- DCSOffenseStatsHeader:Hide()
 
-local DCSOffenseStatsFS = DCSOffenseStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	DCSOffenseStatsFS:SetText(L["Offense"])
-	DCSOffenseStatsFS:SetTextColor(1, 1, 1)
-	DCSOffenseStatsFS:SetPoint("CENTER", 0, 0) --This is -2 to center the header "Offense" better.
-	-- DCSOffenseStatsFS:SetFont("Fonts\\FRIZQT__.TTF", 12, "THINOUTLINE")
-	DCSOffenseStatsFS:SetJustifyH("CENTER")
+-- local DCSOffenseStatsFS = DCSOffenseStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- 	DCSOffenseStatsFS:SetText(L["Offense"])
+-- 	DCSOffenseStatsFS:SetTextColor(1, 1, 1)
+-- 	DCSOffenseStatsFS:SetPoint("CENTER", 0, 0) --This is -2 to center the header "Offense" better.
+-- 	-- DCSOffenseStatsFS:SetFont("Fonts\\FRIZQT__.TTF", 12, "THINOUTLINE")
+-- 	DCSOffenseStatsFS:SetJustifyH("CENTER")
 
-local t=DCSOffenseStatsHeader:CreateTexture(nil,"ARTWORK")
-	t:SetAllPoints(DCSOffenseStatsHeader)
-	t:SetColorTexture(1, 1, 1, 0)
-	t:SetTexture("Interface\\PaperDollInfoFrame\\PaperDollInfoPart1")
-	t:SetTexCoord(0, 0.193359375, 0.69921875, 0.736328125)
-
--- Note: while this function was historically named "BothHands",
--- it looks like it only ever displayed attack rating for the main hand.
-local function DCS_PaperDollFrame_SetAttackBothHands(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-
-	local mainHandAttackBase, mainHandAttackMod = UnitAttackBothHands(unit)
-
-	local frame = _G[prefix.."AttackFrame"]
-	local text = _G[prefix.."AttackFrameStatText"]
-
-	if( mainHandAttackMod == 0 ) then
-		text:SetText(mainHandAttackBase)
-	else
-		local color = RED_FONT_COLOR_CODE
-		if( mainHandAttackMod > 0 ) then
-			color = GREEN_FONT_COLOR_CODE
-		end
-		text:SetText(color..(mainHandAttackBase + mainHandAttackMod)..FONT_COLOR_CODE_CLOSE)
-	end
-
-	frame.tooltip = ATTACK_TOOLTIP
-	frame.tooltip2 = ATTACK_TOOLTIP_SUBTEXT
-	
-	frame:SetParent(DejaClassicStatsPane)
-	frame:SetScale(DCS_StatScale)
-	frame:SetWidth( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset)
-	frame:SetPoint("TOPLEFT", DCSOffenseStatsHeader, "BOTTOMLEFT", 12,0)--Not TOP and BOTTOM becasue of a parenting issue that centers it over the Characterframe...
-	--print(frame.tooltip)
-end
-
-local function DCS_PaperDollFrame_SetAttackPower(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-	
-	local base, posBuff, negBuff = UnitAttackPower(unit)
-
-	local frame = _G[prefix.."AttackPowerFrame"] 
-	local text = _G[prefix.."AttackPowerFrameStatText"]
-
-	PaperDollFormatStat(MELEE_ATTACK_POWER, base, posBuff, negBuff, frame, text)
-	frame.tooltip2 = format(MELEE_ATTACK_POWER_TOOLTIP, max((base+posBuff+negBuff), 0)/ATTACK_POWER_MAGIC_NUMBER)
-	
-	frame:SetParent(DejaClassicStatsPane)
-	frame:SetScale(DCS_StatScale)
-	frame:SetWidth( ( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset) -10) --Inset 10 becasue it is a substat
-	frame:SetPoint("TOPLEFT", CharacterAttackFrame, "BOTTOMLEFT", 10,0)--Inset 10 as it is a sub stat
-	--print(frame.tooltip)
-end
-
-local function DCS_PaperDollFrame_SetDamage(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-
-	local damageText = _G[prefix.."DamageFrameStatText"]
-	local damageFrame = _G[prefix.."DamageFrame"]
-
-	local speed, offhandSpeed = UnitAttackSpeed(unit)
-	
-	local minDamage
-	local maxDamage 
-	local minOffHandDamage
-	local maxOffHandDamage 
-	local physicalBonusPos
-	local physicalBonusNeg
-	local percent
-	minDamage, maxDamage, minOffHandDamage, maxOffHandDamage, physicalBonusPos, physicalBonusNeg, percent = UnitDamage(unit)
-	local displayMin = max(floor(minDamage),1)
-	local displayMax = max(ceil(maxDamage),1)
-
-	minDamage = (minDamage / percent) - physicalBonusPos - physicalBonusNeg
-	maxDamage = (maxDamage / percent) - physicalBonusPos - physicalBonusNeg
-
-	local baseDamage = (minDamage + maxDamage) * 0.5
-	local fullDamage = (baseDamage + physicalBonusPos + physicalBonusNeg) * percent
-	local totalBonus = (fullDamage - baseDamage)
-	local damagePerSecond = (max(fullDamage,1) / speed)
-	local damageTooltip = max(floor(minDamage),1).." - "..max(ceil(maxDamage),1)
-	
-	local colorPos = "|cff20ff20"
-	local colorNeg = "|cffff2020"
-	if ( totalBonus == 0 ) then
-		if ( ( displayMin < 100 ) and ( displayMax < 100 ) ) then 
-			damageText:SetText(displayMin.." - "..displayMax)	
-		else
-			damageText:SetText(displayMin.."-"..displayMax)
-		end
-	else
-		
-		local color
-		if ( totalBonus > 0 ) then
-			color = colorPos
-		else
-			color = colorNeg
-		end
-		if ( ( displayMin < 100 ) and ( displayMax < 100 ) ) then 
-			damageText:SetText(color..displayMin.." - "..displayMax.."|r")	
-		else
-			damageText:SetText(color..displayMin.."-"..displayMax.."|r")
-		end
-		if ( physicalBonusPos > 0 ) then
-			damageTooltip = damageTooltip..colorPos.." +"..physicalBonusPos.."|r"
-		end
-		if ( physicalBonusNeg < 0 ) then
-			damageTooltip = damageTooltip..colorNeg.." "..physicalBonusNeg.."|r"
-		end
-		if ( percent > 1 ) then
-			damageTooltip = damageTooltip..colorPos.." x"..floor(percent*100+0.5).."%|r"
-		elseif ( percent < 1 ) then
-			damageTooltip = damageTooltip..colorNeg.." x"..floor(percent*100+0.5).."%|r"
-		end
-		
-	end
-	damageFrame.damage = damageTooltip
-	damageFrame.attackSpeed = speed
-	damageFrame.dps = damagePerSecond
-	
-	-- If there's an offhand speed then add the offhand info to the tooltip
-	if ( offhandSpeed ) then
-		minOffHandDamage = (minOffHandDamage / percent) - physicalBonusPos - physicalBonusNeg
-		maxOffHandDamage = (maxOffHandDamage / percent) - physicalBonusPos - physicalBonusNeg
-
-		local offhandBaseDamage = (minOffHandDamage + maxOffHandDamage) * 0.5
-		local offhandFullDamage = (offhandBaseDamage + physicalBonusPos + physicalBonusNeg) * percent
-		local offhandDamagePerSecond = (max(offhandFullDamage,1) / offhandSpeed)
-		local offhandDamageTooltip = max(floor(minOffHandDamage),1).." - "..max(ceil(maxOffHandDamage),1)
-		if ( physicalBonusPos > 0 ) then
-			offhandDamageTooltip = offhandDamageTooltip..colorPos.." +"..physicalBonusPos.."|r"
-		end
-		if ( physicalBonusNeg < 0 ) then
-			offhandDamageTooltip = offhandDamageTooltip..colorNeg.." "..physicalBonusNeg.."|r"
-		end
-		if ( percent > 1 ) then
-			offhandDamageTooltip = offhandDamageTooltip..colorPos.." x"..floor(percent*100+0.5).."%|r"
-		elseif ( percent < 1 ) then
-			offhandDamageTooltip = offhandDamageTooltip..colorNeg.." x"..floor(percent*100+0.5).."%|r"
-		end
-		damageFrame.offhandDamage = offhandDamageTooltip
-		damageFrame.offhandAttackSpeed = offhandSpeed
-		damageFrame.offhandDps = offhandDamagePerSecond
-	else
-		damageFrame.offhandAttackSpeed = nil
-	end
-	
-	damageFrame:SetParent(DejaClassicStatsPane)
-	damageFrame:SetScale(DCS_StatScale)
-	damageFrame:SetWidth( ( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset) -10) --Inset 10 becasue it is a substat
-	damageFrame:SetPoint("TOPLEFT", CharacterAttackPowerFrame, "BOTTOMLEFT", 0,0)
-	--print(damageFrame.offhandAttackSpeed)
-end
-
-local function DCS_PaperDollFrame_SetRangedAttack(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	elseif ( unit == "pet" ) then
-		return
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-
-	local hasRelic = UnitHasRelicSlot(unit)
-
-	local rangedAttackBase, rangedAttackMod = UnitRangedAttack(unit)
-	local frame = _G[prefix.."RangedAttackFrame"] 
-	local text = _G[prefix.."RangedAttackFrameStatText"]
-
-	-- If no ranged texture then set stats to n/a
-	local rangedTexture = GetInventoryItemTexture("player", 18)
-	local oldValue = PaperDollFrame.noRanged
-	if ( rangedTexture and not hasRelic ) then
-		PaperDollFrame.noRanged = nil
-	else
-		text:SetText(NOT_APPLICABLE)
-		PaperDollFrame.noRanged = 1
-		frame.tooltip = nil
-	end
-	if ( not rangedTexture or hasRelic ) then
-		return
-	end
-	
-	if( rangedAttackMod == 0 ) then
-		text:SetText(rangedAttackBase)
-	else
-		local color = RED_FONT_COLOR_CODE
-		if( rangedAttackMod > 0 ) then
-			color = GREEN_FONT_COLOR_CODE
-		end
-		text:SetText(color..(rangedAttackBase + rangedAttackMod)..FONT_COLOR_CODE_CLOSE)
-	end
-
-	frame.tooltip = RANGED_ATTACK_TOOLTIP
-	frame.tooltip2 = ATTACK_TOOLTIP_SUBTEXT
-
-	frame:SetParent(DejaClassicStatsPane)
-	frame:SetScale(DCS_StatScale)
-	frame:SetWidth( ( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset) ) 
-	frame:SetPoint("TOPLEFT", CharacterDamageFrame, "BOTTOMLEFT", -10, 0)
-	-- print(frame.tooltip)
-end
-
-local function DCS_PaperDollFrame_SetRangedAttackPower(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	elseif ( unit == "pet" ) then
-		return
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-	local frame = getglobal(prefix.."RangedAttackPowerFrame") 
-	local text = getglobal(prefix.."RangedAttackPowerFrameStatText")
-	
-	-- If no ranged attack then set to n/a
-	if ( PaperDollFrame.noRanged ) then
-		text:SetText(NOT_APPLICABLE)
-		frame.tooltip = nil
-		return
-	end
-	if ( HasWandEquipped() ) then
-		text:SetText("--")
-		frame.tooltip = nil
-		return
-	end
-
-	local base, posBuff, negBuff = UnitRangedAttackPower(unit)
-	PaperDollFormatStat(RANGED_ATTACK_POWER, base, posBuff, negBuff, frame, text)
-	frame.tooltip2 = format(RANGED_ATTACK_POWER_TOOLTIP, base/ATTACK_POWER_MAGIC_NUMBER)
-
-	frame:SetParent(DejaClassicStatsPane)
-	frame:SetScale(DCS_StatScale)
-	frame:SetWidth( ( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset) -10) --Inset 10 becasue it is a substat
-	frame:SetPoint("TOPLEFT", CharacterRangedAttackFrame, "BOTTOMLEFT", 10, 0)--Inset 10 as it is a sub stat
-	-- print(frame.tooltip)
-end
-
-local function DCS_PaperDollFrame_SetRangedDamage(unit, prefix)
-	if ( not unit ) then
-		unit = "player"
-	elseif ( unit == "pet" ) then
-		return
-	end
-	if ( not prefix ) then
-		prefix = "Character"
-	end
-
-	local damageText = getglobal(prefix.."RangedDamageFrameStatText")
-	local damageFrame = getglobal(prefix.."RangedDamageFrame")
-
-	-- If no ranged attack then set to n/a
-	if ( PaperDollFrame.noRanged ) then
-		damageText:SetText(NOT_APPLICABLE)
-		damageFrame.damage = nil
-		return
-	end
-
-	local rangedAttackSpeed, minDamage, maxDamage, physicalBonusPos, physicalBonusNeg, percent = UnitRangedDamage(unit)
-	local displayMin = max(floor(minDamage),1)
-	local displayMax = max(ceil(maxDamage),1)
-
-	minDamage = (minDamage / percent) - physicalBonusPos - physicalBonusNeg
-	maxDamage = (maxDamage / percent) - physicalBonusPos - physicalBonusNeg
-
-	local baseDamage = (minDamage + maxDamage) * 0.5
-	local fullDamage = (baseDamage + physicalBonusPos + physicalBonusNeg) * percent
-	local totalBonus = (fullDamage - baseDamage)
-	local damagePerSecond = (max(fullDamage,1) / rangedAttackSpeed)
-	local tooltip = max(floor(minDamage),1).." - "..max(ceil(maxDamage),1)
-
-	if ( totalBonus == 0 ) then
-		if ( ( displayMin < 100 ) and ( displayMax < 100 ) ) then 
-			damageText:SetText(displayMin.." - "..displayMax)	
-		else
-			damageText:SetText(displayMin.."-"..displayMax)
-		end
-	else
-		local colorPos = "|cff20ff20"
-		local colorNeg = "|cffff2020"
-		local color
-		if ( totalBonus > 0 ) then
-			color = colorPos
-		else
-			color = colorNeg
-		end
-		if ( ( displayMin < 100 ) and ( displayMax < 100 ) ) then 
-			damageText:SetText(color..displayMin.." - "..displayMax.."|r")	
-		else
-			damageText:SetText(color..displayMin.."-"..displayMax.."|r")
-		end
-		if ( physicalBonusPos > 0 ) then
-			tooltip = tooltip..colorPos.." +"..physicalBonusPos.."|r"
-		end
-		if ( physicalBonusNeg < 0 ) then
-			tooltip = tooltip..colorNeg.." "..physicalBonusNeg.."|r"
-		end
-		if ( percent > 1 ) then
-			tooltip = tooltip..colorPos.." x"..floor(percent*100+0.5).."%|r"
-		elseif ( percent < 1 ) then
-			tooltip = tooltip..colorNeg.." x"..floor(percent*100+0.5).."%|r"
-		end
-		damageFrame.tooltip = tooltip.." "..format(DPS_TEMPLATE, damagePerSecond)
-	end
-	damageFrame.attackSpeed = rangedAttackSpeed
-	damageFrame.damage = tooltip
-	damageFrame.dps = damagePerSecond
-
-	damageFrame:SetParent(DejaClassicStatsPane)
-	damageFrame:SetScale(DCS_StatScale)
-	damageFrame:SetWidth( ( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset) -10) --Inset 10 becasue it is a substat
-	damageFrame:SetPoint("TOPLEFT", CharacterRangedAttackPowerFrame, "BOTTOMLEFT", 0, 0)
-	-- print(damageFrame.damage)
-end
+-- local t=DCSOffenseStatsHeader:CreateTexture(nil,"ARTWORK")
+-- 	t:SetAllPoints(DCSOffenseStatsHeader)
+-- 	t:SetColorTexture(1, 1, 1, 0)
+-- 	t:SetTexture("Interface\\PaperDollInfoFrame\\PaperDollInfoPart1")
+-- 	t:SetTexCoord(0, 0.193359375, 0.69921875, 0.736328125)
 
 -----------
 --Defense--
 -----------
-local DCSDefenseStatsHeader = CreateFrame("Frame", "DCSDefenseStatsHeader", DejaClassicStatsPane)
+local DCSDefenseStatsHeader = CreateFrame("Frame", "DCSDefenseStatsHeader", DejaClassicStatsFrame)
 	DCSDefenseStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
-	DCSDefenseStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsPane", "TOPLEFT", DCS_HeaderInsetX, -310)
+	DCSDefenseStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsFrame", "TOPLEFT", DCS_HeaderInsetX, -544)
 	-- DCSDefenseStatsHeader:SetFrameStrata("BACKGROUND")
-	-- DCSDefenseStatsHeader:Show()
+	-- DCSDefenseStatsHeader:Hide()
 
 local DCSDefenseStatsFS = DCSDefenseStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	DCSDefenseStatsFS:SetText(L["Defense"])
@@ -857,79 +438,14 @@ local t=DCSDefenseStatsHeader:CreateTexture(nil,"ARTWORK")
 	t:SetTexture("Interface\\PaperDollInfoFrame\\PaperDollInfoPart1")
 	t:SetTexCoord(0, 0.193359375, 0.69921875, 0.736328125)
 
-local function DCS_PaperDollFrame_SetResistances()
-	for i=1, NUM_RESISTANCE_TYPES, 1 do
-		local resistance
-		local positive
-		local negative
-		local base
-		local text = _G["MagicResText"..i]
-		local frame = _G["MagicResFrame"..i]
-		
-		base, resistance, positive, negative = UnitResistance("player", frame:GetID())
-
-		-- resistances can now be negative. Show Red if negative, Green if positive, white otherwise
-		if( abs(negative) > positive ) then
-			text:SetText(RED_FONT_COLOR_CODE..resistance..FONT_COLOR_CODE_CLOSE)
-		elseif( abs(negative) == positive ) then
-			text:SetText(resistance)
-		else
-			text:SetText(GREEN_FONT_COLOR_CODE..resistance..FONT_COLOR_CODE_CLOSE)
-		end
-
-		local resistanceName = _G["RESISTANCE"..(frame:GetID()).."_NAME"]
-		frame.tooltip = resistanceName.." "..resistance
-		if ( positive ~= 0 or negative ~= 0 ) then
-			-- Otherwise build up the formula
-			frame.tooltip = frame.tooltip.. " ( "..HIGHLIGHT_FONT_COLOR_CODE..base
-			if( positive > 0 ) then
-				frame.tooltip = frame.tooltip..GREEN_FONT_COLOR_CODE.." +"..positive
-			end
-			if( negative < 0 ) then
-				frame.tooltip = frame.tooltip.." "..RED_FONT_COLOR_CODE..negative
-			end
-			frame.tooltip = frame.tooltip..FONT_COLOR_CODE_CLOSE.." )"
-		end
-
-		local unitLevel = UnitLevel("player")
-		unitLevel = max(unitLevel, 20)
-		local magicResistanceNumber = resistance/unitLevel
-		if ( magicResistanceNumber > 5 ) then
-			resistanceLevel = RESISTANCE_EXCELLENT
-		elseif ( magicResistanceNumber > 3.75 ) then
-			resistanceLevel = RESISTANCE_VERYGOOD
-		elseif ( magicResistanceNumber > 2.5 ) then
-			resistanceLevel = RESISTANCE_GOOD
-		elseif ( magicResistanceNumber > 1.25 ) then
-			resistanceLevel = RESISTANCE_FAIR
-		elseif ( magicResistanceNumber > 0 ) then
-			resistanceLevel = RESISTANCE_POOR
-		else
-			resistanceLevel = RESISTANCE_NONE
-		end
-		frame.tooltip2 = format(RESISTANCE_TOOLTIP_SUBTEXT, _G["RESISTANCE_TYPE"..frame:GetID()], unitLevel, resistanceLevel)
-
-		frame:SetParent(DejaClassicStatsPane)
-		-- frame:SetScale(DCS_StatScale)
-		-- frame:SetWidth( (DCS_FrameWidth / DCS_StatScale) - DCS_RframeInset)
-		if (i==1) then
-			frame:SetPoint("TOPLEFT", DCSDefenseStatsHeader, "BOTTOMLEFT", 12, 0)--Not TOP and BOTTOM becasue of a parenting issue that centers it over the Characterframe...
-		else
-			frame:SetPoint("TOPLEFT", _G["MagicResFrame"..(i-1)], "TOPRIGHT", 2,0)
-		end
-		--print(tooltipText)
-	end
-
-end
-
 -------------------------------
 -- Melee Enhancements Header --
 -------------------------------
-local DCSMeleeEnhancementsStatsHeader = CreateFrame("Frame", "DCSMeleeEnhancementsStatsHeader", DejaClassicStatsPane)
+local DCSMeleeEnhancementsStatsHeader = CreateFrame("Frame", "DCSMeleeEnhancementsStatsHeader", DejaClassicStatsFrame)
 	DCSMeleeEnhancementsStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
-	DCSMeleeEnhancementsStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsPane", "TOPLEFT", DCS_HeaderInsetX, -430)
+	DCSMeleeEnhancementsStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsFrame", "TOPLEFT", DCS_HeaderInsetX, -170)
 	-- DCSMeleeEnhancementsStatsHeader:SetFrameStrata("BACKGROUND")
-	-- DCSMeleeEnhancementsStatsHeader:Show()
+	-- DCSMeleeEnhancementsStatsHeader:Hide()
 
 local DCSPrimaryStatsFS = DCSMeleeEnhancementsStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	DCSPrimaryStatsFS:SetText(L["Melee Enhancements"])
@@ -947,11 +463,11 @@ local t=DCSMeleeEnhancementsStatsHeader:CreateTexture(nil,"ARTWORK")
 -------------------------------
 -- Spell Enhancements Header --
 -------------------------------
-local DCSSpellEnhancementsStatsHeader = CreateFrame("Frame", "DCSSpellEnhancementsStatsHeader", DejaClassicStatsPane)
+local DCSSpellEnhancementsStatsHeader = CreateFrame("Frame", "DCSSpellEnhancementsStatsHeader", DejaClassicStatsFrame)
 	DCSSpellEnhancementsStatsHeader:SetSize( DCS_HeaderWidth, DCS_HeaderHeight )
-	DCSSpellEnhancementsStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsPane", "TOPLEFT", DCS_HeaderInsetX, -520)
+	DCSSpellEnhancementsStatsHeader:SetPoint("TOPLEFT", "DejaClassicStatsFrame", "TOPLEFT", DCS_HeaderInsetX, -357)
 	-- DCSSpellEnhancementsStatsHeader:SetFrameStrata("BACKGROUND")
-	-- DCSSpellEnhancementsStatsHeader:Show()
+	-- DCSSpellEnhancementsStatsHeader:Hide()
 
 local DCSPrimaryStatsFS = DCSSpellEnhancementsStatsHeader:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	DCSPrimaryStatsFS:SetText(L["Spell Enhancements"])
@@ -968,32 +484,84 @@ local t=DCSSpellEnhancementsStatsHeader:CreateTexture(nil,"ARTWORK")
 
 ---------------------
 -- Primary/General --
----------------------		
-local function DCS_Durability()
-	local displayDura
-	if (addon.duraMean == 100) then
-		displayDura = format("%.0f%%", addon.duraMean);
-	else
-		displayDura = format("%.2f%%", addon.duraMean);
+---------------------
+local function DCS_SetBlizzPrimaryStats(statindex)
+	local text = _G["CharacterStatFrame"..statindex.."StatText"];
+	local frame = _G["CharacterStatFrame"..statindex];
+	local stat, effectiveStat, posBuff, negBuff = UnitStat("player", statindex);	
+	-- Set the tooltip text
+	local tooltipText = HIGHLIGHT_FONT_COLOR_CODE.._G["SPELL_STAT"..statindex.."_NAME"].." ";
+	-- Get class specific tooltip for that stat
+	local temp, classFileName = UnitClass("player");
+	local classStatText = _G[strupper(classFileName).."_"..frame.stat.."_".."TOOLTIP"];
+	-- If can't find one use the default
+	if ( not classStatText ) then
+		classStatText = _G["DEFAULT".."_"..frame.stat.."_".."TOOLTIP"];
 	end
-	return displayDura, "", "", "", ""
-end
-local function DCS_RepairTotal()
-	if (not DejaClassicStatsPane.scanTooltip) then
-		DejaClassicStatsPane.scanTooltip = CreateFrame("GameTooltip", "StatRepairCostTooltip", DejaClassicStatsPane, "GameTooltipTemplate")
-		DejaClassicStatsPane.scanTooltip:SetOwner(DejaClassicStatsPane, "ANCHOR_NONE")
-	end
-	local totalCost = 0
-	local _, repairCost
-	for _, index in ipairs({1,3,5,6,7,8,9,10,16,17}) do
-		_, _, repairCost = DejaClassicStatsPane.scanTooltip:SetInventoryItem("player", index)
-		if (repairCost and repairCost > 0) then
-			totalCost = totalCost + repairCost
+
+	if ( ( posBuff == 0 ) and ( negBuff == 0 ) ) then
+		text:SetText(effectiveStat);
+		frame.tooltip = tooltipText..effectiveStat..FONT_COLOR_CODE_CLOSE;
+		frame.tooltip2 = classStatText;
+	else 
+		tooltipText = tooltipText..effectiveStat;
+		if ( posBuff > 0 or negBuff < 0 ) then
+			tooltipText = tooltipText.." ("..(stat - posBuff - negBuff)..FONT_COLOR_CODE_CLOSE;
+		end
+		if ( posBuff > 0 ) then
+			tooltipText = tooltipText..FONT_COLOR_CODE_CLOSE..GREEN_FONT_COLOR_CODE.."+"..posBuff..FONT_COLOR_CODE_CLOSE;
+		end
+		if ( negBuff < 0 ) then
+			tooltipText = tooltipText..RED_FONT_COLOR_CODE.." "..negBuff..FONT_COLOR_CODE_CLOSE;
+		end
+		if ( posBuff > 0 or negBuff < 0 ) then
+			tooltipText = tooltipText..HIGHLIGHT_FONT_COLOR_CODE..")"..FONT_COLOR_CODE_CLOSE;
+		end
+		frame.tooltip = tooltipText;
+		frame.tooltip2= classStatText;
+
+		-- If there are any negative buffs then show the main number in red even if there are
+		-- positive buffs. Otherwise show in green.
+		if ( negBuff < 0 ) then
+			text:SetText(RED_FONT_COLOR_CODE..effectiveStat..FONT_COLOR_CODE_CLOSE);
+		else
+			text:SetText(GREEN_FONT_COLOR_CODE..effectiveStat..FONT_COLOR_CODE_CLOSE);
 		end
 	end
-	-- totalCost = 7890 -- Debugging
-	local totalRepairCost = GetCoinTextureString(totalCost)
-	return totalRepairCost, "", "", "", ""
+	return tooltipText, effectiveStat, classStatText, "", "", ""
+end
+-- Strength
+local function DCS_Strength()
+	local statindex = 1
+	return DCS_SetBlizzPrimaryStats(statindex)
+end
+-- Agility
+local function DCS_Agility()
+	local statindex = 2
+	return DCS_SetBlizzPrimaryStats(statindex)
+end
+-- Stamina
+local function DCS_Stamina()
+	local statindex = 3
+	return DCS_SetBlizzPrimaryStats(statindex)
+end
+-- Intellect
+local function DCS_Intellect()
+	local statindex = 4
+	return DCS_SetBlizzPrimaryStats(statindex)
+end
+-- Spirit
+local function DCS_Spirit()
+	local statindex = 5
+	return DCS_SetBlizzPrimaryStats(statindex)
+end
+-- Armor
+local function DCS_Armor()
+	local _ , effectiveArmor = UnitArmor("player");
+	local playerLevel = UnitLevel("player");
+	local armorReduction = effectiveArmor/((85 * playerLevel) + 400);
+	armorReduction = 100 * (armorReduction/(armorReduction + 1));
+return "", format(" %.0f", effectiveArmor), format(ARMOR_TOOLTIP, playerLevel, armorReduction), "", "", ""
 end
 -- Player Movement Speed
 local function MovementSpeed()
@@ -1004,47 +572,155 @@ local function MovementSpeed()
 	else
 		playerSpeed = runSpeed
 	end
-    return format("%.0f%%", ((playerSpeed/7)*100)), "", "", "", ""
+	local TooltipLine1 = L["Your current movement speed including items, buffs, enchants, forms, and mounts."]
+    return "", format("%.0f%%", ((playerSpeed/7)*100)), TooltipLine1, "", "", ""
+end
+local function DCS_Durability()
+	local displayDura
+	if (addon.duraMean == 100) then
+		displayDura = format("%.0f%%", addon.duraMean);
+	else
+		displayDura = format("%.2f%%", addon.duraMean);
+	end
+	local TooltipLine1 = L["The average durability of all equipped items."]
+	return "", displayDura, TooltipLine1, "", "", ""
+end
+local function DCS_RepairTotal()
+	if (not DejaClassicStatsFrame.scanTooltip) then
+		DejaClassicStatsFrame.scanTooltip = CreateFrame("GameTooltip", "StatRepairCostTooltip", DejaClassicStatsFrame, "GameTooltipTemplate")
+		DejaClassicStatsFrame.scanTooltip:SetOwner(DejaClassicStatsFrame, "ANCHOR_NONE")
+	end
+	local totalCost = 0
+	local _, repairCost
+	for _, index in ipairs({1,3,5,6,7,8,9,10,16,17}) do
+		_, _, repairCost = DejaClassicStatsFrame.scanTooltip:SetInventoryItem("player", index)
+		if (repairCost and repairCost > 0) then
+			totalCost = totalCost + repairCost
+		end
+	end
+	-- totalCost = 7890 -- Debugging
+	local totalRepairCost = GetCoinTextureString(totalCost)
+	local TooltipLine1 = L["The total repair cost of all equipped items."]
+	return "", totalRepairCost, TooltipLine1, "", "", ""
 end
 ---------------------------
 -- Melee/Ranged/Physical --
 ---------------------------
+-- Main Hand Attack(Weapon Skill)
+local function MHWeaponSkill()
+	local mainBase, mainMod, offBase, offMod = UnitAttackBothHands("player");
+	local effective = mainBase + mainMod;
+	-- local TooltipLine1 = L["Your attack rating affects your chance to hit a target, and is based on the weapon skill of the weapon you are currently wielding in your main hand."]
+	return "", format("%.0f", effective), ATTACK_TOOLTIP_SUBTEXT, "", "", ""
+end
+-- Main Hand Attack Power
+local function MeleeAP()
+	local base, posBuff, negBuff = UnitAttackPower("player");
+	local effective = base + posBuff + negBuff;
+	return "Power "..format("%.0f", effective), format("%.0f", effective), format(MELEE_ATTACK_POWER_TOOLTIP, max((base+posBuff+negBuff), 0)/ATTACK_POWER_MAGIC_NUMBER), "", "", ""
+end
+-- Main Hand Damage
+local function MHDamage()
+	local speed, offhandSpeed = UnitAttackSpeed("player");
+	local minDamage, maxDamage, minOffHandDamage, maxOffHandDamage, physicalBonusPos, physicalBonusNeg, percent = UnitDamage("player");
+	local damageSpread = max(floor(minDamage),1).." - "..max(ceil(maxDamage),1);
+
+	local baseDamage = (minDamage + maxDamage) * 0.5;
+	local fullDamage = (baseDamage + physicalBonusPos + physicalBonusNeg) * percent;
+	local totalBonus = (fullDamage - baseDamage);
+	local damagePerSecond = (max(fullDamage,1) / speed);
+
+	local TooltipLine1 = L["Attack Speed (seconds): "]..format("%.2f", speed)
+	local TooltipLine2 = L["Damage per Second: "]..format("%.2f", damagePerSecond)
+
+	return "Main Hand Damage "..damageSpread, damageSpread, TooltipLine1, TooltipLine2, "", ""
+end
+-- Off Hand Attack(Weapon Skill)
+local function OHWeaponSkill()
+	local _, offhandSpeed = UnitAttackSpeed("player");
+	if ( offhandSpeed) then
+		local mainBase, mainMod, offBase, offMod = UnitAttackBothHands("player");
+		local effective = offBase + offMod;
+		-- local TooltipLine1 = L["Your attack rating affects your chance to hit a target, and is based on the weapon skill of the weapon you are currently wielding in your off hand."]
+		return "", format("%.0f", effective), ATTACK_TOOLTIP_SUBTEXT, "", "", ""
+	else
+		return "Off Hand: N/A", "N/A", "", "", "", ""
+	end
+end
+-- Off Hand Damage
+local function OHDamage()
+	local _, offhandSpeed = UnitAttackSpeed("player");
+	if ( offhandSpeed) then
+		local minDamage, maxDamage, minOffHandDamage, maxOffHandDamage, physicalBonusPos, physicalBonusNeg, percent = UnitDamage("player");
+		local damageSpread = max(floor(minOffHandDamage),1).." - "..max(ceil(maxOffHandDamage),1);
+		local offhandBaseDamage = (minOffHandDamage + maxOffHandDamage) * 0.5;
+		local offhandFullDamage = (offhandBaseDamage + physicalBonusPos + physicalBonusNeg) * percent;
+		local totalBonus = (offhandFullDamage - offhandBaseDamage);
+		local offhandDamagePerSecond = (max(offhandFullDamage,1) / offhandSpeed);
+		local TooltipLine1 = L["Attack Speed (seconds): "]..format("%.2f", offhandSpeed)
+		local TooltipLine2 = L["Damage per Second: "]..format("%.2f", offhandDamagePerSecond)
+		return "Off Hand Damage "..damageSpread, damageSpread, TooltipLine1, TooltipLine2, "", ""
+	else
+		return "Off Hand Damage N/A", "N/A", "", "", "", ""
+	end
+end
 -- Melee Critical Strike Chance
 local function MeleeCrit()
-    return math.floor(GetCritChance()) .. "%", "", "", "", ""
+	local TooltipLine1 = L["Gives a chance to critically stike with melee attacks, increasing the damage dealt by 200%."]
+	return "", format("%.2f%%", GetCritChance()), TooltipLine1, "", "", ""
+end
+-- Ranged Attack(Weapon Skill)
+local function RangedWeaponSkill()
+	local rangedAttackBase, rangedAttackMod = UnitRangedAttack("player");
+	local effective = rangedAttackBase + rangedAttackMod;
+	-- local TooltipLine1 = L["Your attack rating affects your chance to hit a target, and is based on the weapon skill of the weapon you are currently wielding in your main hand."]
+	return "", format("%.0f", effective), ATTACK_TOOLTIP_SUBTEXT, "", "", ""
+end
+-- Ranged Attack Power
+local function RangedAP()
+	local base, posBuff, negBuff = UnitRangedAttackPower("player");
+	local effective = base + posBuff + negBuff;
+	return "Power "..format("%.0f", effective), format("%.0f", effective), format(RANGED_ATTACK_POWER_TOOLTIP, base/ATTACK_POWER_MAGIC_NUMBER), "", "", ""
+end
+-- Ranged Damage
+local function RangedDamage()
+	local rangedAttackSpeed, minDamage, maxDamage, physicalBonusPos, physicalBonusNeg, percent = UnitRangedDamage("player");
+	local damageSpread = max(floor(minDamage),1).." - "..max(ceil(maxDamage),1);
+	local baseDamage = (minDamage + maxDamage) * 0.5;
+	local fullDamage = (baseDamage + physicalBonusPos + physicalBonusNeg) * percent;
+	local totalBonus = (fullDamage - baseDamage);
+	local damagePerSecond = (max(fullDamage,1) / rangedAttackSpeed);
+	local TooltipLine1 = L["Attack Speed (seconds): "]..format("%.2f", rangedAttackSpeed)
+	local TooltipLine2 = L["Damage per Second: "]..format("%.2f", damagePerSecond)
+	return "Ranged Damage "..damageSpread, damageSpread, TooltipLine1, TooltipLine2, "", ""
 end
 -- Ranged Critical Strike Chance
 local function RangedCrit()
-    return math.floor(GetRangedCritChance()) .. "%", "", "", "", ""
+	return "", format("%.2f%%", GetRangedCritChance()), "", "", "", ""
 end
--- Melee Plus Damage Bonus
-local function MeleePlusDamage()
-    return math.floor(GetSpellBonusDamage(1)), "", "", "", ""
-end
--- Physical Critical Strike Chance
--- local function PhysicalicalCrit()
---     return math.floor(GetSpellCritChance(1)) .. "%", "", "", "", ""
--- end
 -- Bonus Hit Chance Modifier
 local function HitModifier()
 	local hit = GetHitModifier()
 	if hit == nil then hit = 0 end
-    return math.floor(hit) .. "%", "", "", "", ""
+	return "", format("%.2f%%", hit), "", "", "", ""
 end
 -------------
 -- Defense --
 -------------
 -- Dodge Chance
 local function Dodge()
-	return math.floor(GetDodgeChance()) .. "%", "", "", "", ""
+	local TooltipLine1 = L["Gives a chance to dodge enemy melee attacks."]
+	return "", format("%.2f%%", GetDodgeChance()), TooltipLine1, "", "", ""
 end
 -- Parry Chance
 local function Parry()
-	return math.floor(GetParryChance()) .. "%", "", "", "", ""
+	local TooltipLine1 = L["Gives a chance to parry enemy melee attacks."]
+	return "", format("%.2f%%", GetParryChance()), TooltipLine1, "", "", ""
 end
 -- Block Chance
 local function Block()
-	return math.floor(GetBlockChance()) .. "%", "", "", "", ""
+	local TooltipLine1 = L["Gives a chance to block enemy melee and ranged attacks."]
+	return "", format("%.2f%%", GetBlockChance()), TooltipLine1, "", "", ""
 end
 -- Defense
 local function Defense()
@@ -1053,48 +729,119 @@ local function Defense()
 	local TooltipLine2 = L["Bonus Defense from items and enhancements is "]..armorDefense.."."
 	local TooltipLine3 = L["Total Defense is "]..(baseDefense + armorDefense)..L[". Critical Hit immunity for a level 60 player against a raid boss occurs at 440 Defense and requires a defense skill of 140 from items and enhancements to achieve."]
 	local total = "("..baseDefense.." |cff00c0ff+ "..armorDefense.."|r)"
-	return math.floor(baseDefense + armorDefense), TooltipLine1, TooltipLine2, TooltipLine3, total
+	return "", format("%.0f", (baseDefense + armorDefense)), TooltipLine1, TooltipLine2, TooltipLine3, total
 end
 ------------------
 -- Spellcasting --
 ------------------
 -- Current Mana Regen
 -- local function ManaRegenCurrent() --This appears to be power regen like rage, energy, runes, focus, etc.
---     return math.floor(GetPowerRegen()), "", "", "", ""
+-- return "", format("%.0f", GetPowerRegen()), TooltipLine1, "", "", ""
 -- end
 -- Mana Regen while not casting
 local function ManaRegenNotCasting()
-    local base, casting = GetManaRegen()
-    return math.floor(base * 2), "", "", "", ""
+	local base, casting = GetManaRegen()
+	local TooltipLine1 = L["Mana points regenerated per tick while not casting and outside the five second rule."]
+	return "", format("%.0f", (base * 2)), TooltipLine1, "", "", ""
 end
 -- MP5
 local function MP5()
-    local base, casting = GetManaRegen()
-	return math.floor(casting * 2), "", "", "", ""
+	local base, casting = GetManaRegen()
+	local TooltipLine1 = L["Mana points regenerated per tick while casting and inside the five second rule."]
+	return "", format("%.0f", (casting * 0.4)), TooltipLine1, "", "", ""
 end
 -- Spell Critical Strike Chance
 local function SpellCrit()
-    return math.floor(GetSpellCritChance()) .. "%", "", "", "", ""
+	local TooltipLine1 = L["Gives a chance to critically stike with spells, increasing the damage dealt by 150%."]
+	return "", format("%.2f%%", GetSpellCritChance()), TooltipLine1, "", "", ""
 end
 -- Bonus Spell Hit Chance Modifier
 local function SpellHitModifier()
 	local spellhit = GetSpellHitModifier()
 	if spellhit == nil then spellhit = 0 end
-    return math.floor(spellhit) .. "%", "", "", "", ""
-end
--- Bonus Spell Damage
-local function PlusSpellDamage()
-    return math.floor(GetSpellBonusHealing()), "", "", "", ""
+	return "", format("%.2f%%", spellhit), "", "", "", ""
 end
 -- Bonus Healing
 local function PlusHealing()
-    return math.floor(GetSpellBonusHealing()), "", "", "", ""
+	return "", format("%.0f", GetSpellBonusHealing()), "", "", "", ""
+end
+-- Holy Plus Damage Bonus
+local function HolyPlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(2)), "", "", "", ""
+end
+-- Arcane Plus Damage Bonus
+local function ArcanePlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(7)), "", "", "", ""
+end
+-- Fire Plus Damage Bonus
+local function FirePlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(3)), "", "", "", ""
+end
+-- Nature Plus Damage Bonus
+local function NaturePlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(4)), "", "", "", ""
+end
+-- Frost Plus Damage Bonus
+local function FrostPlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(5)), "", "", "", ""
+end
+-- Shadow Plus Damage Bonus
+local function ShadowPlusDamage()
+	return "", format("%.0f", GetSpellBonusDamage(6)), "", "", "", ""
 end
 
 DCS_STAT_DATA = {
 	---------------------
 	-- Primary/General --
 	---------------------
+	DCS_Strength ={
+		statName = "DCS_Strength",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Strength: "],
+		statFunction = DCS_Strength,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
+	DCS_Agility ={
+		statName = "DCS_Agility",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Agility: "],
+		statFunction = DCS_Agility,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
+	DCS_Stamina ={
+		statName = "DCS_Stamina",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Stamina: "],
+		statFunction = DCS_Stamina,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
+	DCS_Intellect ={
+		statName = "DCS_Intellect",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Intellect: "],
+		statFunction = DCS_Intellect,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
+	DCS_Spirit ={
+		statName = "DCS_Spirit",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Spirit: "],
+		statFunction = DCS_Spirit,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
+	DCS_Armor ={
+		statName = "DCS_Armor",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Armor "],
+		statFunction = DCS_Armor,
+		relativeTo = DCSPrimaryStatsHeader,
+	},
 	MovementSpeed ={
 		statName = "MovementSpeed",
 		StatValue = 0,
@@ -1122,6 +869,46 @@ DCS_STAT_DATA = {
 	---------------------------
 	-- Melee/Ranged/Physical --
 	---------------------------
+	MHWeaponSkill ={
+		statName = "MHWeaponSkill",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Main Hand: "],
+		statFunction = MHWeaponSkill,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	MHDamage ={
+		statName = "MHDamage",
+		StatValue = 0,
+		isShown = true,
+		Label = L["    Damage: "], --Indented to show as a sublisting under Main Hand
+		statFunction = MHDamage,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	MeleeAP ={
+		statName = "MeleeAP",
+		StatValue = 0,
+		isShown = true,
+		Label = L["    Power: "], --Indented to show as a sublisting under Main Hand
+		statFunction = MeleeAP,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	OHWeaponSkill ={
+		statName = "OHWeaponSkill",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Off Hand: "],
+		statFunction = OHWeaponSkill,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	OHDamage ={
+		statName = "OHDamage",
+		StatValue = 0,
+		isShown = true,
+		Label = L["    Damage: "], --Indented to show as a sublisting under Off Hand
+		statFunction = OHDamage,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
 	MeleeCrit ={
 		statName = "MeleeCrit",
 		StatValue = 0,
@@ -1138,6 +925,30 @@ DCS_STAT_DATA = {
 		statFunction = HitModifier,
 		relativeTo = DCSMeleeEnhancementsStatsHeader,
 	},
+	RangedWeaponSkill ={
+		statName = "RangedWeaponSkill",
+		StatValue = 0,
+		isShown = true,
+		Label = L["Ranged: "],
+		statFunction = RangedWeaponSkill,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	RangedAP ={
+		statName = "RangedAP",
+		StatValue = 0,
+		isShown = true,
+		Label = L["    Power: "], --Indented to show as a sublisting under Ranged
+		statFunction = RangedAP,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
+	RangedDamage ={
+		statName = "RangedDamage",
+		StatValue = 0,
+		isShown = true,
+		Label = L["    Damage: "], --Indented to show as a sublisting under Ranged
+		statFunction = RangedDamage,
+		relativeTo = DCSMeleeEnhancementsStatsHeader,
+	},
 	RangedCrit = {
 		statName = "RangedCrit",
 		StatValue = 0,
@@ -1146,22 +957,6 @@ DCS_STAT_DATA = {
 		statFunction = RangedCrit,
 		relativeTo = DCSMeleeEnhancementsStatsHeader,
 	},
-	MeleePlusDamage = {
-		statName = "MeleePlusDamage",
-		StatValue = 0,
-		isShown = true,
-		Label = L["Melee +Damage: "],	
-		statFunction = MeleePlusDamage,
-		relativeTo = DCSMeleeEnhancementsStatsHeader,
-	},
-	-- PhysicalCrit = {
-	-- 	statName = "PhysicalCrit",
-	-- 	StatValue = 0,
-	-- 	isShown = true,
-	-- 	Label = L["Physical Critical Strike: "],	
-	-- 	statFunction = PhysicalicalCrit,
-	-- 	relativeTo = DCSMeleeEnhancementsStatsHeader,
-	-- },
 	DodgeChance = {
 		isShown = true,
 		Label = L["Dodge: "],	
@@ -1217,92 +1012,148 @@ DCS_STAT_DATA = {
 		statFunction = SpellHitModifier,
 		relativeTo = DCSSpellEnhancementsStatsHeader,
 	},
-	PlusSpellDamage = {
-		isShown = true,
-		Label = L["Spell +Damage: "],	
-		statFunction = PlusSpellDamage,
-		relativeTo = DCSSpellEnhancementsStatsHeader,
-	},
 	PlusHealing = {
 		isShown = true,
-		Label = L["+Healing: "],	
+		Label = L["+ Healing: "],	
 		statFunction = PlusHealing,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	HolyPlusDamage ={
+		isShown = true,
+		Label = L["+ Holy: "],	
+		statFunction = HolyPlusDamage,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	ArcanePlusDamage ={
+		isShown = true,
+		Label = L["+ Arcane: "],	
+		statFunction = ArcanePlusDamage,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	FirePlusDamage ={
+		isShown = true,
+		Label = L["+ Fire: "],	
+		statFunction = FirePlusDamage,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	NaturePlusDamage ={
+		isShown = true,
+		Label = L["+ Nature: "],	
+		statFunction = NaturePlusDamage,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	FrostPlusDamage ={
+		isShown = true,
+		Label = L["+ Frost: "],	
+		statFunction = FrostPlusDamage,
+		relativeTo = DCSSpellEnhancementsStatsHeader,
+	},
+	ShadowPlusDamage ={
+		isShown = true,
+		Label = L["+ Shadow: "],	
+		statFunction = ShadowPlusDamage,
 		relativeTo = DCSSpellEnhancementsStatsHeader,
 	},
 }
 
 DCS_PRIMARY_STAT_LIST = {
-	-- "Health",
-	-- "Mana",
+	"DCS_Strength",
+	"DCS_Agility",
+	"DCS_Stamina",
+	"DCS_Intellect",
+	"DCS_Spirit",
+	"DCS_Armor",
 	"MovementSpeed",
 	"DCS_Durability",
 	"DCS_RepairTotal",
-	}
+}
+
+DCS_OFFENSE_STAT_LIST = {
+	"MHWeaponSkill",
+	"MeleeAP",
+	"MHDamage",
+	"OHWeaponSkill",
+	"OHDamage",
+	"MeleeCrit",
+	"MeleeHitChance",
+	"RangedWeaponSkill",
+	"RangedAP",
+	"RangedDamage",
+	"RangedCrit",
+}
 
 DCS_MELEE_STAT_LIST = {
-	"MeleeHitChance",
-	"MeleePlusDamage",
-	"MeleeCrit",
-	"RangedCrit",
-	-- "PhysicalCrit",
-	}
+}
 
 DCS_DEFENSE_STAT_LIST = {
 	"DodgeChance",
 	"ParryChance",
 	"BlockChance",
 	"Defense",
-	}
+}
 
 DCS_SPELL_STAT_LIST = {
 	-- "ManaRegenCurrent", --This appears to be power regen like rage, energy, runes, focus, etc.
 	"SpellHitChance",
-	"PlusSpellDamage",
 	"SpellCritChance",
-	"PlusHealing",
 	"ManaRegenNotCasting",
 	"MP5",
-	}
+	"PlusHealing",
+	"HolyPlusDamage",
+	"ArcanePlusDamage",
+	"FirePlusDamage",
+	"NaturePlusDamage",
+	"FrostPlusDamage",
+	"ShadowPlusDamage",
+}
 
 local function DCS_CreateStatText(StatKey, StatValue, XoffSet, YoffSet)
-	DejaClassicStatsPane.statFrame = CreateFrame("Frame", "DCS"..StatKey.."StatFrame", DejaClassicStatsPane)
-	DejaClassicStatsPane.statFrame:SetPoint("TOPLEFT", DCS_STAT_DATA[StatKey].relativeTo, "BOTTOMLEFT", (15 + XoffSet), (-14 * (YoffSet - 1)))
-	DejaClassicStatsPane.statFrame:SetSize(160, 16)
+	DejaClassicStatsFrame.statFrame = CreateFrame("Frame", "DCS"..StatKey.."StatFrame", DejaClassicStatsFrame)
+	DejaClassicStatsFrame.statFrame:SetPoint("TOPLEFT", DCS_STAT_DATA[StatKey].relativeTo, "BOTTOMLEFT", (15 + XoffSet), ( (-14 * (YoffSet - 1)) -2) )
+	DejaClassicStatsFrame.statFrame:SetSize(160, 16)
 
-	DejaClassicStatsPane.stat = DejaClassicStatsPane.statFrame:CreateFontString(StatKey.."NameFS", "GameFontNormal")
-	DejaClassicStatsPane.stat:SetPoint("LEFT", DejaClassicStatsPane.statFrame, "LEFT")
+	DejaClassicStatsFrame.stat = DejaClassicStatsFrame.statFrame:CreateFontString(StatKey.."NameFS", "GameFontNormal")
+	DejaClassicStatsFrame.stat:SetPoint("LEFT", DejaClassicStatsFrame.statFrame, "LEFT")
 	if (namespace.locale == "zhCN") or (namespace.locale == "zhTW") or (namespace.locale == "koKR") then
-		DejaClassicStatsPane.stat:SetFontObject("GameFontNormalLarge")
+		DejaClassicStatsFrame.stat:SetFontObject("GameFontNormalLarge")
 	else
-		DejaClassicStatsPane.stat:SetFontObject("GameFontNormal")
+		DejaClassicStatsFrame.stat:SetFontObject("GameFontNormal")
 	end	
-	DejaClassicStatsPane.stat:SetJustifyH("LEFT")
-	DejaClassicStatsPane.stat:SetShadowOffset(1, -1) 
-	DejaClassicStatsPane.stat:SetShadowColor(0, 0, 0)
-	DejaClassicStatsPane.stat:SetTextColor(1, 0.8, 0.1)
-	DejaClassicStatsPane.stat:SetText("")
+	DejaClassicStatsFrame.stat:SetJustifyH("LEFT")
+	DejaClassicStatsFrame.stat:SetShadowOffset(1, -1) 
+	DejaClassicStatsFrame.stat:SetShadowColor(0, 0, 0)
+	DejaClassicStatsFrame.stat:SetTextColor(1, 0.8, 0.1)
+	DejaClassicStatsFrame.stat:SetText("")
 
-	DejaClassicStatsPane.value = DejaClassicStatsPane.statFrame:CreateFontString(StatKey.."ValueFS", "GameFontNormal")
-	DejaClassicStatsPane.value:SetPoint("RIGHT", DejaClassicStatsPane.statFrame, "RIGHT")
+	DejaClassicStatsFrame.value = DejaClassicStatsFrame.statFrame:CreateFontString(StatKey.."ValueFS", "GameFontNormal")
+	DejaClassicStatsFrame.value:SetPoint("RIGHT", DejaClassicStatsFrame.statFrame, "RIGHT")
 	if (namespace.locale == "zhCN") or (namespace.locale == "zhTW") or (namespace.locale == "koKR") then
-		DejaClassicStatsPane.value:SetFontObject("GameFontNormalLarge")
+		DejaClassicStatsFrame.value:SetFontObject("GameFontNormalLarge")
 	else
-		DejaClassicStatsPane.value:SetFontObject("GameFontNormal")
+		DejaClassicStatsFrame.value:SetFontObject("GameFontNormal")
 	end
-	DejaClassicStatsPane.value:SetJustifyH("RIGHT")
-	DejaClassicStatsPane.value:SetShadowOffset(1, -1) 
-	DejaClassicStatsPane.value:SetShadowColor(0, 0, 0)
-	DejaClassicStatsPane.value:SetTextColor(1,1,1,1)
-	DejaClassicStatsPane.value:SetText("")
+	DejaClassicStatsFrame.value:SetJustifyH("RIGHT")
+	DejaClassicStatsFrame.value:SetShadowOffset(1, -1) 
+	DejaClassicStatsFrame.value:SetShadowColor(0, 0, 0)
+	DejaClassicStatsFrame.value:SetTextColor(1,1,1,1)
+	DejaClassicStatsFrame.value:SetText("")
 end
 
-local function DCS_SetStatText(StatKey, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, XoffSet, YoffSet)
+local function DCS_SetStatText(StatKey, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, XoffSet, YoffSet)
 	_G[StatKey.."NameFS"]:SetText(DCS_STAT_DATA[StatKey].Label)
 	_G[StatKey.."ValueFS"]:SetText(StatValue1)
+	
+	local tooltipheader
+
+	if (StatLabel == "") then
+		tooltipheader = DCS_STAT_DATA[StatKey].Label..StatValue1
+	else
+		tooltipheader = StatLabel
+	end
 
 	_G["DCS"..StatKey.."StatFrame"]:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(_G["DCS"..StatKey.."StatFrame"], "ANCHOR_RIGHT");
-		GameTooltip:SetText(DCS_STAT_DATA[StatKey].Label..StatValue1.." "..StatValue5.."", 1, 1, 1, 1, true)
+		GameTooltip:SetText(tooltipheader.."", 1, 1, 1, 1, true)
 		GameTooltip:AddLine(StatValue2, 1, 0.8, 0.1, true)
 		GameTooltip:AddLine(StatValue3, 1, 0.8, 0.1, true)
 		GameTooltip:AddLine(StatValue4, 1, 0.8, 0.1, true)
@@ -1317,8 +1168,11 @@ end
 local function DCS_CREATE_STATS()
 	for k, v in ipairs(DCS_PRIMARY_STAT_LIST) do
 		local XoffSet = (0) 
-		local YoffSet = (7 + k) 
+		local YoffSet = (0 + k) 
 		DCS_CreateStatText(v, 0, XoffSet, YoffSet)
+	end
+	for k, v in ipairs(DCS_OFFENSE_STAT_LIST) do
+		DCS_CreateStatText(v, 0, 0, k)
 	end
 	for k, v in ipairs(DCS_MELEE_STAT_LIST) do
 		DCS_CreateStatText(v, 0, 0, k)
@@ -1334,29 +1188,33 @@ end
 
 local function DCS_SET_STATS_TEXT()
 	for k, v in ipairs(DCS_PRIMARY_STAT_LIST) do
-		local StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
-		DCS_SetStatText(v, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
+		local StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
+		DCS_SetStatText(v, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
+	end
+	for k, v in ipairs(DCS_OFFENSE_STAT_LIST) do
+		local StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
+		DCS_SetStatText(v, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
 	end
 	for k, v in ipairs(DCS_MELEE_STAT_LIST) do
-		local StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
-		DCS_SetStatText(v, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
+		local StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
+		DCS_SetStatText(v, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
 	end
 	for k, v in ipairs(DCS_DEFENSE_STAT_LIST) do
-		local StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
-		DCS_SetStatText(v, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
+		local StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
+		DCS_SetStatText(v, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
 	end
 	for k, v in ipairs(DCS_SPELL_STAT_LIST) do
-		local StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
-		DCS_SetStatText(v, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
+		local StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5 = DCS_STAT_DATA[v].statFunction()
+		DCS_SetStatText(v, StatLabel, StatValue1, StatValue2, StatValue3, StatValue4, StatValue5, 0, 0)
 	end
 end
 
 DCS_CLASSIC_SPECS = { -- These are not default UI/API positions organized to attatch specs to appropriate headings (Primary, Offense, Defense)
 	DRUID = {
 		spec = {
-			tree1 = "DruidRestoration",
-			tree2 = "DruidBalance",
-			tree3 = "DruidFeralCombat",
+			tree1 = "DruidBalance",
+			tree2 = "DruidFeralCombat",
+			tree3 = "DruidRestoration",
 		},
 	},
 	HUNTER = {
@@ -1376,15 +1234,15 @@ DCS_CLASSIC_SPECS = { -- These are not default UI/API positions organized to att
 	PALADIN = {
 		spec = {
 			tree1 = "PaladinHoly",
-			tree2 = "PaladinCombat",
-			tree3 = "PaladinProtection",
+			tree2 = "PaladinProtection",
+			tree3 = "PaladinCombat",
 		},
 	},
 	PRIEST = {
 		spec = {
-			tree1 = "PriestHoly",
-			tree2 = "PriestShadow",
-			tree3 = "PriestDiscipline",
+			tree1 = "PriestDiscipline",
+			tree2 = "PriestHoly",
+			tree3 = "PriestShadow",
 		},
 	},
 	ROGUE = {
@@ -1403,9 +1261,9 @@ DCS_CLASSIC_SPECS = { -- These are not default UI/API positions organized to att
 	},
 	WARLOCK = {
 		spec = {
-			tree1 = "WarlockSummoning",
-			tree2 = "WarlockDestruction",
-			tree3 = "WarlockCurses",
+			tree1 = "WarlockCurses",
+			tree2 = "WarlockSummoning",
+			tree3 = "WarlockDestruction",
 		},
 	},
 	WARRIOR = {
@@ -1422,35 +1280,41 @@ DCS_CATEGORIES = {
 	"Offense",
 	"Defense",
 }
-local DCS_PrimaryTalentSpec = 1
-local DCS_OffenseTalentSpec = 2
-local DCS_DefenseTalentSpec = 3
 
--- This may work to get talents in Classic. Use most points spent as Primary header art and adjsut others.
--- for i = 1, GetNumTalentTabs() do
--- 	local _, name, _, _, pointsSpent = GetTalentTabInfo(i)
--- 	print(i, name, pointsSpent)
--- end
+---------------------------------------------------
+-- Get Talent Points Spent Set Top Art As Primary--
+---------------------------------------------------
+local DCS_PrimaryTalentSpec, DCS_OffenseTalentSpec, DCS_DefenseTalentSpec
 
--- This is dry coding from retail. 
--- In Classic I'll have to get each trees spent points and compare them to determin the "spec".
--- local currentSpec = GetSpecialization()
--- if (className == "Druid") then
--- 	if (currentSpec == 3) then currentSpec = 2 elseif (currentSpec == 4) then currentSpec = 3 end -- Druid adjustments for 4 trees
--- end
--- 	DCS_PrimaryTalentSpec = currentSpec
--- -- print(currentSpec)
+local function DCS_GetTalents()
+	local numTabs = GetNumTalentTabs();
+	local tab1, tab2, tab3
+	for t=1, numTabs do
+		local _, _, pointsSpent = GetTalentTabInfo(t)
+		if t==1 then
+			tab1 = pointsSpent
+		elseif t==2 then
+			tab2 = pointsSpent
+		elseif t==3 then
+			tab3 = pointsSpent
+		end
+	end
+	local tbl = {tab1, tab2, tab3}
+	local function indexsort(tbl)
+		local idx = {}
+		for i = 1, #tbl do idx[i] = i end -- build a table of indexes
+		-- sort the indexes, but use the values as the sorting criteria
+		table.sort(idx, function(a, b) return tbl[a] > tbl[b] end)
+		-- return the sorted indexes
+		return (table.unpack or unpack)(idx)
+	end
+	DCS_PrimaryTalentSpec, DCS_OffenseTalentSpec, DCS_DefenseTalentSpec = indexsort(tbl)
+	--   print(DCS_PrimaryTalentSpec, DCS_OffenseTalentSpec, DCS_DefenseTalentSpec)
+end
 
--- if (currentSpec == 2) then
--- 	DCS_OffenseTalentSpec = 1
--- elseif (currentSpec == 3) then
--- 	DCS_DefenseTalentSpec = 1
--- end
-
--- print(DCS_CLASSIC_SPECS[className].spec["tree"..DCS_PrimaryTalentSpec])
-----------------------
+-----------------------
 -- Talent Scroll Art --
-----------------------
+-----------------------
 gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground = {
 	ShowHideScrollArtBackgroundChecked = true,
 }
@@ -1460,7 +1324,7 @@ local TalentArtoffsetX, TalentArtoffsetY = 25, 20
 local ShowHideScrollArt
 local DesaturateScrollArtBackground
 
-local function DCS_TalentArtFrames(v, frameTL, frameTR, frameBL, frameBR, drawLayer, DCS_TalentSpec, frameTLrelativeTo, relativePoint)
+local function DCS_TalentArtFrames(v, frameTL, frameTR, frameBL, frameBR, drawLayer, DCS_TalentSpec, TLAnchorframePoint, frameTLrelativeTo, relativePoint, xOffset, yOffset)
 	ShowHideScrollArt = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked
 	DesaturateScrollArtBackground = gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked
 	local frameexists = _G[frameTL.."Frame"]
@@ -1486,26 +1350,26 @@ local function DCS_TalentArtFrames(v, frameTL, frameTR, frameBL, frameBR, drawLa
 			_G[frameBR.."Frame"]:SetDesaturated(DesaturateScrollArtBackground);
 		end
 	else 
-		local frameTL=DejaClassicStatsPane:CreateTexture(frameTL.."Frame","ARTWORK", nil, drawLayer)
+		local frameTL=DejaClassicStatsFrame:CreateTexture(frameTL.."Frame","ARTWORK", nil, drawLayer)
 		-- print(v, drawLayer, DCS_TalentSpec)
 		frameTL:ClearAllPoints()
 		frameTL:SetScale(TalentArtScale)
 		frameTL:SetTexture("Interface\\TALENTFRAME\\"..DCS_CLASSIC_SPECS[classFilename].spec["tree"..DCS_TalentSpec].."-TopLeft")
 		frameTL:SetDesaturated(DesaturateScrollArtBackground);
-		frameTL:SetPoint("TOPLEFT", frameTLrelativeTo, "BOTTOMLEFT", TalentArtoffsetX, TalentArtoffsetY)
-		local frameTR=DejaClassicStatsPane:CreateTexture(frameTR.."Frame","ARTWORK", nil, drawLayer)
+		frameTL:SetPoint(TLAnchorframePoint, frameTLrelativeTo, relativePoint, xOffset, yOffset)
+		local frameTR=DejaClassicStatsFrame:CreateTexture(frameTR.."Frame","ARTWORK", nil, drawLayer)
 		frameTR:ClearAllPoints()
 		frameTR:SetScale(TalentArtScale)
 		frameTR:SetTexture("Interface\\TALENTFRAME\\"..DCS_CLASSIC_SPECS[classFilename].spec["tree"..DCS_TalentSpec].."-TopRight")
 		frameTR:SetDesaturated(DesaturateScrollArtBackground);
 		frameTR:SetPoint("TOPLEFT", frameTL, "TOPRIGHT")
-		local frameBL=DejaClassicStatsPane:CreateTexture(frameBL.."Frame","ARTWORK", nil, drawLayer)
+		local frameBL=DejaClassicStatsFrame:CreateTexture(frameBL.."Frame","ARTWORK", nil, drawLayer)
 		frameBL:ClearAllPoints()
 		frameBL:SetScale(TalentArtScale)
 		frameBL:SetTexture("Interface\\TALENTFRAME\\"..DCS_CLASSIC_SPECS[classFilename].spec["tree"..DCS_TalentSpec].."-BottomLeft")
 		frameBL:SetDesaturated(DesaturateScrollArtBackground);
 		frameBL:SetPoint("TOPLEFT", frameTL, "BOTTOMLEFT")
-		local frameBR=DejaClassicStatsPane:CreateTexture(frameBR.."Frame","ARTWORK", nil, drawLayer)
+		local frameBR=DejaClassicStatsFrame:CreateTexture(frameBR.."Frame","ARTWORK", nil, drawLayer)
 		frameBR:ClearAllPoints()
 		frameBR:SetScale(TalentArtScale)
 		frameBR:SetTexture("Interface\\TALENTFRAME\\"..DCS_CLASSIC_SPECS[classFilename].spec["tree"..DCS_TalentSpec].."-BottomRight")
@@ -1521,38 +1385,293 @@ local function DCS_TalentArtFrames(v, frameTL, frameTR, frameBL, frameBR, drawLa
 end
 
 local function DCS_SetTalentArtFrames()
+	DCS_GetTalents()
 	for k, v in ipairs(DCS_CATEGORIES) do
 		local DCS_TalentSpec
+		local frameTLrelativeTo = DejaClassicStatsFrame
+		local TLAnchorframePoint
+		local frameTLrelativeTo
+		local relativePoint
+		local xOffset
+		local yOffset
 		if (v == "Primary") then
 			DCS_TalentSpec = DCS_PrimaryTalentSpec
+			TLAnchorframePoint = "TOPLEFT"
+			frameTLrelativeTo = DejaClassicStatsFrame
+			relativePoint = "TOPLEFT"
+			xOffset = 25
+			yOffset = -35
 		elseif (v == "Offense") then
 			DCS_TalentSpec = DCS_OffenseTalentSpec
+			TLAnchorframePoint = "TOPLEFT"
+			frameTLrelativeTo = "PrimaryBottomLeftTalentTextureFrame"
+			relativePoint = "BOTTOMLEFT"
+			xOffset = 0
+			yOffset = 60
 		elseif (v == "Defense") then
-			DCS_TalentSpec = DCS_DefenseTalentSpec
+			DCS_TalentSpec = DCS_DefenseTalentSpec			
+			TLAnchorframePoint = "TOPLEFT"
+			frameTLrelativeTo = "OffenseBottomLeftTalentTextureFrame"
+			relativePoint = "BOTTOMLEFT"
+			xOffset = 0
+			yOffset = 60
 		end
-		DCS_TalentArtFrames(v, v.."TopLeftTalentTexture", v.."TopRightTalentTexture", v.."BottomLeftTalentTexture", v.."BottomRightTalentTexture", k, DCS_TalentSpec, "DCS"..v.."StatsHeader", "BOTTOMLEFT")
+		-- Old relativeto is to attatch to the stat headers.
+		-- DCS_TalentArtFrames(v, v.."TopLeftTalentTexture", v.."TopRightTalentTexture", v.."BottomLeftTalentTexture", v.."BottomRightTalentTexture", k, DCS_TalentSpec, "DCS"..v.."StatsHeader", "BOTTOMLEFT")
+		--New is to attatch to the scroll pane top, center and bottom.
+		DCS_TalentArtFrames(v, v.."TopLeftTalentTexture", v.."TopRightTalentTexture", v.."BottomLeftTalentTexture", v.."BottomRightTalentTexture", k, DCS_TalentSpec, TLAnchorframePoint, frameTLrelativeTo, relativePoint, xOffset, yOffset)
 	end
 end
+
+------------------------------------------------
+-- Mouseover Character Model Rotation Buttons --
+------------------------------------------------
+CHAR_ROTATE_BUTTONS = {
+	"CharacterModelFrameRotateRightButton",
+	"CharacterModelFrameRotateLeftButton",
+	}
+
+local ignoreDCSRBAlpha
+local DCSRBAlphaTimer
+
+local function SetAlpha(frame)
+	if ignoreDCSRBAlpha then return end
+	ignoreDCSRBAlpha = true
+	if frame:IsMouseOver() then
+		frame:SetAlpha(1)
+	else
+		frame:SetAlpha(0)
+	end
+	ignoreDCSRBAlpha = nil
+end
+
+local function showDCSRB(self)
+	if DCSRBAlphaTimer then DCSRBAlphaTimer:Cancel() end
+	for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
+		ignoreDCSRBAlpha = true
+		_G[v]:SetAlpha(1)
+		ignoreDCSRBAlpha = nil
+	end
+end
+
+local function hideDCSRB(self)
+	for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
+		if ShowModelRotation then
+			showDCSRB(self)
+		else
+			ignoreDCSRBAlpha = true
+			_G[v]:SetAlpha(0)
+			ignoreDCSRBAlpha = nil
+		end
+	end
+end
+
+local function delayHideDCSRB(self)
+	DCSRBAlphaTimer = C_Timer.NewTimer(0.75, hideDCSRB)
+end
+
+for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
+	v = _G[v]
+	hooksecurefunc(v, "SetAlpha", SetAlpha)
+	v:HookScript("OnShow", delayHideDCSRB)
+	v:HookScript("OnEnter", showDCSRB)
+	v:HookScript("OnLeave", delayHideDCSRB)
+end
+
+--------------------------------------
+-- Show/Hide Talents Background Art --
+--------------------------------------
+local DCS_ShowHideScrollArtBackgroundCheckedCheck = CreateFrame("CheckButton", "DCS_ShowHideScrollArtBackgroundCheckedCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_ShowHideScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_ShowHideScrollArtBackgroundCheckedCheck:ClearAllPoints()
+	--DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -15)
+	DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScale(1)
+	_G[DCS_ShowHideScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Background Art"])
+	DCS_ShowHideScrollArtBackgroundCheckedCheck.tooltipText = L["Displays the class talents background art."] --Creates a tooltip on mouseover.
+
+DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
+	ShowHideScrollArt = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked
+	self:SetChecked(ShowHideScrollArt)
+	DCS_SetTalentArtFrames()
+end)
+
+DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScript("OnClick", function(self)
+	ShowHideScrollArt = not ShowHideScrollArt
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked = ShowHideScrollArt
+	DCS_SetTalentArtFrames()
+end)
+
+---------------------------------------
+-- Desaturate Talents Background Art --
+---------------------------------------
+gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground = {
+	DesaturateScrollArtBackgroundChecked = true,
+}
+local DesaturateScrollArtBackground --alternate display position of item repair cost, durability, and ilvl
+
+local DCS_DesaturateScrollArtBackgroundCheckedCheck = CreateFrame("CheckButton", "DCS_DesaturateScrollArtBackgroundCheckedCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_DesaturateScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_DesaturateScrollArtBackgroundCheckedCheck:ClearAllPoints()
+	--DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -35)
+	DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScale(1)
+	_G[DCS_DesaturateScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Monochrome Background Art"])
+	DCS_DesaturateScrollArtBackgroundCheckedCheck.tooltipText = L["Displays black and white class talents background art."] --Creates a tooltip on mouseover.
+
+DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
+	DesaturateScrollArtBackground = gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked
+	self:SetChecked(DesaturateScrollArtBackground)
+end)
+
+DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScript("OnClick", function(self)
+	DesaturateScrollArtBackground = not DesaturateScrollArtBackground
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked = DesaturateScrollArtBackground
+	DCS_SetTalentArtFrames()
+end)
+
+----------------------------------------
+-- Show/Hide/Move Default Stats Frame --
+----------------------------------------
+
+gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsShowDefaultStats = {
+	ShowDefaultStatsChecked = false,
+}
+
+local function Default_SetResistances()
+	for i=1, 5, 1 do
+		local frame = _G["MagicResFrame"..i]
+		frame:SetParent(CharacterModelFrame)
+		frame:ClearAllPoints()
+		if ShowDefaultStats then
+			if (i==1) then
+				frame:SetPoint("TOPRIGHT", CharacterModelFrame, "TOPRIGHT", -1, 1)
+			else
+				frame:SetPoint("TOP", _G["MagicResFrame"..(i-1)], "BOTTOM", 0,0)
+			end
+		else
+			if (i==1) then
+				frame:SetPoint("TOPRIGHT", CharacterModelFrame, "TOPRIGHT", -9, -3)
+			else
+				frame:SetPoint("TOP", _G["MagicResFrame"..(i-1)], "BOTTOM", 0,0)
+			end
+		end
+	end
+end
+
+local function DCS_SetResistances()
+	if MoveResistances then
+		Default_SetResistances()
+	else
+		for i=1, 5, 1 do 
+			local frame = _G["MagicResFrame"..i]
+			frame:SetParent(DejaClassicStatsFrame)
+			frame:ClearAllPoints()
+			if (i==1) then
+				frame:SetPoint("TOPLEFT", DCSDefenseStatsHeader, "BOTTOMLEFT", 12, 0)
+			else
+				frame:SetPoint("TOPLEFT", _G["MagicResFrame"..(i-1)], "TOPRIGHT", 2,0)
+			end
+		end
+	end
+end
+
+local function DCS_SetAllStatFrames()
+	if ShowDefaultStats then
+		CharacterModelFrame:SetPoint("TOPLEFT", CharacterHeadSlot, "TOPRIGHT", 7, -4)
+		CharacterModelFrame:SetPoint("BOTTOMRIGHT", CharacterTrinket1Slot, "BOTTOMLEFT", -8, 96)
+		CharacterAttributesFrame:Show()
+		DCS_SetResistances()
+	else
+		CharacterModelFrame:SetPoint("TOPLEFT", CharacterHeadSlot, "TOPRIGHT")
+		CharacterModelFrame:SetPoint("BOTTOMRIGHT", CharacterTrinket1Slot, "BOTTOMLEFT")
+		CharacterAttributesFrame:Hide()
+		DCS_SetResistances()
+	end
+end
+
+local DCS_ShowDefaultStatsCheckedCheck = CreateFrame("CheckButton", "DCS_ShowDefaultStatsCheckedCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_ShowDefaultStatsCheckedCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_ShowDefaultStatsCheckedCheck:ClearAllPoints()
+	--DCS_ShowDefaultStatsCheckedCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_ShowDefaultStatsCheckedCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -195)
+	DCS_ShowDefaultStatsCheckedCheck:SetScale(1)
+	_G[DCS_ShowDefaultStatsCheckedCheck:GetName() .. "Text"]:SetText(L["Default Stats"])
+	DCS_ShowDefaultStatsCheckedCheck.tooltipText = L["Displays the default stat frames."] --Creates a tooltip on mouseover.
+
+DCS_ShowDefaultStatsCheckedCheck:SetScript("OnEvent", function(self, event, ...)
+	ShowDefaultStats = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowDefaultStats.ShowDefaultStatsChecked
+	self:SetChecked(ShowDefaultStats)
+	DCS_SetAllStatFrames()
+end)
+
+DCS_ShowDefaultStatsCheckedCheck:SetScript("OnClick", function(self)
+	ShowDefaultStats = not ShowDefaultStats
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowDefaultStats.ShowDefaultStatsChecked = ShowDefaultStats
+	DCS_SetAllStatFrames()
+	hideDCSRB()
+end)
+
+gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsMoveResistances = {
+	MoveResistancesChecked = false,
+}
+
+local DCS_MoveResistancesCheck = CreateFrame("CheckButton", "DCS_MoveResistancesCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_MoveResistancesCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_MoveResistancesCheck:ClearAllPoints()
+	--DCS_MoveResistancesCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_MoveResistancesCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -215)
+	DCS_MoveResistancesCheck:SetScale(1)
+	_G[DCS_MoveResistancesCheck:GetName() .. "Text"]:SetText(L["Default Resistances"])
+	DCS_MoveResistancesCheck.tooltipText = L["Displays the default resistance frames."] --Creates a tooltip on mouseover.
+
+DCS_MoveResistancesCheck:SetScript("OnEvent", function(self, event, ...)
+	MoveResistances = gdbprivate.gdb.gdbdefaults.DejaClassicStatsMoveResistances.MoveResistancesChecked
+	self:SetChecked(MoveResistances)
+	DCS_SetResistances()
+end)
+
+DCS_MoveResistancesCheck:SetScript("OnClick", function(self)
+	MoveResistances = not MoveResistances
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsMoveResistances.MoveResistancesChecked = MoveResistances
+	DCS_SetResistances()
+end)
+
+gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsShowModelRotation = {
+	ShowModelRotationChecked = false,
+}
+
+local DCS_ShowModelRotationCheck = CreateFrame("CheckButton", "DCS_ShowModelRotationCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_ShowModelRotationCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_ShowModelRotationCheck:ClearAllPoints()
+	--DCS_ShowModelRotationCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_ShowModelRotationCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -235)
+	DCS_ShowModelRotationCheck:SetScale(1)
+	_G[DCS_ShowModelRotationCheck:GetName() .. "Text"]:SetText(L["Rotation Buttons"])
+	DCS_ShowModelRotationCheck.tooltipText = L["Displays the Character Model Rotation buttons."] --Creates a tooltip on mouseover.
+
+DCS_ShowModelRotationCheck:SetScript("OnEvent", function(self, event, ...)
+	ShowModelRotation = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowModelRotation.ShowModelRotationChecked
+	self:SetChecked(ShowModelRotation)
+	hideDCSRB()
+end)
+
+DCS_ShowModelRotationCheck:SetScript("OnClick", function(self)
+	ShowModelRotation = not ShowModelRotation
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowModelRotation.ShowModelRotationChecked = ShowModelRotation
+	hideDCSRB()
+end)
 
 local DejaClassicStatsEventFrame = CreateFrame("Frame", "DejaClassicStatsEventFrame", UIParent)
 -- DejaClassicStatsEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 DejaClassicStatsEventFrame:RegisterEvent("ADDON_LOADED")
 
-	DejaClassicStatsEventFrame:SetScript("OnEvent", function(self, event, ...)
-		CharacterAttributesFrame:Hide()
-		-- CharacterModelFrame:SetScale(1.5)
-		CharacterModelFrame:SetPoint("TOPLEFT", CharacterHeadSlot, "TOPRIGHT")
-		CharacterModelFrame:SetPoint("BOTTOMRIGHT", CharacterTrinket1Slot, "BOTTOMLEFT")
-		DCS_CREATE_STATS()
-		DCS_PaperDollFrame_SetPrimaryStats()
-		DCS_PaperDollFrame_SetArmor("player", "Character")
-		DCS_PaperDollFrame_SetAttackBothHands("player", "Character")
-		DCS_PaperDollFrame_SetAttackPower("player", "Character")
-		DCS_PaperDollFrame_SetDamage("player", "Character")
-		DCS_PaperDollFrame_SetRangedAttack("player", "Character")
-		DCS_PaperDollFrame_SetRangedAttackPower("player", "Character")
-		DCS_PaperDollFrame_SetRangedDamage("player", "Character")
-		DCS_PaperDollFrame_SetResistances()
+	DejaClassicStatsEventFrame:SetScript("OnEvent", function(self, event, arg1)
+		if event == "ADDON_LOADED" and arg1 == "DejaClassicStats" then
+			DCS_SetAllStatFrames()
+			DCS_CREATE_STATS()
+			self:UnregisterEvent("ADDON_LOADED")
+		end
 	end)
 
 	hooksecurefunc("PaperDollFrame_UpdateStats", function()
@@ -1560,96 +1679,3 @@ DejaClassicStatsEventFrame:RegisterEvent("ADDON_LOADED")
 		DCS_RepairTotal()
 	end)
 
-	CHAR_ROTATE_BUTTONS = {
-		"CharacterModelFrameRotateRightButton",
-		"CharacterModelFrameRotateLeftButton",
-		}
-	
-	local ignoreDCSRBAlpha
-	local DCSRBAlphaTimer
-	
-	local function SetAlpha(frame)
-		if ignoreDCSRBAlpha then return end
-		ignoreDCSRBAlpha = true
-		if frame:IsMouseOver() then
-			frame:SetAlpha(1)
-		else
-			frame:SetAlpha(0)
-		end
-		ignoreDCSRBAlpha = nil
-	end
-	
-	local function showDCSRB(self)
-		if DCSRBAlphaTimer then DCSRBAlphaTimer:Cancel() end
-		for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
-			ignoreDCSRBAlpha = true
-			_G[v]:SetAlpha(1)
-			ignoreDCSRBAlpha = nil
-		end
-	end
-	
-	local function hideDCSRB(self)
-		for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
-			ignoreDCSRBAlpha = true
-			_G[v]:SetAlpha(0)
-			ignoreDCSRBAlpha = nil
-		end
-	end
-	
-	local function delayHideDCSRB(self)
-		DCSRBAlphaTimer = C_Timer.NewTimer(0.75, hideDCSRB)
-	end
-	
-	for _, v in ipairs(CHAR_ROTATE_BUTTONS) do
-		v = _G[v]
-		hooksecurefunc(v, "SetAlpha", SetAlpha)
-		v:HookScript("OnEnter", showDCSRB)
-		v:HookScript("OnLeave", delayHideDCSRB)
-		v:SetAlpha(0)
-	end
-
-	local DCS_ShowHideScrollArtBackgroundCheckedCheck = CreateFrame("CheckButton", "DCS_ShowHideScrollArtBackgroundCheckedCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
-		DCS_ShowHideScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
-		DCS_ShowHideScrollArtBackgroundCheckedCheck:ClearAllPoints()
-		--DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
-		DCS_ShowHideScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -15)
-		DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScale(1)
-		_G[DCS_ShowHideScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Background Art"])
-		DCS_ShowHideScrollArtBackgroundCheckedCheck.tooltipText = L["Displays the class talents background art."] --Creates a tooltip on mouseover.
-	
-	DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
-		ShowHideScrollArt = gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked
-		self:SetChecked(ShowHideScrollArt)
-		DCS_SetTalentArtFrames()
-	end)
-	
-	DCS_ShowHideScrollArtBackgroundCheckedCheck:SetScript("OnClick", function(self)
-		ShowHideScrollArt = not ShowHideScrollArt
-		gdbprivate.gdb.gdbdefaults.DejaClassicStatsShowHideScrollArtBackground.ShowHideScrollArtBackgroundChecked = ShowHideScrollArt
-		DCS_SetTalentArtFrames()
-	end)
-
-	gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground = {
-		DesaturateScrollArtBackgroundChecked = true,
-	}
-	local DesaturateScrollArtBackground --alternate display position of item repair cost, durability, and ilvl
-	
-	local DCS_DesaturateScrollArtBackgroundCheckedCheck = CreateFrame("CheckButton", "DCS_DesaturateScrollArtBackgroundCheckedCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
-		DCS_DesaturateScrollArtBackgroundCheckedCheck:RegisterEvent("PLAYER_LOGIN")
-		DCS_DesaturateScrollArtBackgroundCheckedCheck:ClearAllPoints()
-		--DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", 30, -255)
-		DCS_DesaturateScrollArtBackgroundCheckedCheck:SetPoint("TOPLEFT", "dcsMiscPanelCategoryFS", 7, -35)
-		DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScale(1)
-		_G[DCS_DesaturateScrollArtBackgroundCheckedCheck:GetName() .. "Text"]:SetText(L["Monochrome Background Art"])
-		DCS_DesaturateScrollArtBackgroundCheckedCheck.tooltipText = L["Displays black and white class talents background art."] --Creates a tooltip on mouseover.
-	
-	DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScript("OnEvent", function(self, event, ...)
-		DesaturateScrollArtBackground = gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked
-		self:SetChecked(DesaturateScrollArtBackground)
-	end)
-	
-	DCS_DesaturateScrollArtBackgroundCheckedCheck:SetScript("OnClick", function(self)
-		DesaturateScrollArtBackground = not DesaturateScrollArtBackground
-		gdbprivate.gdb.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground.DesaturateScrollArtBackgroundChecked = DesaturateScrollArtBackground
-		DCS_SetTalentArtFrames()
-	end)

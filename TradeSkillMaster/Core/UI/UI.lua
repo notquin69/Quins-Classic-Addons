@@ -392,7 +392,11 @@ function TSM.UI.ShowTooltip(parent, tooltip)
 	if type(tooltip) == "number" then
 		GameTooltip:SetHyperlink("item:"..tooltip)
 	elseif tonumber(tooltip) then
-		GameTooltip:SetHyperlink("enchant:"..tooltip)
+		if TSM.Crafting.ProfessionState.IsClassicCrafting() then
+			GameTooltip:SetCraftSpell(TSM.Crafting.ProfessionScanner.GetIndexBySpellId(tonumber(tooltip)) or tooltip)
+		else
+			GameTooltip:SetHyperlink("enchant:"..tooltip)
+		end
 	elseif type(tooltip) == "string" and (strfind(tooltip, "\124Hitem:") or strfind(tooltip, "\124Hbattlepet:") or strfind(tooltip, "^i:") or strfind(tooltip, "^p:")) then
 		TSMAPI_FOUR.Util.SafeTooltipLink(tooltip)
 	else

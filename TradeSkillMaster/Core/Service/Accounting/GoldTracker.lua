@@ -89,7 +89,9 @@ end
 
 function GoldTracker.OnDisable()
 	private.PlayerLogGold()
-	private.GuildLogGold()
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+		private.GuildLogGold()
+	end
 	TSM.db.sync.internalData.goldLog = TSMAPI_FOUR.CSV.Encode(CSV_COLUMNS, private.characterGoldLog[private.currentCharacterKey])
 	local guild = TSMAPI_FOUR.PlayerInfo.GetPlayerGuild(UnitName("player"))
 	if guild and private.guildGoldLog[guild] then

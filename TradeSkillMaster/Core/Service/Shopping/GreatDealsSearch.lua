@@ -25,6 +25,9 @@ function GreatDealsSearch.OnEnable()
 		local realmName, data = unpack(info)
 		if TSMAPI.AppHelper:IsCurrentRealm(realmName) then
 			private.filter = assert(loadstring(data))().greatDeals
+			if private.filter == "" then
+				break
+			end
 			-- populate item info cache
 			for _, item in TSMAPI_FOUR.Util.VarargIterator(strsplit(";", private.filter)) do
 				item = strsplit("/", item)

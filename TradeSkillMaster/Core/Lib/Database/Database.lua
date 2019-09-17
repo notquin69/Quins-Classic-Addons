@@ -466,6 +466,7 @@ function Database.BulkInsertNewRow(self, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10
 		local f2 = self._multiFieldIndexFields[field][2]
 		self._bulkInsertContext.indexValues[field][uuid] = tempTbl[f1]..TSM.CONST.DB_INDEX_VALUE_SEP..tempTbl[f2]
 	end
+	return uuid
 end
 
 function Database.BulkInsertNewRowFast6(self, v1, v2, v3, v4, v5, v6, extraValue)

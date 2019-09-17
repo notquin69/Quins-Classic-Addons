@@ -37,7 +37,7 @@ function private.ScanThread(auctionScan)
 		TSM:Print(L["No recent AuctionDB scan data found."])
 		return false
 	end
-	auctionScan:SetCustomFilterFunc(private.ScanFilter)
+	auctionScan:SetCustomFilterFunc(private.IsItemBuyoutTooHigh)
 
 	-- create the list of items, and add filters for them
 	wipe(private.itemList)
@@ -69,10 +69,6 @@ function private.ShouldInclude(itemString, minBuyout)
 	end
 
 	return true
-end
-
-function private.ScanFilter(row)
-	return private.IsItemBuyoutTooHigh(row:GetField("itemString"), row:GetField("itemBuyout"))
 end
 
 function private.IsItemBuyoutTooHigh(itemString, buyout)

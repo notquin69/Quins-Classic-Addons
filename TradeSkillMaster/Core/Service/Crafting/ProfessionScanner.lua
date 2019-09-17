@@ -36,6 +36,7 @@ function ProfessionScanner.OnInitialize()
 		:Commit()
 	TSM.Crafting.ProfessionState.RegisterUpdateCallback(private.ProfessionStateUpdate)
 	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		TSMAPI_FOUR.Event.Register("CRAFT_UPDATE", private.OnTradeSkillUpdateEvent)
 		TSMAPI_FOUR.Event.Register("TRADE_SKILL_UPDATE", private.OnTradeSkillUpdateEvent)
 	else
 		TSMAPI_FOUR.Event.Register("TRADE_SKILL_LIST_UPDATE", private.OnTradeSkillUpdateEvent)
@@ -65,6 +66,10 @@ end
 
 function ProfessionScanner.CreateQuery()
 	return private.db:NewQuery()
+end
+
+function ProfessionScanner.GetIndexBySpellId(spellId)
+	return private.db:GetUniqueRowField("spellId", spellId, "index")
 end
 
 function ProfessionScanner.GetNameBySpellId(spellId)
@@ -199,14 +204,27 @@ function private.ScanProfession()
 	end
 
 	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-		local lastHeaderIndex = nil
+		local lastHeaderIndex = 0
 		private.db:TruncateAndBulkInsertStart()
-		for i = 1, GetNumTradeSkills() do
-			local name, skillType = GetTradeSkillInfo(i)
+		for i = 1, TSM.Crafting.ProfessionState.IsClassicCrafting() and GetNumCrafts() or GetNumTradeSkills() do
+			local name, _, skillType
+			if TSM.Crafting.ProfessionState.IsClassicCrafting() then
+				name, _, skillType = GetCraftInfo(i)
+			else
+				name, skillType = GetTradeSkillInfo(i)
+			end
 			if skillType == "header" then
 				lastHeaderIndex = i
 			else
-				private.db:BulkInsertNewRow(i, i, name, lastHeaderIndex, skillType, -1, 1)
+				local spellId = nil
+				if TSM.Crafting.ProfessionState.IsClassicCrafting() then
+					local itemLink = GetCraftItemLink(i)
+					spellId = itemLink and tonumber(strmatch(itemLink, "enchant:([0-9]+)")) or nil
+				else
+					local itemLink = GetTradeSkillItemLink(i)
+					spellId = itemLink and tonumber(strmatch(itemLink, "item:([0-9]+)")) or nil
+				end
+				private.db:BulkInsertNewRow(i, spellId or i, name, lastHeaderIndex, skillType, -1, 1)
 			end
 		end
 		private.db:BulkInsertEnd()
@@ -309,19 +327,23 @@ end
 
 function private.ScanRecipe(professionName, spellId)
 	-- get the links
-	local itemLink, lNum, hNum = TSM.Crafting.ProfessionUtil.GetRecipeInfo(spellId)
+	local itemLink, lNum, hNum = TSM.Crafting.ProfessionUtil.GetRecipeInfo(WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and ProfessionScanner.GetIndexBySpellId(spellId) or spellId)
 	assert(itemLink, "Invalid craft: "..tostring(spellId))
 
 	-- get the itemString and craft name
 	local itemString, craftName = nil, nil
 	if strfind(itemLink, "enchant:") then
-		-- result of craft is not an item
-		itemString = TSM.CONST.ENCHANT_ITEM_STRINGS[spellId] or TSM.CONST.MASS_MILLING_RECIPES[spellId]
-		if not itemString then
-			-- we don't care about this craft
+		if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 			return true
+		else
+			-- result of craft is not an item
+			itemString = TSM.CONST.ENCHANT_ITEM_STRINGS[spellId] or TSM.CONST.MASS_MILLING_RECIPES[spellId]
+			if not itemString then
+				-- we don't care about this craft
+				return true
+			end
+			craftName = GetSpellInfo(spellId)
 		end
-		craftName = GetSpellInfo(spellId)
 	elseif strfind(itemLink, "item:") then
 		-- result of craft is item
 		itemString = TSMAPI_FOUR.Item.ToBaseItemString(itemLink)

@@ -303,6 +303,7 @@ function addon.loadCurrentGuide()
 			table.insert(addon.currentGuide.steps, step)
 			step.index = #addon.currentGuide.steps
 			local i = 1
+			local lastGoto
 			while i <= #step.elements do
 				local element = step.elements[i]
 				element.available = true
@@ -313,6 +314,9 @@ function addon.loadCurrentGuide()
 					step.manual = true
 				elseif element.t == "GOTO" then
 					if step.manual == nil then step.manual = false end
+					if lastGoto ~= nil then lastGoto.lastGoto = false end
+					element.lastGoto = true
+					lastGoto = element
 				end
 				if element.questId ~= nil then
 					if addon.quests[element.questId] == nil then addon.quests[element.questId] = {} end
@@ -321,10 +325,12 @@ function addon.loadCurrentGuide()
 					addon.quests[element.questId].finished = addon.quests[element.questId].completed
 					if addon.questsDB[element.questId] ~= nil and addon.questsDB[element.questId].prequests ~= nil then
 						for _, id in ipairs(addon.questsDB[element.questId].prequests) do
-							if addon.quests[id] == nil then addon.quests[id] = {} end
-							addon.quests[id].completed = completed[id] ~= nil and completed[id]
-							if addon.quests[id].followup == nil then addon.quests[id].followup = {} end
-							table.insert(addon.quests[id].followup, element.questId)
+							if (addon.questsDB[id].faction or addon.faction) == addon.faction then
+								if addon.quests[id] == nil then addon.quests[id] = {} end
+								addon.quests[id].completed = completed[id] ~= nil and completed[id]
+								if addon.quests[id].followup == nil then addon.quests[id].followup = {} end
+								table.insert(addon.quests[id].followup, element.questId)
+							end
 						end
 					end
 					if addon.quests[element.questId].lastStep == nil then addon.quests[element.questId].lastStep = {} end
@@ -346,14 +352,15 @@ function addon.loadCurrentGuide()
 							gotoElement.radius = addon.DEFAULT_GOTO_RADIUS + gotoElement.radius
 							gotoElement.generated = true
 							gotoElement.available = true
-							gotoElement.questId = element.questId
-							gotoElement.questType = element.t
-							gotoElement.objective = element.objective
+							gotoElement.attached = element
 							table.insert(step.elements, i, gotoElement)
 							for j = i, #step.elements do
 								step.elements[j].index = j
 							end
 							i = i + 1
+							if lastGoto ~= nil then lastGoto.lastGoto = false end
+							gotoElement.lastGoto = true
+							lastGoto = gotoElement
 						end
 					end						
 				elseif element.t == "FLY" then
@@ -365,11 +372,15 @@ function addon.loadCurrentGuide()
 						gotoElement.radius = addon.DEFAULT_GOTO_RADIUS
 						gotoElement.generated = true
 						gotoElement.available = true
+						gotoElement.attached = element
 						table.insert(step.elements, i, gotoElement)
 						for j = i, #step.elements do
 							step.elements[j].index = j
 						end
 						i = i + 1
+						if lastGoto ~= nil then lastGoto.lastGoto = false end
+						gotoElement.lastGoto = true
+						lastGoto = gotoElement
 					end						
 				elseif element.t == "GET_FLIGHT_POINT" then
 					if guide.autoAddCoordinatesGOTO and (GuidelimeData.showMapMarkersGOTO or GuidelimeData.showMinimapMarkersGOTO) and not step.hasGoto and not element.optional then
@@ -381,11 +392,15 @@ function addon.loadCurrentGuide()
 							gotoElement.radius = addon.DEFAULT_GOTO_RADIUS
 							gotoElement.generated = true
 							gotoElement.available = true
+							gotoElement.attached = element
 							table.insert(step.elements, i, gotoElement)
 							for j = i, #step.elements do
 								step.elements[j].index = j
 							end
 							i = i + 1
+							if lastGoto ~= nil then lastGoto.lastGoto = false end
+							gotoElement.lastGoto = true
+							lastGoto = gotoElement
 						end
 					end						
 				end
@@ -428,9 +443,7 @@ local function loadStepOnActivation(i)
 								locElement.generated = true
 								locElement.available = true
 								locElement.index = j
-								locElement.questId = element.questId
-								locElement.questType = element.t
-								locElement.objective = element.objective
+								locElement.attached = element
 								table.insert(step.elements, j, locElement)
 								j = j + 1
 							end
@@ -715,11 +728,18 @@ local function updateStepCompletion(i, completedIndexes)
 			if step.completed == nil or not element.completed then step.completed = element.completed end
 		end
 	end
-	-- check goto last so that goto only matters when there are no other objectives completed
+	-- check goto last so that go to does not matter when all other objectives are completed
+	local nonGotoCompleted = step.completed or wasCompleted
 	for _, element in ipairs(step.elements) do
-		if not wasCompleted and element.t == "GOTO" and not step.completed and step.active and not step.skip then
+		if element.t == "GOTO"  then
 			--if addon.debugging then print("LIME : zone coordinates", x, y, element.mapID) end
-			if addon.x ~= nil and addon.y ~= nil and element.wx ~= nil and element.wy ~= nil and addon.instance == element.instance and addon.alive then
+			if nonGotoCompleted or step.skip then
+				element.completed = true
+			elseif element.attached ~= nil and element.attached.completed then
+				element.completed = true
+			elseif element.completed and not element.lastGoto and element.attached == nil then
+				-- do not reactivate unless it is the last goto of the step
+			elseif addon.x ~= nil and addon.y ~= nil and element.wx ~= nil and element.wy ~= nil and addon.instance == element.instance and addon.alive and step.active then
 				local radius = element.radius * element.radius
 				-- add some hysteresis
 				if element.completed then radius = radius * 1.6 end
@@ -756,7 +776,7 @@ local function updateStepAvailability(i, changedIndexes, scheduled)
 		if element.t == "ACCEPT" then
 			if addon.questsDB[element.questId] ~= nil and addon.questsDB[element.questId].prequests ~= nil then
 				for _, id in ipairs(addon.questsDB[element.questId].prequests) do
-					if not addon.quests[id].completed and not scheduled.TURNIN[id] then
+					if (addon.questsDB[id].faction or addon.faction) == addon.faction and not addon.quests[id].completed and not scheduled.TURNIN[id] then
 						element.available = false
 						if not addon.contains(step.missingPrequests, id) then
 							table.insert(step.missingPrequests, id)
@@ -921,6 +941,26 @@ local function updateFirstActiveIndex()
 	return oldFirstActiveIndex ~= addon.currentGuide.firstActiveIndex
 end
 
+local function getQuestActiveObjectives(id, objective)
+	local objectiveList = addon.getQuestObjectives(id)
+	if objectiveList == nil then return {} end
+	local objectives
+	if objective == nil then
+		objectives = {}; for i = 1, #objectiveList do objectives[i] = i end
+	else
+		objectives = {objective}
+	end
+	local active = {}
+	for _, i in ipairs(objectives) do
+		local o
+		if addon.quests[id] ~= nil and addon.quests[id].logIndex ~= nil and addon.quests[id].objectives ~= nil then	o = addon.quests[id].objectives[i] end
+		if o == nil or (not o.done and o.desc ~= nil and o.desc ~= "") then
+			table.insert(active, i)
+		end
+	end
+	return active
+end
+
 function addon.updateStepsMapIcons()
 	if addon.isEditorShowing() or addon.currentGuide == nil then return end
 	addon.removeMapIcons()
@@ -930,7 +970,7 @@ function addon.updateStepsMapIcons()
 		if not step.skip and not step.completed and step.available then
 			for _, element in ipairs(step.elements) do
 				if element.t == "GOTO" and step.active and not element.completed then
-					if element.specialLocation == "NEAREST_FLIGHT_POINT" then
+					if element.specialLocation == "NEAREST_FLIGHT_POINT" and addon.x ~= nil and addon.y ~= nil then
 						element.wx, element.wy, element.instance = addon.getNearestFlightPoint(addon.x, addon.y, addon.instance, addon.faction)
 					end
 					if element.wx ~= nil then
@@ -944,7 +984,15 @@ function addon.updateStepsMapIcons()
 						end
 					end
 				elseif (element.t == "LOC" or element.t == "GOTO") and not element.completed and element.specialLocation == nil then
-					addon.addMapIcon(element, false)
+					local found = true
+					if element.objectives ~= nil and element.attached ~= nil and element.attached.questId ~= nil then
+						local objectives = getQuestActiveObjectives(element.attached.questId, element.attached.objective)
+						found = false
+						for _, o in ipairs(element.objectives) do
+							if addon.contains(objectives, o) then found = true; break; end
+						end
+					end
+					if found then addon.addMapIcon(element, false) end
 				end
 			end
 		end

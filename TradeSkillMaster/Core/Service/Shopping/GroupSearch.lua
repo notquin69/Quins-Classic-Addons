@@ -95,13 +95,11 @@ function private.ScanThread(auctionScan, groupList)
 	return true
 end
 
-function private.ScanFilter(row)
-	local itemBuyout = row:GetField("itemBuyout")
+function private.ScanFilter(itemString, itemBuyout, stackSize)
 	if itemBuyout == 0 then
 		return true
 	end
 
-	local itemString = row:GetField("itemString")
 	local groupPath = TSM.Groups.GetPathByItem(itemString)
 	if not groupPath or not private.groups[groupPath] then
 		return true
@@ -112,7 +110,7 @@ function private.ScanFilter(row)
 		return true
 	end
 
-	if operation.evenStacks and row:GetField("stackSize") % 5 ~= 0 then
+	if operation.evenStacks and stackSize % 5 ~= 0 then
 		return true
 	end
 

@@ -114,15 +114,18 @@ function CachedTooltip.AddItemValueLine(self, label, value)
 	self:AddLine(label, self:FormatMoney(value))
 end
 
-function CachedTooltip.AddSubItemValueLine(self, itemString, value, multiplier)
+function CachedTooltip.AddSubItemValueLine(self, itemString, value, multiplier, matRate, minAmount, maxAmount)
 	local name = TSMAPI_FOUR.Item.GetName(itemString)
 	local quality = TSMAPI_FOUR.Item.GetQuality(itemString)
 	if not name or not quality then
 		return
 	end
-	multiplier = TSMAPI_FOUR.Util.Round(multiplier * self._quantity, 0.01)
+	multiplier = TSMAPI_FOUR.Util.Round(multiplier * self._quantity, 0.001)
+	matRate = matRate and matRate * 100
+	matRate = matRate and matRate.."% " or ""
+	local range = (minAmount and maxAmount) and (minAmount ~= maxAmount and "|cffffff00 ["..minAmount.."-"..maxAmount.."]|r" or "|cffffff00 ["..minAmount.."]|r") or ""
 	value = value * multiplier
-	self:AddLine("|c"..select(4, GetItemQualityColor(quality))..name.." x"..multiplier.."|r", self:FormatMoney(value))
+	self:AddLine("|c"..select(4, GetItemQualityColor(quality))..matRate..name.." x"..multiplier.."|r"..range, self:FormatMoney(value))
 end
 
 function CachedTooltip.StartSection(self)

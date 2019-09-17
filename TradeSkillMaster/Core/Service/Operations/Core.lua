@@ -239,6 +239,8 @@ function Operations.SanitizeSettings(moduleName, operationName, operationSetting
 				TSM:LOG_ERR("Resetting operation setting %s,%s,%s (%s)", moduleName, operationName, tostring(key), tostring(value))
 				operationSettings[key] = operationInfo[key].type == "table" and CopyTable(operationInfo[key].default) or operationInfo[key].default
 			end
+		elseif operationInfo[key].customSanitizeFunction then
+			operationSettings[key] = operationInfo[key].customSanitizeFunction(value)
 		end
 	end
 	for key in pairs(operationInfo) do

@@ -43,13 +43,11 @@ function private.ScanThread(auctionScan)
 	return true
 end
 
-function private.ScanFilter(row)
-	local itemDisplayedBid = row:GetField("itemDisplayedBid")
+function private.ScanFilter(itemString, _, _, itemDisplayedBid)
 	if itemDisplayedBid == 0 then
 		return true
 	end
 
-	local itemString = row:GetField("itemString")
 	local _, operationSettings = TSM.Operations.GetFirstOperationByItem("Sniper", itemString)
 	if not operationSettings then
 		return true

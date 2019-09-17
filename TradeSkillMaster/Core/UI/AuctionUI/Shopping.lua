@@ -28,7 +28,7 @@ local private = {
 	itemString = nil,
 	postQuantity = nil,
 	postStack = nil,
-	postTime = L["24 hr"],
+	postTimeStr = nil,
 	perItem = true,
 	updateCallbacks = {},
 }
@@ -45,6 +45,11 @@ local DEFAULT_TAB_GROUP_CONTEXT = {
 	pathIndex = 1
 }
 local PLAYER_NAME = UnitName("player")
+local POST_TIME_STRS = {
+	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["2 hr"] or L["12 hr"],
+	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["8 hr"] or L["24 hr"],
+	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["12 hr"] or L["48 hr"],
+}
 local function NoOp()
 	-- do nothing - what did you expect?
 end
@@ -58,6 +63,7 @@ private.dividedContainerContext = {}
 -- ============================================================================
 
 function Shopping.OnInitialize()
+	private.postTimeStr = POST_TIME_STRS[2]
 	TSM.UI.AuctionUI.RegisterTopLevelPage(L["Shopping"], "iconPack.24x24/Shopping", private.GetShoppingFrame, private.OnItemLinked)
 	private.FSMCreate()
 end
@@ -674,7 +680,7 @@ function private.BuyoutConfirmationShow(context, isBuy)
 	end
 
 	local record = context.scanFrame:GetElement("auctions"):GetSelectedRecord()
-	local buyout = isBuy and record:GetField("buyout") or record:GetField("requiredBid")
+	local buyout = isBuy and record:GetField("buyout") or TSM.Auction.Util.GetRequiredBidByScanResultRow(record)
 	local stackSize = record:GetField("stackSize")
 	local itemString = record:GetField("itemString")
 
@@ -982,10 +988,10 @@ function private.GetPostingFrame()
 				:SetStyle("textColor", "#e2e2e2")
 				:SetStyle("selectedBackground", "#e2e2e2")
 				:SetStyle("fontHeight", 12)
-				:AddOption(L["12 hr"])
-				:AddOption(L["24 hr"])
-				:AddOption(L["48 hr"])
-				:SetOption(private.postTime, true)
+				:AddOption(POST_TIME_STRS[1])
+				:AddOption(POST_TIME_STRS[2])
+				:AddOption(POST_TIME_STRS[3])
+				:SetOption(private.postTimeStr, true)
 				:SetScript("OnValueChanged", private.DurationOnValueChanged)
 			)
 		)
@@ -1729,17 +1735,8 @@ function private.UpdateDepositCost(frame)
 		return
 	end
 
-	local postTime = frame:GetElement("duration.toggle"):GetValue()
-	private.postTime = postTime
-	if postTime == L["12 hr"] then
-		postTime = 1
-	elseif postTime == L["24 hr"] then
-		postTime = 2
-	elseif postTime == L["48 hr"] then
-		postTime = 3
-	else
-		error("Invalid post time")
-	end
+	private.postTimeStr = frame:GetElement("duration.toggle"):GetValue()
+	local postTime = TSMAPI_FOUR.Util.GetDistinctTableKey(POST_TIME_STRS, private.postTimeStr)
 
 	local bid = TSM.Money.FromString(frame:GetElement("bid.text"):GetText())
 	local buyout = TSM.Money.FromString(frame:GetElement("buyout.text"):GetText())
@@ -1774,16 +1771,6 @@ function private.PostButtonOnClick(button)
 		bid = bid * stackSize
 		buyout = buyout * stackSize
 	end
-	local postTime = frame:GetElement("duration.toggle"):GetValue()
-	if postTime == L["12 hr"] then
-		postTime = 1
-	elseif postTime == L["24 hr"] then
-		postTime = 2
-	elseif postTime == L["48 hr"] then
-		postTime = 3
-	else
-		error("Invalid post time")
-	end
 
 	local postBag, postSlot = nil, nil
 	for _, bag, slot, itemString in TSMAPI_FOUR.Inventory.BagIterator(false, false, false, true) do
@@ -1798,6 +1785,7 @@ function private.PostButtonOnClick(button)
 			num = 1
 		end
 		-- need to set the duration in the default UI to avoid Blizzard errors
+		local postTime = TSMAPI_FOUR.Util.GetDistinctTableKey(POST_TIME_STRS, frame:GetElement("duration.toggle"):GetValue())
 		AuctionFrameAuctions.duration = postTime
 		ClearCursor()
 		PickupContainerItem(postBag, postSlot)
@@ -2234,7 +2222,8 @@ function private.FSMCreate()
 				context.progress = context.numConfirmed / context.numFound
 				context.progressText = progressText
 				context.postDisabled = private.GetBagQuantity(selection:GetField("itemString")) == 0
-				context.bidDisabled = selection:GetField("displayedBid") == selection:GetField("buyout") or numCanBuy == 0 or GetMoney() < selection:GetField("requiredBid") or TSMAPI_FOUR.PlayerInfo.IsPlayer(selection.seller, true, true, true) or selection:GetField("isHighBidder")
+				local requiredBid = TSM.Auction.Util.GetRequiredBidByScanResultRow(selection)
+				context.bidDisabled = selection:GetField("displayedBid") == selection:GetField("buyout") or numCanBuy == 0 or GetMoney() < requiredBid or TSMAPI_FOUR.PlayerInfo.IsPlayer(selection.seller, true, true, true) or selection:GetField("isHighBidder")
 				context.buyoutDisabled = selection:GetField("buyout") == 0 or numCanBuy == 0 or GetMoney() < selection:GetField("buyout") or TSMAPI_FOUR.PlayerInfo.IsPlayer(selection.seller, true, true, true)
 				UpdateScanFrame(context)
 			end)
@@ -2305,7 +2294,8 @@ function private.FSMCreate()
 			:SetOnEnter(function(context)
 				local selection = context.scanFrame:GetElement("auctions"):GetSelectedRecord()
 				local price = TSMAPI_FOUR.CustomPrice.GetValue(TSM.db.global.shoppingOptions.buyoutAlertSource, selection:GetField("itemString"))
-				if not TSM.db.global.shoppingOptions.buyoutConfirm or (price and ceil(selection:GetField("requiredBid") / selection:GetField("stackSize")) < price) then
+				local requiredBid = TSM.Auction.Util.GetRequiredBidByScanResultRow(selection)
+				if not TSM.db.global.shoppingOptions.buyoutConfirm or (price and ceil(requiredBid / selection:GetField("stackSize")) < price) then
 					return "ST_PLACING_BID"
 				else
 					private.BuyoutConfirmationShow(context, false)
@@ -2348,7 +2338,7 @@ function private.FSMCreate()
 				assert(index)
 				if context.auctionScan:ValidateIndex(index, context.findAuction) then
 					-- bid on the auction
-					PlaceAuctionBid("list", index, context.findAuction:GetField("requiredBid"))
+					PlaceAuctionBid("list", index, TSM.Auction.Util.GetRequiredBidByScanResultRow(context.findAuction))
 					context.numBid = context.numBid + 1
 				else
 					TSM:Printf(L["Failed to bid on auction of %s."], context.findAuction:GetField("rawLink"))

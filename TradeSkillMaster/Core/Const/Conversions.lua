@@ -94,7 +94,7 @@ TSM.CONST.CONVERSIONS = {
 		{"i:109128", 0.42, "mill"},
 		{"i:109129", 0.42, "mill"},
 	},
-	["i:129032"] = { -- Roseate Pigment (no legion ink)
+	["i:129032"] = { -- Roseate Pigment (No Legion Ink)
 		{"i:124101", 0.42, "mill"},
 		{"i:124102", 0.42, "mill"},
 		{"i:124103", 0.42, "mill"},
@@ -169,14 +169,14 @@ TSM.CONST.CONVERSIONS = {
 		{"i:13466", 0.1, "mill"},
 		{"i:13467", 0.1, "mill"},
 	},
-	["i:43103"] = { -- Sapphire Pigment (Ink of the Sky)
+	["i:43103"] = { -- Verdant Pigment (Hunter's Ink)
 		{"i:2453", 0.1, "mill"},
 		{"i:3820", 0.1, "mill"},
 		{"i:2450", 0.05, "mill"},
 		{"i:785", 0.05, "mill"},
 		{"i:2452", 0.05, "mill"},
 	},
-	["i:129034"] = { -- Sallow Pigment (no legion ink)
+	["i:129034"] = { -- Sallow Pigment (No Legion Ink)
 		{"i:124101", 0.04, "mill"},
 		{"i:124102", 0.04, "mill"},
 		{"i:124103", 0.05, "mill"},
@@ -213,6 +213,9 @@ TSM.CONST.CONVERSIONS = {
 		{"i:152509", 0.825, "mill"},
 		{"i:152511", 0.825, "mill"},
 		{"i:152510", 0.825, "mill"},
+	},
+	["i:168662"] = { -- Maroon Pigment
+		{"i:152505", 0.825, "mill"},
 	},
 	-- ======================================== Vanilla Gems =======================================
 	["i:774"] = { -- Malachite
@@ -421,7 +424,7 @@ TSM.CONST.CONVERSIONS = {
 		{"i:152512", 0.055, "prospect"},
 		{"i:152513", 0.065, "prospect"},
 	},
-	["i:153701"] = { -- Rubellite- - BFA
+	["i:153701"] = { -- Rubellite - BFA
 		{"i:152579", 0.06, "prospect"},
 		{"i:152512", 0.055, "prospect"},
 		{"i:152513", 0.065, "prospect"},
@@ -640,23 +643,49 @@ TSM.CONST.CONVERSIONS = {
 	["i:151721"] = { -- Hesselian
 		{"i:151564", 0.0040, "prospect"},
 	},
-	["i:153706"] = { -- Kraken's Eye -  BFA
+	["i:153706"] = { -- Kraken's Eye - BFA
 		{"i:152579", 0.0065, "prospect"},
 		{"i:152512", 0.006, "prospect"},
 		{"i:152513", 0.0081, "prospect"},
 	},
-
+	["i:168635"] = { -- Leviathan's Eye - BFA
+		{"i:168185", 0.032, "prospect"},
+	},
+	["i:168188"] = { -- Sage Agate - BFA
+		{"i:168185", 0.012, "prospect"},
+	},
+	["i:168193"] = { -- Azsharine - BFA
+		{"i:168185", 0.012, "prospect"},
+	},
+	["i:168189"] = { -- Dark Opal - BFA
+		{"i:168185", 0.04, "prospect"},
+	},
+	["i:168190"] = { -- Lava Lazuli - BFA
+		{"i:168185", 0.044, "prospect"},
+	},
+	["i:168191"] = { -- Sea Currant - BFA
+		{"i:168185", 0.044, "prospect"},
+	},
+	["i:168192"] = { -- Sand Spinel - BFA
+		{"i:168185", 0.044, "prospect"},
+	},
 	-- =========================================== Essences ========================================
-	["i:52719"] = {{"i:52718", 1/3, "transform"}}, -- Celestial Essence
-	["i:52718"] = {{"i:52719", 3, "transform"}}, -- Celestial Essence
-	["i:34055"] = {{"i:34056", 1/3, "transform"}}, -- Cosmic Essence
-	["i:34056"] = {{"i:34055", 3, "transform"}}, -- Cosmic Essence
-	["i:22446"] = {{"i:22447", 1/3, "transform"}}, -- Planar Essence
-	["i:22447"] = {{"i:22446", 3, "transform"}}, -- Planar Essence
-	["i:16203"] = {{"i:16202", 1/3, "transform"}}, -- Eternal Essence
-	["i:16202"] = {{"i:16203", 3, "transform"}}, -- Eternal Essence
-	["i:10939"] = {{"i:10938", 1/3, "transform"}}, -- Magic Essence
-	["i:10938"] = {{"i:10939", 3, "transform"}}, -- Magic Essence
+	["i:52719"] = {{"i:52718", 1/3, "transform"}}, -- Greater Celestial Essence
+	["i:52718"] = {{"i:52719", 3, "transform"}}, -- Lesser Celestial Essence
+	["i:34055"] = {{"i:34056", 1/3, "transform"}}, -- Greater Cosmic Essence
+	["i:34056"] = {{"i:34055", 3, "transform"}}, -- Lesser Cosmic Essence
+	["i:22446"] = {{"i:22447", 1/3, "transform"}}, -- Greater Planar Essence
+	["i:22447"] = {{"i:22446", 3, "transform"}}, -- Lesser Planar Essence
+	["i:16203"] = {{"i:16202", 1/3, "transform"}}, -- Greater Eternal Essence
+	["i:16202"] = {{"i:16203", 3, "transform"}}, -- Lesser Eternal Essence
+	["i:11175"] = {{"i:11174", 1/3, "transform"}}, -- Greater Nether Essence
+	["i:11174"] = {{"i:11175", 3, "transform"}}, -- Lesser Nether Essence
+	["i:11135"] = {{"i:11134", 1/3, "transform"}}, -- Greater Mystic Essence
+	["i:11134"] = {{"i:11135", 3, "transform"}}, -- Lesser Mystic Essence
+	["i:11082"] = {{"i:10998", 1/3, "transform"}}, -- Greater Astral Essence
+	["i:10998"] = {{"i:11082", 3, "transform"}}, -- Lesser Astral Essence
+	["i:10939"] = {{"i:10938", 1/3, "transform"}}, -- Greater Magic Essence
+	["i:10938"] = {{"i:10939", 3, "transform"}}, -- Lesser Magic Essence
 	-- ============================================ Shards =========================================
 	["i:52721"] = {{"i:52720", 1/3, "transform"}}, -- Heavenly Shard
 	["i:34052"] = {{"i:34053", 1/3, "transform"}}, -- Dream Shard
@@ -726,7 +755,6 @@ TSM.CONST.CONVERSIONS = {
 		{"i:111663", 2, "transform"}, -- Blackwater Whiptail
 		{"i:111662", 1, "transform"}, -- Small Blackwater Whiptail
 	},
-
 	-- ========================================== Aromatic Fish Oil (BFA) ===========================
 	["i:160711"] = {
 		{"i:152545", 1, "transform"}, -- Frenzied Fangtooth

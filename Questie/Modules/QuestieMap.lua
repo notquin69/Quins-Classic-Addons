@@ -120,7 +120,11 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
 
 
         icon.texture:SetTexture(data.Icon) -- todo: implement .GlowIcon
-        icon.texture:SetVertexColor(1, 1, 1, 1);
+        local colors = {1, 1, 1}
+        if data.IconColor ~= nil and Questie.db.global.questObjectiveColors then
+            colors = data.IconColor
+        end
+        icon.texture:SetVertexColor(colors[1], colors[2], colors[3], 1);
         -- because of how frames work, I cant seem to set the glow as being behind the note. So for now things are draw in reverse.
         if data.IconScale then
             local scale = 16 * (data:GetIconScale()*(Questie.db.global.globalScale or 0.7));
@@ -156,18 +160,43 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
                         local NormalizedValue = 1 / (Questie.db.global.fadeLevel or 1.5);
 
                         if(distance > 0.6) then
-                            self.texture:SetVertexColor(1, 1, 1, (1 - NormalizedValue * distance) + 0.5)
-                            if self.glowTexture and self.glowTexture.GetVertexColor then
-                                local r,g,b = self.glowTexture:GetVertexColor()
-                                self.glowTexture:SetVertexColor(r,g,b,(1 - NormalizedValue * distance) + 0.5)
-                            end
-                        elseif (distance < Questie.db.global.fadeOverPlayerDistance) and Questie.db.global.fadeOverPlayer then
-                            local fadeAmount = QuestieFramePool:remap(distance, 0, Questie.db.global.fadeOverPlayerDistance, Questie.db.global.fadeOverPlayerLevel, 1);
-                           -- local fadeAmount = math.max(fadeAmount, 0.5);
+                            local fadeAmount = (1 - NormalizedValue * distance) + 0.5
+                            if self.faded and fadeAmount > Questie.db.global.iconFadeLevel then fadeAmount = Questie.db.global.iconFadeLevel end
                             self.texture:SetVertexColor(1, 1, 1, fadeAmount)
                             if self.glowTexture and self.glowTexture.GetVertexColor then
                                 local r,g,b = self.glowTexture:GetVertexColor()
                                 self.glowTexture:SetVertexColor(r,g,b,fadeAmount)
+                            end
+                        elseif (distance < Questie.db.global.fadeOverPlayerDistance) and Questie.db.global.fadeOverPlayer then
+                            local fadeAmount = QuestieFramePool:remap(distance, 0, Questie.db.global.fadeOverPlayerDistance, Questie.db.global.fadeOverPlayerLevel, 1);
+                           -- local fadeAmount = math.max(fadeAmount, 0.5);
+                            if self.faded and fadeAmount > Questie.db.global.iconFadeLevel then fadeAmount = Questie.db.global.iconFadeLevel end
+                            self.texture:SetVertexColor(1, 1, 1, fadeAmount)
+                            if self.glowTexture and self.glowTexture.GetVertexColor then
+                                local r,g,b = self.glowTexture:GetVertexColor()
+                                self.glowTexture:SetVertexColor(r,g,b,fadeAmount)
+                            end
+                        else
+                            if self.faded then
+                                self.texture:SetVertexColor(1, 1, 1, Questie.db.global.iconFadeLevel)
+                                if self.glowTexture and self.glowTexture.GetVertexColor then
+                                    local r,g,b = self.glowTexture:GetVertexColor()
+                                    self.glowTexture:SetVertexColor(r,g,b,Questie.db.global.iconFadeLevel)
+                                end
+                            else
+                                self.texture:SetVertexColor(1, 1, 1, 1)
+                                if self.glowTexture and self.glowTexture.GetVertexColor then
+                                    local r,g,b = self.glowTexture:GetVertexColor()
+                                    self.glowTexture:SetVertexColor(r,g,b,1)
+                                end
+                            end
+                        end
+                    else
+                        if self.faded then
+                            self.texture:SetVertexColor(1, 1, 1, Questie.db.global.iconFadeLevel)
+                            if self.glowTexture and self.glowTexture.GetVertexColor then
+                                local r,g,b = self.glowTexture:GetVertexColor()
+                                self.glowTexture:SetVertexColor(r,g,b,Questie.db.global.iconFadeLevel)
                             end
                         else
                             self.texture:SetVertexColor(1, 1, 1, 1)
@@ -175,12 +204,6 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
                                 local r,g,b = self.glowTexture:GetVertexColor()
                                 self.glowTexture:SetVertexColor(r,g,b,1)
                             end
-                        end
-                    else
-                        self.texture:SetVertexColor(1, 1, 1, 1)
-                        if self.glowTexture and self.glowTexture.GetVertexColor then
-                            local r,g,b = self.glowTexture:GetVertexColor()
-                            self.glowTexture:SetVertexColor(r,g,b,1)
                         end
                     end
                 end
@@ -216,11 +239,10 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
                  or ((not Questie.db.global.enableTurnins) and icon.data.Type == "complete")
                  or ((not Questie.db.global.enableAvailable) and icon.data.Type == "available"))
                  or ((not Questie.db.global.enableMapIcons) and (not icon.miniMapIcon))
-                 or ((not Questie.db.global.enableMiniMapIcons) and (icon.miniMapIcon))) then
+                 or ((not Questie.db.global.enableMiniMapIcons) and (icon.miniMapIcon))) or (icon.data.ObjectiveData and icon.data.ObjectiveData.HideIcons) or (icon.data.QuestData and icon.data.QuestData.HideIcons and icon.data.Type ~= "complete") then
             icon:FakeHide()
             iconMinimap:FakeHide()
         end
-        
         
         return icon, iconMinimap;
     end

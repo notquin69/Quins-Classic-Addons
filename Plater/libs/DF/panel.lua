@@ -6931,7 +6931,9 @@ DF.HealthFrameFunctions = {
 	UpdateHealth = function (self)
 		local health = 0
 		if RealMobHealth then
-			health = RealMobHealth.GetUnitHealth(self.displayedUnit)
+			health, maxHealth = RealMobHealth.GetUnitHealth(self.displayedUnit)
+			self:SetMinMaxValues (0, maxHealth)
+			self.currentHealthMax = maxHealth
 		else
 			health = UnitHealth (self.displayedUnit)
 		end

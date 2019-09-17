@@ -9,6 +9,3 @@ main.lua
 progressBar.lua
 xpBar.lua
 reputationBar.lua
-artifactBar.lua
-azeriteBar.lua
-honorBar.lua

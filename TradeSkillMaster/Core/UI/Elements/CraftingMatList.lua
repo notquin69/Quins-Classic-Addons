@@ -104,7 +104,10 @@ function CraftingMatList._DrawRow(self, row, dataIndex)
 	local index = row:GetContext()
 	local itemLink, _, texture, quantity = TSM.Crafting.ProfessionUtil.GetMatInfo(self._spellId, index)
 	local itemString = TSMAPI_FOUR.Item.ToItemString(itemLink)
-	local bagQuantity = TSMAPI_FOUR.Inventory.GetBagQuantity(itemString) + TSMAPI_FOUR.Inventory.GetReagentBankQuantity(itemString) + TSMAPI_FOUR.Inventory.GetBankQuantity(itemString)
+	local bagQuantity = TSMAPI_FOUR.Inventory.GetBagQuantity(itemString)
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+		bagQuantity = bagQuantity + TSMAPI_FOUR.Inventory.GetReagentBankQuantity(itemString) + TSMAPI_FOUR.Inventory.GetBankQuantity(itemString)
+	end
 	local color = bagQuantity >= quantity and "|cff2cec0d" or "|cfff21319"
 	row:GetElement("qty"):SetText(format("%s%s / %d|r", color, bagQuantity > 999 and "*" or bagQuantity, quantity))
 	row:GetElement("icon"):SetStyle("texture", texture)

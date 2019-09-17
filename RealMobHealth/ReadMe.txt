@@ -17,6 +17,11 @@ Clears all recorded health data.
 
 ===============================================================================
 Versions:
+2.11	(2019-09-15)
+	-Localization.lua now uncludes Unicode BOM for easier UTF-8 editing
+	-Revised deDE localization (courtesy of Dathwada)
+	-Added esES localization (courtesy of Lynk_One)
+
 2.10	(2019-09-11)
 	-Added koKR localization (courtesy of chkid)
 

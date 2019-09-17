@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
--- 	Leatrix Plus 1.13.29 (11th September 2019)
+-- 	Leatrix Plus 1.13.30 (13th September 2019)
 ----------------------------------------------------------------------
 
 --	01:Functions	20:Live			50:RunOnce		70:Logout			
@@ -20,7 +20,7 @@
 	local void
 
 --	Version
-	LeaPlusLC["AddonVer"] = "1.13.29"
+	LeaPlusLC["AddonVer"] = "1.13.30"
 	LeaPlusLC["RestartReq"] = nil
 
 --	If client restart is required and has not been done, show warning and quit
@@ -408,7 +408,6 @@
 		or	(LeaPlusLC["FasterMovieSkip"]		~= LeaPlusDB["FasterMovieSkip"])		-- Faster movie skip
 		or	(LeaPlusLC["StandAndDismount"]		~= LeaPlusDB["StandAndDismount"])		-- Stand and dismount
 		or	(LeaPlusLC["ShowVendorPrice"]		~= LeaPlusDB["ShowVendorPrice"])		-- Show vendor price
-		or	(LeaPlusLC["MakeShamanBlue"]		~= LeaPlusDB["MakeShamanBlue"])			-- Make shaman blue
 
 		-- Settings
 		or	(LeaPlusLC["EnableHotkey"]			~= LeaPlusDB["EnableHotkey"])			-- Enable hotkey
@@ -516,17 +515,6 @@
 ----------------------------------------------------------------------
 
 	function LeaPlusLC:Isolated()
-
-		----------------------------------------------------------------------
-		--	Make shaman blue
-		----------------------------------------------------------------------
-
-		if LeaPlusLC["MakeShamanBlue"] == "On" then
-			RAID_CLASS_COLORS["SHAMAN"].colorStr = "ff0270dd"
-			RAID_CLASS_COLORS["SHAMAN"].r = 0.01
-			RAID_CLASS_COLORS["SHAMAN"].g = 0.44
-			RAID_CLASS_COLORS["SHAMAN"].b = 0.87
-		end
 
 		----------------------------------------------------------------------
 		-- Faster movie skip
@@ -2141,24 +2129,31 @@
 
 		if LeaPlusLC["ShowVendorPrice"] == "On" then
 
-			-- Function to add vendor price to tooltips
-			local function ShowVendorPrice(tooltip)
-				-- Do nothing if money frame is already showing
+			-- Function to show vendor price
+			local function ShowSellPrice(tooltip, tooltipObject)
 				if tooltip.shownMoneyFrames then return end
-				-- Get item sell price
-				local void, link = tooltip:GetItem()
-				if not link then return end
-				local void, void, void, void, void, void, void, void, void, void, itemSellPrice = GetItemInfo(link)
-				if not itemSellPrice or itemSellPrice <= 0 then return end
+				tooltipObject = tooltipObject or GameTooltip
+				-- Get container
 				local container = GetMouseFocus()
 				if not container then return end
-				-- Show sell price in tooltip
-				SetTooltipMoney(tooltip, itemSellPrice, "STATIC", L["Sell Price (Per Unit)"] .. ":")
+				-- Get item
+				local itemName, itemlink = tooltipObject:GetItem()
+				if not itemlink then return end
+				local void, void, void, void, void, void, void, void, void, void, sellPrice = GetItemInfo(itemlink)
+				if sellPrice and sellPrice > 0 then
+					local count = container and type(container.count) == "number" and container.count or 1
+					if sellPrice then
+						SetTooltipMoney(tooltip, sellPrice * count, "STATIC", SELL_PRICE .. ":")
+					end
+				end
+				-- Refresh chat tooltips
+				if tooltipObject == ItemRefTooltip then ItemRefTooltip:Show() end
 			end
 
-			-- Run function for regular tooltips and chat link tooltips
-			GameTooltip:HookScript("OnTooltipSetItem", ShowVendorPrice)
-			ItemRefTooltip:HookScript("OnTooltipSetItem", ShowVendorPrice)
+			-- Show vendor price when tooltips are shown
+			GameTooltip:HookScript("OnTooltipSetItem", ShowSellPrice)
+			hooksecurefunc(GameTooltip, "SetHyperlink", function(tip) ShowSellPrice(tip, GameTooltip) end)
+			hooksecurefunc(ItemRefTooltip, "SetHyperlink", function(tip) ShowSellPrice(tip, ItemRefTooltip) end)
 
 		end
 
@@ -5666,7 +5661,6 @@
 				LeaPlusLC:LoadVarChk("FasterMovieSkip", "Off")				-- Faster movie skip
 				LeaPlusLC:LoadVarChk("StandAndDismount", "Off")				-- Stand and dismount
 				LeaPlusLC:LoadVarChk("ShowVendorPrice", "Off")				-- Show vendor price
-				LeaPlusLC:LoadVarChk("MakeShamanBlue", "Off")				-- Make shaman blue
 
 				-- Settings
 				LeaPlusLC:LoadVarChk("ShowMinimapIcon", "On")				-- Show minimap button
@@ -5820,7 +5814,6 @@
 			LeaPlusDB["FasterMovieSkip"] 		= LeaPlusLC["FasterMovieSkip"]
 			LeaPlusDB["StandAndDismount"] 		= LeaPlusLC["StandAndDismount"]
 			LeaPlusDB["ShowVendorPrice"] 		= LeaPlusLC["ShowVendorPrice"]
-			LeaPlusDB["MakeShamanBlue"] 		= LeaPlusLC["MakeShamanBlue"]
 
 			-- Settings
 			LeaPlusDB["ShowMinimapIcon"] 		= LeaPlusLC["ShowMinimapIcon"]
@@ -7131,7 +7124,6 @@
 				LeaPlusDB["FasterMovieSkip"] = "On"				-- Faster movie skip
 				LeaPlusDB["StandAndDismount"] = "On"			-- Stand and dismount
 				LeaPlusDB["ShowVendorPrice"] = "On"				-- Show vendor price
-				LeaPlusDB["MakeShamanBlue"] = "On"				-- Make shaman blue
 
 				-- Settings
 				LeaPlusDB["EnableHotkey"] = "On"				-- Enable hotkey
@@ -7452,8 +7444,7 @@
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "FasterLooting"				, 	"Faster auto loot"				,	340, -152, 	true,	"If checked, the amount of time it takes to auto loot creatures will be significantly reduced.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "FasterMovieSkip"			, 	"Faster movie skip"				,	340, -172, 	true,	"If checked, you will be able to cancel cinematics without being prompted for confirmation.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "StandAndDismount"			, 	"Stand and dismount"			,	340, -192, 	true,	"If checked, your character will automatically stand or dismount when an action is prevented because you are either seated or mounted.")
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVendorPrice"			, 	"Show vendor price"				,	340, -212, 	true,	"If checked, the per unit vendor price will be shown in item tooltips.")
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "MakeShamanBlue"			, 	"Make shaman blue"				,	340, -232, 	true,	"If checked, the shaman class color will be changed from pink to blue.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVendorPrice"			, 	"Show vendor price"				,	340, -212, 	true,	"If checked, the vendor price will be shown in item tooltips.")
 
 	LeaPlusLC:CfgBtn("ModViewportBtn", LeaPlusCB["ViewPortEnable"])
 

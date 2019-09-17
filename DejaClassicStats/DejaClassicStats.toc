@@ -1,5 +1,5 @@
 ## Interface: 11302
-## Version: 1302r022
+## Version: 1302r024
 ## Title: |cff00c0ffDejaClassicStats|r
 ## Author: Dejablue, Kakjens, loudsoul
 ## Notes: Dejablue's improved character stats panel view.
@@ -24,3 +24,4 @@ Localization\localization.zhTW.lua
 DejaClassicStats.lua
 DCSDuraRepair.lua
 DCSExpand.lua
+DCSAbout.lua
