@@ -1,0 +1,12 @@
+## Interface: 11302
+## Title: PallyPower
+## Author: Aznamir
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: PP_PerUser,PallyPower_Assignments
+
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libs\LibClassicDurations\LibClassicDurations.xml
+
+PallyPower.xml

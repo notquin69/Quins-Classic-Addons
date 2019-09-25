@@ -1,0 +1,8 @@
+<Bindings>
+    <Binding name="PALLYPOWER_TOGGLE" header="PALLYPOWER" CATEGORY="ADDONS">
+                PallyPower_BarToggle();
+    </Binding>
+    <Binding name="PALLYPOWER_REPORT" CATEGORY="ADDONS">
+                PallyPower_Report();
+    </Binding>
+</Bindings>
