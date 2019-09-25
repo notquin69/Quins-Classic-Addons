@@ -524,6 +524,16 @@ function private.ScanAuctionPageThreaded(auctionScan, filter)
 			end
 		end
 
+		if filter:_IsGetAll() then
+			-- update the "page"
+			local prevPage = filter:_GetPage()
+			local currentPage = floor(index / NUM_AUCTION_ITEMS_PER_PAGE)
+			if currentPage ~= prevPage then
+				filter:_SetPage(currentPage)
+				auctionScan:_SetPageProgress(filter:_GetPageProgress())
+			end
+		end
+
 		if index > numAuctions then
 			return true, numInsertedRows
 		elseif GetTime() > startTime + 300 then
@@ -533,7 +543,7 @@ function private.ScanAuctionPageThreaded(auctionScan, filter)
 			TSM:LOG_ERR("Timed out on index (%d)", index)
 			return false
 		end
-		TSMAPI_FOUR.Thread.Yield(true)
+		TSMAPI_FOUR.Thread.Sleep(0.01)
 		if auctionScan:_IsCancelled() then
 			TSM:LOG_INFO("Stopping canelled scan")
 			return false

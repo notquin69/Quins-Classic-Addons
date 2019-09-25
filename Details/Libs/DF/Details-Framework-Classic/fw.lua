@@ -1,5 +1,5 @@
 
-local dversion = 205
+local dversion = 207
 local major, minor = "DetailsFramework-1.0", dversion
 local DF, oldminor = LibStub:NewLibrary (major, minor)
 
@@ -2677,17 +2677,17 @@ function DF_CALC_PERFORMANCE()
 end
 
 DF.ClassFileNameToIndex = {
-	["DEATHKNIGHT"] = 6,
+	--["DEATHKNIGHT"] = 6,
 	["WARRIOR"] = 1,
 	["ROGUE"] = 4,
 	["MAGE"] = 8,
 	["PRIEST"] = 5,
 	["HUNTER"] = 3,
 	["WARLOCK"] = 9,
-	["DEMONHUNTER"] = 12,
+	--["DEMONHUNTER"] = 12,
 	["SHAMAN"] = 7,
 	["DRUID"] = 11,
-	["MONK"] = 10,
+	--["MONK"] = 10,
 	["PALADIN"] = 2,
 }
 DF.ClassCache = {}
@@ -2725,12 +2725,13 @@ DF.RaceList = {
 	[7] = "Gnome",
 	[8] = "Troll",
 	[9] = "Goblin",
-	[10] = "BloodElf",
-	[11] = "Draenei",
-	[22] = "Worgen",
-	[24] = "Pandaren",
+	--[10] = "BloodElf",
+	--[11] = "Draenei",
+	--[22] = "Worgen",
+	--[24] = "Pandaren",
 }
 
+--[[
 DF.AlliedRaceList = {
 	[27] = "Nightborne",
 	[29] = "HighmountainTauren",
@@ -2742,6 +2743,7 @@ DF.AlliedRaceList = {
 	[40] = "Vulpera",
 	[41] = "MagharOrc",
 }
+--]]
 
 --> store and return a list of character races, always return the non-localized value
 DF.RaceCache = {}
@@ -2755,11 +2757,12 @@ function DF:GetCharacterRaceList (fullList)
 		if (raceInfo and DF.RaceList [raceInfo.raceID]) then
 			tinsert (DF.RaceCache, {Name = raceInfo.raceName, FileString = raceInfo.clientFileString})
 		end
-		
+		--[[
 		local alliedRaceInfo = C_AlliedRaces.GetRaceInfoByID (i)
 		if (alliedRaceInfo and DF.AlliedRaceList [alliedRaceInfo.raceID]) then
 			tinsert (DF.RaceCache, {Name = alliedRaceInfo.name, FileString = alliedRaceInfo.raceFileString})
 		end
+		--]]
 	end
 	
 	return DF.RaceCache
@@ -2771,6 +2774,7 @@ end
 function DF:GetCharacterTalents (onlySelected, onlySelectedHash)
 	local talentList = {}
 	
+	--[[
 	for i = 1, 7 do
 		for o = 1, 3 do
 			local talentID, name, texture, selected, available = GetTalentInfo (i, o, 1)
@@ -2789,11 +2793,14 @@ function DF:GetCharacterTalents (onlySelected, onlySelectedHash)
 			end
 		end
 	end
+	--]]
 	
 	return talentList
 end
 
 function DF:GetCharacterPvPTalents (onlySelected, onlySelectedHash)
+	--todo classic: get talent infos...
+	--[[
 	if (onlySelected or onlySelectedHash) then
 		local talentsSelected = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
 		local talentList = {}
@@ -2824,6 +2831,8 @@ function DF:GetCharacterPvPTalents (onlySelected, onlySelectedHash)
 		end
 		return talentList
 	end
+	--]]
+	return {}
 end
 
 DF.GroupTypes = {
@@ -2844,7 +2853,9 @@ DF.RoleTypes = {
 	{Name = _G.TANK, ID = "TANK", Texture = _G.INLINE_TANK_ICON},
 }
 function DF:GetRoleTypes()
-	return DF.RoleTypes
+	--return DF.RoleTypes
+	-- classic: no roles...
+	return {}
 end
 
 DF.CLEncounterID = {

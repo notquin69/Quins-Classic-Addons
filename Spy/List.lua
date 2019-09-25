@@ -910,7 +910,7 @@ function Spy:ParseUnitDetails(player, class, level, race, zone, subZone, mapX, m
 	end
 	return true, nil
 end
-
+--[[
 function Spy:AddDetected(player, timestamp, learnt, source)
 	if Spy.db.profile.ShowOnlyPvPFlagged then
 		if UnitIsPVP("player") then
@@ -920,9 +920,10 @@ function Spy:AddDetected(player, timestamp, learnt, source)
 	else
 		Spy:AddDetectedToLists(player, timestamp, learnt, source)
 	end	
-end
+end ]]--
 
-function Spy:AddDetectedToLists(player, timestamp, learnt, source)
+--function Spy:AddDetectedToLists(player, timestamp, learnt, source)
+function Spy:AddDetected(player, timestamp, learnt, source)
 	if not Spy.NearbyList[player] then
 		if Spy.db.profile.ShowOnDetection and not Spy.db.profile.MainWindowVis then
 			Spy:SetCurrentList(1)

@@ -1,8 +1,8 @@
 ## Author: Potdisc
 ## Interface: 11302
-## Notes: RCLootCouncil for WoW Classic v0.0.2
+## Notes: RCLootCouncil for WoW Classic v0.1.1
 ## Title: RCLootCouncil Classic
-## Version: 0.0.2
+## Version: 0.1.1
 ## X-Curse-Project-ID: 332955
 ## SavedVariables: RCLootCouncilDB, RCLootCouncilLootDB
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3, lib-st, LibWindow-1.1, LibDialog-1.0
@@ -28,8 +28,8 @@ RCLootCouncil\Modules\Modules.xml
 
 RCLootCouncil\Utils\BackwardsCompat.lua
 RCLootCouncil\Utils\Utils.lua
-RCLootCouncil\Utils\trinketData.lua
-RCLootCouncil\Utils\tokenData.lua
+## RCLootCouncil\Utils\trinketData.lua
+## RCLootCouncil\Utils\tokenData.lua
 RCLootCouncil\Utils\ItemStorage.lua
 RCLootCouncil\Utils\autopass.lua
 RCLootCouncil\Utils\sync.lua

@@ -2,7 +2,7 @@
 -- L00: Leatrix Maps Library
 ----------------------------------------------------------------------
 
-	-- LibDBIcon 8.0.4
+	-- LibDBIcon 8.0.4 by funkehdude
 	-- 11: LibStub: (?s)-- LibStubStart\R?\K.*?(?=-- LibStubEnd)
 	-- 12: LibCallbackHandler: (?s)-- CallbackStart\R?\K.*?(?=-- CallbackEnd)
 	-- 13: LibDataBroker: (?s)-- DataBrokerStart\R?\K.*?(?=-- DataBrokerEnd)

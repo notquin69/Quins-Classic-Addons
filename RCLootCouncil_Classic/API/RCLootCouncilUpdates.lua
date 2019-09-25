@@ -102,13 +102,25 @@ function addon:GetPlayerInfo ()
    return self.playerName, self.playerClass, nil --[[self.Utils:GetPlayerRole()]], self.guildRank, enchant, lvl, ilvl, nil--self.playersData.specID
 end
 
-
+-- Class tags needs updated as druids are number 11 and we have 8 classes
+do
+   local info = C_CreatureInfo.GetClassInfo(11)
+   addon.classDisplayNameToID[info.className] = 11
+   addon.classTagNameToID[info.classFile] = 11
+end
 ----------------------------------------------
 -- Utils
 ----------------------------------------------
 function addon.Utils:GetPlayerRole ()
    return "" -- Unused
 end
+
+-- Free some memory by removing unneeded data
+_G.RCTokenTable = {}
+_G.RCTokenIlvl = {}
+_G.RCTokenClasses = {}
+_G.RCTrinketCategories = {}
+_G.RCTrinketSpecs = {}
 
 ----------------------------------------------
 -- Options Menu
@@ -191,5 +203,5 @@ function private.GetAverageItemLevel()
          count = count + 1
       end
    end
-   return sum / count
+   return addon.round(sum / count, 2)
 end

@@ -1,3 +1,9 @@
+* 1.2.3
+    - Fixed issue where error would sometimes occur on login
+
+* 1.2.2
+    - Fixed issue where addon would not attach to the talent ui if DejaClassicStats is enabled
+
 * 1.2.1
     - Fixed level text with a 4 or 8 sometimes getting turned into ...
 

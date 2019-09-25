@@ -4831,6 +4831,17 @@
 			Api2Frame:SetPoint ("center")
 			DetailsFramework:ApplyStandardBackdrop (Api2Frame, false, 1.2)
 			
+			--add a box telling to use spell name instead of spellid (classic wow only)
+			local classicWarningFrame = CreateFrame ("frame", nil, Api2Frame)
+			DetailsFramework:ApplyStandardBackdrop (classicWarningFrame, false, 1.2)
+			classicWarningFrame:SetPoint ("bottomleft", Api2Frame, "bottomleft", scrollWidth + 31, 1)
+			classicWarningFrame:SetPoint ("bottomright", Api2Frame, "bottomright", -0, 1)
+			classicWarningFrame:SetHeight (20)
+			local classicWarningLabel = DetailsFramework:CreateLabel (classicWarningFrame)
+			classicWarningLabel.text = "WoW Classic: use the spell name instead of spellID."
+			classicWarningLabel.color = "orange"
+			classicWarningLabel:SetPoint("left", classicWarningFrame, "left", 4, 0)
+
 			--store
 			local apiFunctionNames = {}
 			local parametersLines = {}

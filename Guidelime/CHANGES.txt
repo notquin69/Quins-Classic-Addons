@@ -1,40 +1,48 @@
-tag 0cb48a49864dacb7c9d99aacebbdddda63240ce2 v1.026
-Author:	max-ri <51713394+max-ri@users.noreply.github.com>
-Date:	Mon Sep 16 22:19:23 2019 +0200
+tag 772217bc40aaf3823d11cd6a8845f6fc0555fdef v1.029
+Author:	max-ri <max_r_@web.de>
+Date:	Tue Sep 24 17:52:20 2019 +0200
 
-v1.026
+v1.029
 
-commit 8b06265e54200614492cdcd117f30b711315bb89
-Author: max-ri <51713394+max-ri@users.noreply.github.com>
-Date:   Mon Sep 16 22:19:23 2019 +0200
-
-    v1.026
-
-commit ee7353000b4068022dd818075a76349b321b7f2d
-Author: max-ri <51713394+max-ri@users.noreply.github.com>
-Date:   Mon Sep 16 22:19:08 2019 +0200
-
-    bugfix: an error can occurs at steps for quests started by an item
-
-commit d2780f22df837e5123d59f18090e8a1ce0a364a0
+commit 423e424aea4959566da0726991db84ccab82b573
 Author: max-ri <max_r_@web.de>
-Date:   Mon Sep 16 17:30:14 2019 +0200
+Date:   Tue Sep 24 17:52:19 2019 +0200
 
-    dont show additional markers for completed objectives
+    v1.029
 
-commit 7aca626e2ee67d20fb728d4109870102add02cd9
+commit 49140932a2568f6e9f9965d60067d8e1a9951e87
 Author: max-ri <max_r_@web.de>
-Date:   Mon Sep 16 14:53:01 2019 +0200
+Date:   Tue Sep 24 17:51:52 2019 +0200
+
+    scan quests script: correctly respect class/race restrictions ([A])
+
+commit 58e49032f2f75c4b23a107f4f32f7f0c8c4993b3
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 24 17:36:18 2019 +0200
+
+    check quests function finished
+    
+    also fixes for scan quests script: supports multiple paths now; correctly checks "requires one of" prequest type (if marked as such in db)
+
+commit fcb6146566f52e8aa3699f11e8c52c81ab3ba9ea
+Author: max-ri <max_r_@web.de>
+Date:   Tue Sep 24 17:33:30 2019 +0200
 
     corrections to quests db
     
-    - race restrictions on quest chains introducing flight paths #47
-    - prequests on Report to Captain Stoutfist(473) and War Banners(464) #107
-    - "Crown of the Earth pt. 5"(934) has been replaced with Crown of the Earth pt. 5"(7383)
+    - added "requires one of" for prequests on certain quests
+    - some Timbermaw quests have been replace with new ids
+    - marked 2 breadcrumb quests as optional (for lvl 10 mage quests)
 
-commit bbf6f3a726f45a551c785db28637ec1877d7f90c
+commit 3cef4cf837833c6ddd00730734b339e77a0607e1
 Author: max-ri <max_r_@web.de>
-Date:   Mon Sep 16 11:36:54 2019 +0200
+Date:   Mon Sep 23 17:59:14 2019 +0200
 
-    bugfix: an error can occur when addon window is closed when talking to quest givers
+    check quests function (continued)
+
+commit 6bc3bfea3a31ad0349fe99ad764fe6779ac4f003
+Author: max-ri <51713394+max-ri@users.noreply.github.com>
+Date:   Mon Sep 23 07:31:42 2019 +0200
+
+    check quests function added (incomplete)
 

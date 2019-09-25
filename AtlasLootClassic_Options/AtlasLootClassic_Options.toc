@@ -1,6 +1,6 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.11
+## Version: v1.1.12
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -12,7 +12,7 @@
 ## Title-itIT: AtlasLoot Classic |cFF22B14C[Options]|r
 ## Title-koKR: AtlasLoot 클래식 |cFF22B14C[옵션]|r
 ## Title-ptBR: AtlasLoot Classic |cFF22B14C[Options]|r
-## Title-ruRU: AtlasLoot Classic |cFF22B14C[Настройки]|r
+## Title-ruRU: AtlasLoot Classic |cFF22B14C[(настройки)]|r
 ## Title-zhCN: AtlasLoot Classic |cFF22B14C[Options]|r
 ## Title-zhTW: 副本戰利品查詢經典版 |cFF22B14C[設定選項]|r
 ## Notes: AtlasLoot options module

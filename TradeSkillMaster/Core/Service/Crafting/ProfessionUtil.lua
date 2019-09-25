@@ -78,7 +78,7 @@ end
 
 function ProfessionUtil.GetCurrentProfessionName()
 	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-		local name = TSM.Crafting.ProfessionState.IsClassicCrafting() and GetCraftDisplaySkillLine() or GetTradeSkillLine()
+		local name = TSM.Crafting.ProfessionState.IsClassicCrafting() and GetCraftSkillLine(1) or GetTradeSkillLine()
 		return name
 	else
 		local _, name, _, _, _, _, parentName = C_TradeSkillUI.GetTradeSkillLine()
@@ -216,7 +216,6 @@ function ProfessionUtil.Craft(spellId, quantity, useVellum, callback)
 		spellId = TSM.Crafting.ProfessionScanner.GetIndexBySpellId(spellId)
 		if TSM.Crafting.ProfessionState.IsClassicCrafting() then
 			private.craftName = GetCraftInfo(spellId)
-			DoCraft(spellId)
 		else
 			private.craftName = GetTradeSkillInfo(spellId)
 			DoTradeSkill(spellId, quantity)

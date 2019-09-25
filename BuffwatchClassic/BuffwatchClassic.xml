@@ -32,7 +32,7 @@
         </Backdrop>
 
       </Frame>
-	  
+
       <CheckButton name="$parent_LockAll" inherits="UICheckButtonTemplate">
         <Size>
           <AbsDimension x="18" y="18"/>
@@ -110,7 +110,7 @@
           </OnLoad>
         </Scripts>
       </Frame>
-	  
+
       <Button name="$parent_MinimizeButton" hidden="false">
         <Size>
           <AbsDimension x="16" y="16"/>
@@ -158,7 +158,7 @@
           </OnLeave>
         </Scripts>
       </Button>
-	  
+
       <Frame name="$parent_PlayerFrame">
 
         <Anchors>

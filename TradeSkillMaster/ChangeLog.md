@@ -1,11 +1,9 @@
-## v4.8.8 Changes
+## v4.8.9 Changes
 
-* Added support for enchanting, smelting, and poisons for Classic
-* Fixed various issues related to Crafting on Classic
-* Updated disenchant values for both Classic and Retail
-* Added more detailed disenchant/mill/prospecting information to the tooltip
-* Fixed various errors seen while using TSM on Classic
-* Fixed auction durations for Classic
-* Fixed a few errors caused by incorrect translations
+* Fixed progress messages for full AH scans
+* Further disenchant value updates for Classic
+* Auction durations will show up properly in Classic
+* Enchanting crafts should work directly from the TSM UI
+* Various other crafting and trade skill related fixes for Classic
 
 [Known Issues](http://support.tradeskillmaster.com/display/KB/TSM4+Currently+Known+Issues)

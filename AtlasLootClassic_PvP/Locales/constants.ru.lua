@@ -4,5 +4,5 @@ if not AL then return end
 
 -- These localization strings are translated on Curseforge: https://www.curseforge.com/wow/addons/atlaslootclassic/localization
 -- PvP
-AL["Battlegrounds"] = "Поле боя"
-AL["Class Sets"] = "Классовый Комплект"
+AL["Battlegrounds"] = "Поля боя"
+AL["Class Sets"] = "Классовые наборы предметов"

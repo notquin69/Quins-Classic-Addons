@@ -1446,7 +1446,7 @@ namespace.crowdControls = {
 
 -- Addon Savedvariables
 namespace.defaultConfig = {
-    version = "10", -- settings version
+    version = "11", -- settings version
     pushbackDetect = true,
     movementDetect = true,
     locale = GetLocale(),
@@ -1473,6 +1473,7 @@ namespace.defaultConfig = {
         textColor = { 1, 1, 1, 1 },
         textPositionX = 0,
         textPositionY = 0,
+        frameLevel = 10,
     },
 
     target = {
@@ -1497,5 +1498,56 @@ namespace.defaultConfig = {
         textColor = { 1, 1, 1, 1 },
         textPositionX = 0,
         textPositionY = 0,
+        frameLevel = 10,
+    },
+
+    party = {
+        enabled = false,
+        width = 120,
+        height = 12,
+        iconSize = 16,
+        showCastInfoOnly = false,
+        showTimer = false,
+        autoPosition = false,
+        castFont = _G.STANDARD_TEXT_FONT,
+        castFontSize = 9,
+        castStatusBar = "Interface\\TargetingFrame\\UI-StatusBar",
+        castBorder = "Interface\\CastingBar\\UI-CastingBar-Border",
+        hideIconBorder = false,
+        position = { "CENTER", -143.5, -5 },
+        iconPositionX = -5,
+        iconPositionY = 0,
+        borderColor = { 1, 1, 1, 1 },
+        statusColor = { 1, 0.7, 0, 1 },
+        statusColorChannel = { 0, 1, 0, 1 },
+        textColor = { 1, 1, 1, 1 },
+        textPositionX = 0,
+        textPositionY = 0,
+        frameLevel = 10,
+    },
+
+    player = {
+        enabled = false,
+        width = 190,
+        height = 19,
+        iconSize = 16,
+        showCastInfoOnly = false,
+        showTimer = false,
+        autoPosition = true,
+        castFont = _G.STANDARD_TEXT_FONT,
+        castFontSize = 12,
+        castStatusBar = "Interface\\TargetingFrame\\UI-StatusBar",
+        castBorder = "Interface\\CastingBar\\UI-CastingBar-Border",
+        hideIconBorder = false,
+        position = { "CENTER", -18, -87 },
+        iconPositionX = -5,
+        iconPositionY = 0,
+        borderColor = { 1, 1, 1, 1 },
+        statusColor = { 1, 0.7, 0, 1 },
+        statusColorChannel = { 0, 1, 0, 1 },
+        textColor = { 1, 1, 1, 1 },
+        textPositionX = 0,
+        textPositionY = 0,
+        frameLevel = 10,
     },
 }

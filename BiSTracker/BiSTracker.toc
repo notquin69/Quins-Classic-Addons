@@ -3,7 +3,7 @@
 ## Title: BiS Tracker
 ## Notes: Shows BiS items for every class, and where to get them.
 ## Author: Yes
-## Version: 1.2 
+## Version: 1.4 
 ## SavedVariablesPerCharacter: BiS_Settings
 
 Templates.xml

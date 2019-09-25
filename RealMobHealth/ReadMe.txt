@@ -17,6 +17,10 @@ Clears all recorded health data.
 
 ===============================================================================
 Versions:
+2.12	(2019-09-23)
+	-Now detects health from a Hunter's Beast Lore
+	-Added ruRU localization (courtesy of vAlshebnik)
+
 2.11	(2019-09-15)
 	-Localization.lua now uncludes Unicode BOM for easier UTF-8 editing
 	-Revised deDE localization (courtesy of Dathwada)

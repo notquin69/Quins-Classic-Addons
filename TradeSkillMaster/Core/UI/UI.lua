@@ -32,8 +32,8 @@ local private = {
 local TIME_LEFT_STRINGS = {
 	"|cfff72d1f30m|r",
 	"|cfff72d1f2h|r",
-	"|cffe1f71f12h|r",
-	"|cff4ff71f48h|r",
+	WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and "|cffe1f71f12h|r" or "|cffe1f71f8h|r",
+	WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC and "|cff4ff71f48h|r" or "|cff4ff71f24h|r",
 }
 local GROUP_LEVEL_COLORS = {
 	"#ffb85c",

@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
--- 	Leatrix Plus 1.13.30 (13th September 2019)
+-- 	Leatrix Plus 1.13.32 (25th September 2019)
 ----------------------------------------------------------------------
 
 --	01:Functions	20:Live			50:RunOnce		70:Logout			
@@ -20,7 +20,7 @@
 	local void
 
 --	Version
-	LeaPlusLC["AddonVer"] = "1.13.30"
+	LeaPlusLC["AddonVer"] = "1.13.32"
 	LeaPlusLC["RestartReq"] = nil
 
 --	If client restart is required and has not been done, show warning and quit
@@ -383,11 +383,14 @@
 		or	(LeaPlusLC["MinimapMod"]			~= LeaPlusDB["MinimapMod"])				-- Customise minimap
 		or	(LeaPlusLC["TipModEnable"]			~= LeaPlusDB["TipModEnable"])			-- Manage tooltip
 		or	(LeaPlusLC["EnhanceDressup"]		~= LeaPlusDB["EnhanceDressup"])			-- Enhance dressup
+		or	(LeaPlusLC["EnhanceQuestLog"]		~= LeaPlusDB["EnhanceQuestLog"])		-- Enhance quest log
 		or	(LeaPlusLC["ShowVolume"]			~= LeaPlusDB["ShowVolume"])				-- Show volume slider
 		or	(LeaPlusLC["AhExtras"]				~= LeaPlusDB["AhExtras"])				-- Show auction controls
 		or	(LeaPlusLC["ShowCooldowns"]			~= LeaPlusDB["ShowCooldowns"])			-- Show cooldowns
 		or	(LeaPlusLC["DurabilityStatus"]		~= LeaPlusDB["DurabilityStatus"])		-- Show durability status
 		or	(LeaPlusLC["ShowVanityControls"]	~= LeaPlusDB["ShowVanityControls"])		-- Show vanity controls
+		or	(LeaPlusLC["ShowBagSearchBox"]		~= LeaPlusDB["ShowBagSearchBox"])		-- Show bag search box
+		or	(LeaPlusLC["ShowFreeBagSlots"]		~= LeaPlusDB["ShowFreeBagSlots"])		-- Show free bag slots
 		or	(LeaPlusLC["ShowWowheadLinks"]		~= LeaPlusDB["ShowWowheadLinks"])		-- Show Wowhead links
 
 		-- Frames
@@ -2124,6 +2127,190 @@
 	function LeaPlusLC:Player()
 
 		----------------------------------------------------------------------
+		--	Show free bag slots
+		----------------------------------------------------------------------
+
+		if LeaPlusLC["ShowFreeBagSlots"] == "On" then
+
+			-- Set the CVAR and show the count
+			SetCVar("displayFreeBagSlots", "1")
+			MainMenuBarBackpackButtonCount:Show()
+
+			-- Function to update the count value
+			local function UpdateSlots()
+				if MainMenuBarBackpackButton.freeSlots then
+					MainMenuBarBackpackButtonCount:SetText(string.format("(%s)", MainMenuBarBackpackButton.freeSlots))
+				end
+			end
+
+			-- Update the count value when free slots are updated
+			hooksecurefunc("MainMenuBarBackpackButton_UpdateFreeSlots", UpdateSlots)
+
+			-- Show free slots in the backpack tooltip
+			MainMenuBarBackpackButton:HookScript("OnEnter", function(self)
+				GameTooltip:AddLine(string.format(NUM_FREE_SLOTS, (self.freeSlots or 0)))
+				GameTooltip:Show()
+			end)
+
+		end
+
+		----------------------------------------------------------------------
+		--	Enhance quest log
+		----------------------------------------------------------------------
+
+		if LeaPlusLC["EnhanceQuestLog"] == "On" then
+
+			-- Make the quest log frame double-wide
+			UIPanelWindows["QuestLogFrame"] = {area = "override", pushable = 0, xoffset = -16, yoffset = 12, bottomClampOverride = 140 + 12, width = 714, height = 487, whileDead = 1}
+
+			-- Size the quest log frame
+			QuestLogFrame:SetWidth(714)
+			QuestLogFrame:SetHeight(487)
+
+			-- Adjust quest log title text
+			QuestLogTitleText:ClearAllPoints()
+			QuestLogTitleText:SetPoint("TOP", QuestLogFrame, "TOP", 0, -18)
+
+			-- Move the detail frame to the right and stretch it to full height
+			QuestLogDetailScrollFrame:ClearAllPoints()
+			QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogListScrollFrame, "TOPRIGHT", 31, 1)
+			QuestLogDetailScrollFrame:SetHeight(336)
+
+			-- Expand the quest list to full height
+			QuestLogListScrollFrame:SetHeight(336)
+
+			-- Create additional quest rows
+			local oldQuestsDisplayed = QUESTS_DISPLAYED
+			_G.QUESTS_DISPLAYED = _G.QUESTS_DISPLAYED + 16
+			for i = oldQuestsDisplayed + 1, QUESTS_DISPLAYED do
+				local button = CreateFrame("Button", "QuestLogTitle" .. i, QuestLogFrame, "QuestLogTitleButtonTemplate")
+				button:SetID(i)
+				button:Hide()
+				button:ClearAllPoints()
+				button:SetPoint("TOPLEFT", _G["QuestLogTitle" .. (i-1)], "BOTTOMLEFT", 0, 1)
+			end
+
+			-- Get quest frame textures
+			local regions = {QuestLogFrame:GetRegions()}
+
+			-- Set top left texture
+			regions[3]:SetTexture("Interface\\QUESTFRAME\\UI-QuestLogDualPane-Left")
+			regions[3]:SetSize(512,512)
+
+			-- Set top right texture
+			regions[4]:ClearAllPoints()
+			regions[4]:SetPoint("TOPLEFT", regions[3], "TOPRIGHT", 0, 0)
+			regions[4]:SetTexture("Interface\\QUESTFRAME\\UI-QuestLogDualPane-Right")
+			regions[4]:SetSize(256,512)
+
+			-- Hide bottom left and bottom right textures
+			regions[5]:Hide()
+			regions[6]:Hide()
+
+			-- Position and resize abandon button
+			QuestLogFrameAbandonButton:SetSize(110, 21)
+			QuestLogFrameAbandonButton:SetText(ABANDON_QUEST_ABBREV)
+			QuestLogFrameAbandonButton:ClearAllPoints()
+			QuestLogFrameAbandonButton:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 17, 54)
+
+			-- Position and resize share button
+			QuestFramePushQuestButton:SetSize(100, 21)
+			QuestFramePushQuestButton:SetText(SHARE_QUEST_ABBREV)
+			QuestFramePushQuestButton:ClearAllPoints()
+			QuestFramePushQuestButton:SetPoint("LEFT", QuestLogFrameAbandonButton, "RIGHT", -3, 0)
+
+			-- Add map button
+			local logMapButton = CreateFrame("Button", nil, QuestLogFrame, "UIPanelButtonTemplate")
+			logMapButton:SetText("Map")
+			logMapButton:ClearAllPoints()
+			logMapButton:SetPoint("LEFT", QuestFramePushQuestButton, "RIGHT", -3, 0)
+			logMapButton:SetSize(100, 21)
+			logMapButton:SetScript("OnClick", ToggleWorldMap)
+
+			-- Position and size close button
+			QuestFrameExitButton:SetSize(80, 22)
+			QuestFrameExitButton:SetText(CLOSE)
+			QuestFrameExitButton:ClearAllPoints()
+			QuestFrameExitButton:SetPoint("BOTTOMRIGHT", QuestLogFrame, "BOTTOMRIGHT", -42, 54)
+
+			-- Empty quest frame
+			QuestLogNoQuestsText:ClearAllPoints()
+			QuestLogNoQuestsText:SetPoint("TOP", QuestLogListScrollFrame, 0, -50)
+			hooksecurefunc(EmptyQuestLogFrame, "Show", function()
+				EmptyQuestLogFrame:ClearAllPoints()
+				EmptyQuestLogFrame:SetPoint("BOTTOMLEFT", QuestLogFrame, "BOTTOMLEFT", 20, -76)
+				EmptyQuestLogFrame:SetHeight(487)
+			end)
+
+			-- Show map button (not currently used)
+			local mapButton = CreateFrame("BUTTON", nil, QuestLogFrame)
+			mapButton:SetSize(36, 25)
+			mapButton:SetPoint("TOPRIGHT", -390, -44)
+			mapButton:SetNormalTexture("Interface\\QuestFrame\\UI-QuestMap_Button")
+			mapButton:GetNormalTexture():SetTexCoord(0.125, 0.875, 0, 0.5)
+			mapButton:SetPushedTexture("Interface\\QuestFrame\\UI-QuestMap_Button")
+			mapButton:GetPushedTexture():SetTexCoord(0.125, 0.875, 0.5, 1.0)
+			mapButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square")
+			mapButton:SetScript("OnClick", ToggleWorldMap)
+			mapButton:Hide()
+
+			-- Show quest levels
+			hooksecurefunc("QuestLog_Update", function()
+				local numEntries, numQuests = GetNumQuestLogEntries()
+				if numEntries == 0 then return end
+				-- Traverse quests in log
+				for i = 1, QUESTS_DISPLAYED do
+					local questIndex = i + FauxScrollFrame_GetOffset(QuestLogListScrollFrame)
+					if questIndex <= numEntries then
+						-- Get quest title and check
+						local questLogTitle = _G["QuestLogTitle" .. i]
+						local questCheck = _G["QuestLogTitle" .. i .. "Check"]
+						local title, level, void, isHeader = GetQuestLogTitle(questIndex)
+						if not isHeader then
+							-- Add level tag if its not a header
+							local questTextFormatted = string.format("  [%02d] %s", level, title)
+							questLogTitle:SetText(questTextFormatted)
+							QuestLogDummyText:SetText(questTextFormatted)
+						end
+						-- Show tracking check mark
+						local checkText = _G["QuestLogTitle" .. i .. "NormalText"]
+						if checkText then
+							local checkPos = checkText:GetStringWidth()
+							if checkPos then
+								if checkPos <= 210 then
+									questCheck:SetPoint("LEFT", questLogTitle, "LEFT", checkPos + 24, 0)
+								else
+									questCheck:SetPoint("LEFT", questLogTitle, "LEFT", 210, 0)
+								end
+							end
+						end
+					end
+				end
+			end)
+
+		end
+
+		----------------------------------------------------------------------
+		--	Show bag search box
+		----------------------------------------------------------------------
+
+		if LeaPlusLC["ShowBagSearchBox"] == "On" then
+
+			-- Create bag item search box
+			local BagItemSearchBox = CreateFrame("EditBox", "BagItemSearchBox", ContainerFrame1, "BagSearchBoxTemplate")
+			BagItemSearchBox:SetSize(110, 18)
+			BagItemSearchBox:SetMaxLetters(15)
+			BagItemSearchBox:SetPoint("TOPLEFT", 54, -29)
+
+			-- Create bank item search box
+			local BankItemSearchBox = CreateFrame("EditBox", "BankItemSearchBox", BankFrame, "BagSearchBoxTemplate")
+			BankItemSearchBox:SetSize(120, 14)
+			BankItemSearchBox:SetMaxLetters(15)
+			BankItemSearchBox:SetPoint("TOPRIGHT", -60, -40)
+
+		end
+
+		----------------------------------------------------------------------
 		--	Show vendor price
 		----------------------------------------------------------------------
 
@@ -2142,7 +2329,7 @@
 				local void, void, void, void, void, void, void, void, void, void, sellPrice = GetItemInfo(itemlink)
 				if sellPrice and sellPrice > 0 then
 					local count = container and type(container.count) == "number" and container.count or 1
-					if sellPrice then
+					if sellPrice and count > 0 then
 						SetTooltipMoney(tooltip, sellPrice * count, "STATIC", SELL_PRICE .. ":")
 					end
 				end
@@ -2197,19 +2384,76 @@
 		if LeaPlusLC["ShowVanityControls"] == "On" then
 
 			-- Create checkboxes
-			LeaPlusLC:MakeCB(CharacterModelFrame, "ShowHelm", L["Helm"], 2, -192, false, "");
-			LeaPlusLC:MakeCB(CharacterModelFrame, "ShowCloak", L["Cloak"], 281, -192, false, "");
+			LeaPlusLC:MakeCB(CharacterModelFrame, "ShowHelm", L["Helm"], 2, -192, false, "")
+			LeaPlusLC:MakeCB(CharacterModelFrame, "ShowCloak", L["Cloak"], 281, -192, false, "")
 			LeaPlusCB["ShowHelm"]:SetFrameStrata("HIGH")
-			LeaPlusCB["ShowHelm"]:SetHitRectInsets(0, -LeaPlusCB["ShowHelm"].f:GetStringWidth() + 4, 0, 0)
-
 			LeaPlusCB["ShowCloak"]:SetFrameStrata("HIGH")
-			LeaPlusCB["ShowCloak"]:SetHitRectInsets(0, -LeaPlusCB["ShowCloak"].f:GetStringWidth() + 4, 0, 0)
-			LeaPlusCB["ShowCloak"]:ClearAllPoints()
-			LeaPlusCB["ShowCloak"]:SetPoint("TOPLEFT", 210 - LeaPlusCB["ShowCloak"].f:GetStringWidth(), -192) -- 240
+
+			-- Function to set vanity controls layout
+			local function SetVanityControlsLayout()
+				if LeaPlusLC["VanityAltLayout"] == "On" then
+					-- Alternative layout
+					LeaPlusCB["ShowHelm"].f:SetText(L["H"])
+					LeaPlusCB["ShowHelm"]:ClearAllPoints()
+					LeaPlusCB["ShowHelm"]:SetPoint("BOTTOMRIGHT", 0, 54)
+					LeaPlusCB["ShowHelm"]:SetHitRectInsets(-LeaPlusCB["ShowHelm"].f:GetStringWidth() + 4, 3, 0, 0)
+					LeaPlusCB["ShowHelm"].f:ClearAllPoints()
+					LeaPlusCB["ShowHelm"].f:SetPoint("RIGHT", LeaPlusCB["ShowHelm"], "LEFT", 4, 0)
+
+					LeaPlusCB["ShowCloak"].f:SetText(L["C"])
+					LeaPlusCB["ShowCloak"]:ClearAllPoints()
+					LeaPlusCB["ShowCloak"]:SetPoint("TOP", LeaPlusCB["ShowHelm"], "BOTTOM", 0, 6)
+					LeaPlusCB["ShowCloak"].f:ClearAllPoints()
+					LeaPlusCB["ShowCloak"].f:SetPoint("RIGHT", LeaPlusCB["ShowCloak"], "LEFT", 4, 0)
+					LeaPlusCB["ShowCloak"]:SetHitRectInsets(-LeaPlusCB["ShowCloak"].f:GetStringWidth() + 4, 3, 0, 0)
+				else
+					-- Default layout
+					LeaPlusCB["ShowHelm"].f:SetText(L["Helm"])
+					LeaPlusCB["ShowHelm"]:ClearAllPoints()
+					LeaPlusCB["ShowHelm"]:SetPoint("TOPLEFT", 2, -192)
+					LeaPlusCB["ShowHelm"]:SetHitRectInsets(3, -LeaPlusCB["ShowHelm"].f:GetStringWidth(), 0, 0)
+					LeaPlusCB["ShowHelm"].f:ClearAllPoints()
+					LeaPlusCB["ShowHelm"].f:SetPoint("LEFT", LeaPlusCB["ShowHelm"], "RIGHT", 0, 0)
+
+					LeaPlusCB["ShowCloak"].f:SetText(L["Cloak"])
+					LeaPlusCB["ShowCloak"]:ClearAllPoints()
+					LeaPlusCB["ShowCloak"]:SetPoint("BOTTOMRIGHT", 0, 8)
+					LeaPlusCB["ShowCloak"]:SetHitRectInsets(-LeaPlusCB["ShowCloak"].f:GetStringWidth(), 3, 0, 0)
+					LeaPlusCB["ShowCloak"].f:ClearAllPoints()
+					LeaPlusCB["ShowCloak"].f:SetPoint("RIGHT", LeaPlusCB["ShowCloak"], "LEFT", 0, 0)
+				end
+			end
+
+			-- Set position when controls are shift/right-clicked
+			LeaPlusCB["ShowHelm"]:SetScript('OnMouseDown', function(self, btn)
+				if btn == "RightButton" and IsShiftKeyDown() then
+					if LeaPlusLC["VanityAltLayout"] == "On" then LeaPlusLC["VanityAltLayout"] = "Off" else LeaPlusLC["VanityAltLayout"] = "On" end
+					SetVanityControlsLayout()
+				end
+			end)
+
+			LeaPlusCB["ShowCloak"]:SetScript('OnMouseDown', function(self, btn)
+				if btn == "RightButton" and IsShiftKeyDown() then
+					if LeaPlusLC["VanityAltLayout"] == "On" then LeaPlusLC["VanityAltLayout"] = "Off" else LeaPlusLC["VanityAltLayout"] = "On" end
+					SetVanityControlsLayout()
+				end
+			end)
+
+			-- Set controls on startup
+			SetVanityControlsLayout()
+
+			-- Manage alpha
+			LeaPlusCB["ShowHelm"]:SetAlpha(0.3)
+			LeaPlusCB["ShowCloak"]:SetAlpha(0.3)
+			LeaPlusCB["ShowHelm"]:HookScript("OnEnter", function() LeaPlusCB["ShowHelm"]:SetAlpha(1.0) end)
+			LeaPlusCB["ShowHelm"]:HookScript("OnLeave", function() LeaPlusCB["ShowHelm"]:SetAlpha(0.3) end)
+			LeaPlusCB["ShowCloak"]:HookScript("OnEnter", function()	LeaPlusCB["ShowCloak"]:SetAlpha(1.0) end)
+			LeaPlusCB["ShowCloak"]:HookScript("OnLeave", function()	LeaPlusCB["ShowCloak"]:SetAlpha(0.3) end)
 
 			-- Toggle helm with click
 			LeaPlusCB["ShowHelm"]:HookScript("OnClick", function()
 				LeaPlusCB["ShowHelm"]:Disable()
+				LeaPlusCB["ShowHelm"]:SetAlpha(1.0)
 				C_Timer.After(0.5, function()
 					if ShowingHelm() then
 						ShowHelm(false)
@@ -2217,12 +2461,16 @@
 						ShowHelm(true)
 					end
 					LeaPlusCB["ShowHelm"]:Enable()
+					if not LeaPlusCB["ShowHelm"]:IsMouseOver() then
+						LeaPlusCB["ShowHelm"]:SetAlpha(0.3)
+					end
 				end)
 			end)
 
 			-- Toggle cloak with click
 			LeaPlusCB["ShowCloak"]:HookScript("OnClick", function()
 				LeaPlusCB["ShowCloak"]:Disable()
+				LeaPlusCB["ShowCloak"]:SetAlpha(1.0)
 				C_Timer.After(0.5, function()
 					if ShowingCloak() then
 						ShowCloak(false)
@@ -2230,6 +2478,9 @@
 						ShowCloak(true)
 					end
 					LeaPlusCB["ShowCloak"]:Enable()
+					if not LeaPlusCB["ShowCloak"]:IsMouseOver() then
+						LeaPlusCB["ShowCloak"]:SetAlpha(0.3)
+					end
 				end)
 			end)
 
@@ -5616,6 +5867,7 @@
 				LeaPlusLC:LoadVarNum("TipCursorY", 0, -128, 128)			-- Tooltip cursor Y offset
 
 				LeaPlusLC:LoadVarChk("EnhanceDressup", "Off")				-- Enhance dressup
+				LeaPlusLC:LoadVarChk("EnhanceQuestLog", "Off")				-- Enhance quest log
 				LeaPlusLC:LoadVarChk("ShowVolume", "Off")					-- Show volume slider
 				LeaPlusLC:LoadVarChk("AhExtras", "Off")						-- Show auction controls
 				LeaPlusLC:LoadVarChk("AhBuyoutOnly", "Off")					-- Auction buyout only
@@ -5626,6 +5878,9 @@
 				LeaPlusLC:LoadVarChk("NoCooldownDuration", "On")			-- Hide cooldown duration
 				LeaPlusLC:LoadVarChk("DurabilityStatus", "Off")				-- Show durability status
 				LeaPlusLC:LoadVarChk("ShowVanityControls", "Off")			-- Show vanity controls
+				LeaPlusLC:LoadVarChk("ShowBagSearchBox", "Off")				-- Show bag search box
+				LeaPlusLC:LoadVarChk("ShowFreeBagSlots", "Off")				-- Show free bag slots
+				LeaPlusLC:LoadVarChk("VanityAltLayout", "Off")				-- Vanity alternative layout
 				LeaPlusLC:LoadVarChk("ShowWowheadLinks", "Off")				-- Show Wowhead links
 
 				-- Frames
@@ -5769,6 +6024,7 @@
 			LeaPlusDB["TipCursorY"]				= LeaPlusLC["TipCursorY"]
 
 			LeaPlusDB["EnhanceDressup"]			= LeaPlusLC["EnhanceDressup"]
+			LeaPlusDB["EnhanceQuestLog"]		= LeaPlusLC["EnhanceQuestLog"]
 			LeaPlusDB["ShowVolume"] 			= LeaPlusLC["ShowVolume"]
 			LeaPlusDB["AhExtras"]				= LeaPlusLC["AhExtras"]
 			LeaPlusDB["AhBuyoutOnly"]			= LeaPlusLC["AhBuyoutOnly"]
@@ -5779,6 +6035,9 @@
 			LeaPlusDB["NoCooldownDuration"]		= LeaPlusLC["NoCooldownDuration"]
 			LeaPlusDB["DurabilityStatus"]		= LeaPlusLC["DurabilityStatus"]
 			LeaPlusDB["ShowVanityControls"]		= LeaPlusLC["ShowVanityControls"]
+			LeaPlusDB["ShowBagSearchBox"]		= LeaPlusLC["ShowBagSearchBox"]
+			LeaPlusDB["ShowFreeBagSlots"]		= LeaPlusLC["ShowFreeBagSlots"]
+			LeaPlusDB["VanityAltLayout"]		= LeaPlusLC["VanityAltLayout"]
 			LeaPlusDB["ShowWowheadLinks"]		= LeaPlusLC["ShowWowheadLinks"]
 
 			-- Frames
@@ -5881,6 +6140,13 @@
 		if LeaPlusDB["NoRestedEmotes"] == "On" then
 			if wipe or (not wipe and LeaPlusLC["NoRestedEmotes"] == "Off") then
 				SetCVar("Sound_EnableEmoteSounds", "1")
+			end
+		end
+
+		-- Show free bag slos
+		if LeaPlusDB["ShowFreeBagSlots"] == "On" then
+			if wipe or (not wipe and LeaPlusLC["ShowFreeBagSlots"] == "Off") then
+				SetCVar("displayFreeBagSlots", "0")
 			end
 		end
 
@@ -7056,11 +7322,14 @@
 				LeaPlusDB["TipCursorX"] = 0						-- X offset
 				LeaPlusDB["TipCursorY"] = 0						-- Y offset
 				LeaPlusDB["EnhanceDressup"] = "On"				-- Enhance dressup
+				LeaPlusDB["EnhanceQuestLog"] = "On"				-- Enhance quest log
 				LeaPlusDB["ShowVolume"] = "On"					-- Show volume slider
 				LeaPlusDB["AhExtras"] = "On"					-- Show auction controls
 				LeaPlusDB["ShowCooldowns"] = "On"				-- Show cooldowns
 				LeaPlusDB["DurabilityStatus"] = "On"			-- Show durability status
 				LeaPlusDB["ShowVanityControls"] = "On"			-- Show vanity controls
+				LeaPlusDB["ShowBagSearchBox"] = "On"			-- Show bag search box
+				LeaPlusDB["ShowFreeBagSlots"] = "On"			-- Show free bag slots
 				LeaPlusDB["ShowWowheadLinks"] = "On"			-- Show Wowhead links
 
 				-- Interface: Manage frames
@@ -7391,14 +7660,18 @@
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "MinimapMod"				,	"Customise minimap"				, 	146, -92, 	true,	"If checked, you will be able to customise the minimap.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "TipModEnable"				,	"Manage tooltip"				,	146, -112, 	true,	"If checked, the tooltip will be color coded and you will be able to modify the tooltip layout and scale.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "EnhanceDressup"			, 	"Enhance dressup"				,	146, -132, 	true,	"If checked, nude and tabard toggle buttons will be added to the dressup frame and model rotation controls will be removed.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "EnhanceQuestLog"			, 	"Enhance quest log"				,	146, -152, 	true,	"If checked, the quest log frame will be larger and feature a world map button and quest levels.")
+
 
 	LeaPlusLC:MakeTx(LeaPlusLC[pg], "Extras"					, 	340, -72);
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVolume"				, 	"Show volume slider"			, 	340, -92, 	true,	"If checked, a master volume slider will be shown in the character sheet.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "AhExtras"					, 	"Show auction controls"			, 	340, -112, 	true,	"If checked, additional functionality will be added to the auction house.|n|nBuyout only - create buyout auctions without filling in the starting price.|n|nGold only - set the copper and silver prices at 99 to speed up new auctions.|n|nFind item - search the auction house for the item you are selling.|n|nIn addition, the auction duration setting will be saved account-wide.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowCooldowns"				, 	"Show cooldowns"				, 	340, -132, 	true,	"If checked, you will be able to place up to five beneficial cooldown icons above the target frame.")
 	LeaPlusLC:MakeCB(LeaPlusLC[pg], "DurabilityStatus"			, 	"Show durability status"		, 	340, -152, 	true,	"If checked, a button will be added to the character sheet which will show your equipped item durability when you hover the pointer over it.|n|nIn addition, an overall percentage will be shown in the chat frame when you die.")
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVanityControls"		, 	"Show vanity controls"			, 	340, -172, 	true,	"If checked, helm and cloak toggle checkboxes will be shown in the character sheet.")
-	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowWowheadLinks"			, 	"Show Wowhead links"			, 	340, -192, 	true,	"If checked, Wowhead links will be shown above the quest log frame.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowVanityControls"		, 	"Show vanity controls"			, 	340, -172, 	true,	"If checked, helm and cloak toggle checkboxes will be shown in the character sheet.|n|nYou can hold shift and right-click the checkboxes to switch layouts.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowBagSearchBox"			, 	"Show bag search box"			, 	340, -192, 	true,	"If checked, a bag search box will be shown in the backpack frame and the bank frame.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowFreeBagSlots"			, 	"Show free bag slots"			, 	340, -212, 	true,	"If checked, the number of free bag slots will be shown in the backpack button icon and tooltip.")
+	LeaPlusLC:MakeCB(LeaPlusLC[pg], "ShowWowheadLinks"			, 	"Show Wowhead links"			, 	340, -232, 	true,	"If checked, Wowhead links will be shown above the quest log frame.")
 
 	LeaPlusLC:CfgBtn("ModMinimapBtn", LeaPlusCB["MinimapMod"])
 	LeaPlusLC:CfgBtn("MoveTooltipButton", LeaPlusCB["TipModEnable"])

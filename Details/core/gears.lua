@@ -61,11 +61,18 @@ end
 			end
 		end
 	end
-	hooksecurefunc ("FCF_SetWindowName", _detalhes.chat_embed.hook_settabname)
-	hooksecurefunc ("FCF_Close", _detalhes.chat_embed.hook_closetab)
+
+	--to hook secure functions only when using the tab system
+	local isWindowHooked = false
 	
 	function _detalhes.chat_embed:SetTabSettings (tab_name, is_enabled, is_single)
-	
+
+		if (not isWindowHooked) then
+			--hook blizzard chat functions
+			hooksecurefunc ("FCF_SetWindowName", _detalhes.chat_embed.hook_settabname)
+			hooksecurefunc ("FCF_Close", _detalhes.chat_embed.hook_closetab)
+		end
+
 		local current_enabled_state = _detalhes.chat_tab_embed.enabled
 		local current_name = _detalhes.chat_tab_embed.tab_name
 	
@@ -420,6 +427,85 @@ function _detalhes:TrackSpecsNow (track_everything)
 		end
 	end
 	
+end
+
+Details.specToRole = {
+	--DRUID
+	[102] = "DAMAGER", --BALANCE
+	[103] = "DAMAGER", --FERAL DRUID
+	[105] = "HEALER", --RESTORATION
+
+	--HUNTER
+	[253] = "DAMAGER", --BM
+	[254] = "DAMAGER", --MM
+	[255] = "DAMAGER", --SURVIVOR
+
+	--MAGE
+	[62] = "DAMAGER", --ARCANE
+	[64] = "DAMAGER", --FROST
+	[63] = "DAMAGER", ---FIRE
+
+	--PALADIN
+	[70] = "DAMAGER", --RET
+	[65] = "HEALER", --HOLY
+	[66] = "TANK", --PROT
+
+	--PRIEST
+	[257] = "HEALER", --HOLY
+	[256] = "HEALER", --DISC
+	[258] = "DAMAGER", --SHADOW
+
+	--ROGUE
+	[259] = "DAMAGER", --ASSASSINATION
+	[260] = "DAMAGER", --COMBAT
+	[261] = "DAMAGER", --SUB
+
+	--SHAMAN
+	[262] = "DAMAGER", --ELEMENTAL
+	[263] = "DAMAGER", --ENHAN
+	[264] = "HEALER", --RESTO
+
+	--WARLOCK
+	[265] = "DAMAGER", --AFF
+	[266] = "DAMAGER", --DESTRO
+	[267] = "DAMAGER", --DEMO
+
+	--WARRIOR
+	[71] = "DAMAGER", --ARMS
+	[71] = "DAMAGER", --ARMS
+	[72] = "DAMAGER", --FURY
+	[73] = "TANK", --PROT
+}
+
+--/dump _detalhes:GetRoleFromSpec (103, UnitGUID("target"))
+--open the talent frame at level 1:
+--/run SHOW_TALENT_LEVEL = 1
+--/run SHOW_SPEC_LEVEL = 1
+
+function _detalhes:GetRoleFromSpec (specId, unitGUID)
+	if (specId == 103) then --feral druid
+		local talents = _detalhes.cached_talents [unitGUID]
+		if (talents) then
+			local tankTalents = 0
+			for i = 1, #talents do
+				local iconTexture, rank, tier, column = unpack (talents [i])
+				if (tier == 2) then
+					if (column == 1 and rank == 5) then
+						tankTalents = tankTalents + 5
+					end
+					if (column == 3 and rank == 5) then
+						tankTalents = tankTalents + 5
+					end
+
+					if (tankTalents >= 10) then
+						return "TANK"
+					end
+				end
+			end
+		end
+	end
+	
+	return Details.specToRole [specId] or "NONE"
 end
 
 function _detalhes:ResetSpecCache (forced)
@@ -2247,9 +2333,7 @@ function Details:SendPlayerClassicInformation()
 		local spentPoints = spec [2]
 		local specTexture = spec [3]
 
-		--print (specName, spentPoints, specTexture)
-
-		--player spec stored here?
+		--add the spec into the spec cache
 		Details.playerClassicSpec = {}
 		Details.playerClassicSpec.specs = Details.GetClassicSpecByTalentTexture (specTexture)
 		Details.playerClassicSpec.talents = talentsSelected
@@ -2258,6 +2342,13 @@ function Details:SendPlayerClassicInformation()
 		_detalhes.cached_specs [UnitGUID ("player")] = Details.playerClassicSpec.specs
 		--cache the player talents
 		_detalhes.cached_talents [UnitGUID ("player")] = talentsSelected
+
+		if (Details.playerClassicSpec.specs == 103) then
+			if (Details:GetRoleFromSpec (Details.playerClassicSpec.specs, UnitGUID ("player")) == "TANK") then
+				Details.playerClassicSpec.specs = 104
+				_detalhes.cached_specs [UnitGUID ("player")] = Details.playerClassicSpec.specs
+			end
+		end
 
 		local CONST_ITEMLEVEL_DATA = "IL"
 
@@ -2405,33 +2496,6 @@ end
 function Details.GetClassicSpecByTalentTexture (talentTexture)
 	return Details.textureToSpec [talentTexture] or 0
 end
-
-
-
---[=[
-function (...)
-    local search = "talent"
-    
-    for key, value in pairs (_G) do
-
---    if (string.lower (key) == search) then                
---    	print (key, value)                
---    end        
-
-	  if type (key) == "string" then
-		if string.lower (key):find (search) then
-			if type (value) == "table" then
-				for key, value in pairs (value) do
-					print (key, value)             
-				end
-			end   
-		end
-	  end
-    end
-end
-
-
---]=]
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 --compress data

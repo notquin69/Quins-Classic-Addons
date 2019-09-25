@@ -6,6 +6,16 @@ addon.races = {Human = "Alliance", NightElf = "Alliance", Dwarf = "Alliance", Gn
 addon.raceIDs = {Human = 1, NightElf = 4, Dwarf = 3, Gnome = 7, Orc = 2, Troll = 8, Tauren = 6, Undead = 5}
 addon.classes = {"Warrior", "Rogue", "Mage", "Warlock", "Hunter", "Priest", "Druid", "Paladin", "Shaman"}
 addon.classesWithFaction = {Paladin = "Alliance", Shaman = "Horde"}
+addon.classesPerRace = {
+	Human = {"Warrior", "Paladin", "Rogue", "Priest", "Mage", "Warlock"},
+	NightElf = {"Warrior", "Hunter", "Rogue", "Priest", "Druid"},
+	Dwarf = {"Warrior", "Paladin", "Hunter", "Rogue", "Priest"},
+	Gnome = {"Warrior", "Rogue", "Mage", "Warlock"},
+	Orc = {"Warrior", "Hunter", "Rogue", "Shaman", "Warlock"},
+	Troll = {"Warrior", "Hunter", "Rogue", "Priest", "Shaman", "Mage"},
+	Tauren = {"Warrior", "Hunter", "Shaman", "Druid"},
+	Undead = {"Warrior", "Rogue", "Priest", "Mage", "Warlock"}
+}
 
 addon.racesPerFaction = {}
 for race, faction in pairs(addon.races) do
@@ -83,4 +93,16 @@ function addon.containsKey(table, value)
 		end
 	end
 	return false
+end
+
+function addon.applies(guide)
+	local applies = true
+	if guide.races ~= nil then
+		if not addon.contains(guide.races, addon.race) then applies = false end
+	end
+	if guide.classes ~= nil then
+		if not addon.contains(guide.classes, addon.class) then applies = false end
+	end
+	if guide.faction ~= nil and guide.faction ~= addon.faction then applies = false end
+	return applies
 end

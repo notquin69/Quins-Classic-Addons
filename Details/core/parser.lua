@@ -423,6 +423,8 @@
 	------------------------------------------------------------------------------------------------
 	--> early checks and fixes
 
+		--9/20 18:55:03.683  SPELL_EXTRA_ATTACKS,Player-4701-0091E2F3,"Gravel-Mograine",0x511,0x0,Player-4701-0091E2F3,"Gravel-Mograine",0x511,0x0,16459,"Sword Specialization",0x1,1
+
 		spellid = spellname
 
 		if (who_serial == "") then

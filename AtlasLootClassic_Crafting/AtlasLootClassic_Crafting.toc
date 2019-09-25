@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Author: Lag
-## Version: v1.1.11
+## Version: v1.1.12
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -12,18 +12,18 @@
 ## Title-itIT: AtlasLootClassic |cFF0099FF[Crafting]|r
 ## Title-koKR: AtlasLoot 클래식 |cFF0099FF[제작 아이템]|r
 ## Title-ptBR: AtlasLootClassic |cFF0099FF[Crafting]|r
-## Title-ruRU: AtlasLootClassic |cFF0099FF[Профессии]|r
+## Title-ruRU: AtlasLootClassic |cFF0099FF[(профессии)]|r
 ## Title-zhCN: AtlasLootClassic |cFF0099FF[Crafting]|r
 ## Title-zhTW: 副本戰利品查詢經典版 |cFF0099FF[專業製作]|r
 ## Notes: AtlasLoot loot tables of Crafting Items
 ## Notes-deDE: AtlasLoot Beuteverzeichnis der Berufe
 ## Notes-esES: AtlasLoot loot tables of Crafting Items
 ## Notes-esMX: AtlasLoot loot tables of Crafting Items
-## Notes-frFR: AtlasLoot loot tables of Crafting Items
+## Notes-frFR: Notes-Artisanat
 ## Notes-itIT: AtlasLoot loot tables of Crafting Items
 ## Notes-koKR: 제작 아이템의 AtlasLoot 전리품 표
 ## Notes-ptBR: AtlasLoot loot tables of Crafting Items
-## Notes-ruRU: Таблицы лута AtlasLoot для профессии
+## Notes-ruRU: Таблицы добычи AtlasLoot для профессий
 ## Notes-zhCN: AtlasLoot专业制作物品列表
 ## Notes-zhTW: 專業技能物品資料庫。
 

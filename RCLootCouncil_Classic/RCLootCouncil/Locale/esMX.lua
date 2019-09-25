@@ -640,6 +640,11 @@ L["opt_deletePatch_confirm"] = [=[Are you sure you want to delete everything old
 --[[Translation missing --]]
 L["opt_deletePatch_desc"] = "Delete all entries added before the selected patch."
 --[[Translation missing --]]
+L["opt_deleteRaid_confirm"] = [=[Are you sure you want to delete all entries from the selected instance?
+This cannot be undone.]=]
+--[[Translation missing --]]
+L["opt_deleteRaid_desc"] = "Delete all entries from a specific instance."
+--[[Translation missing --]]
 L["opt_moreButtons_desc"] = "Add a new set of buttons for a specific gear slot. The most specific type is used, i.e. adding buttons for 'Head' and 'Azerite Armor' will make head type armor use the head buttons instead of azerite armor."
 --[[Translation missing --]]
 L["opt_printCompletedTrade_Desc"] = "Check to enable a message every time a candidate trades an awarded item to the winner."
@@ -755,7 +760,7 @@ L["Responses"] = "Responses"
 L["Responses from Chat"] = "Responses from Chat"
 --[[Translation missing --]]
 L["responses_from_chat_desc"] = [=[In case someone haven't installed the addon (Button 1 is used if no keyword is specified).
-Example: "/w ML_NAME [ITEM] greed" would by default show up as you greeding on an item.
+Example: "/w ML_NAME 1 greed [ITEM]" would by default show up as you greeding on the first item in the session.
 Below you can choose keywords for the individual buttons. Only A-Z, a-z and 0-9 is accepted for keywords, everything else is considered a seperation.
 Players can recieve the keyword list by messaging 'rchelp' to the Master Looter once the addon is enabled (i.e. in a raid).]=]
 --[[Translation missing --]]

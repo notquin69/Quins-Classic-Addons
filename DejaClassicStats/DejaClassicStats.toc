@@ -1,5 +1,5 @@
 ## Interface: 11302
-## Version: 1302r024
+## Version: 1302r026
 ## Title: |cff00c0ffDejaClassicStats|r
 ## Author: Dejablue, Kakjens, loudsoul
 ## Notes: Dejablue's improved character stats panel view.

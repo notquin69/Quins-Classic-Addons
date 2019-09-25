@@ -7,13 +7,9 @@ BUFFWATCHADDON_G.TOOLTIP.ANCHORPOINT = "Determines which direction the window ex
 BUFFWATCHADDON_G.TOOLTIP.COOLDOWNTEXTSCALE = "Sets the scale of Blizzard cooldown text, if enabled";
 BUFFWATCHADDON_G.TOOLTIP.HIDECOOLDOWNTEXT = "Hide Blizzard cooldown text overlays";
 BUFFWATCHADDON_G.TOOLTIP.MODE = "Selects which players to show";
-BUFFWATCHADDON_G.TOOLTIP.PLAYEXPIREDSOUND = "Plays a sound if buffs have started to expire";
 BUFFWATCHADDON_G.TOOLTIP.SCALE = "Sets the scale of the Buffwatch window";
 BUFFWATCHADDON_G.TOOLTIP.SHOWALLFORPLAYER = "Always show all buffs for this player";
 BUFFWATCHADDON_G.TOOLTIP.SHOWCASTABLEBUFFS = "Only show buffs you can cast on other players";
-BUFFWATCHADDON_G.TOOLTIP.SHOWDEBUFFS = "Show debuffs";
-BUFFWATCHADDON_G.TOOLTIP.SHOWDISPELLDEBUFFS = "Only show debuffs you can dispell";
-BUFFWATCHADDON_G.TOOLTIP.SHOWEXPIREDWARNING = "Shows a warning if buffs have started to expire";
 BUFFWATCHADDON_G.TOOLTIP.SHOWONLYMINE = "Only show buffs you have cast";
 BUFFWATCHADDON_G.TOOLTIP.SHOWPETS = "Show pets in the player list";
 BUFFWATCHADDON_G.TOOLTIP.SHOWSPIRALS = "Enable cooldown spirals on buff buttons";
@@ -30,7 +26,6 @@ function BUFFWATCHADDON_G.Options_OnLoad(self)
     self.name = BUFFWATCHADDON.NAME;
     self.default = BUFFWATCHADDON.Options_SetDefaults;
     self.refresh = BUFFWATCHADDON.Options_Init;
---    self.okay = BUFFWATCHADDON.Options_OkayButton;
     self.cancel = BUFFWATCHADDON.Options_CancelButton;
 
     InterfaceOptions_AddCategory(self);
@@ -87,7 +82,6 @@ function BUFFWATCHADDON_G.HelpFrame_OnLoad(self)
     InterfaceOptions_AddCategory(self);
 
     Buffwatch_HelpFrameText:ClearAllPoints();
-    --Buffwatch_HelpFrameText:SetPoint("TOPLEFT", "Buffwatch_HelpScrollFrame", "TOPLEFT", 10, 0);
     Buffwatch_HelpFrameText:SetPoint("TOPLEFT", 10, -4);
     Buffwatch_HelpFrameText:SetPoint("BOTTOMRIGHT", -55, 5);
 
@@ -98,9 +92,6 @@ function BUFFWATCHADDON.Options_Init()
 
     BuffwatchTempConfig = CopyTable(BuffwatchConfig);
     BuffwatchTempPlayerConfig = CopyTable(BuffwatchPlayerConfig);
-
--- Temporary disabled until the RAID filter is working again, or a new method is found
---BuffwatchPlayerConfig.ShowCastableBuffs = false;
 
     UIDropDownMenu_SetSelectedValue(Buffwatch_Options_Mode, BuffwatchPlayerConfig.Mode);
     UIDropDownMenu_SetText(Buffwatch_Options_Mode, BuffwatchPlayerConfig.Mode);
@@ -121,18 +112,15 @@ function BUFFWATCHADDON.Options_Init()
 
     Buffwatch_Options_ShowAllForPlayer:SetChecked(BuffwatchPlayerConfig.ShowAllForPlayer);
 
---    Buffwatch_Options_ShowExpiredWarning:SetChecked(BuffwatchConfig.ExpiredWarning);
---    Buffwatch_Options_PlayExpiredSound:SetChecked(BuffwatchConfig.ExpiredSound);
-
     Buffwatch_Options_ShowSpirals:SetChecked(BuffwatchConfig.Spirals);
     BUFFWATCHADDON_G.Options_ShowSpirals_OnClick(Buffwatch_Options_ShowSpirals, true);
 
     Buffwatch_Options_HideCooldownText:SetChecked(BuffwatchConfig.HideCooldownText);
 
     Buffwatch_Options_Alpha:SetValue(BuffwatchConfig.Alpha);
-    
+
     Buffwatch_Options_Scale:SetValue(BuffwatchPlayerConfig.Scale);
-    
+
     Buffwatch_Options_CooldownTextScale:SetValue(BuffwatchConfig.CooldownTextScale);
 
     if (BUFFWATCHADDON.framePositioned == true) then
@@ -141,7 +129,7 @@ function BUFFWATCHADDON.Options_Init()
 end
 
 function BUFFWATCHADDON.Options_Mode_OnClick(self)
-    i = self:GetID();
+    local i = self:GetID();
     UIDropDownMenu_SetSelectedID(Buffwatch_Options_Mode, i);
     BuffwatchPlayerConfig.Mode = BUFFWATCHADDON.MODE_DROPDOWN_LIST[i];
     BUFFWATCHADDON.Set_UNIT_IDs();
@@ -165,7 +153,7 @@ function BUFFWATCHADDON_G.Options_Mode_OnLoad(self)
 end
 
 function BUFFWATCHADDON.Options_SortOrder_OnClick(self)
-    i = self:GetID();
+    local i = self:GetID();
     UIDropDownMenu_SetSelectedID(Buffwatch_Options_SortOrder, i);
     BuffwatchPlayerConfig.SortOrder = BUFFWATCHADDON.SORTORDER_DROPDOWN_LIST[i];
     BUFFWATCHADDON.PositionAllPlayerFrames();
@@ -184,12 +172,11 @@ end
 
 function BUFFWATCHADDON_G.Options_SortOrder_OnLoad(self)
     UIDropDownMenu_Initialize(self, BUFFWATCHADDON.Options_SortOrder_Initialize);
---    UIDropDownMenu_SetText(self, BuffwatchPlayerConfig.SortOrder);
     UIDropDownMenu_SetWidth(self, 90);
 end
 
 function BUFFWATCHADDON.Options_AnchorPoint_OnClick(self)
-    i = self:GetID();
+    local i = self:GetID();
     UIDropDownMenu_SetSelectedID(Buffwatch_Options_AnchorPoint, i);
     BuffwatchPlayerConfig.AnchorPoint = BUFFWATCHADDON.ANCHORPOINT_DROPDOWN_LIST[i];
     BUFFWATCHADDON.GetPoint(BuffwatchFrame, BUFFWATCHADDON.ANCHORPOINT_DROPDOWN_MAP[BuffwatchPlayerConfig.AnchorPoint]);
@@ -208,7 +195,6 @@ end
 
 function BUFFWATCHADDON_G.Options_AnchorPoint_OnLoad(self)
     UIDropDownMenu_Initialize(self, BUFFWATCHADDON.Options_AnchorPoint_Initialize);
---    UIDropDownMenu_SetText(self, BuffwatchPlayerConfig.AnchorPoint);
     UIDropDownMenu_SetWidth(self, 100);
 end
 
@@ -261,7 +247,7 @@ function BUFFWATCHADDON_G.Options_ShowAllForPlayer_OnClick(self)
     else
         BuffwatchPlayerConfig.ShowAllForPlayer = false;
     end
-    
+
     BUFFWATCHADDON.GetAllBuffs();
 
 end
@@ -296,13 +282,6 @@ function BUFFWATCHADDON.Options_SetDefaults()
     BuffwatchConfig = CopyTable(BUFFWATCHADDON.DEFAULTS);
     BuffwatchPlayerConfig = CopyTable(BUFFWATCHADDON.PLAYER_DEFAULTS);
 end
-
---[[
-function BUFFWATCHADDON.Options_OkayButton()
--- Temporary disabled until the RAID filter is working again, or a new method is found
-BuffwatchPlayerConfig.ShowCastableBuffs = false;
-end
-]]
 
 function BUFFWATCHADDON.Options_CancelButton()
     BuffwatchConfig = CopyTable(BuffwatchTempConfig);

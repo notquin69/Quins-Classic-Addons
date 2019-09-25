@@ -207,24 +207,21 @@ function private.ScanProfession()
 		local lastHeaderIndex = 0
 		private.db:TruncateAndBulkInsertStart()
 		for i = 1, TSM.Crafting.ProfessionState.IsClassicCrafting() and GetNumCrafts() or GetNumTradeSkills() do
-			local name, _, skillType
+			local name, subName, skillType
 			if TSM.Crafting.ProfessionState.IsClassicCrafting() then
-				name, _, skillType = GetCraftInfo(i)
+				name, subName, skillType = GetCraftInfo(i)
+				if subName and subName ~= "" then
+					name = name.." - "..subName
+				end
 			else
 				name, skillType = GetTradeSkillInfo(i)
 			end
 			if skillType == "header" then
 				lastHeaderIndex = i
 			else
-				local spellId = nil
-				if TSM.Crafting.ProfessionState.IsClassicCrafting() then
-					local itemLink = GetCraftItemLink(i)
-					spellId = itemLink and tonumber(strmatch(itemLink, "enchant:([0-9]+)")) or nil
-				else
-					local itemLink = GetTradeSkillItemLink(i)
-					spellId = itemLink and tonumber(strmatch(itemLink, "item:([0-9]+)")) or nil
+				if name and name ~= "" then
+					private.db:BulkInsertNewRow(i, TSMAPI_FOUR.Util.CalculateHash(name), name, lastHeaderIndex, skillType, -1, 1)
 				end
-				private.db:BulkInsertNewRow(i, spellId or i, name, lastHeaderIndex, skillType, -1, 1)
 			end
 		end
 		private.db:BulkInsertEnd()

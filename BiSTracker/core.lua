@@ -1,26 +1,26 @@
-local MainFrame = CreateFrame("Frame", "BiSMainFrame", CharacterFrame, "BiSFrameTemplate")--, "ThinBorderTemplate")
-MainFrame:RegisterEvent("PLAYER_LOGIN")
+local MainFrame = CreateFrame("Frame", "BiSMainFrame", CharacterFrame, "BiSFrameTemplate");
+MainFrame:RegisterEvent("PLAYER_LOGIN");
 MainFrame:RegisterEvent("CHAT_MSG_LOOT");
 MainFrame:RegisterEvent("ADDON_LOADED");
+MainFrame:RegisterEvent("PLAYER_LOGOUT");
 
-local addonVersion = "1.2.0";
+local NewCustomSpecFrame;
+local ToastFrame;
+local ExpandFrame;
+local ConfirmDeleteFrame;
+
+local addonVersion = "1.4.3";
 local contributors = "Wizm-Mograine PvP";
 
 local loadMessageStart = "|cFF00FFB0" .. "BiSTracker" .. ": |r";
 local loadMessage = loadMessageStart .. "|cff00cc66Version |r" .. addonVersion .. "|cff00cc66, developed and maintained by|r Yekru-Mograine PvP";
 local contributorMessage = loadMessageStart .. "|cff00cc66Contributors: |r" .. contributors;
 
-
-
-
-
-
-
-if type(BiS_Settings) ~= "table" then
-	BiS_Settings = {}
-else
-
-end
+local customSpecs = {
+	"Add New Spec"
+};
+local customSpecData = {};
+local editingSpec = false;
 
 
 local backdrop = {
@@ -62,10 +62,12 @@ local itemSlots = {
 local items = {};
 local dropdowns = {};
 local specItems = {};
+local phaseItems = {};
 
 local class = "Druid";
 local spec = "FeralDps";
 local phase = "Phase1";
+local newSpecPhase = "Phase1";
 
 local classes = {
 	"Druid",
@@ -76,7 +78,8 @@ local classes = {
 	"Rogue",
 	"Shaman",
 	"Warlock",
-	"Warrior"
+	"Warrior",
+	"Custom"
 };
 
 local classIcons = {
@@ -88,7 +91,8 @@ local classIcons = {
 	135428,
 	133437,
 	136020,
-	135328
+	135328,
+	134400
 };
 
 local druidSpecs = {
@@ -177,761 +181,11 @@ local showWindow = true;
 local frameWidth, frameHeight = 250, 50 + table.getn(itemSlots)*15 + 35;
 
 local function getItemData()
-			if class == "Druid" then
-
-				if spec == "FeralTank" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Druid.FeralTank.Phase1;
-
-					elseif phase == "Phase2PreRaid" then 
-
-						return BiSData.Druid.FeralTank.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Druid.FeralTank.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Druid.FeralTank.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Druid.FeralTank.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Druid.FeralTank.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Druid.FeralTank.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "FeralDps" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Druid.FeralDps.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Druid.FeralDps.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Druid.FeralDps.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Druid.FeralDps.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Druid.FeralDps.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Druid.FeralDps.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Druid.FeralDps.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Restoration" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Druid.Restoration.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Druid.Restoration.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Druid.Restoration.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Druid.Restoration.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Druid.Restoration.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Druid.Restoration.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Druid.Restoration.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Balance" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Druid.Balance.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Druid.Balance.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Druid.Balance.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Druid.Balance.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Druid.Balance.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Druid.Balance.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Druid.Balance.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Hunter" then
-				if spec == "All" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Hunter.All.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Hunter.All.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Hunter.All.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Hunter.All.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Hunter.All.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Hunter.All.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Hunter.All.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Mage" then
-				if spec == "All" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Mage.All.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Mage.All.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Mage.All.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Mage.All.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Mage.All.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Mage.All.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Mage.All.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Paladin" then
-				if spec == "Holy" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Paladin.Holy.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Paladin.Holy.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Paladin.Holy.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Paladin.Holy.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Paladin.Holy.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Paladin.Holy.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Paladin.Holy.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Retribution" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Paladin.Retribution.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Paladin.Retribution.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Paladin.Retribution.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Paladin.Retribution.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Paladin.Retribution.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Paladin.Retribution.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Paladin.Retribution.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Protection" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Paladin.Protection.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Paladin.Protection.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Paladin.Protection.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Paladin.Protection.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Paladin.Protection.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Paladin.Protection.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Paladin.Protection.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Priest" then
-				if spec == "Holy" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Priest.Holy.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Priest.Holy.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Priest.Holy.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Priest.Holy.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Priest.Holy.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Priest.Holy.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Priest.Holy.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Hybrid" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Priest.Hybrid.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Priest.Hybrid.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Priest.Hybrid.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Priest.Hybrid.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Priest.Hybrid.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Priest.Hybrid.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Priest.Hybrid.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Shadow" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Priest.Shadow.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Priest.Shadow.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Priest.Shadow.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Priest.Shadow.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Priest.Shadow.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Priest.Shadow.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Priest.Shadow.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-
-			elseif class == "Rogue" then
-				if spec == "Swords" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Rogue.Swords.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Rogue.Swords.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Rogue.Swords.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Rogue.Swords.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Rogue.Swords.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Rogue.Swords.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Rogue.Swords.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Daggers" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Rogue.Daggers.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Rogue.Daggers.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Rogue.Daggers.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Rogue.Daggers.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Rogue.Daggers.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Rogue.Daggers.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Rogue.Daggers.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Shaman" then
-				if spec == "Elemental" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Shaman.Elemental.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Shaman.Elemental.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Shaman.Elemental.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Shaman.Elemental.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Shaman.Elemental.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Shaman.Elemental.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Shaman.Elemental.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Restoration" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Shaman.Restoration.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Shaman.Restoration.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Shaman.Restoration.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Shaman.Restoration.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Shaman.Restoration.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Shaman.Restoration.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Shaman.Restoration.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Enhancement" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Shaman.Enhancement.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Shaman.Enhancement.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Shaman.Enhancement.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Shaman.Enhancement.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Shaman.Enhancement.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Shaman.Enhancement.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Shaman.Enhancement.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Warlock" then
-				if spec == "All" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Warlock.All.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Warlock.All.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Warlock.All.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Warlock.All.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Warlock.All.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Warlock.All.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Warlock.All.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			elseif class == "Warrior" then
-				if spec == "Fury" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Warrior.Fury.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Warrior.Fury.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Warrior.Fury.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Warrior.Fury.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Warrior.Fury.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Warrior.Fury.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Warrior.Fury.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				elseif spec == "Protection" then
-
-					if phase == "Phase1" then
-
-						return BiSData.Warrior.Protection.Phase1;
-
-					elseif phase == "Phase2PreRaid" then
-
-						return BiSData.Warrior.Protection.Phase2PreRaid;
-
-					elseif phase == "Phase2" then
-
-						return BiSData.Warrior.Protection.Phase2;
-
-					elseif phase == "Phase3" then
-
-						return BiSData.Warrior.Protection.Phase3;
-
-					elseif phase == "Phase4" then
-
-						return BiSData.Warrior.Protection.Phase4;
-
-					elseif phase == "Phase5" then
-
-						return BiSData.Warrior.Protection.Phase5;
-
-					elseif phase == "Phase6" then
-
-						return BiSData.Warrior.Protection.Phase6;
-
-					else 
-
-						return "Error";
-
-					end
-
-				end
-
-			else 
-
-				return "Error";
-
-			end
-
+	if class == "Custom" then
+		return customSpecData[spec][phase];
+	else
+		return BiSData[class][spec][phase];	
+	end
 end
 
 local function updateTooltipWindowSize(width, height)
@@ -988,7 +242,6 @@ local function getWeaponDamage(itemId)
 	GetItemStats("item:"..itemId, stats);
 	local damageTable = {dps = "", damage = ""};
 	for key,value in pairs(stats) do 
-		--print(key .. " - " .. value);
 		if key == "ITEM_MOD_DAMAGE_PER_SECOND_SHORT" then
 			damageTable.dps = math.ceil(value*100)*0.01;
 		elseif key == "" then
@@ -1000,324 +253,328 @@ end
 
 
 local function updateItemList()
-	local itemData = getItemData();
-	bisCurrentClassSpecData = {};
+	if spec ~= customSpecs[1] then
+		local itemData = getItemData();
+		bisCurrentClassSpecData = {};
 
-	if table.getn(items) == 0 then
-		for itemIndex = 1, table.getn(itemSlots) do
-			local listItemName = "";
-			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent;
-			if itemData[itemSlots[itemIndex]].itemID ~= 0 then
-				itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemData[itemSlots[itemIndex]].itemID);
-			end
-
-
-			if itemName ~= nil then
-				itemName = "[" .. itemName .. "]";
-				if string.len(itemName) > 23 then
-					listItemName = itemName:sub(1, 23) .. "...]";
-				else 
-					listItemName = itemName;
+		if table.getn(items) == 0 then
+			for itemIndex = 1, table.getn(itemSlots) do
+				local listItemName = "";
+				local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent;
+				if itemData[itemSlots[itemIndex]].itemID ~= 0 and itemData[itemSlots[itemIndex]].itemID ~= "" then
+					itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemData[itemSlots[itemIndex]].itemID);
 				end
-			end
 
-			local item = CreateFrame("Frame", itemSlots[itemIndex], MainFrame, "BiSFrameTemplate");
-			item:SetBackdropColor(1, 1, 1, 0.1);
-			item:SetPoint("LEFT", MainFrame.TopLeft, "LEFT", 10, -1 * (20 + itemIndex * 16) - 30);
-			item:SetSize(frameWidth, 17);
 
-			item.icon = item:CreateTexture(itemSlots[itemIndex] .. "Icon", "ARTWORK");
-			item.icon:SetPoint("LEFT", item.Left, "LEFT", 2, 0);
-			item.icon:SetWidth(item:GetHeight());
-			item.icon:SetHeight(item:GetHeight());
-			item.icon:SetTexture(itemIcon);
-
-			item.playerHasItem = item:CreateTexture(itemSlots[itemIndex] .. "playerHasItem", "ARTWORK");
-			item.playerHasItem:SetPoint("RIGHT", item.Right, "RIGHT", -item:GetHeight() - 2, 0)
-			item.playerHasItem:SetWidth(item:GetHeight());
-			item.playerHasItem:SetHeight(item:GetHeight());
-			item.playerHasItem:SetTexture(167334);
-
-			if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-				item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-			else
-				item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-			end
-
-			if tostring(itemMinLevel) == "nil" then
-				item.playerHasItem:Hide();
-			else
-				item.playerHasItem:Show();
-			end
-
-			if itemRarity == 2 then 
-				item.titleRed = 0.1;
-				item.titleGreen = 1;
-				item.titleBlue = 0;
-			elseif itemRarity == 3 then 
-				item.titleRed = 0;
-				item.titleGreen = 0.43;
-				item.titleBlue = 0.86;
-			elseif itemRarity == 4 then 
-				item.titleRed = 0.63;
-				item.titleGreen = 0.2;
-				item.titleBlue = 0.92;
-			elseif itemRarity == 5 then 
-				item.titleRed = 1;
-				item.titleGreen = 0.5;
-				item.titleBlue = 0;
-			end
-
-			bisCurrentClassSpecData[itemData[itemSlots[itemIndex]].itemID] = {
-				itemName = itemName, 
-				itemIcon = itemIcon, 
-				class = class, 
-				spec = spec,
-				titleRed = item.titleRed,
-				titleGreen = item.titleGreen,
-				titleBlue = item.titleBlue,
-			};
-
-			item.title = item:CreateFontString(itemSlots[itemIndex] .. "Name", "OVERLAY");
-			item.title:SetFontObject("GameFontHighlight");
-			item.title:SetPoint("LEFT", item.Left, "LEFT", 24, 0);
-			item.title:SetText(listItemName);
-			
-			item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-			--item.title:SetFont("Fonts\\FRIZQT__.TTF", 10);
-			item:SetScript("OnEnter", function(self) 
-				item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
-				item.title:SetTextColor(0.86, 0.64, 0, 1);
-				if (tostring(itemMinLevel) ~= "nil") then
-
-					MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
-					MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
-					MainFrame.tip:SetHyperlink(itemLink);
-					MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
-					if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type)
-;						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
-					else
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
+				if itemName ~= nil then
+					itemName = "[" .. itemName .. "]";
+					if string.len(itemName) > 23 then
+						listItemName = itemName:sub(1, 23) .. "...]";
+					else 
+						listItemName = itemName;
 					end
-					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
-					else
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
-					end
-					MainFrame.tip:Show();
-					--MainFrame.tooltip:Show();
-					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--MainFrame.tooltip.weaponDamage:SetText("");
-					--MainFrame.tooltip.weaponSpeed:SetText("");
-					--MainFrame.tooltip.dps:SetText("");
-					--MainFrame.tooltip.weaponStats:SetText("");
-					--MainFrame.tooltip.gearStats:SetText("");
-					--MainFrame.tooltip.icon:SetTexture(itemIcon);
-					--MainFrame.tooltip.title:SetText(itemName);
-					--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-					--MainFrame.tooltip.acquire:SetText("");
-					--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
-					--MainFrame.tooltip.type:SetText(itemType);
-					--MainFrame.tooltip.subType:SetText(itemSubType);
-
-					MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
-					MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
-					MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
-					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
-					else
-						MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
-					end
-
-					--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-					--else
-					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-					--end
-
-					--local nameLength = string.len(itemName);
-					--if (nameLength * 13 < 230) then
-					--	updateTooltipWindowSize(280, 300);
-					--else
-					--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
-					--end
-
-					--if itemType == "Weapon" then
-					--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
-					--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
-					--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
-					--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--else
-					--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--end
 				end
-			end);
 
-			item:SetScript("OnLeave", function(self) 
+				local item = CreateFrame("Frame", itemSlots[itemIndex], MainFrame, "BiSFrameTemplate");
 				item:SetBackdropColor(1, 1, 1, 0.1);
-				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-				--MainFrame.tooltip:Hide();
-				MainFrame.tip:Hide();
-				MainFrame.tooltipObtain:Hide();
-			end);
-			
-			item:SetScript("OnMouseDown", function(self)
-				SetItemRef(itemLink, itemLink, "LeftButton");
-			end)
+				item:SetPoint("LEFT", MainFrame.TopLeft, "LEFT", 10, -1 * (20 + itemIndex * 16) - 30);
+				item:SetSize(frameWidth, 17);
 
-			item:Show();
+				item.icon = item:CreateTexture(itemSlots[itemIndex] .. "Icon", "ARTWORK");
+				item.icon:SetPoint("LEFT", item.Left, "LEFT", 2, 0);
+				item.icon:SetWidth(item:GetHeight());
+				item.icon:SetHeight(item:GetHeight());
+				item.icon:SetTexture(itemIcon);
 
-			table.insert(items, item);
+				item.playerHasItem = item:CreateTexture(itemSlots[itemIndex] .. "playerHasItem", "ARTWORK");
+				item.playerHasItem:SetPoint("RIGHT", item.Right, "RIGHT", -item:GetHeight() - 2, 0)
+				item.playerHasItem:SetWidth(item:GetHeight());
+				item.playerHasItem:SetHeight(item:GetHeight());
+				item.playerHasItem:SetTexture(167334);
 
-		end
-	else
-		for itemIndex = 1, table.getn(itemSlots) do
-			local listItemName = "";
-			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent;
-			if itemData[itemSlots[itemIndex]].itemID ~= 0 then
-				itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemData[itemSlots[itemIndex]].itemID);
-			end
-
-			if itemName ~= nil then
-				itemName = "[" .. itemName .. "]";
-			end
-
-			local item = items[itemIndex];
-			if itemRarity == 2 then 
-				item.titleRed = 0.1;
-				item.titleGreen = 1;
-				item.titleBlue = 0;
-			elseif itemRarity == 3 then 
-				item.titleRed = 0;
-				item.titleGreen = 0.43;
-				item.titleBlue = 0.86;
-			elseif itemRarity == 4 then 
-				item.titleRed = 0.63;
-				item.titleGreen = 0.2;
-				item.titleBlue = 0.92;
-			elseif itemRarity == 5 then 
-				item.titleRed = 1;
-				item.titleGreen = 0.5;
-				item.titleBlue = 0;
-			end
-
-			bisCurrentClassSpecData[itemData[itemSlots[itemIndex]].itemID] = {
-				itemName = itemName, 
-				itemIcon = itemIcon, 
-				class = class, 
-				spec = spec,
-				titleRed = item.titleRed,
-				titleGreen = item.titleGreen,
-				titleBlue = item.titleBlue,
-			};
-
-			if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-				item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-			else
-				item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-			end
-
-			if tostring(itemMinLevel) == "nil" then
-				item.playerHasItem:Hide();
-			else
-				item.playerHasItem:Show();
-			end
-
-			item:SetScript("OnEnter", function(self)
-				item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
-				item.title:SetTextColor(0.86, 0.64, 0, 1);
-				if (tostring(itemMinLevel) ~= "nil") then
-					
-
-					
-
-					MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
-					MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
-					MainFrame.tip:SetHyperlink(itemLink);
-					MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
-					if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type)
-;						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
-					else
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
-					end
-					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
-					else
-						MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
-					end
-					MainFrame.tip:Show();
-					--MainFrame.tooltip:Show();
-					--print(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--MainFrame.tooltip.weaponDamage:SetText("");
-					--MainFrame.tooltip.weaponSpeed:SetText("");
-					--MainFrame.tooltip.dps:SetText("");
-					--MainFrame.tooltip.weaponStats:SetText("");
-					--MainFrame.tooltip.gearStats:SetText("");
-					--MainFrame.tooltip.icon:SetTexture(itemIcon);
-					--MainFrame.tooltip.title:SetText(itemName);
-					--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-					--MainFrame.tooltip.acquire:SetText("");
-					--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
-					--MainFrame.tooltip.type:SetText(itemType);
-					--MainFrame.tooltip.subType:SetText(itemSubType);
-
-					MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
-					MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
-					MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
-					if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
-						MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
-					else
-						MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
-					end
-
-					--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
-					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
-					--else
-					--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
-					--end
-
-					--local nameLength = string.len(itemName);
-					--if (nameLength * 13 < 230) then
-					--	updateTooltipWindowSize(280, 300);
-					--else
-					--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
-					--end
-
-					--if itemType == "Weapon" then
-					--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
-					--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
-					--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
-					--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--else
-					--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
-					--end
+				if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+					item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+				else
+					item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
 				end
-			end)
 
-			item:SetScript("OnLeave", function(self)
-				item:SetBackdropColor(1, 1, 1, 0.1);
-				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-				--MainFrame.tooltip:Hide();
-				MainFrame.tip:Hide();
-				MainFrame.tooltipObtain:Hide();
-			end)
-			item:SetScript("OnMouseDown", function(self)
-				SetItemRef(itemLink, itemLink, "LeftButton");
-			end)
-			if itemName ~= nil then
-				if string.len(itemName) > 23 then
-					listItemName = itemName:sub(1, 23) .. "...]";
-				else 
-					listItemName = itemName;
+				if tostring(itemMinLevel) == "nil" then
+					item.playerHasItem:Hide();
+				else
+					item.playerHasItem:Show();
 				end
+
+				if itemRarity == 2 then 
+					item.titleRed = 0.1;
+					item.titleGreen = 1;
+					item.titleBlue = 0;
+				elseif itemRarity == 3 then 
+					item.titleRed = 0;
+					item.titleGreen = 0.43;
+					item.titleBlue = 0.86;
+				elseif itemRarity == 4 then 
+					item.titleRed = 0.63;
+					item.titleGreen = 0.2;
+					item.titleBlue = 0.92;
+				elseif itemRarity == 5 then 
+					item.titleRed = 1;
+					item.titleGreen = 0.5;
+					item.titleBlue = 0;
+				end
+
+				bisCurrentClassSpecData[itemData[itemSlots[itemIndex]].itemID] = {
+					itemName = itemName, 
+					itemIcon = itemIcon, 
+					class = class, 
+					spec = spec,
+					titleRed = item.titleRed,
+					titleGreen = item.titleGreen,
+					titleBlue = item.titleBlue,
+				};
+
+				item.title = item:CreateFontString(itemSlots[itemIndex] .. "Name", "OVERLAY");
+				item.title:SetFontObject("GameFontHighlight");
+				item.title:SetPoint("LEFT", item.Left, "LEFT", 24, 0);
+				item.title:SetText(listItemName);
+				
+				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+				--item.title:SetFont("Fonts\\FRIZQT__.TTF", 10);
+				item:SetScript("OnEnter", function(self) 
+					item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+					item.title:SetTextColor(0.86, 0.64, 0, 1);
+					if (tostring(itemMinLevel) ~= "nil") then
+
+						MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
+						MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
+						MainFrame.tip:SetHyperlink(itemLink);
+						MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
+						if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type);
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
+						else
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
+						end
+						if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+							MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						else
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						end
+						MainFrame.tip:Show();
+						--MainFrame.tooltip:Show();
+						--MainFrame.tooltip.weaponDamage:SetText("");
+						--MainFrame.tooltip.weaponSpeed:SetText("");
+						--MainFrame.tooltip.dps:SetText("");
+						--MainFrame.tooltip.weaponStats:SetText("");
+						--MainFrame.tooltip.gearStats:SetText("");
+						--MainFrame.tooltip.icon:SetTexture(itemIcon);
+						--MainFrame.tooltip.title:SetText(itemName);
+						--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+						--MainFrame.tooltip.acquire:SetText("");
+						--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
+						--MainFrame.tooltip.type:SetText(itemType);
+						--MainFrame.tooltip.subType:SetText(itemSubType);
+
+						MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
+						MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
+						MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+						if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+							MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						else
+							MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						end
+
+						--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+						--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+						--else
+						--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
+						--end
+
+						--local nameLength = string.len(itemName);
+						--if (nameLength * 13 < 230) then
+						--	updateTooltipWindowSize(280, 300);
+						--else
+						--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
+						--end
+
+						--if itemType == "Weapon" then
+						--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
+						--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
+						--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
+						--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+						--else
+						--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+						--end
+					end
+				end);
+
+				item:SetScript("OnLeave", function(self) 
+					item:SetBackdropColor(1, 1, 1, 0.1);
+					item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+					--MainFrame.tooltip:Hide();
+					MainFrame.tip:Hide();
+					MainFrame.tooltipObtain:Hide();
+				end);
+
+				item:SetScript("OnMouseDown", function(self)
+					if itemName ~= nil then
+						SetItemRef(itemLink, itemLink, "LeftButton");
+					end
+				end)
+
+				item:Show();
+
+				table.insert(items, item);
+
 			end
+		else
+			for itemIndex = 1, table.getn(itemSlots) do
+				local listItemName = "";
+				local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent;
+				if itemData[itemSlots[itemIndex]].itemID ~= 0 and itemData[itemSlots[itemIndex]].itemID ~= "" then
+					itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon, itemSellPrice, itemClassID, itemSubClassID, bindType, expacID, itemSetID, isCraftingReagent = GetItemInfo(itemData[itemSlots[itemIndex]].itemID);
+				end
 
-			item.title:SetText(listItemName);
-			item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
-			item.icon:SetTexture(itemIcon);
+				if itemName ~= nil then
+					itemName = "[" .. itemName .. "]";
+				end
 
+				local item = items[itemIndex];
+				if itemRarity == 2 then 
+					item.titleRed = 0.1;
+					item.titleGreen = 1;
+					item.titleBlue = 0;
+				elseif itemRarity == 3 then 
+					item.titleRed = 0;
+					item.titleGreen = 0.43;
+					item.titleBlue = 0.86;
+				elseif itemRarity == 4 then 
+					item.titleRed = 0.63;
+					item.titleGreen = 0.2;
+					item.titleBlue = 0.92;
+				elseif itemRarity == 5 then 
+					item.titleRed = 1;
+					item.titleGreen = 0.5;
+					item.titleBlue = 0;
+				end
+
+				bisCurrentClassSpecData[itemData[itemSlots[itemIndex]].itemID] = {
+					itemName = itemName, 
+					itemIcon = itemIcon, 
+					class = class, 
+					spec = spec,
+					titleRed = item.titleRed,
+					titleGreen = item.titleGreen,
+					titleBlue = item.titleBlue,
+				};
+
+				if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+					item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+				else
+					item.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
+				end
+
+				if tostring(itemMinLevel) == "nil" then
+					item.playerHasItem:Hide();
+				else
+					item.playerHasItem:Show();
+				end
+
+				item:SetScript("OnEnter", function(self)
+					item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+					item.title:SetTextColor(0.86, 0.64, 0, 1);
+					if (tostring(itemMinLevel) ~= "nil") then
+						
+
+						
+
+						MainFrame.tip:SetOwner(MainFrame, "ANCHOR_NONE");
+						MainFrame.tip:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 220, -13);
+						MainFrame.tip:SetHyperlink(itemLink);
+						MainFrame.tip:AddLine("\nThis item can be obtained in: " .. itemData[itemSlots[itemIndex]].Obtain.Zone);
+						if string.match(itemData[itemSlots[itemIndex]].Obtain.Type, "Profession") then
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type);
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Method);
+						else
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Type .. ": " .. itemData[itemSlots[itemIndex]].Obtain.Method);
+						end
+						if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+							MainFrame.tip:AddLine("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						else
+							MainFrame.tip:AddLine(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						end
+						MainFrame.tip:Show();
+						--MainFrame.tooltip:Show();
+						--MainFrame.tooltip.weaponDamage:SetText("");
+						--MainFrame.tooltip.weaponSpeed:SetText("");
+						--MainFrame.tooltip.dps:SetText("");
+						--MainFrame.tooltip.weaponStats:SetText("");
+						--MainFrame.tooltip.gearStats:SetText("");
+						--MainFrame.tooltip.icon:SetTexture(itemIcon);
+						--MainFrame.tooltip.title:SetText(itemName);
+						--MainFrame.tooltip.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+						--MainFrame.tooltip.acquire:SetText("");
+						--MainFrame.tooltip.levelRequirement:SetText("Required Level: " .. tostring(itemMinLevel));
+						--MainFrame.tooltip.type:SetText(itemType);
+						--MainFrame.tooltip.subType:SetText(itemSubType);
+
+						MainFrame.tooltipObtain.zone:SetText(itemData[itemSlots[itemIndex]].Obtain.Zone);
+						MainFrame.tooltipObtain.Type:SetText(itemData[itemSlots[itemIndex]].Obtain.Type .. ":");
+						MainFrame.tooltipObtain.Method:SetText(itemData[itemSlots[itemIndex]].Obtain.Method);
+						if (string.len(itemData[itemSlots[itemIndex]].Obtain.Drop) > 0) then
+							MainFrame.tooltipObtain.Drop:SetText("Drop chance: " .. itemData[itemSlots[itemIndex]].Obtain.Drop);
+						else
+							MainFrame.tooltipObtain.Drop:SetText(itemData[itemSlots[itemIndex]].Obtain.Drop);
+						end
+
+						--if characterHasItem(itemData[itemSlots[itemIndex]].itemID) then
+						--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-Ready");
+						--else
+						--	MainFrame.tooltip.playerHasItem:SetTexture("Interface\\RaidFrame\\ReadyCheck-NotReady");
+						--end
+
+						--local nameLength = string.len(itemName);
+						--if (nameLength * 13 < 230) then
+						--	updateTooltipWindowSize(280, 300);
+						--else
+						--	updateTooltipWindowSize(nameLength * 13 + 50, 300);
+						--end
+
+						--if itemType == "Weapon" then
+						--	local weapondmg = getWeaponDamage(itemData[itemSlots[itemIndex]].itemID);
+						--	MainFrame.tooltip.weaponDamage:SetText(weapondmg.damage);
+						--	MainFrame.tooltip.dps:SetText("(" .. weapondmg.dps .. " Damage Per Second)");
+						--	MainFrame.tooltip.weaponStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+						--else
+						--	MainFrame.tooltip.gearStats:SetText(getItemStats(itemData[itemSlots[itemIndex]].itemID));
+						--end
+					end
+				end)
+
+				item:SetScript("OnLeave", function(self)
+					item:SetBackdropColor(1, 1, 1, 0.1);
+					item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+					--MainFrame.tooltip:Hide();
+					MainFrame.tip:Hide();
+					MainFrame.tooltipObtain:Hide();
+				end)
+				item:SetScript("OnMouseDown", function(self)
+					if itemName ~= nil then
+						SetItemRef(itemLink, itemLink, "LeftButton");
+					end
+				end)
+				if itemName ~= nil then
+					if string.len(itemName) > 23 then
+						listItemName = itemName:sub(1, 23) .. "...]";
+					else 
+						listItemName = itemName;
+					end
+				end
+
+				item.title:SetText(listItemName);
+				item.title:SetTextColor(item.titleRed, item.titleGreen, item.titleBlue, 1);
+				item.icon:SetTexture(itemIcon);
+
+			end
 		end
 	end
 
@@ -1340,7 +597,6 @@ function toggleWindow()
 end
 
 local function dropdownClick(title, dropdown)
-	--print(title .." Pushed");
 
 	dropdowns[1].dropdownList:Hide();
 	dropdowns[2].dropdownList:Hide();
@@ -1375,7 +631,174 @@ local function createDropdownListSpecItems(specs, dropdownlist)
 				item.title:SetTextColor(1, 1, 1, 1);
 			end);
 			item:SetScript("OnMouseDown", function(self)
-				spec = item.title:GetText();
+				if (item.title:GetText() == customSpecs[1]) then
+					editSpec = false;
+					NewCustomSpecFrame.title:SetText("Add a new custom spec");
+					NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetText("Add Spec");
+
+					NewCustomSpecFrame.nameEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Head.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Head.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Head.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Head.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Head.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Neck.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Neck.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Neck.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Neck.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Neck.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Shoulder.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Shoulder.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Shoulder.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Shoulder.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Shoulder.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Cloak.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Cloak.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Cloak.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Cloak.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Cloak.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Chest.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Chest.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Chest.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Chest.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Chest.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Wrist.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Wrist.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Wrist.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Wrist.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Wrist.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Gloves.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Gloves.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Gloves.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Gloves.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Gloves.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Waist.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Waist.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Waist.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Waist.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Waist.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Legs.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Legs.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Legs.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Legs.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Legs.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Boots.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Boots.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Boots.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Boots.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Boots.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Ring1.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Ring1.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring1.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring1.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring1.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Ring2.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Ring2.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring2.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring2.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ring2.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Trinket1.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Trinket1.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket1.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket1.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket1.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Trinket2.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Trinket2.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket2.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket2.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Trinket2.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.MainHand.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.MainHand.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.MainHand.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.MainHand.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.MainHand.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.OffHand.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.OffHand.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.OffHand.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.OffHand.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.OffHand.dropEdit:SetText("");
+
+					NewCustomSpecFrame.scrollFrame.content.Ranged.idEdit:SetNumber(0);
+					NewCustomSpecFrame.scrollFrame.content.Ranged.zoneEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ranged.typeEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ranged.methodEdit:SetText("");
+					NewCustomSpecFrame.scrollFrame.content.Ranged.dropEdit:SetText("");
+
+					UIDropDownMenu_SetSelectedValue(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, "Phase1");
+
+					NewCustomSpecFrame:Show();
+				else
+					spec = item.title:GetText();
+					for x = 1, table.getn(phaseItems) do
+						if class == "Custom" then 
+							if customSpecData[spec][phases[x]] ~= nil then
+								phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+								phaseItems[x]:SetScript("OnEnter", function(self) 
+									phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+									phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+								end);
+								phaseItems[x]:SetScript("OnLeave", function(self) 
+									phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+									phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+								end);
+								phaseItems[x]:SetScript("OnMouseDown", function(self)
+									phase = phaseItems[x].title:GetText();
+									updateItemList();
+
+								end);
+							else
+								phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+								phaseItems[x]:SetScript("OnEnter", function(self)
+								end);
+								phaseItems[x]:SetScript("OnLeave", function(self)
+								end);
+								phaseItems[x]:SetScript("OnMouseDown", function(self)
+								end);
+							end
+						else
+							if BiSData[class][spec][phases[x]] ~= nil then
+								phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+								phaseItems[x]:SetScript("OnEnter", function(self) 
+									phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+									phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+								end);
+								phaseItems[x]:SetScript("OnLeave", function(self) 
+									phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+									phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+								end);
+								phaseItems[x]:SetScript("OnMouseDown", function(self)
+									phase = phaseItems[x].title:GetText();
+									updateItemList();
+
+								end);
+							else
+								phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+								phaseItems[x]:SetScript("OnEnter", function(self)
+								end);
+								phaseItems[x]:SetScript("OnLeave", function(self)
+								end);
+								phaseItems[x]:SetScript("OnMouseDown", function(self)
+								end);
+							end
+						end
+					end
+				end
 				updateItemList();
 			end);
 
@@ -1387,17 +810,25 @@ local function createDropdownListSpecItems(specs, dropdownlist)
 		end
 end
 
+local function setDropdownListSize(specs, dropdownlist, minSize)
+
+	dropdownlist:SetSize(minSize, table.getn(specs) * 16 + 15);
+	for itemIndex = 1, table.getn(specs) do
+		if (string.len(specs[itemIndex]) * 9) > dropdownlist:GetWidth() then
+			dropdownlist:SetSize((string.len(specs[itemIndex]) * 9) + 5, table.getn(specs) * 16 + 15);
+		end
+	end
+end
+
 function characterHasItem(itemId)
 	local hasItem = false;
 	if IsEquippedItem(itemId) then
 		hasItem = true;
-		--print("Equipped");
 	else
 		for i = 0, NUM_BAG_SLOTS do
 		    for z = 1, GetContainerNumSlots(i) do
 		        if GetContainerItemID(i, z) == itemId then
 		        	hasItem = true;
-		        	--print("In Bagslot" .. i);
 		            break
 		        end
 		    end
@@ -1480,60 +911,78 @@ local function createDropdown(title, x, y, width, height)
 
 			item:SetScript("OnMouseDown", function(self)
 				class = item.title:GetText();
+
 				if class == "Druid" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(druidSpecs) * 16 + 15);
+					setDropdownListSize(druidSpecs, dropdowns[2].dropdownList, 100);
 					spec = druidSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(druidSpecs[itemIndex]);
 					end
 				elseif class == "Hunter" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(hunterSpecs) * 16 + 15);
+					setDropdownListSize(hunterSpecs, dropdowns[2].dropdownList, 100);
 					spec = hunterSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(hunterSpecs[itemIndex]);
 					end
 				elseif class == "Mage" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(mageSpecs) * 16 + 15);
+					setDropdownListSize(mageSpecs, dropdowns[2].dropdownList, 100);
 					spec = mageSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(mageSpecs[itemIndex]);
 					end
 				elseif class == "Paladin" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(paladinSpecs) * 16 + 15);
+					setDropdownListSize(paladinSpecs, dropdowns[2].dropdownList, 100);
 					spec = paladinSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(paladinSpecs[itemIndex]);
 					end
 				elseif class == "Priest" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(priestSpecs) * 16 + 15);
+					setDropdownListSize(priestSpecs, dropdowns[2].dropdownList, 100);
 					spec = priestSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(priestSpecs[itemIndex]);
 					end
 				elseif class == "Rogue" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(rogueSpecs) * 16 + 15);
+					setDropdownListSize(rogueSpecs, dropdowns[2].dropdownList, 100);
 					spec = rogueSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(rogueSpecs[itemIndex]);
 					end
 				elseif class == "Shaman" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(shamanSpecs) * 16 + 15);
+					setDropdownListSize(shamanSpecs, dropdowns[2].dropdownList, 100);
 					spec = shamanSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(shamanSpecs[itemIndex]);
 					end
 				elseif class == "Warlock" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(warlockSpecs) * 16 + 15);
+					setDropdownListSize(warlockSpecs, dropdowns[2].dropdownList, 100);
 					spec = warlockSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(warlockSpecs[itemIndex]);
 					end
 				elseif class == "Warrior" then
-					dropdowns[2].dropdownList:SetSize(100, table.getn(warriorSpecs) * 16 + 15);
+					setDropdownListSize(warriorSpecs, dropdowns[2].dropdownList, 100);
 					spec = warriorSpecs[1];
 					for itemIndex = 1, table.getn(specItems) do
 						specItems[itemIndex].title:SetText(warriorSpecs[itemIndex]);
 					end					
+				end
+				if class == "Custom" then
+					setDropdownListSize(customSpecs, dropdowns[2].dropdownList, 100);
+					if table.getn(customSpecs) > 1 then
+						spec = customSpecs[2];
+					else
+						spec = customSpecs[1];
+					end
+					for itemIndex = 1, table.getn(specItems) do
+						specItems[itemIndex].title:SetText(customSpecs[itemIndex]);
+					end	
+					MainFrame.editSpec:Show();
+					MainFrame.deleteSpec:Show();
+				else
+
+					MainFrame.editSpec:Hide();
+					MainFrame.deleteSpec:Hide();
 				end
 
 
@@ -1564,7 +1013,10 @@ local function createDropdown(title, x, y, width, height)
 			createDropdownListSpecItems(warlockSpecs, dropdown.dropdownList);
 		elseif class == "Warrior" then
 			createDropdownListSpecItems(warriorSpecs, dropdown.dropdownList);
+		elseif class == "Custom" then
+			createDropdownListSpecItems(customSpecs, dropdown.dropdownList);
 		end
+
 	elseif title == "Phase" then
 		for itemIndex = 1, table.getn(phases) do
 			local item = CreateFrame("Frame", phases[itemIndex], dropdown.dropdownList, "BiSFrameTemplate");
@@ -1576,7 +1028,7 @@ local function createDropdown(title, x, y, width, height)
 			item.title:SetFontObject("GameFontHighlight");
 			item.title:SetPoint("LEFT", item.Left, "CENTER", 14, 0);
 			item.title:SetText(phases[itemIndex]);
-			if phases[itemIndex] == "Phase1" then
+			if BiSData[class][spec][phases[itemIndex]] ~= nil then
 				item.title:SetTextColor(1, 1, 1, 1);
 				item:SetScript("OnEnter", function(self) 
 					item:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
@@ -1597,7 +1049,7 @@ local function createDropdown(title, x, y, width, height)
 			
 			item:Show();
 
-			--table.insert(dropdownItems, item);
+			table.insert(phaseItems, item);
 			dropdown.dropdownList:SetSize(120, table.getn(phases) * 16 + 15);
 		end
 	end
@@ -1609,9 +1061,130 @@ local function createDropdown(title, x, y, width, height)
 
 end
 
+local function updateSpecDropdown()
+	setDropdownListSize(customSpecs, dropdowns[2].dropdownList, 100);
+	if table.getn(customSpecs) > 1 then
+		spec = customSpecs[2];
+	else
+		spec = customSpecs[1];
+	end
+	for itemIndex = 1, table.getn(specItems) do
+		specItems[itemIndex].title:SetText(customSpecs[itemIndex]);
+	end	
+	updateItemList();
+end
+
+local function createCustomSpecBlock(title, parent, left, y)
+	local item;
+	if left then
+		item = CreateFrame("Frame", "newSpecContent"..title, parent, "BiSFrameTemplate");
+		item:SetSize((NewCustomSpecFrame.scrollFrame.content:GetWidth()-24)/2, 170);
+		item:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, y);
+	else 
+		item = CreateFrame("Frame", "newSpecContent"..title, parent, "BiSFrameTemplate");
+		item:SetSize((NewCustomSpecFrame.scrollFrame.content:GetWidth()-24)/2, 170);
+		item:SetPoint("TOPRIGHT", parent, "TOPRIGHT", -15, y);
+	end
+
+	
+	item.title = item:CreateFontString(nil, "OVERLAY");
+	item.title:SetPoint("TOP", item.Top, "TOP", 0, 0);
+	item.title:SetFontObject("GameFontHighlight");
+	item.title:SetText(title);
+
+	item.idText = item:CreateFontString(nil, "OVERLAY");
+	item.idText:SetPoint("TOPLEFT", item.TopLeft, "TOPLEFT", 5, -25);
+	item.idText:SetFontObject("GameFontHighlight");
+	item.idText:SetText("Item ID:");
+
+	item.idEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+	item.idEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -18);
+	item.idEdit:SetSize(110, 24);		
+	item.idEdit:SetAutoFocus(false);
+	item.idEdit:SetNumeric(true);
+
+	item.idEdit:SetScript("OnEnterPressed", function(self, value)
+		item.idEdit:ClearFocus();
+	end)
+
+	item.zoneText = item:CreateFontString(nil, "OVERLAY");
+	item.zoneText:SetPoint("TOPLEFT", item.TopLeft, "TOPLEFT", 5, -55);
+	item.zoneText:SetFontObject("GameFontHighlight");
+	item.zoneText:SetText("Zone:");
+
+	item.zoneEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+	item.zoneEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -48);
+	item.zoneEdit:SetSize(110, 24);		
+	item.zoneEdit:SetAutoFocus(false);
+
+	item.zoneEdit:SetScript("OnEnterPressed", function(self, value)
+		item.zoneEdit:ClearFocus();
+	end)
+
+	item.typeText = item:CreateFontString(nil, "OVERLAY");
+	item.typeText:SetPoint("TOPLEFT", item.TopLeft, "TOPLEFT", 5, -85);
+	item.typeText:SetFontObject("GameFontHighlight");
+	item.typeText:SetText("Method: ");
+
+	item.typeEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+	item.typeEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -78);
+	item.typeEdit:SetSize(110, 24);		
+	item.typeEdit:SetAutoFocus(false);
+
+	item.typeEdit:SetScript("OnEnterPressed", function(self, value)
+		item.typeEdit:ClearFocus();
+	end)
+
+	item.methodText = item:CreateFontString(nil, "OVERLAY");
+	item.methodText:SetPoint("TOPLEFT", item.TopLeft, "TOPLEFT", 5, -115);
+	item.methodText:SetFontObject("GameFontHighlight");
+	item.methodText:SetText("Npc/Quest: ");
+
+	item.methodEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+	item.methodEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -108);
+	item.methodEdit:SetSize(90, 24);		
+	item.methodEdit:SetAutoFocus(false);
+
+	item.methodEdit:SetScript("OnEnterPressed", function(self, value)
+		item.methodEdit:ClearFocus();
+	end)
+
+	item.dropText = item:CreateFontString(nil, "OVERLAY");
+	item.dropText:SetPoint("TOPLEFT", item.TopLeft, "TOPLEFT", 5, -145);
+	item.dropText:SetFontObject("GameFontHighlight");
+	item.dropText:SetText("Drop chance: ");
+
+	item.dropEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+	item.dropEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -138);
+	item.dropEdit:SetSize(80, 24);		
+	item.dropEdit:SetAutoFocus(false);
+
+	item.dropEdit:SetScript("OnEnterPressed", function(self, value)
+		item.dropEdit:ClearFocus();
+	end)
+
+	return item;
+
+end
+
 MainFrame:SetScript("OnEvent", function(self, event, ...)
 	local args = {...}
 	if event == "PLAYER_LOGIN" then
+
+		if type(BiS_Settings) ~= "table" then
+			BiS_Settings = {}
+			BiS_Settings["CustomSpecsData"] = customSpecData;
+			BiS_Settings["CustomSpecs"] = customSpecs;
+		else
+			if BiS_Settings["CustomSpecsData"] ~= nil and BiS_Settings["CustomSpecs"] ~= nil then
+				customSpecData = BiS_Settings["CustomSpecsData"];
+				customSpecs = BiS_Settings["CustomSpecs"];
+			else
+				BiS_Settings["CustomSpecsData"] = customSpecData;
+				BiS_Settings["CustomSpecs"] = customSpecs;
+			end
+		end
+		
 		MainFrame:SetBackdrop(backdrop);
 		MainFrame:SetBackdropBorderColor(1, 1, 1, 1);
 		MainFrame:SetBackdropColor(0, 0, 0, 1);
@@ -1654,6 +1227,744 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
 		ToastFrame.itemName:SetFontObject("GameFontHighlight");
 		ToastFrame.itemName:SetText("[Some random item]");
 		ToastFrame.itemName:SetFont("Fonts\\FRIZQT__.TTF", 17);
+
+		ConfirmDeleteFrame = CreateFrame("Frame", "BiSConfirmDeleteFrame", UIParent, "BiSFrameTemplate");
+		ConfirmDeleteFrame:SetPoint("TOP", UIParent, "TOP", 0, -150);
+		ConfirmDeleteFrame:SetSize(400, 100);
+		ConfirmDeleteFrame:SetBackdrop(backdrop);
+		ConfirmDeleteFrame:SetBackdropBorderColor(1, 1, 1, 1);
+		ConfirmDeleteFrame:SetBackdropColor(0, 0, 0, 1);
+		ConfirmDeleteFrame:Hide();
+
+		ConfirmDeleteFrame.title = ConfirmDeleteFrame:CreateFontString(nil, "OVERLAY");
+		ConfirmDeleteFrame.title:SetPoint("TOP", ConfirmDeleteFrame.Top, "TOP", 0, -20);
+		ConfirmDeleteFrame.title:SetFontObject("GameFontHighlight");
+		ConfirmDeleteFrame.title:SetText("You are about to remove the following spec: ");
+		ConfirmDeleteFrame.title:SetFont("Fonts\\FRIZQT__.TTF", 15);
+
+		ConfirmDeleteFrame.specName = ConfirmDeleteFrame:CreateFontString(nil, "OVERLAY");
+		ConfirmDeleteFrame.specName:SetPoint("TOP", ConfirmDeleteFrame.Top, "TOP", 0, -40);
+		ConfirmDeleteFrame.specName:SetFontObject("GameFontHighlight");
+		ConfirmDeleteFrame.specName:SetFont("Fonts\\FRIZQT__.TTF", 15);
+
+		ConfirmDeleteFrame.accept = CreateFrame("Button", "BiSConfirmDeleteFrameAccept", ConfirmDeleteFrame, "UIPanelButtonTemplate");
+		ConfirmDeleteFrame.accept:SetPoint("BOTTOMLEFT", ConfirmDeleteFrame.BottomLeft, "BOTTOMLEFT", 17, 10);
+		ConfirmDeleteFrame.accept:SetText("Proceed");
+		ConfirmDeleteFrame.accept:SetSize(180, 30);
+
+		ConfirmDeleteFrame.accept:SetScript("OnClick", function(self, value, ...)
+			for x = 1, table.getn(customSpecs) do
+				if customSpecs[x] == spec then
+					table.remove(customSpecs, x);
+				end
+			end
+			customSpecData[spec] = nil;
+
+			spec = customSpecs[table.getn(customSpecs)];
+			for itemIndex = 1, table.getn(specItems) do
+				specItems[itemIndex].title:SetText(customSpecs[itemIndex]);
+			end
+
+			setDropdownListSize(customSpecs, dropdowns[2].dropdownList, 100);
+
+			updateItemList();
+
+			ConfirmDeleteFrame:Hide();
+		end)
+
+
+		ConfirmDeleteFrame.deny = CreateFrame("Button", "BiSConfirmDeleteFrameCancel", ConfirmDeleteFrame, "UIPanelButtonTemplate");
+		ConfirmDeleteFrame.deny:SetPoint("BOTTOMRIGHT", ConfirmDeleteFrame.BottomRight, "BOTTOMRIGHT", -17, 10);
+		ConfirmDeleteFrame.deny:SetText("Cancel");
+		ConfirmDeleteFrame.deny:SetSize(180, 30);
+
+		ConfirmDeleteFrame.deny:SetScript("OnClick", function(self, value, ...)
+			ConfirmDeleteFrame:Hide();
+		end)
+
+		NewCustomSpecFrame = CreateFrame("Frame", "BiSnewCustomSpecFrame", UIParent, "BiSFrameTemplate");
+		NewCustomSpecFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 50);
+		NewCustomSpecFrame:SetSize(400, 600);
+		NewCustomSpecFrame:SetBackdrop(backdrop);
+		NewCustomSpecFrame:SetBackdropBorderColor(1, 1, 1, 1);
+		NewCustomSpecFrame:SetBackdropColor(0, 0, 0, 1);
+		NewCustomSpecFrame:Hide();
+
+		NewCustomSpecFrame.title = NewCustomSpecFrame:CreateFontString(nil, "OVERLAY");
+		NewCustomSpecFrame.title:SetPoint("TOP", NewCustomSpecFrame.Top, "TOP", 0, -10);
+		NewCustomSpecFrame.title:SetFontObject("GameFontHighlight");
+		NewCustomSpecFrame.title:SetText("Add a new custom spec");
+		NewCustomSpecFrame.title:SetFont("Fonts\\FRIZQT__.TTF", 15);
+
+		NewCustomSpecFrame.close = CreateFrame("Button", "CustomSpecClose", NewCustomSpecFrame, "UIPanelCloseButton");
+		NewCustomSpecFrame.close:SetSize(32, 32);
+		NewCustomSpecFrame.close:SetPoint("TOPRIGHT", NewCustomSpecFrame.TopRight, "TOPRIGHT", -2, -2);
+
+		NewCustomSpecFrame.nameText = NewCustomSpecFrame:CreateFontString(nil, "OVERLAY");
+		NewCustomSpecFrame.nameText:SetPoint("TOPLEFT", NewCustomSpecFrame.TopLeft, "TOPLEFT", 15, -38);
+		NewCustomSpecFrame.nameText:SetFontObject("GameFontHighlight");
+		NewCustomSpecFrame.nameText:SetText("Name of the spec:");
+		NewCustomSpecFrame.nameText:SetFont("Fonts\\FRIZQT__.TTF", 13)
+
+		NewCustomSpecFrame.nameEdit = CreateFrame("EditBox", "nameEditBox", NewCustomSpecFrame, "InputBoxTemplate");
+		NewCustomSpecFrame.nameEdit:SetPoint("TOPRIGHT", NewCustomSpecFrame.TopRight, "TOPRIGHT", -35, -32);
+		NewCustomSpecFrame.nameEdit:SetSize(220, 24);		
+		NewCustomSpecFrame.nameEdit:SetAutoFocus(false);
+
+		NewCustomSpecFrame.nameEdit:SetScript("OnEnterPressed", function(self, value)
+			NewCustomSpecFrame.nameEdit:ClearFocus();
+		end)
+
+		NewCustomSpecFrame.scrollFrame = CreateFrame("ScrollFrame", nil, NewCustomSpecFrame);
+		NewCustomSpecFrame.scrollFrame:SetPoint("TOPLEFT", 10, -68);
+		NewCustomSpecFrame.scrollFrame:SetPoint("BOTTOMRIGHT", -10, 10);
+		NewCustomSpecFrame.scrollFrame.texture = NewCustomSpecFrame.scrollFrame:CreateTexture();
+		NewCustomSpecFrame.scrollFrame.texture:SetAllPoints();
+		NewCustomSpecFrame.scrollFrame.texture:SetTexture(.5,.5,.5,1);
+
+		NewCustomSpecFrame.scrollFrame.scrollBar = CreateFrame("Slider", nil, NewCustomSpecFrame.scrollFrame, "UIPanelScrollBarTemplate");
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetPoint("TOPLEFT", NewCustomSpecFrame, "TOPRIGHT", -24, -82);
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetPoint("BOTTOMLEFT", NewCustomSpecFrame, "BOTTOMRIGHT", -24, 24);
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetMinMaxValues(1, 1012);
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetValueStep(10);
+		NewCustomSpecFrame.scrollFrame.scrollBar.scrollStep = 10;
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetValue(0);
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetWidth(16);
+		NewCustomSpecFrame.scrollFrame.scrollBar:SetScript("OnValueChanged", function(self, value)
+			self:GetParent():SetVerticalScroll(value);
+		end)
+		NewCustomSpecFrame.scrollFrame.scrollBar.scrollbg = NewCustomSpecFrame.scrollFrame.scrollBar:CreateTexture(nil, "BACKGROUND");
+		NewCustomSpecFrame.scrollFrame.scrollBar.scrollbg:SetAllPoints(NewCustomSpecFrame.scrollFrame.scrollBar);
+		NewCustomSpecFrame.scrollFrame.scrollBar.scrollbg:SetTexture(0, 0, 0, 0.4);
+
+		NewCustomSpecFrame.scrollFrame.content = CreateFrame("Frame", nil, NewCustomSpecFrame.scrollFrame);
+		NewCustomSpecFrame.scrollFrame.content:SetSize(376, 2000);
+
+		NewCustomSpecFrame.scrollFrame.content:SetScript("OnMouseWheel", function(self, value)
+			local scrollValue = self:GetParent():GetVerticalScroll();
+			local scrollBarValue = self:GetParent().scrollBar:GetValue();
+			if scrollValue - value*10 > 0 and scrollValue - value*10 < 1012 then 
+				self:GetParent().scrollBar:SetValue(scrollBarValue - value*10);
+				self:GetParent():SetVerticalScroll(scrollValue - value*10);
+			else
+				if (value == 1) then
+					self:GetParent().scrollBar:SetValue(0);
+					self:GetParent():SetVerticalScroll(0);
+				else
+					self:GetParent().scrollBar:SetValue(1012);
+					self:GetParent():SetVerticalScroll(1012);
+				end
+			end
+		end)
+
+		NewCustomSpecFrame.scrollFrame.content.Head = createCustomSpecBlock("Head", NewCustomSpecFrame.scrollFrame.content, true, -5);
+		NewCustomSpecFrame.scrollFrame.content.Neck = createCustomSpecBlock("Neck", NewCustomSpecFrame.scrollFrame.content, false, -5);
+		NewCustomSpecFrame.scrollFrame.content.Shoulder = createCustomSpecBlock("Shoulder", NewCustomSpecFrame.scrollFrame.content, true, -175);
+		NewCustomSpecFrame.scrollFrame.content.Cloak = createCustomSpecBlock("Cloak", NewCustomSpecFrame.scrollFrame.content, false, -175);
+		NewCustomSpecFrame.scrollFrame.content.Chest = createCustomSpecBlock("Chest", NewCustomSpecFrame.scrollFrame.content, true, -345);
+		NewCustomSpecFrame.scrollFrame.content.Wrist = createCustomSpecBlock("Wrist", NewCustomSpecFrame.scrollFrame.content, false, -345);
+		NewCustomSpecFrame.scrollFrame.content.Gloves = createCustomSpecBlock("Gloves", NewCustomSpecFrame.scrollFrame.content, true, -515);
+		NewCustomSpecFrame.scrollFrame.content.Waist = createCustomSpecBlock("Waist", NewCustomSpecFrame.scrollFrame.content, false, -515);
+		NewCustomSpecFrame.scrollFrame.content.Legs = createCustomSpecBlock("Legs", NewCustomSpecFrame.scrollFrame.content, true, -685);
+		NewCustomSpecFrame.scrollFrame.content.Boots = createCustomSpecBlock("Boots", NewCustomSpecFrame.scrollFrame.content, false, -685);
+		NewCustomSpecFrame.scrollFrame.content.Ring1 = createCustomSpecBlock("Ring 1", NewCustomSpecFrame.scrollFrame.content, true, -855);
+		NewCustomSpecFrame.scrollFrame.content.Ring2 = createCustomSpecBlock("Ring 2", NewCustomSpecFrame.scrollFrame.content, false, -855);
+		NewCustomSpecFrame.scrollFrame.content.Trinket1 = createCustomSpecBlock("Trinket 1", NewCustomSpecFrame.scrollFrame.content, true, -1025);
+		NewCustomSpecFrame.scrollFrame.content.Trinket2 = createCustomSpecBlock("Trinket 2", NewCustomSpecFrame.scrollFrame.content, false, -1025);
+		NewCustomSpecFrame.scrollFrame.content.MainHand = createCustomSpecBlock("Main-hand", NewCustomSpecFrame.scrollFrame.content, true, -1195);
+		NewCustomSpecFrame.scrollFrame.content.OffHand = createCustomSpecBlock("Off-hand", NewCustomSpecFrame.scrollFrame.content, false, -1195);
+		NewCustomSpecFrame.scrollFrame.content.Ranged = createCustomSpecBlock("Ranged", NewCustomSpecFrame.scrollFrame.content, true, -1365);
+		--NewCustomSpecFrame.scrollFrame.content.addBox = createCustomSpecBlock("Ranged", NewCustomSpecFrame.scrollFrame.content, false, -1365);
+
+		NewCustomSpecFrame.scrollFrame.content.addBox = CreateFrame("Frame", nil, NewCustomSpecFrame.scrollFrame.content, "BiSFrameTemplate");
+		NewCustomSpecFrame.scrollFrame.content.addBox:SetSize((NewCustomSpecFrame.scrollFrame.content:GetWidth()-24)/2, 170);
+		NewCustomSpecFrame.scrollFrame.content.addBox:SetPoint("TOPRIGHT", NewCustomSpecFrame.scrollFrame.content, "TOPRIGHT", -15, -1365);
+
+		NewCustomSpecFrame.scrollFrame.content.addBox.idText = NewCustomSpecFrame.scrollFrame.content.addBox:CreateFontString(nil, "OVERLAY");
+		NewCustomSpecFrame.scrollFrame.content.addBox.idText:SetPoint("TOPLEFT", NewCustomSpecFrame.scrollFrame.content.addBox.TopLeft, "TOPLEFT", 5, -25);
+		NewCustomSpecFrame.scrollFrame.content.addBox.idText:SetFontObject("GameFontHighlight");
+		NewCustomSpecFrame.scrollFrame.content.addBox.idText:SetText("Phase:");
+
+		NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown = CreateFrame("Frame", "newSpecPhaseDropdown", NewCustomSpecFrame.scrollFrame.content.addBox, "UIDropDownMenuTemplate");
+		NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown:SetPoint("TOPRIGHT", NewCustomSpecFrame.scrollFrame.content.addBox, "TOPRIGHT", 15, -14);
+		UIDropDownMenu_SetWidth(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, 110);
+		UIDropDownMenu_SetText(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, "Phase1");
+
+		--[[item.idEdit = CreateFrame("EditBox", "headEditBox", item, "InputBoxTemplate");
+		item.idEdit:SetPoint("TOPRIGHT", item.TopRight, "TOPRIGHT", -5, -18);
+		item.idEdit:SetSize(110, 24);		
+		item.idEdit:SetAutoFocus(false);
+		item.idEdit:SetNumeric(true);]]
+
+		local function UIDropDownMenu_OnClick(self, arg1, arg2, checked)
+			UIDropDownMenu_SetSelectedValue(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, self.value);
+			newSpecPhase = arg1;
+		end
+
+		UIDropDownMenu_Initialize(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, function(self, level, menuList)
+			local info = UIDropDownMenu_CreateInfo();
+			info.func = UIDropDownMenu_OnClick;
+			info.text, info.arg1, info.checked = "Phase1", "Phase1", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase2PreRaid", "Phase2PreRaid", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase2", "Phase2", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase3", "Phase3", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase4", "Phase4", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase5", "Phase5", false;
+			UIDropDownMenu_AddButton(info);
+			info.text, info.arg1, info.checked = "Phase6", "Phase6", false;
+			UIDropDownMenu_AddButton(info);
+			
+		end)
+		UIDropDownMenu_SetSelectedValue(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, "Phase1");
+
+
+
+
+
+		NewCustomSpecFrame.scrollFrame.content.addSpecBtn = CreateFrame("Button", "test", NewCustomSpecFrame.scrollFrame.content, "UIPanelButtonTemplate");
+		NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetSize(120, 32);
+		NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetPoint("TOPRIGHT", NewCustomSpecFrame.scrollFrame.content, "TOPRIGHT", -40, -1435);
+		NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetText("Add Spec");
+		NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetScript("OnClick", function(self)
+			local name = NewCustomSpecFrame.nameEdit:GetText();
+
+			local items = {
+				Head = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},Neck = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Shoulder = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Cloak = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Chest = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Wrist = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Gloves = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Waist = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Legs = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Boots = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Ring1 = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Ring2 = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Trinket1 = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Trinket2 = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				MainHand = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				OffHand = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+				Ranged = {
+					itemID = 0,
+					Obtain = {
+						Zone = "",
+						Type = "",
+						Method = "",
+						Drop = "",
+					}
+				},
+			}
+
+			items["Head"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Head.idEdit:GetNumber();
+			items["Head"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Head.zoneEdit:GetText();
+			items["Head"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Head.typeEdit:GetText();
+			items["Head"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Head.methodEdit:GetText();
+			items["Head"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Head.dropEdit:GetText();
+
+			items["Neck"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Neck.idEdit:GetNumber();
+			items["Neck"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Neck.zoneEdit:GetText();
+			items["Neck"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Neck.typeEdit:GetText();
+			items["Neck"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Neck.methodEdit:GetText();
+			items["Neck"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Neck.dropEdit:GetText();
+
+			items["Shoulder"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Shoulder.idEdit:GetNumber();
+			items["Shoulder"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Shoulder.zoneEdit:GetText();
+			items["Shoulder"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Shoulder.typeEdit:GetText();
+			items["Shoulder"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Shoulder.methodEdit:GetText();
+			items["Shoulder"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Shoulder.dropEdit:GetText();
+
+			items["Cloak"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Cloak.idEdit:GetNumber();
+			items["Cloak"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Cloak.zoneEdit:GetText();
+			items["Cloak"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Cloak.typeEdit:GetText();
+			items["Cloak"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Cloak.methodEdit:GetText();
+			items["Cloak"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Cloak.dropEdit:GetText();
+
+			items["Chest"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Chest.idEdit:GetNumber();
+			items["Chest"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Chest.zoneEdit:GetText();
+			items["Chest"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Chest.typeEdit:GetText();
+			items["Chest"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Chest.methodEdit:GetText();
+			items["Chest"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Chest.dropEdit:GetText();
+
+			items["Wrist"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Wrist.idEdit:GetNumber();
+			items["Wrist"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Wrist.zoneEdit:GetText();
+			items["Wrist"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Wrist.typeEdit:GetText();
+			items["Wrist"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Wrist.methodEdit:GetText();
+			items["Wrist"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Wrist.dropEdit:GetText();
+
+			items["Gloves"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Gloves.idEdit:GetNumber();
+			items["Gloves"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Gloves.zoneEdit:GetText();
+			items["Gloves"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Gloves.typeEdit:GetText();
+			items["Gloves"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Gloves.methodEdit:GetText();
+			items["Gloves"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Gloves.dropEdit:GetText();
+
+			items["Waist"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Waist.idEdit:GetNumber();
+			items["Waist"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Waist.zoneEdit:GetText();
+			items["Waist"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Waist.typeEdit:GetText();
+			items["Waist"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Waist.methodEdit:GetText();
+			items["Waist"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Waist.dropEdit:GetText();
+
+			items["Legs"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Legs.idEdit:GetNumber();
+			items["Legs"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Legs.zoneEdit:GetText();
+			items["Legs"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Legs.typeEdit:GetText();
+			items["Legs"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Legs.methodEdit:GetText();
+			items["Legs"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Legs.dropEdit:GetText();
+
+			items["Boots"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Boots.idEdit:GetNumber();
+			items["Boots"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Boots.zoneEdit:GetText();
+			items["Boots"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Boots.typeEdit:GetText();
+			items["Boots"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Boots.methodEdit:GetText();
+			items["Boots"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Boots.dropEdit:GetText();
+
+			items["Ring1"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Ring1.idEdit:GetNumber();
+			items["Ring1"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Ring1.zoneEdit:GetText();
+			items["Ring1"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Ring1.typeEdit:GetText();
+			items["Ring1"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Ring1.methodEdit:GetText();
+			items["Ring1"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Ring1.dropEdit:GetText();
+
+			items["Ring2"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Ring2.idEdit:GetNumber();
+			items["Ring2"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Ring2.zoneEdit:GetText();
+			items["Ring2"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Ring2.typeEdit:GetText();
+			items["Ring2"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Ring2.methodEdit:GetText();
+			items["Ring2"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Ring2.dropEdit:GetText();
+
+			items["Trinket1"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Trinket1.idEdit:GetNumber();
+			items["Trinket1"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Trinket1.zoneEdit:GetText();
+			items["Trinket1"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Trinket1.typeEdit:GetText();
+			items["Trinket1"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Trinket1.methodEdit:GetText();
+			items["Trinket1"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Trinket1.dropEdit:GetText();
+
+			items["Trinket2"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Trinket2.idEdit:GetNumber();
+			items["Trinket2"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Trinket2.zoneEdit:GetText();
+			items["Trinket2"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Trinket2.typeEdit:GetText();
+			items["Trinket2"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Trinket2.methodEdit:GetText();
+			items["Trinket2"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Trinket2.dropEdit:GetText();
+
+			items["MainHand"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.MainHand.idEdit:GetNumber();
+			items["MainHand"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.MainHand.zoneEdit:GetText();
+			items["MainHand"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.MainHand.typeEdit:GetText();
+			items["MainHand"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.MainHand.methodEdit:GetText();
+			items["MainHand"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.MainHand.dropEdit:GetText();
+
+			items["OffHand"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.OffHand.idEdit:GetNumber();
+			items["OffHand"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.OffHand.zoneEdit:GetText();
+			items["OffHand"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.OffHand.typeEdit:GetText();
+			items["OffHand"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.OffHand.methodEdit:GetText();
+			items["OffHand"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.OffHand.dropEdit:GetText();
+
+			items["Ranged"]["itemID"] = NewCustomSpecFrame.scrollFrame.content.Ranged.idEdit:GetNumber();
+			items["Ranged"]["Obtain"]["Zone"] = NewCustomSpecFrame.scrollFrame.content.Ranged.zoneEdit:GetText();
+			items["Ranged"]["Obtain"]["Type"] = NewCustomSpecFrame.scrollFrame.content.Ranged.typeEdit:GetText();
+			items["Ranged"]["Obtain"]["Method"] = NewCustomSpecFrame.scrollFrame.content.Ranged.methodEdit:GetText();
+			items["Ranged"]["Obtain"]["Drop"] = NewCustomSpecFrame.scrollFrame.content.Ranged.dropEdit:GetText();
+
+
+			if type(customSpecData[name]) ~= "table" then
+				table.insert(customSpecs, name);
+				customSpecData[name] = {};
+				spec = name;
+
+				if (table.getn(customSpecs) > table.getn(specItems)) then
+
+					local listItem = CreateFrame("Frame", nil, dropdowns[2].dropdownList, "BiSFrameTemplate");
+					listItem:SetBackdropColor(1, 1, 1, 0.1);
+					listItem:SetPoint("LEFT", dropdowns[2].dropdownList.TopLeft, "LEFT", -2, -1 * ((table.getn(specItems) + 1) * 16) + 3);
+					listItem:SetSize(frameWidth, 15);
+
+					listItem.title = listItem:CreateFontString(nil, "OVERLAY");
+					listItem.title:SetFontObject("GameFontHighlight");
+					listItem.title:SetPoint("LEFT", listItem.Left, "CENTER", 14, 0);
+					listItem.title:SetTextColor(1, 1, 1, 1);
+					listItem.title:SetText(name);
+					listItem:SetScript("OnEnter", function(self) 
+						listItem:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+						listItem.title:SetTextColor(0.86, 0.64, 0, 1);
+					end);
+					listItem:SetScript("OnLeave", function(self) 
+						listItem:SetBackdropColor(1, 1, 1, 0.1);
+						listItem.title:SetTextColor(1, 1, 1, 1);
+					end);
+					listItem:SetScript("OnMouseDown", function(self)
+						if (listItem.title:GetText() == customSpecs[1]) then
+							editSpec = false;
+							NewCustomSpecFrame.title:SetText("Add a new custom spec");
+							NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetText("Add Spec");
+
+							NewCustomSpecFrame.nameEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Head.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Head.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Head.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Head.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Head.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Neck.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Neck.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Neck.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Neck.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Neck.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Shoulder.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Shoulder.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Shoulder.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Shoulder.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Shoulder.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Cloak.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Cloak.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Cloak.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Cloak.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Cloak.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Chest.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Chest.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Chest.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Chest.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Chest.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Wrist.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Wrist.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Wrist.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Wrist.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Wrist.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Gloves.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Gloves.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Gloves.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Gloves.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Gloves.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Waist.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Waist.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Waist.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Waist.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Waist.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Legs.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Legs.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Legs.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Legs.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Legs.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Boots.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Boots.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Boots.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Boots.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Boots.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Ring1.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Ring1.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring1.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring1.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring1.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Ring2.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Ring2.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring2.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring2.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ring2.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Trinket1.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Trinket1.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket1.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket1.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket1.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Trinket2.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Trinket2.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket2.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket2.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Trinket2.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.MainHand.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.MainHand.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.MainHand.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.MainHand.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.MainHand.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.OffHand.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.OffHand.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.OffHand.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.OffHand.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.OffHand.dropEdit:SetText("");
+
+							NewCustomSpecFrame.scrollFrame.content.Ranged.idEdit:SetNumber(0);
+							NewCustomSpecFrame.scrollFrame.content.Ranged.zoneEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ranged.typeEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ranged.methodEdit:SetText("");
+							NewCustomSpecFrame.scrollFrame.content.Ranged.dropEdit:SetText("");
+
+							UIDropDownMenu_SetSelectedValue(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, "Phase1");
+
+							NewCustomSpecFrame:Show();
+
+
+
+						else
+							spec = listItem.title:GetText();
+						end
+						for x = 1, table.getn(phaseItems) do
+							if class == "Custom" then 
+								if customSpecData[spec][phases[x]] ~= nil then
+									phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+									phaseItems[x]:SetScript("OnEnter", function(self) 
+										phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+										phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+									end);
+									phaseItems[x]:SetScript("OnLeave", function(self) 
+										phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+										phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+									end);
+									phaseItems[x]:SetScript("OnMouseDown", function(self)
+										phase = phaseItems[x].title:GetText();
+										updateItemList();
+
+									end);
+								else
+									phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+									phaseItems[x]:SetScript("OnEnter", function(self)
+									end);
+									phaseItems[x]:SetScript("OnLeave", function(self)
+									end);
+									phaseItems[x]:SetScript("OnMouseDown", function(self)
+									end);
+								end
+							else
+								if BiSData[class][spec][phases[x]] ~= nil then
+									phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+									phaseItems[x]:SetScript("OnEnter", function(self) 
+										phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+										phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+									end);
+									phaseItems[x]:SetScript("OnLeave", function(self) 
+										phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+										phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+									end);
+									phaseItems[x]:SetScript("OnMouseDown", function(self)
+										phase = phaseItems[x].title:GetText();
+										updateItemList();
+
+									end);
+								else
+									phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+									phaseItems[x]:SetScript("OnEnter", function(self)
+									end);
+									phaseItems[x]:SetScript("OnLeave", function(self)
+									end);
+									phaseItems[x]:SetScript("OnMouseDown", function(self)
+									end);
+								end
+							end
+						end
+						updateItemList();
+					end);
+					listItem:Show();
+
+					table.insert(specItems, listItem);
+				else
+					for itemIndex = 1, table.getn(specItems) do
+						specItems[itemIndex].title:SetText(customSpecs[itemIndex]);
+					end
+				end
+
+				if string.len(name) * 9 > dropdowns[2].dropdownList:GetWidth() then
+					dropdowns[2].dropdownList:SetSize(string.len(name) * 9 + 10, table.getn(customSpecs) * 16 + 15);
+				else
+					dropdowns[2].dropdownList:SetHeight(table.getn(customSpecs) * 16 + 15);
+				end
+			end
+			customSpecData[name][newSpecPhase] = items;
+			for x = 1, table.getn(phaseItems) do
+				if class == "Custom" then 
+					if customSpecData[spec][phases[x]] ~= nil then
+						phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+						phaseItems[x]:SetScript("OnEnter", function(self) 
+							phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+							phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+						end);
+						phaseItems[x]:SetScript("OnLeave", function(self) 
+							phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+							phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+						end);
+						phaseItems[x]:SetScript("OnMouseDown", function(self)
+							phase = phaseItems[x].title:GetText();
+							updateItemList();
+
+						end);
+					else
+						phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+						phaseItems[x]:SetScript("OnEnter", function(self)
+						end);
+						phaseItems[x]:SetScript("OnLeave", function(self)
+						end);
+						phaseItems[x]:SetScript("OnMouseDown", function(self)
+						end);
+					end
+				else
+					if BiSData[class][spec][phases[x]] ~= nil then
+						phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+						phaseItems[x]:SetScript("OnEnter", function(self) 
+							phaseItems[x]:SetBackdropColor(0.2, 0.2, 0.2, 0.3);
+							phaseItems[x].title:SetTextColor(0.86, 0.64, 0, 1);
+						end);
+						phaseItems[x]:SetScript("OnLeave", function(self) 
+							phaseItems[x]:SetBackdropColor(1, 1, 1, 0.1);
+							phaseItems[x].title:SetTextColor(1, 1, 1, 1);
+						end);
+						phaseItems[x]:SetScript("OnMouseDown", function(self)
+							phase = phaseItems[x].title:GetText();
+							updateItemList();
+
+						end);
+					else
+						phaseItems[x].title:SetTextColor(0.7, 0.7, 0.7, 1);
+						phaseItems[x]:SetScript("OnEnter", function(self)
+						end);
+						phaseItems[x]:SetScript("OnLeave", function(self)
+						end);
+						phaseItems[x]:SetScript("OnMouseDown", function(self)
+						end);
+					end
+				end
+			end
+			updateItemList();
+			NewCustomSpecFrame:Hide();
+		end)
+
+		NewCustomSpecFrame.scrollFrame:SetScrollChild(NewCustomSpecFrame.scrollFrame.content);
+
 
 
 		MainFrame.tip = CreateFrame("GAMETOOLTIP", "$parentToolTip", UIParent, "GameTooltipTemplate");
@@ -1705,6 +2016,146 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
 		MainFrame.tooltipObtain:Hide();
 
 
+		MainFrame.editSpec = CreateFrame("Button", "BiSEditSpecButton", MainFrame);
+		MainFrame.editSpec:SetSize(18, 18);
+		MainFrame.editSpec:SetPoint("RIGHT", MainFrame.TopRight, "CENTER", -50, -14);
+		MainFrame.editSpec:SetNormalTexture("Interface\\AddOns\\BiSTracker\\assets\\pentest");
+		MainFrame.editSpec:SetPushedTexture("Interface\\AddOns\\BiSTracker\\assets\\pentest");
+		MainFrame.editSpec:SetHighlightTexture("Interface\\AddOns\\BiSTracker\\assets\\pen50", "ADD");
+		MainFrame.editSpec:Hide();
+
+		MainFrame.editSpec:SetScript("OnClick", function(self, event, ...)
+			if table.getn(customSpecs) > 1 then
+				editSpec = true;
+				NewCustomSpecFrame.title:SetText("Edit spec");
+				NewCustomSpecFrame.scrollFrame.content.addSpecBtn:SetText("Apply Changes");
+
+				NewCustomSpecFrame.nameEdit:SetText(spec);
+
+				NewCustomSpecFrame.scrollFrame.content.Head.idEdit:SetNumber(customSpecData[spec][phase]["Head"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Head.zoneEdit:SetText(customSpecData[spec][phase]["Head"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Head.typeEdit:SetText(customSpecData[spec][phase]["Head"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Head.methodEdit:SetText(customSpecData[spec][phase]["Head"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Head.dropEdit:SetText(customSpecData[spec][phase]["Head"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Neck.idEdit:SetNumber(customSpecData[spec][phase]["Neck"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Neck.zoneEdit:SetText(customSpecData[spec][phase]["Neck"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Neck.typeEdit:SetText(customSpecData[spec][phase]["Neck"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Neck.methodEdit:SetText(customSpecData[spec][phase]["Neck"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Neck.dropEdit:SetText(customSpecData[spec][phase]["Neck"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Shoulder.idEdit:SetNumber(customSpecData[spec][phase]["Shoulder"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Shoulder.zoneEdit:SetText(customSpecData[spec][phase]["Shoulder"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Shoulder.typeEdit:SetText(customSpecData[spec][phase]["Shoulder"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Shoulder.methodEdit:SetText(customSpecData[spec][phase]["Shoulder"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Shoulder.dropEdit:SetText(customSpecData[spec][phase]["Shoulder"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Cloak.idEdit:SetNumber(customSpecData[spec][phase]["Cloak"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Cloak.zoneEdit:SetText(customSpecData[spec][phase]["Cloak"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Cloak.typeEdit:SetText(customSpecData[spec][phase]["Cloak"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Cloak.methodEdit:SetText(customSpecData[spec][phase]["Cloak"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Cloak.dropEdit:SetText(customSpecData[spec][phase]["Cloak"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Chest.idEdit:SetNumber(customSpecData[spec][phase]["Chest"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Chest.zoneEdit:SetText(customSpecData[spec][phase]["Chest"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Chest.typeEdit:SetText(customSpecData[spec][phase]["Chest"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Chest.methodEdit:SetText(customSpecData[spec][phase]["Chest"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Chest.dropEdit:SetText(customSpecData[spec][phase]["Chest"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Wrist.idEdit:SetNumber(customSpecData[spec][phase]["Wrist"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Wrist.zoneEdit:SetText(customSpecData[spec][phase]["Wrist"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Wrist.typeEdit:SetText(customSpecData[spec][phase]["Wrist"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Wrist.methodEdit:SetText(customSpecData[spec][phase]["Wrist"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Wrist.dropEdit:SetText(customSpecData[spec][phase]["Wrist"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Gloves.idEdit:SetNumber(customSpecData[spec][phase]["Gloves"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Gloves.zoneEdit:SetText(customSpecData[spec][phase]["Gloves"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Gloves.typeEdit:SetText(customSpecData[spec][phase]["Gloves"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Gloves.methodEdit:SetText(customSpecData[spec][phase]["Gloves"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Gloves.dropEdit:SetText(customSpecData[spec][phase]["Gloves"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Waist.idEdit:SetNumber(customSpecData[spec][phase]["Waist"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Waist.zoneEdit:SetText(customSpecData[spec][phase]["Waist"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Waist.typeEdit:SetText(customSpecData[spec][phase]["Waist"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Waist.methodEdit:SetText(customSpecData[spec][phase]["Waist"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Waist.dropEdit:SetText(customSpecData[spec][phase]["Waist"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Legs.idEdit:SetNumber(customSpecData[spec][phase]["Legs"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Legs.zoneEdit:SetText(customSpecData[spec][phase]["Legs"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Legs.typeEdit:SetText(customSpecData[spec][phase]["Legs"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Legs.methodEdit:SetText(customSpecData[spec][phase]["Legs"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Legs.dropEdit:SetText(customSpecData[spec][phase]["Legs"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Boots.idEdit:SetNumber(customSpecData[spec][phase]["Boots"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Boots.zoneEdit:SetText(customSpecData[spec][phase]["Boots"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Boots.typeEdit:SetText(customSpecData[spec][phase]["Boots"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Boots.methodEdit:SetText(customSpecData[spec][phase]["Boots"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Boots.dropEdit:SetText(customSpecData[spec][phase]["Boots"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Ring1.idEdit:SetNumber(customSpecData[spec][phase]["Ring1"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring1.zoneEdit:SetText(customSpecData[spec][phase]["Ring1"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring1.typeEdit:SetText(customSpecData[spec][phase]["Ring1"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring1.methodEdit:SetText(customSpecData[spec][phase]["Ring1"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring1.dropEdit:SetText(customSpecData[spec][phase]["Ring1"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Ring2.idEdit:SetNumber(customSpecData[spec][phase]["Ring2"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring2.zoneEdit:SetText(customSpecData[spec][phase]["Ring2"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring2.typeEdit:SetText(customSpecData[spec][phase]["Ring2"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring2.methodEdit:SetText(customSpecData[spec][phase]["Ring2"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Ring2.dropEdit:SetText(customSpecData[spec][phase]["Ring2"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Trinket1.idEdit:SetNumber(customSpecData[spec][phase]["Trinket1"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket1.zoneEdit:SetText(customSpecData[spec][phase]["Trinket1"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket1.typeEdit:SetText(customSpecData[spec][phase]["Trinket1"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket1.methodEdit:SetText(customSpecData[spec][phase]["Trinket1"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket1.dropEdit:SetText(customSpecData[spec][phase]["Trinket1"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Trinket2.idEdit:SetNumber(customSpecData[spec][phase]["Trinket2"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket2.zoneEdit:SetText(customSpecData[spec][phase]["Trinket2"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket2.typeEdit:SetText(customSpecData[spec][phase]["Trinket2"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket2.methodEdit:SetText(customSpecData[spec][phase]["Trinket2"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Trinket2.dropEdit:SetText(customSpecData[spec][phase]["Trinket2"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.MainHand.idEdit:SetNumber(customSpecData[spec][phase]["MainHand"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.MainHand.zoneEdit:SetText(customSpecData[spec][phase]["MainHand"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.MainHand.typeEdit:SetText(customSpecData[spec][phase]["MainHand"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.MainHand.methodEdit:SetText(customSpecData[spec][phase]["MainHand"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.MainHand.dropEdit:SetText(customSpecData[spec][phase]["MainHand"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.OffHand.idEdit:SetNumber(customSpecData[spec][phase]["OffHand"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.OffHand.zoneEdit:SetText(customSpecData[spec][phase]["OffHand"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.OffHand.typeEdit:SetText(customSpecData[spec][phase]["OffHand"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.OffHand.methodEdit:SetText(customSpecData[spec][phase]["OffHand"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.OffHand.dropEdit:SetText(customSpecData[spec][phase]["OffHand"]["Obtain"]["Drop"]);
+
+				NewCustomSpecFrame.scrollFrame.content.Ranged.idEdit:SetNumber(customSpecData[spec][phase]["Ranged"]["itemID"]);
+				NewCustomSpecFrame.scrollFrame.content.Ranged.zoneEdit:SetText(customSpecData[spec][phase]["Ranged"]["Obtain"]["Zone"]);
+				NewCustomSpecFrame.scrollFrame.content.Ranged.typeEdit:SetText(customSpecData[spec][phase]["Ranged"]["Obtain"]["Type"]);
+				NewCustomSpecFrame.scrollFrame.content.Ranged.methodEdit:SetText(customSpecData[spec][phase]["Ranged"]["Obtain"]["Method"]);
+				NewCustomSpecFrame.scrollFrame.content.Ranged.dropEdit:SetText(customSpecData[spec][phase]["Ranged"]["Obtain"]["Drop"]);
+
+				UIDropDownMenu_SetSelectedValue(NewCustomSpecFrame.scrollFrame.content.addBox.phaseDropdown, phase);
+
+				NewCustomSpecFrame:Show();
+			end
+
+		end)
+
+		MainFrame.deleteSpec = CreateFrame("Button", "BiSDeleteSpecButton", MainFrame);
+		MainFrame.deleteSpec:SetSize(18, 18);
+		MainFrame.deleteSpec:SetPoint("RIGHT", MainFrame.TopRight, "CENTER", -27, -14);
+		MainFrame.deleteSpec:SetNormalTexture("Interface\\AddOns\\BiSTracker\\assets\\delete");
+		MainFrame.deleteSpec:SetPushedTexture("Interface\\AddOns\\BiSTracker\\assets\\delete");
+		MainFrame.deleteSpec:SetHighlightTexture("Interface\\AddOns\\BiSTracker\\assets\\delete", "ADD");
+		MainFrame.deleteSpec:Hide();
+
+		MainFrame.deleteSpec:SetScript("OnClick", function(self, event, ...)
+			if table.getn(customSpecs) > 1 then
+				ConfirmDeleteFrame.specName:SetText(spec);
+				ConfirmDeleteFrame:Show();
+			end
+		end)
+
 		MainFrame.reload = CreateFrame("Button", "BiSReloadButton", MainFrame);
 		MainFrame.reload:SetSize(18, 18);
 		MainFrame.reload:SetPoint("RIGHT", MainFrame.TopRight, "CENTER", -6, -14);
@@ -1733,7 +2184,6 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
  
         if UnitName("player") == player then
         	if bisCurrentClassSpecData[itemId] ~= nil then
-        		print(string.len(bisCurrentClassSpecData[itemId].itemName));
         		if string.len(bisCurrentClassSpecData[itemId].itemName) * 14 < 300 then
         			ToastFrame:SetSize(300, 60)
         		else
@@ -1754,5 +2204,8 @@ MainFrame:SetScript("OnEvent", function(self, event, ...)
             print(loadMessage);
             print(contributorMessage);
         end
+    elseif event == "PLAYER_LOGOUT" then
+		BiS_Settings["CustomSpecsData"] = customSpecData;
+		BiS_Settings["CustomSpecs"] = customSpecs;
     end
 end);

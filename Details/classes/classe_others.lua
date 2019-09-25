@@ -595,7 +595,7 @@ function atributo_misc:DeadAtualizarBarra (morte, qual_barra, colocacao, instanc
 			esta_barra.icone_classe:SetTexCoord (_unpack (_detalhes.class_specs_coords [spec]))
 		else
 			esta_barra.icone_classe:SetTexture (instancia.row_info.icon_file)
-			esta_barra.icone_classe:SetTexCoord (_unpack (CLASS_ICON_TCOORDS [morte[4]]))
+			esta_barra.icone_classe:SetTexCoord (_unpack (CLASS_ICON_TCOORDS [morte[4] or {}]))
 		end
 	else
 		esta_barra.icone_classe:SetTexture (instancia.row_info.icon_file)

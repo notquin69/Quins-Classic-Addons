@@ -20,6 +20,7 @@ gdbprivate.gdbdefaults.gdbdefaults.dejacharacterstatsExpandButtonAltPlacementChe
 local DCS_tooltipText
 local PaperDollFrame = PaperDollFrame
 local CharacterFrame = CharacterFrame
+local PaperDollpoint, PaperDollrelativeTo, PaperDollrelativePoint, PaperDollxOffset, PaperDollyOffset = 0,0,0,0,0
 
 local function DCS_CharacterFrame_Expand()
 	DCS_StatScrollFrame:Show()
@@ -38,49 +39,6 @@ end
 local function DCS_ExpandCheck_OnLeave(self)
 	GameTooltip_Hide()
  end
- 
-local function DCS_ShownMoveTalentFrame()
-	if TalentFrame then
-		local checked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked
-		if checked == true then
-			local point, relativeTo, relativePoint, xOffset, yOffset = TalentFrame:GetPoint(1)
-			-- print(point, relativeTo, relativePoint, xOffset, yOffset)
-			if ( relativeTo ) then
-				relativeTo = relativeTo:GetName();
-			else
-				relativeTo = TalentFrame:GetParent():GetName();
-			end
-			
-			-- These are debugging messages for the frame points
-			-- Un-comment them to help debug
-			-- DEFAULT_CHAT_FRAME:AddMessage(point)
-			-- DEFAULT_CHAT_FRAME:AddMessage(relativeTo)
-			-- DEFAULT_CHAT_FRAME:AddMessage(relativePoint)
-			-- DEFAULT_CHAT_FRAME:AddMessage(xOffset)
-			-- DEFAULT_CHAT_FRAME:AddMessage(yOffset)
-
-			TalentFrame:ClearAllPoints()		
-			TalentFrame:SetPoint(
-				point,
-				relativeTo, 
-				relativePoint, 
-				(xOffset + 200), 
-				yOffset)
-		end
-	end
-end
-
-local function DCS_HiddenMoveTalentFrameBack()
-	if TalentFrame then
-		TalentFrame:ClearAllPoints()		
-		TalentFrame:SetPoint(
-			"TOPLEFT",
-			UIParent, 
-			"TOPLEFT", 
-			369.00003051758, 
-			-104.00000762939)
-	end
-end
 
 	PaperDollFrame.ExpandButton = CreateFrame("Button", nil, PaperDollFrame)
 	PaperDollFrame.ExpandButton:SetSize(32, 32)
@@ -93,7 +51,6 @@ end
 		local checked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked
 		if checked == true then
 			DCS_CharacterFrame_Collapse()
-			DCS_HiddenMoveTalentFrameBack()
 			self:SetNormalTexture("Interface\\BUTTONS\\UI-SpellbookIcon-NextPage-Up")
 			self:SetPushedTexture("Interface\\BUTTONS\\UI-SpellbookIcon-NextPage-Down")
 			DCS_tooltipText = L['Show Character Stats'] --Creates a tooltip on mouseover.
@@ -106,32 +63,26 @@ end
 			gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked = true
 		end
 		DCS_ExpandCheck_OnEnter()
-		DCS_ShownMoveTalentFrame()
 	end)
 
 	PaperDollFrame:HookScript("OnShow", function(self)
 		local checked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked
 		if checked == true then
-			DCS_CharacterFrame_Expand()
-			DCS_ShownMoveTalentFrame()
+			if TradeSkillFrame:IsVisible() or CraftFrame:IsVisible() or TalentFrame:IsVisible() then
+				DCS_CharacterFrame_Collapse()	
+			else
+				DCS_CharacterFrame_Expand()
+			end
 			PaperDollFrame.ExpandButton:SetNormalTexture("Interface\\BUTTONS\\UI-SpellbookIcon-PrevPage-Up")
 			PaperDollFrame.ExpandButton:SetPushedTexture("Interface\\BUTTONS\\UI-SpellbookIcon-PrevPage-Down")
 			DCS_tooltipText = L['Hide Character Stats'] --Creates a tooltip on mouseover.
 		else
-			DCS_CharacterFrame_Collapse()
+			DCS_CharacterFrame_Collapse()	
 			PaperDollFrame.ExpandButton:SetNormalTexture("Interface\\BUTTONS\\UI-SpellbookIcon-NextPage-Up")
 			PaperDollFrame.ExpandButton:SetPushedTexture("Interface\\BUTTONS\\UI-SpellbookIcon-NextPage-Down")
 			DCS_tooltipText = L['Show Character Stats'] --Creates a tooltip on mouseover.
 		end
 	end)
-
-	-- Move Talent Frame if DCS is shown.	
-	TalentMicroButton:HookScript("OnClick", function(self)
-		if PaperDollFrame:IsVisible() then
-			DCS_ShownMoveTalentFrame()
-		end
-	end)
-
 --------------------------
 -- Toggle Expand Button --
 --------------------------
@@ -199,5 +150,45 @@ local DCS_ExpandButtonAltPlacementCheck = CreateFrame("CheckButton", "DCS_Expand
 		else
 			PaperDollFrame.ExpandButton:ClearAllPoints()
 			PaperDollFrame.ExpandButton:SetPoint("TOPRIGHT", CharacterTrinket1Slot, "BOTTOMRIGHT", 2, -3)
+		end
+	end)
+
+
+DCS_BLIZZ_SKILL_PANELS = {
+	"TradeSkill",
+	"Craft",
+	"Talent",
+}
+
+local DejaClassicStatsExpandEventFrame = CreateFrame("Frame", "DejaClassicStatsExpandEventFrame", UIParent)
+	-- DejaClassicStatsExpandEventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	DejaClassicStatsExpandEventFrame:RegisterEvent("ADDON_LOADED")
+
+	DejaClassicStatsExpandEventFrame:SetScript("OnEvent", function(self, event, arg1)
+		if event == "ADDON_LOADED" and arg1 == "DejaClassicStats" then
+			self:UnregisterEvent("ADDON_LOADED")
+			for k, v in ipairs(DCS_BLIZZ_SKILL_PANELS) do
+				if _G[v.."Frame"] == nil then
+					LoadAddOn("Blizzard_"..v.."UI")
+					_G[v.."Frame"]:HookScript("OnShow", function(self)
+						if PaperDollFrame:IsVisible() then
+							local checked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked
+							if checked == true then
+								DCS_CharacterFrame_Collapse()
+							end
+						end
+					end)
+					_G[v.."Frame"]:HookScript("OnHide", function(self)
+						if TradeSkillFrame:IsVisible() or CraftFrame:IsVisible() or TalentFrame:IsVisible() then return
+						else
+							local checked = gdbprivate.gdb.gdbdefaults.dejacharacterstatsExpandChecked.ExpandSetChecked
+							if checked == true then
+								DCS_CharacterFrame_Expand()
+							end
+						end
+					end)
+				end
+			end
+			
 		end
 	end)

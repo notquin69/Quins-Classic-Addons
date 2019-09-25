@@ -90,7 +90,7 @@ local playersData = {-- Update on login/encounter starts. it stores the informat
 
 function RCLootCouncil:OnInitialize()
 	--IDEA Consider if we want everything on self, or just whatever modules could need.
-  	self.version = "2.13.1"
+  	self.version = "2.14.0"
 	self.nnp = false
 	self.debug = false
 	self.tVersion = nil -- String or nil. Indicates test version, which alters stuff like version check. Is appended to 'version', i.e. "version-tVersion" (max 10 letters for stupid security)
@@ -2168,12 +2168,10 @@ function RCLootCouncil:ItemIsItem(item1, item2)
 	item1 = self.Utils:GetItemStringFromLink(item1)
 	item2 = self.Utils:GetItemStringFromLink(item2)
 	if not (item1 and item2) then return false end -- KeyStones will fail the GetItemStringFromLink
-	local pattern = "item:(%d*):(%d*):(%d*):(%d*):(%d*):(%d*):(%d*):%d*:%d*:%d*"
-	local replacement = "item:%1:%2:%3:%4:%5:%6:%7:::" -- Compare link with uniqueId, linkLevel and SpecID removed
-	--[[ REVIEW The above doesn't take upgradeValues into account.
+	--[[ REVIEW Doesn't take upgradeValues into account.
 		Doing that would require a parsing of the bonusIDs to check the correct positionings.
 	]]
-	return item1:gsub(pattern, replacement) == item2:gsub(pattern, replacement)
+	return self.Utils:NeutralizeItem(item1) == self.Utils:NeutralizeItem(item2)
 end
 
 --@param links. Table of strings. Any link in the table can contain connected links (links without space in between)

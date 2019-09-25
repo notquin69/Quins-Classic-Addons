@@ -248,7 +248,8 @@ function addon.getQuestPositions(id, typ, objective, filterZone)
 					if x ~= nil then
 						table.insert(positions, {x = math.floor(x * 10000) / 100, y = math.floor(y * 10000) / 100, zone = zone, mapID = addon.mapIDs[zone], 
 							wx = pos.y, wy = pos.x, instance = pos.mapid,
-							objectives = objectives.npc[npcId]})
+							objectives = objectives.npc[npcId],
+							npcId = npcId})
 					elseif addon.debugging and filterZone == nil then
 						print("LIME: error transforming (", pos.x, pos.y, pos.mapid, ") into zone coordinates for quest #" .. id .. " npc #" .. npcId)
 					end
@@ -267,7 +268,8 @@ function addon.getQuestPositions(id, typ, objective, filterZone)
 					if x ~= nil then
 						table.insert(positions, {x = math.floor(x * 10000) / 100, y = math.floor(y * 10000) / 100, zone = zone, mapID = addon.mapIDs[zone], 
 							wx = pos.y, wy = pos.x, instance = pos.mapid,
-							objectives = objectives.object[objectId]})
+							objectives = objectives.object[objectId],
+							objectId = objectId})
 					elseif addon.debugging and filterZone == nil then 
 						print("error transforming (" .. pos.x .. "," .. pos.y .. "," .. pos.mapid .. ") into zone coordinates for quest #" .. id .. " object #" .. objectId)
 					end
@@ -564,4 +566,20 @@ function addon.GetZoneCoordinatesFromWorld(worldX, worldY, instance, zone)
 			if x ~= nil then return x, y, z end
 		end
 	end
+end
+
+function addon.getMissingPrequests(id, isCompleteFunc)
+	local missingPrequests = {}
+	if addon.questsDB[id] ~= nil and addon.questsDB[id].prequests ~= nil then
+		for _, pid in ipairs(addon.questsDB[id].prequests) do
+			if addon.applies(addon.questsDB[pid]) then
+				if not isCompleteFunc(pid) then
+					table.insert(missingPrequests, pid)
+				elseif addon.questsDB[id].oneOfPrequests then
+					return {}
+				end
+			end
+		end
+	end
+	return missingPrequests
 end

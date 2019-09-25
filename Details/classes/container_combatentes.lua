@@ -158,7 +158,7 @@
 	--> try to get the actor class from name
 	local function get_actor_class (novo_objeto, nome, flag, serial)
 		--> get spec
-		if (_detalhes.track_specs) then
+		--if (_detalhes.track_specs) then
 			local have_cached = _detalhes.cached_specs [serial]
 			if (have_cached) then
 				if (Details.IsValidSpecId (have_cached)) then
@@ -183,7 +183,7 @@
 					--_detalhes:ScheduleTimer ("GuessSpec", 3, {novo_objeto, self, 1})
 				end
 			end
-		end
+		--end
 	
 		local _, engClass = _UnitClass (nome or "")
 

@@ -43,6 +43,7 @@ function RCLootCouncilML:OnEnable()
 	db = addon:Getdb()
 	self.candidates = {} 	-- candidateName = { class, role, rank }
 	self.lootTable = {} 		-- The MLs operating lootTable, see ML:AddItem()
+	self.oldLootTable = {}
 	self.lootQueue = {}     -- Items ML have attempted to give out that waiting for LOOT_SLOT_CLEARED
 	self.running = false		-- true if we're handling a session
 	self.council = self:GetCouncilInGroup()
@@ -1015,6 +1016,17 @@ function RCLootCouncilML:Award(session, winner, response, reason, callback, ...)
 	addon:DebugLog("ML:Award", session, winner, response, reason)
 	local args = {...} --  "..."(Three dots) cant be used in an inner function, use unpack(args) instead.
 
+	if not self.lootTable or #self.lootTable == 0 then -- Our session probably ended, check the old loot table
+		if self.oldLootTable and #self.oldLootTable > 0 then
+			-- Restore it, and assume we want to reaward something
+			self.lootTable = self.oldLootTable
+		else
+			-- We have neither lootTable nor oldLootTable - that shouldn't happen!
+			addon:Debug("ML:Award <ERROR> - Neither lootTable nor oldLootTable!")
+			return false
+		end
+	end
+
 	if self.lootTable[session].lootSlot and self.lootTable[session].bagged then -- For debugging purpose, addon bug if this happens, such values never exist at any time.
 		awardFailed(session, winner, "unlooted_in_bag", callback, ...)
 		addon:SessionError("Session "..session.." has unlooted item in the bag!?")
@@ -1110,8 +1122,8 @@ function RCLootCouncilML:Award(session, winner, response, reason, callback, ...)
 		else -- Store in our bags and award later
 			self:GiveLoot(self.lootTable[session].lootSlot, addon.playerName, function(awarded, cause)
 				if awarded then
-					awardFailed(session, nil, "bagged", callback, unpack(args)) -- Item hasn't been awarded
 					registerAndAnnounceBagged(session)
+					awardFailed(session, nil, "bagged", callback, unpack(args)) -- Item hasn't been awarded
 				else
 					awardFailed(session, nil, cause, callback, unpack(args))
 					self:PrintLootErrorMsg(cause, self.lootTable[session].lootSlot, self.lootTable[session].link, addon.playerName)
@@ -1342,6 +1354,7 @@ end
 
 function RCLootCouncilML:EndSession()
 	addon:DebugLog("ML:EndSession()")
+	self.oldLootTable = self.lootTable
 	self.lootTable = {}
 	addon:SendCommand("group", "session_end")
 	self.running = false
@@ -1421,23 +1434,13 @@ function RCLootCouncilML:GetItemsFromMessage(msg, sender, retryCount)
 		if not arg2 or not arg2:find("|Hitem:") then return end
 		item1, item2 = arg2, arg3
 
-		-- check if the response is valid
 		local whisperKeys = {}
-		if self.lootTable[ses].token and addon.mldb.tierButtonsEnabled then
-			isTier = true
-			for i=1, db.tierNumButtons do
-				gsub(db.tierButtons[i]["whisperKey"], '[%w]+', function(x) tinsert(whisperKeys, {key = x, num = i}) end)
-			end
-		elseif self.lootTable[ses].relic and addon.mldb.relicButtonsEnabled then
-			isRelic = true
-			for i=1, db.relicNumButtons do
-				gsub(db.relicButtons[i]["whisperKey"], '[%w]+', function(x) tinsert(whisperKeys, {key = x, num = i}) end)
-			end
-		else
-			for i = 1, db.buttons.default.numButtons do --go through all the button
-				gsub(db.buttons[i]["whisperKey"], '[%w]+', function(x) tinsert(whisperKeys, {key = x, num = i}) end) -- extract the whisperKeys to a table
+		for k, v in pairs(db.buttons.default) do
+			if k ~= "numButtons" then
+				gsub(v.whisperKey, '[%w]+', function(x) tinsert(whisperKeys, {key = x, num = k}) end) -- extract the whisperKeys to a table
 			end
 		end
+
 		for _,v in ipairs(whisperKeys) do
 			if strmatch(arg1, v.key) then -- if we found a match
 				response = v.num
@@ -1498,8 +1501,8 @@ function RCLootCouncilML:SendWhisperHelp(target)
 	local msg
 	SendChatMessage(L["whisper_guide"], "WHISPER", nil, target)
 	for i = 1, db.buttons.default.numButtons do
-		msg = "[RCLootCouncil]: "..db.buttons[i]["text"]..":  " -- i.e. MainSpec/Need:
-		msg = msg..""..db.buttons[i]["whisperKey"].."." -- need, mainspec, etc
+		msg = "[RCLootCouncil]: "..db.buttons.default[i]["text"]..":  " -- i.e. MainSpec/Need:
+		msg = msg..""..db.buttons.default[i]["whisperKey"].."." -- need, mainspec, etc
 		SendChatMessage(msg, "WHISPER", nil, target)
 	end
 	SendChatMessage(L["whisper_guide2"], "WHISPER", nil, target)
@@ -1512,7 +1515,7 @@ end
 function RCLootCouncilML.AwardPopupOnShow(frame, data)
 	frame:SetFrameStrata("FULLSCREEN")
 	frame.text:SetText(format(L["Are you sure you want to give #item to #player?"], data.link, addon.Ambiguate(data.winner)))
-	frame.icon:SetTexture(RCLootCouncilML.lootTable[data.session].texture)
+	frame.icon:SetTexture(data.texture)
 end
 
 function RCLootCouncilML.AwardPopupOnClickYesCallback(awarded, session, winner, status, data, callback, ...)

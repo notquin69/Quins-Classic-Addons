@@ -23,6 +23,7 @@ local private = {
 	marketValueQuery = nil,
 	didScan = false,
 	auctionScan = nil,
+	lastProgressUpdateTime = 0,
 }
 local CSV_KEYS = { "itemString", "minBuyout", "marketValue", "numAuctions", "quantity", "lastScan" }
 
@@ -233,10 +234,19 @@ function private.ScanThread()
 	private.auctionScan = TSMAPI_FOUR.Auction.NewAuctionScan(private.scanDB)
 		:SetResolveSellers(false)
 		:SetIgnoreItemLevel(false)
+		:SetScript("OnProgressUpdate", private.OnProgressUpdate)
 		:SetScript("OnFilterDone", private.OnFullScanDone)
 	private.auctionScan:NewAuctionFilter()
 		:SetGetAll(true)
 	private.auctionScan:StartScanThreaded()
+end
+
+function private.OnProgressUpdate()
+	local _, _, page, totalPages = private.auctionScan:GetProgress()
+	if totalPages > 0 and time() - private.lastProgressUpdateTime > 5 then
+		TSM:Printf(L["Scanning is %d%% complete"], TSMAPI_FOUR.Util.Round(page * 100 / totalPages))
+		private.lastProgressUpdateTime = time()
+	end
 end
 
 function private.OnFullScanDone()

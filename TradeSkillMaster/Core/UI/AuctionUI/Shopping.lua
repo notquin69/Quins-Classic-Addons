@@ -48,7 +48,7 @@ local PLAYER_NAME = UnitName("player")
 local POST_TIME_STRS = {
 	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["2 hr"] or L["12 hr"],
 	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["8 hr"] or L["24 hr"],
-	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["12 hr"] or L["48 hr"],
+	WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and L["24 hr"] or L["48 hr"],
 }
 local function NoOp()
 	-- do nothing - what did you expect?

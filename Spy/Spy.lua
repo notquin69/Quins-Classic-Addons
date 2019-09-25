@@ -6,7 +6,7 @@ local L = AceLocale:GetLocale("Spy")
 local _
 
 Spy = LibStub("AceAddon-3.0"):NewAddon("Spy", "AceConsole-3.0", "AceEvent-3.0", "AceComm-3.0", "AceTimer-3.0")
-Spy.Version = "1.0.6"
+Spy.Version = "1.0.7"
 Spy.DatabaseVersion = "1.1"
 Spy.Signature = "[Spy]"
 Spy.ButtonLimit = 15
@@ -169,7 +169,7 @@ Spy.options = {
 						end
 					end,
 				},
-				ShowOnlyPvPFlagged = {
+--[[				ShowOnlyPvPFlagged = {
 					name = L["ShowOnlyPvPFlagged"],
 					desc = L["ShowOnlyPvPFlaggedDescription"],
 					type = "toggle",
@@ -181,7 +181,7 @@ Spy.options = {
 					set = function(info, value)
 						Spy.db.profile.ShowOnlyPvPFlagged = value
 					end,
-				},	
+				},	]]--
 				ShowKoSButton = {
 					name = L["ShowKoSButton"],
 					desc = L["ShowKoSButtonDescription"],
@@ -414,7 +414,7 @@ Spy.options = {
 								Spy.db.profile.Announce = "Raid"
 							end,
 						},
-						LocalDefense = {
+--[[						LocalDefense = {
 							name = L["LocalDefense"],
 							desc = L["LocalDefenseDescription"],
 							type = "toggle",
@@ -425,7 +425,7 @@ Spy.options = {
 							set = function(info, value)
 								Spy.db.profile.Announce = "LocalDefense"
 							end,
-						},
+						},]]--
 					},
 				},
 				OnlyAnnounceKoS = {
@@ -1174,7 +1174,7 @@ local Default_Profile = {
 		DisplayLastSeen=true,
 		ShowOnDetection=true,
 		HideSpy=false,
-		ShowOnlyPvPFlagged=false,
+--		ShowOnlyPvPFlagged=false,
 		ShowKoSButton=false,		
 		InvertSpy=false,
 		ResizeSpy=true,
@@ -1318,7 +1318,7 @@ function Spy:CheckDatabase()
 	if Spy.db.profile.DisplayLastSeen == nil then Spy.db.profile.DisplayLastSeen = Default_Profile.profile.DisplayLastSeen end
 	if Spy.db.profile.ShowOnDetection == nil then Spy.db.profile.ShowOnDetection = Default_Profile.profile.ShowOnDetection end
 	if Spy.db.profile.HideSpy == nil then Spy.db.profile.HideSpy = Default_Profile.profile.HideSpy end
-	if Spy.db.profile.ShowOnlyPvPFlagged == nil then Spy.db.profile.ShowOnlyPvPFlagged = Default_Profile.profile.ShowOnlyPvPFlagged end	
+--	if Spy.db.profile.ShowOnlyPvPFlagged == nil then Spy.db.profile.ShowOnlyPvPFlagged = Default_Profile.profile.ShowOnlyPvPFlagged end	
 	if Spy.db.profile.ShowKoSButton == nil then Spy.db.profile.ShowKoSButton = Default_Profile.profile.ShowKoSButton end	
 	if Spy.db.profile.InvertSpy == nil then Spy.db.profile.InvertSpy = Default_Profile.profile.InvertSpy end
 	if Spy.db.profile.ResizeSpy == nil then Spy.db.profile.ResizeSpy = Default_Profile.profile.ResizeSpy end

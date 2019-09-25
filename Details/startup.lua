@@ -1236,7 +1236,7 @@ function _G._detalhes:Start()
 	--> restore cooltip anchor position
 		DetailsTooltipAnchor:Restore()
 	
-	--> check is this is the first run
+	--> check if this is the first run
 		if (self.is_first_run) then
 			if (#self.custom == 0) then
 				_detalhes:AddDefaultCustomDisplays()

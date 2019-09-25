@@ -1,3 +1,33 @@
+# v0.1.1
+## Bugfixes
+* *Reworked the entire whisper system to be functional again.*
+
+
+# v0.1.0
+## Updated RCLootCouncil to v2.14.0
+
+* ### Voting Frame
+The ML can now right click candidates after a session has ended.
+This basically allows for an entire redo of the session, particularly changing awards later than usual.
+As a reminder you can always reopen the voting frame with "/rc open".
+
+* ### Bugfixes
+Reawarding an item to the original owner will now remove the old trade entry from the TradeUI.
+
+
+## Bugfixes
+* *RCLootCouncil v2.14.0 fixes the issue with "Award Later".*
+
+
+# v0.0.3
+## Changes
+#### Auto pass
+Warriors and Paladins no longer auto pass on leather items.
+
+## Bugfixes
+* *Auto pass no longer breaks the addon for druids.*
+
+
 # v0.0.2
 
 ## Added

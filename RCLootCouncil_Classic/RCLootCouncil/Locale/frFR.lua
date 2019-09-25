@@ -426,6 +426,11 @@ L["opt_deletePatch_confirm"] = [=[Are you sure you want to delete everything old
 --[[Translation missing --]]
 L["opt_deletePatch_desc"] = "Delete all entries added before the selected patch."
 --[[Translation missing --]]
+L["opt_deleteRaid_confirm"] = [=[Are you sure you want to delete all entries from the selected instance?
+This cannot be undone.]=]
+--[[Translation missing --]]
+L["opt_deleteRaid_desc"] = "Delete all entries from a specific instance."
+--[[Translation missing --]]
 L["opt_moreButtons_desc"] = "Add a new set of buttons for a specific gear slot. The most specific type is used, i.e. adding buttons for 'Head' and 'Azerite Armor' will make head type armor use the head buttons instead of azerite armor."
 --[[Translation missing --]]
 L["opt_printCompletedTrade_Desc"] = "Check to enable a message every time a candidate trades an awarded item to the winner."
