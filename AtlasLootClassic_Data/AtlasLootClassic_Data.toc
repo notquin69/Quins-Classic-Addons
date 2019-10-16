@@ -1,0 +1,37 @@
+﻿## Interface: 11302
+## Author: Lag
+## Version: v1.3.0
+## Dependencies: AtlasLootClassic
+## LoadOnDemand: 1
+
+## Title: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-deDE: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-esES: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-esMX: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-frFR: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-itIT: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-koKR: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-ptBR: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-ruRU: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-zhCN: AtlasLootClassic |cFFFF0000[Data]|r
+## Title-zhTW: AtlasLootClassic |cFFFF0000[Data]|r
+## Notes: AtlasLoot data module
+## Notes-deDE: AtlasLoot data module
+## Notes-esES: AtlasLoot data module
+## Notes-esMX: AtlasLoot data module
+## Notes-frFR: AtlasLoot data module
+## Notes-itIT: AtlasLoot data module
+## Notes-koKR: AtlasLoot data module
+## Notes-ptBR: AtlasLoot data module
+## Notes-ruRU: AtlasLoot data module
+## Notes-zhCN: AtlasLoot data module
+## Notes-zhTW: AtlasLoot data module
+
+## X-Category: Map
+## X-License: GPL v2
+
+core.lua
+
+locales.lua
+items.lua
+source.lua

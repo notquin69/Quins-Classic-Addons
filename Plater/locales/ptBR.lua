@@ -95,6 +95,8 @@ L["OPTIONS_ALPHA"] = "Alfa"
 --[[Translation missing --]]
 --[[ L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = ""--]] 
 --[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_COPIED"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_FAIL_COPIED"] = ""--]] 

@@ -91,18 +91,18 @@ local UnitIsAFK = UnitIsAFK;
 local UnitIsConnected = UnitIsConnected;
 local UnitIsCharmed = UnitIsCharmed;
 local UnitInRaid = UnitInRaid;
-local UnitHasVehicleUI = UnitHasVehicleUI;
+local VUHDO_unitHasVehicleUI = VUHDO_unitHasVehicleUI;
 local UnitTargetsVehicleInRaidUI = UnitTargetsVehicleInRaidUI;
 local UnitCanAttack = UnitCanAttack;
 local GetNumGroupMembers = GetNumGroupMembers;
 local UnitName = UnitName;
 local UnitPower = UnitPower;
 local UnitPowerMax = UnitPowerMax;
-local UnitThreatSituation = UnitThreatSituation;
+local VUHDO_unitThreatSituation = VUHDO_unitThreatSituation;
 local UnitClass = UnitClass;
 local UnitPowerType = UnitPowerType;
-local UnitHasVehicleUI = UnitHasVehicleUI;
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned;
+local VUHDO_unitHasVehicleUI = VUHDO_unitHasVehicleUI;
+local VUHDO_unitGroupRolesAssigned = VUHDO_unitGroupRolesAssigned;
 local GetRaidRosterInfo = GetRaidRosterInfo;
 local InCombatLockdown = InCombatLockdown;
 local IsInRaid = IsInRaid;
@@ -349,9 +349,9 @@ function VUHDO_setHealth(aUnit, aMode)
 			tInfo["dead"] = tIsDead;
 			tInfo["afk"] = tIsAfk;
 			tInfo["connected"] = tIsConnected;
-			tInfo["threat"] = UnitThreatSituation(aUnit) or 0;
+			tInfo["threat"] = VUHDO_unitThreatSituation(aUnit) or 0;
 			tInfo["threatPerc"] = 0;
-			tInfo["isVehicle"] = UnitHasVehicleUI(aUnit);
+			tInfo["isVehicle"] = VUHDO_unitHasVehicleUI(aUnit);
 			tInfo["className"] = tLocalClass or "";
 			tInfo["petUnit"] = VUHDO_OWNER_2_PET[aUnit];
 			tInfo["targetUnit"] = VUHDO_getTargetUnit(aUnit);
@@ -536,7 +536,7 @@ end
 --
 local tRole;
 local function VUHDO_addUnitToSpecial(aUnit)
-	if VUHDO_CONFIG["OMIT_DFT_MTS"] and "TANK" == (UnitGroupRolesAssigned(aUnit)) then
+	if VUHDO_CONFIG["OMIT_DFT_MTS"] and "TANK" == (VUHDO_unitGroupRolesAssigned(aUnit)) then
 		tinsert(VUHDO_GROUPS[41], aUnit); -- VUHDO_ID_MAINTANKS
 		return;
 	end
@@ -861,7 +861,7 @@ function VUHDO_refreshRaidMembers()
 			else
 				tInfo["group"] = VUHDO_getUnitGroup(tPlayer, false);
 
-				tInfo["isVehicle"] = UnitHasVehicleUI(tPlayer);
+				tInfo["isVehicle"] = VUHDO_unitHasVehicleUI(tPlayer);
 				if ( tInfo["isVehicle"] ) then
 					local tRaidId = UnitInRaid(tPlayer);
 					
@@ -902,7 +902,7 @@ function VUHDO_refreshRaidMembers()
 				VUHDO_setHealth(bossUnitId, 1); -- VUHDO_UPDATE_ALL
 			else
 				tInfo["group"] = VUHDO_getUnitGroup(bossUnitId, false);
-				tInfo["isVehicle"] = UnitHasVehicleUI(bossUnitId);
+				tInfo["isVehicle"] = VUHDO_unitHasVehicleUI(bossUnitId);
 
 				tInfo["afk"] = false;
 				tInfo["connected"] = true;

@@ -45,6 +45,8 @@ local anchors = {
 local cache = {}
 local _G = _G
 local strmatch = _G.strmatch
+local strfind = _G.string.find
+local UnitGUID = _G.UnitGUID
 local GetNamePlateForUnit = _G.C_NamePlate.GetNamePlateForUnit
 
 local function GetUnitFrameForUnit(unitType, unitID, hasNumberIndex)
@@ -57,7 +59,10 @@ local function GetUnitFrameForUnit(unitType, unitID, hasNumberIndex)
             name = format(name, strmatch(unitID, "%d+")) -- add unit index to unitframe name
         end
 
-        if _G[name] then return _G[name], name end
+        local frame = _G[name]
+        if frame and frame:IsVisible() then
+            return _G[name], name
+        end
     end
 end
 
@@ -75,9 +80,9 @@ local function GetPartyFrameForUnit(unitID)
     -- to loop through them all and check if the unit matches
     for i = 1, 40 do
         local frame, frameName = GetUnitFrameForUnit("party", "party"..i, true)
-        if frame and frame.unit and UnitGUID(frame.unit) == guid then
+        if frame and frame.unit and UnitGUID(frame.unit) == guid and frame:IsVisible() then
             if compact then
-                if not strfind(frameName, "PartyMemberFrame") then
+                if strfind(frameName, "PartyMemberFrame") == nil then
                     return frame
                 end
             else

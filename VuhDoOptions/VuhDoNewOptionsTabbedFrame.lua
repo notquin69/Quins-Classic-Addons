@@ -219,3 +219,4 @@ function VUHDO_initOptionsSettings()
 		};
 	end
 end
+

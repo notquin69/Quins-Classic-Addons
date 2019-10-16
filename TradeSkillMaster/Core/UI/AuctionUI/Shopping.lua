@@ -1366,9 +1366,11 @@ function private.ClassDropdownOnSelectionChanged(dropdown, selection)
 		subClassDropdown:SetItems(TSMAPI_FOUR.Item.GetItemSubClasses(selection))
 		subClassDropdown:SetDisabled(false)
 		subClassDropdown:SetSelection(nil)
+			:Draw()
 	else
 		subClassDropdown:SetDisabled(true)
 		subClassDropdown:SetSelection(nil)
+			:Draw()
 	end
 end
 

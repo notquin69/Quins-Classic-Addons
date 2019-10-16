@@ -1506,7 +1506,7 @@ end)
 -- Desaturate Talents Background Art --
 ---------------------------------------
 gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsDesaturateScrollArtBackground = {
-	DesaturateScrollArtBackgroundChecked = true,
+	DesaturateScrollArtBackgroundChecked = false,
 }
 local DesaturateScrollArtBackground --alternate display position of item repair cost, durability, and ilvl
 
@@ -1594,7 +1594,7 @@ local DCS_ShowDefaultStatsCheckedCheck = CreateFrame("CheckButton", "DCS_ShowDef
 	DCS_ShowDefaultStatsCheckedCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_ShowDefaultStatsCheckedCheck:ClearAllPoints()
 	--DCS_ShowDefaultStatsCheckedCheck:SetPoint("TOPLEFT", 30, -255)
-	DCS_ShowDefaultStatsCheckedCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -195)
+	DCS_ShowDefaultStatsCheckedCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -215)
 	DCS_ShowDefaultStatsCheckedCheck:SetScale(1)
 	_G[DCS_ShowDefaultStatsCheckedCheck:GetName() .. "Text"]:SetText(L["Default Stats"])
 	DCS_ShowDefaultStatsCheckedCheck.tooltipText = L["Displays the default stat frames."] --Creates a tooltip on mouseover.
@@ -1620,7 +1620,7 @@ local DCS_MoveResistancesCheck = CreateFrame("CheckButton", "DCS_MoveResistances
 	DCS_MoveResistancesCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_MoveResistancesCheck:ClearAllPoints()
 	--DCS_MoveResistancesCheck:SetPoint("TOPLEFT", 30, -255)
-	DCS_MoveResistancesCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -215)
+	DCS_MoveResistancesCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -235)
 	DCS_MoveResistancesCheck:SetScale(1)
 	_G[DCS_MoveResistancesCheck:GetName() .. "Text"]:SetText(L["Default Resistances"])
 	DCS_MoveResistancesCheck.tooltipText = L["Displays the default resistance frames."] --Creates a tooltip on mouseover.
@@ -1645,7 +1645,7 @@ local DCS_ShowModelRotationCheck = CreateFrame("CheckButton", "DCS_ShowModelRota
 	DCS_ShowModelRotationCheck:RegisterEvent("PLAYER_LOGIN")
 	DCS_ShowModelRotationCheck:ClearAllPoints()
 	--DCS_ShowModelRotationCheck:SetPoint("TOPLEFT", 30, -255)
-	DCS_ShowModelRotationCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -235)
+	DCS_ShowModelRotationCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -255)
 	DCS_ShowModelRotationCheck:SetScale(1)
 	_G[DCS_ShowModelRotationCheck:GetName() .. "Text"]:SetText(L["Rotation Buttons"])
 	DCS_ShowModelRotationCheck.tooltipText = L["Displays the Character Model Rotation buttons."] --Creates a tooltip on mouseover.

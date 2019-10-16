@@ -3,32 +3,19 @@ if not L then return end
 
 L["OPTIONS_ALPHA"] = "Alpha"
 L["OPTIONS_ANCHOR"] = "Ankerpunkt"
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_BOTTOM"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_BOTTOMLEFT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_BOTTOMRIGHT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_CENTER"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_INNERBOTTOM"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_INNERLEFT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_INNERRIGHT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_INNERTOP"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_LEFT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_RIGHT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_TOP"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_TOPLEFT"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_ANCHOR_TOPRIGHT"] = ""--]] 
+L["OPTIONS_ANCHOR_BOTTOM"] = "Unten"
+L["OPTIONS_ANCHOR_BOTTOMLEFT"] = "Unten links"
+L["OPTIONS_ANCHOR_BOTTOMRIGHT"] = "Unten rechts"
+L["OPTIONS_ANCHOR_CENTER"] = "Mitte"
+L["OPTIONS_ANCHOR_INNERBOTTOM"] = "Innen unten"
+L["OPTIONS_ANCHOR_INNERLEFT"] = "Innen links"
+L["OPTIONS_ANCHOR_INNERRIGHT"] = "Rechts innen "
+L["OPTIONS_ANCHOR_INNERTOP"] = "Innen oben"
+L["OPTIONS_ANCHOR_LEFT"] = "Links"
+L["OPTIONS_ANCHOR_RIGHT"] = "Rechts"
+L["OPTIONS_ANCHOR_TOP"] = "Oben"
+L["OPTIONS_ANCHOR_TOPLEFT"] = "Oben links"
+L["OPTIONS_ANCHOR_TOPRIGHT"] = "Oben rechts"
 L["OPTIONS_CANCEL"] = "Abbrechen"
 L["OPTIONS_COLOR"] = "Farbe"
 L["OPTIONS_ENABLED"] = "Aktiviert"
@@ -65,13 +52,12 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "Ungültige Profildatei."
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[Ungültige Profildatei.
 Importiere Skripte oder Mods im Skript-Tab.]=]
 --[[Translation missing --]]
---[[ L["OPTIONS_SETTINGS_COPIED"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_SETTINGS_FAIL_COPIED"] = ""--]] 
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
+L["OPTIONS_SETTINGS_COPIED"] = "Einstellungen kopiert."
+L["OPTIONS_SETTINGS_FAIL_COPIED"] = "Fehler beim kopieren der Einstllungen für den aktuell ausgewählten Reiter."
 L["OPTIONS_SHADOWCOLOR"] = "Schatten-Farbe"
 L["OPTIONS_SIZE"] = "Größe"
---[[Translation missing --]]
---[[ L["OPTIONS_STATUSBAR_TEXT"] = ""--]] 
+L["OPTIONS_STATUSBAR_TEXT"] = "Profile, Mods, Skripte, Animationen und Farbtabellen können jetzt von |cFFFFAA00http://wago.io|r importiert werden."
 L["OPTIONS_TABNAME_ADVANCED"] = "Erweitert"
 L["OPTIONS_TABNAME_ANIMATIONS"] = "Animationen"
 L["OPTIONS_TABNAME_AUTO"] = "Automatisierung"
@@ -90,8 +76,7 @@ L["OPTIONS_TABNAME_PLAYERENEMY"] = "Feindliche Spieler"
 L["OPTIONS_TABNAME_PLAYERFRIENDLY"] = "Freundliche Spieler"
 L["OPTIONS_TABNAME_PROFILES"] = "Profile"
 L["OPTIONS_TABNAME_SCRIPTING"] = "Skripte"
---[[Translation missing --]]
---[[ L["OPTIONS_TABNAME_STRATA"] = ""--]] 
+L["OPTIONS_TABNAME_STRATA"] = "Level & Strata"
 L["OPTIONS_TABNAME_TARGET"] = "Ziel"
 L["OPTIONS_TABNAME_THREAT"] = "Bedrohung / Aggro"
 L["OPTIONS_TEXTURE"] = "Textur"
@@ -119,10 +104,8 @@ L["OPTIONS_THREAT_COLOR_TANK_NOAGGRO_DESC"] = "Die Einheit hat keine Aggro auf d
 L["OPTIONS_THREAT_COLOR_TANK_NOTINCOMBAT_DESC"] = "Die Einheit ist nicht im Kampf."
 L["OPTIONS_THREAT_COLOR_TANK_ONYOU_SOLID_DESC"] = "Die Einheit greift dich an und du hast einen hohen Bedrohungsstatus."
 L["OPTIONS_THREAT_COLOR_TAPPED_DESC"] = "Andere Spieler haben diese Einheit in Besitz genommen und du erhälst keine Erfahrung oder Beute für das Töten."
---[[Translation missing --]]
---[[ L["OPTIONS_THREAT_DPS_CANCHECKNOTANK"] = ""--]] 
---[[Translation missing --]]
---[[ L["OPTIONS_THREAT_DPS_CANCHECKNOTANK_DESC"] = ""--]] 
+L["OPTIONS_THREAT_DPS_CANCHECKNOTANK"] = "Prüfe Aggro von nicht-Tanks"
+L["OPTIONS_THREAT_DPS_CANCHECKNOTANK_DESC"] = "Wenn du als DPS oder Heiler keine Aggro hast, dann prüfe ob der Gegner eine andere Einheit, die kein Tank ist, angreift."
 L["OPTIONS_THREAT_MODIFIERS_ANCHOR_TITLE"] = "Bedrohungs-Modifizierungen"
 L["OPTIONS_THREAT_MODIFIERS_BORDERCOLOR"] = "Rahmenfarbe"
 L["OPTIONS_THREAT_MODIFIERS_HEALTHBARCOLOR"] = "Lebensbalkenfarbe"

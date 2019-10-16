@@ -19,20 +19,36 @@ local STATIC_DATA = { classes = {}, subClasses = {}, classLookup = {}, classIdLo
 
 do
 	-- Needed because NUM_LE_ITEM_CLASSS contains an erroneous value
-	local ITEM_CLASS_IDS = {
-		LE_ITEM_CLASS_WEAPON,
-		LE_ITEM_CLASS_ARMOR,
-		LE_ITEM_CLASS_CONTAINER,
-		LE_ITEM_CLASS_GEM,
-		LE_ITEM_CLASS_ITEM_ENHANCEMENT,
-		LE_ITEM_CLASS_CONSUMABLE,
-		LE_ITEM_CLASS_GLYPH,
-		LE_ITEM_CLASS_TRADEGOODS,
-		LE_ITEM_CLASS_RECIPE,
-		LE_ITEM_CLASS_BATTLEPET,
-		LE_ITEM_CLASS_QUESTITEM,
-		LE_ITEM_CLASS_MISCELLANEOUS
-	}
+	local ITEM_CLASS_IDS = nil
+	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+		ITEM_CLASS_IDS = {
+			LE_ITEM_CLASS_WEAPON,
+			LE_ITEM_CLASS_ARMOR,
+			LE_ITEM_CLASS_CONTAINER,
+			LE_ITEM_CLASS_GEM,
+			LE_ITEM_CLASS_ITEM_ENHANCEMENT,
+			LE_ITEM_CLASS_CONSUMABLE,
+			LE_ITEM_CLASS_GLYPH,
+			LE_ITEM_CLASS_TRADEGOODS,
+			LE_ITEM_CLASS_RECIPE,
+			LE_ITEM_CLASS_BATTLEPET,
+			LE_ITEM_CLASS_QUESTITEM,
+			LE_ITEM_CLASS_MISCELLANEOUS,
+		}
+	else
+		ITEM_CLASS_IDS = {
+			LE_ITEM_CLASS_WEAPON,
+			LE_ITEM_CLASS_ARMOR,
+			LE_ITEM_CLASS_CONTAINER,
+			LE_ITEM_CLASS_CONSUMABLE,
+			LE_ITEM_CLASS_TRADEGOODS,
+			LE_ITEM_CLASS_PROJECTILE,
+			LE_ITEM_CLASS_QUIVER,
+			LE_ITEM_CLASS_RECIPE,
+			LE_ITEM_CLASS_REAGENT,
+			LE_ITEM_CLASS_MISCELLANEOUS,
+		}
+	end
 
 	for _, classId in ipairs(ITEM_CLASS_IDS) do
 		local class = GetItemClassInfo(classId)
@@ -41,7 +57,10 @@ do
 			STATIC_DATA.classLookup[class] = {}
 			STATIC_DATA.classLookup[class]._index = classId
 			for _, subClassId in pairs({GetAuctionItemSubClasses(classId)}) do
-				STATIC_DATA.classLookup[class][GetItemSubClassInfo(classId, subClassId)] = subClassId
+				local subClassName = GetItemSubClassInfo(classId, subClassId)
+				if not strfind(subClassName, "(OBSOLETE)") then
+					STATIC_DATA.classLookup[class][subClassName] = subClassId
+				end
 			end
 		end
 	end

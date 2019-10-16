@@ -251,6 +251,7 @@
 			<OnMouseDown>VUHDO_tabbedFrameOnMouseDown(self)</OnMouseDown>
 			<OnMouseUp>VUHDO_tabbedFrameOnMouseUp(self)</OnMouseUp>
 			<OnShow>
+					
 				self:SetScale(VUHDO_OPTIONS_SETTINGS.scale);
 				VuhDoNewOptionsScaleSlider:Show();
 				VuhDoNewOptionsPanelBarsTexturePanelTextureSliderSlider:SetMinMaxValues(1, #VUHDO_STATUS_BARS);

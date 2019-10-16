@@ -205,7 +205,7 @@ end
 
 --
 local function VUHDO_isPhasedValidator(anInfo, _)
-	if UnitIsWarModePhased(anInfo["unit"]) or not UnitInPhase(anInfo["unit"]) then
+	if VUHDO_unitIsWarModePhased(anInfo["unit"]) or not UnitInPhase(anInfo["unit"]) then
 		return true, "Interface\\TargetingFrame\\UI-PhasingIcon", 
 			-1, -1, -1, nil, nil, 0.15625, 0.84375, 0.15625, 0.84375;
 	else
@@ -217,7 +217,7 @@ end
 
 --
 local function VUHDO_isWarModePhasedValidator(anInfo, _)
-	if UnitIsWarModePhased(anInfo["unit"]) then
+	if VUHDO_unitIsWarModePhased(anInfo["unit"]) then
 		return true, "Interface\\TargetingFrame\\UI-PhasingIcon", 
 			-1, -1, -1, nil, nil, 0.15625, 0.84375, 0.15625, 0.84375;
 	else
@@ -465,9 +465,9 @@ end
 local tPower;
 local function VUHDO_holyPowersEqualsValidator(anInfo, someCustom)
 	if anInfo["connected"] and not anInfo["dead"] then
-		tPower = UnitPower(anInfo["unit"], 9);
+		tPower = UnitPower(anInfo["unit"], VUHDO_UNIT_POWER_HOLY_POWER);
 		if tPower == someCustom["custom"][1] then
-			return true, nil, tPower, -1, UnitPowerMax(anInfo["unit"], 9);
+			return true, nil, tPower, -1, UnitPowerMax(anInfo["unit"], VUHDO_UNIT_POWER_HOLY_POWER);
 		else
 			return false, nil, -1, -1, -1;
 		end
@@ -779,7 +779,7 @@ end
 local function VUHDO_statusExcessAbsorbValidator(anInfo, _)
 	local healthmax = anInfo["healthmax"];
 
-	local excessAbsorb = (UnitGetTotalAbsorbs(anInfo["unit"]) or 0) + anInfo["health"] - healthmax;
+	local excessAbsorb = (VUHDO_unitGetTotalAbsorbs(anInfo["unit"]) or 0) + anInfo["health"] - healthmax;
 
 	if excessAbsorb < 0 then
 		return true, nil, 0, -1, healthmax;
@@ -792,7 +792,7 @@ end
 
 --
 local function VUHDO_statusTotalAbsorbValidator(anInfo, _)
-	return true, nil, UnitGetTotalAbsorbs(anInfo["unit"]) or 0, -1, anInfo["healthmax"];
+	return true, nil, VUHDO_unitGetTotalAbsorbs(anInfo["unit"]) or 0, -1, anInfo["healthmax"];
 end
 
 
@@ -824,7 +824,7 @@ end
 
 --
 local function VUHDO_hasSummonIconValidator(anInfo, _)
-	if C_IncomingSummon.HasIncomingSummon(anInfo["unit"]) then
+	if VUHDO_hasIncomingSummon(anInfo["unit"]) then
 		local status = C_IncomingSummon.IncomingSummonStatus(anInfo["unit"]);
 
 		if (status == Enum.SummonStatus.Pending) then

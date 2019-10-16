@@ -97,7 +97,7 @@ local L = namespace.L 				--localization
 			"|n" ..																					--(Spacer)
 			"|cff0094c4Localization Translators:|r" .. "|n" ..
 			"|cff0094c4    French:|r Furfx, Brainc3ll, Lightuky, Medaleux, sv002, Darkcraft92, Ymvej, Druidzor, napnapnapnapnap" .. "|n" .. 						--(French)
-			"|cff0094c4    German:|r Scap04, pas06, flow0284, Markurion, Branduril, NekoNyaaaa" .. "|n" .. 						--(German)
+			"|cff0094c4    German:|r Scap04, barneyandroid, pas06, flow0284, Markurion, Branduril, NekoNyaaaa" .. "|n" .. 						--(German)
 			"|cff0094c4    Portuguese:|r Othra, Rhyrol" .. "|n" ..									--(Portuguese)
 			"|cff0094c4    Spanish:|r Tholagar, Mikel391, MrUrkaz, Krounted, Valhallanem" .. "|n" ..						--(Spanish)
 			"|cff0094c4    Italian:|r infinitybofh, INoobInside" .. "|n" ..							--(Portuguese)

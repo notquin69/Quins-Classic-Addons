@@ -2002,6 +2002,7 @@ function ilvl_core:GetItemLevel (unitid, guid, is_forced, try_number)
 end
 
 local NotifyInspectHook = function (unitid)
+
 	local unit = unitid:gsub ("%d+", "")
 	
 	if ((IsInRaid() or IsInGroup()) and (_detalhes:GetZoneType() == "raid" or _detalhes:GetZoneType() == "party")) then
@@ -2020,7 +2021,7 @@ local NotifyInspectHook = function (unitid)
 		end
 	end
 end
-hooksecurefunc ("NotifyInspect", NotifyInspectHook)
+--hooksecurefunc ("NotifyInspect", NotifyInspectHook) --disabled on classic
 
 function ilvl_core:Reset()
 	ilvl_core.raid_id = 1
@@ -2270,6 +2271,8 @@ talentWatchClassic:RegisterEvent ("SPELLS_CHANGED")
 talentWatchClassic:RegisterEvent ("PLAYER_ENTERING_WORLD")
 talentWatchClassic:RegisterEvent ("GROUP_ROSTER_UPDATE")
 
+talentWatchClassic.cooldown = 0
+
 C_Timer.NewTicker (600, function()
 	Details:SendPlayerClassicInformation()
 end)
@@ -2282,13 +2285,26 @@ talentWatchClassic:SetScript ("OnEvent", function (self, event, ...)
 	end
 end)
 
-function Details:SendPlayerClassicInformation()
+function Details:SendPlayerClassicInformation (targetPlayer)
 
-	if (talentWatchClassic.delayedUpdate and not talentWatchClassic.delayedUpdate._cancelled) then
-		talentWatchClassic.delayedUpdate:Cancel()
+	if (not targetPlayer) then
+		if (time() > talentWatchClassic.cooldown) then
+			--isn't in cooldown, set a new cooldown
+			talentWatchClassic.cooldown = time() + 5
+		else
+			--it's on cooldown
+			if (not talentWatchClassic.delayedUpdate or talentWatchClassic.delayedUpdate._cancelled) then
+				talentWatchClassic.delayedUpdate = C_Timer.NewTimer (10, Details.SendPlayerClassicInformation)
+			end
+			return
+		end
+
+		--cancel any schedule
+		if (talentWatchClassic.delayedUpdate and not talentWatchClassic.delayedUpdate._cancelled) then
+			talentWatchClassic.delayedUpdate:Cancel()
+		end
+		talentWatchClassic.delayedUpdate = nil
 	end
-
-	talentWatchClassic.delayedUpdate = nil
 
 	--amount of tabs existing
 	local numTabs = GetNumTalentTabs() or 3
@@ -2313,7 +2329,9 @@ function Details:SendPlayerClassicInformation()
 				if (talentIndex <= numTalents) then
 					local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo (i, talentIndex)
 					if (name and rank and type (rank) == "number") then
-						tinsert (talentsSelected, {iconTexture, rank, tier, column})
+						--send the specID instead of the specName
+						local specID = Details.textureToSpec [fileName]
+						tinsert (talentsSelected, {iconTexture, rank, tier, column, i, specID, maxRank})
 					end
 				end
 			end
@@ -2350,18 +2368,30 @@ function Details:SendPlayerClassicInformation()
 			end
 		end
 
+		local CONST_DETAILS_PREFIX = "DTLS"
 		local CONST_ITEMLEVEL_DATA = "IL"
+		local CONST_ASK_TALENTS = "AT"
+		local CONST_ANSWER_TALENTS = "AWT"
 
-		if (IsInRaid()) then
-			_detalhes:SendRaidData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, talentsSelected, Details.playerClassicSpec.specs)
+		local compressedTalents = Details:CompressData (talentsSelected, "comm")
+
+		if (targetPlayer) then
+			_detalhes:SendCommMessage (CONST_DETAILS_PREFIX, _detalhes:Serialize (CONST_ANSWER_TALENTS, UnitName("player"), GetRealmName(), _detalhes.realversion, UnitGUID ("player"), 0, compressedTalents, Details.playerClassicSpec.specs), "WHISPER", targetPlayer)
+
 			if (_detalhes.debug) then
-				_detalhes:Msg ("(debug) sent ilevel data to Raid")
+				_detalhes:Msg ("(debug) sent talents data to: " .. (targetPlayer or "UNKNOWN-PLAYER"))
+			end
+
+		elseif (IsInRaid()) then
+			_detalhes:SendRaidData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, compressedTalents, Details.playerClassicSpec.specs)
+			if (_detalhes.debug) then
+				_detalhes:Msg ("(debug) sent talents data to Raid")
 			end
 			
 		elseif (IsInGroup()) then
-			_detalhes:SendPartyData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, talentsSelected, Details.playerClassicSpec.specs)
+			_detalhes:SendPartyData (CONST_ITEMLEVEL_DATA, UnitGUID ("player"), 0, compressedTalents, Details.playerClassicSpec.specs)
 			if (_detalhes.debug) then
-				_detalhes:Msg ("(debug) sent ilevel data to Party")
+				_detalhes:Msg ("(debug) sent talents data to Party")
 			end
 		end
 	end
@@ -2369,17 +2399,13 @@ end
 
 function Details:ClassicSpecFromNetwork (player, realm, core, serialNumber, itemLevel, talentsSelected, currentSpec)
 	if (_detalhes.debug) then
-		local talents = "Invalid Talents"
-		if (type (talentsSelected) == "table") then
-			talents = ""
-			for i = 1, #talentsSelected do
-				talents = talents .. talentsSelected [i] .. ","
-			end
-		end
-		_detalhes:Msg ("(debug) Received PlayerInfo Data: " .. (player or "Invalid Player Name") .. " | " .. (itemLevel or "Invalid Item Level") .. " | " .. (currentSpec or "Invalid Spec") .. " | " .. talents  .. " | " .. (serialNumber or "Invalid Serial"))
+		_detalhes:Msg ("(debug) Received PlayerInfo Data: " .. (player or "Invalid Player Name") .. " | " .. (itemLevel or "Invalid Item Level") .. " | " .. (currentSpec or "Invalid Spec") .. " | {} | " .. (serialNumber or "Invalid Serial"))
 	end
 
-
+	if (type (talentsSelected) == "string") then
+		talentsSelected = Details:DecompressData (talentsSelected, "comm")
+	end
+	
 	if (not player) then
 		return
 	end
@@ -2412,6 +2438,13 @@ function Details:ClassicSpecFromNetwork (player, realm, core, serialNumber, item
 	--store the spec the player is playing
 	if (type (currentSpec) == "number") then
 		_detalhes.cached_specs [serialNumber] = currentSpec
+	end
+
+	if (InspectFrame and InspectFrame:IsShown() and UnitIsUnit (InspectFrame.unit, "target")) then
+		if (DetailsTalentFrame and (not DetailsTalentFrame:IsShown() or DetailsTalentFrame.showAnimation:IsPlaying())) then
+			DetailsTalentFrame.showAnimation:Stop()
+			Details:ShowTalentsPanel()
+		end
 	end
 end
 
@@ -2489,6 +2522,46 @@ Details.textureToSpec = {
 	WarriorProtection = 73,
 }
 
+
+Details.specToTexture = {
+	[102] = "DruidBalance",
+	[103] = "DruidFeralCombat",
+	[105] = "DruidRestoration",
+
+	[253] = "HunterBeastMaster",
+	[254] = "HunterMarksmanship",
+	[255] = "HunterSurvival",
+
+	[62] = "MageArcane",
+	[64] = "MageFrost",
+	[63] = "MageFire",
+
+	[70] = "PaladinCombat",
+	[65] = "PaladinHoly",
+	[66] = "PaladinProtection",
+
+	[257] = "PriestHoly",
+	[256] = "PriestDiscipline",
+	[258] = "PriestShadow",
+
+	[259] = "RogueAssassination",
+	[260] = "RogueCombat",
+	[261] = "RogueSubtlety",
+
+	[262] = "ShamanElementalCombat",
+	[263] = "ShamanEnhancement",
+	[264] = "ShamanRestoration",
+
+	[265] = "WarlockCurses",
+	[266] = "WarlockDestruction",
+	[267] = "WarlockSummoning",
+
+	[71] = "WarriorArm",
+	[71] = "WarriorArms",
+	[72] = "WarriorFury",
+	[73] = "WarriorProtection",
+}
+
 function Details.IsValidSpecId (specId)
 	return Details.validSpecIds [specId]
 end
@@ -2496,6 +2569,395 @@ end
 function Details.GetClassicSpecByTalentTexture (talentTexture)
 	return Details.textureToSpec [talentTexture] or 0
 end
+
+local CONST_ICON_WIDTH_SPACE_REQUIRED = 10
+local MAX_NUM_TALENT_TIERS = 8
+local NUM_TALENT_COLUMNS = 4
+local CONST_ICON_SIZE = 32
+local CONST_TALENTFRAME_WIDTH = 184
+
+--cache the original function since other addons are replacing it
+local tooltipSetTalent = GameTooltip.SetTalent
+
+local talentButtonOnEnter = function (self)
+	--GameTooltip:SetOwner (self, "ANCHOR_RIGHT")
+	--tooltipSetTalent (GameTooltip, PanelTemplates_GetSelectedTab (self:GetParent()), self:GetID())
+	--GameTooltip:Show()
+
+	--self.UpdateTooltip = TalentFrameTalent_OnEnter
+end
+
+local createTalentButton = function (parent, tier, column)
+	local button = CreateFrame ("button", "$parentTalent_T" .. tier .. "C" .. column, parent)
+	button:SetScript ("OnEnter", talentButtonOnEnter)
+	button:SetHighlightTexture ([[Interface\Buttons\ButtonHilight-Square]])
+
+	local talentIcon = DetailsFramework:CreateImage (button, [[Interface\Buttons\UI-EmptySlot-White]], CONST_ICON_SIZE, CONST_ICON_SIZE, "background", {0, 1, 0, 1}, "talentIcon", "$parentTalentIcon")
+	button.talentIcon:SetPoint ("topleft", -1, 1)
+	button.talentIcon:SetPoint ("bottomright", 1, -1)
+
+	DetailsFramework:CreateImage (button, [[Interface\TalentFrame\TalentFrame-RankBorder]], 32, 32, "overlay", {0, 1, 0, 1}, "rankBorder", "$parentRankBorder")
+	button.rankBorder:SetPoint ("center", button, "bottomright", 0, 0)
+
+	DetailsFramework:CreateLabel (button, "", 10, "white", "GameFontNormalSmall", "rankText", "$parentRankText", "overlay")
+	button.rankText:SetPoint ("center", button.rankBorder, "center", 0, 0)
+
+	local offset = 14
+	DetailsFramework:CreateImage (button, [[Interface\Buttons\UI-Quickslot2]], 32, 32, "artwork", {0, 1, 0, 1}, "border", "$parentBorder")
+	button.border:SetPoint ("topleft", -offset, offset - 1)
+	button.border:SetPoint ("bottomright", offset, -offset - 1)
+	
+	return button
+end
+
+function Details.IsPlayingTalentLoadAnimation()
+	return DetailsTalentFrame.loadingTalentsAnimation.IsPlaying
+end
+
+function Details.PlayTalentLoadingAnimation()
+	if (not Details.IsPlayingTalentLoadAnimation()) then
+		DetailsTalentFrame.loadingTalentsAnimation.FadeIN:Stop()
+		DetailsTalentFrame.loadingTalentsAnimation.Loop:Stop()
+		DetailsTalentFrame.loadingTalentsAnimation.FadeOUT:Stop()
+
+		DetailsTalentFrame.loadingTalentsAnimation:Show()
+		DetailsTalentFrame.loadingTalentsAnimation.FadeIN:Play()
+		DetailsTalentFrame.loadingTalentsAnimation.Loop:Play()
+		DetailsTalentFrame.loadingTalentsAnimation.IsPlaying = true
+	end
+end
+
+function Details.StopTalentLoadingAnimation()
+	DetailsTalentFrame.loadingTalentsAnimation.FadeIN:Stop()
+	DetailsTalentFrame.loadingTalentsAnimation.Loop:Stop()
+	DetailsTalentFrame.loadingTalentsAnimation.FadeOUT:Play()
+	DetailsTalentFrame.loadingTalentsAnimation.IsPlaying = false
+end
+
+function Details.CreateTalentLoadingAnimation()
+	local f = CreateFrame ("frame", nil, DetailsTalentFrame)
+	f:SetSize (48, 48)
+	f:SetPoint ("center", DetailsTalentFrame, "center", 0, 0)
+	f:SetFrameLevel (3000)
+	
+	local animGroup1 = f:CreateAnimationGroup()
+	local anim1 = animGroup1:CreateAnimation ("Alpha")
+	anim1:SetOrder (1)
+	anim1:SetFromAlpha (.7)
+	anim1:SetToAlpha (1)
+	anim1:SetDuration (2.4)
+	f.FadeIN = animGroup1
+	
+	local animGroup2 = f:CreateAnimationGroup()
+	local anim2 = animGroup2:CreateAnimation ("Alpha")
+	f.FadeOUT = animGroup2
+	anim2:SetOrder (2)
+	anim2:SetFromAlpha (1)
+	anim2:SetToAlpha (0)
+	anim2:SetDuration (0.1)
+	animGroup2:SetScript ("OnFinished", function()
+		f:Hide()
+	end)
+	
+	f.Text = f:CreateFontString (nil, "overlay", "GameFontNormal")
+	f.Text:SetText ("")
+	f.Text:SetPoint ("left", f, "right", -5, 1)
+	f.TextBackground = f:CreateTexture (nil, "background")
+	f.TextBackground:SetPoint ("left", f, "right", -20, 0)
+	f.TextBackground:SetSize (160, 14)
+	f.TextBackground:SetTexture ([[Interface\COMMON\ShadowOverlay-Left]])
+	
+	f.Text:Hide()
+	f.TextBackground:Hide()
+	
+	f.CircleAnimStatic = CreateFrame ("frame", nil, f)
+	f.CircleAnimStatic:SetAllPoints()
+	f.CircleAnimStatic.Alpha = f.CircleAnimStatic:CreateTexture (nil, "overlay")
+	f.CircleAnimStatic.Alpha:SetTexture ([[Interface\COMMON\StreamFrame]])
+	f.CircleAnimStatic.Alpha:SetAllPoints()
+	f.CircleAnimStatic.Background = f.CircleAnimStatic:CreateTexture (nil, "background")
+	f.CircleAnimStatic.Background:SetTexture ([[Interface\COMMON\StreamBackground]])
+	f.CircleAnimStatic.Background:SetAllPoints()
+	
+	f.CircleAnim = CreateFrame ("frame", nil, f)
+	f.CircleAnim:SetAllPoints()
+	f.CircleAnim.Spinner = f.CircleAnim:CreateTexture (nil, "artwork")
+	f.CircleAnim.Spinner:SetTexture ([[Interface\COMMON\StreamCircle]])
+	f.CircleAnim.Spinner:SetVertexColor (.5, .5, .5, 1)
+	f.CircleAnim.Spinner:SetAllPoints()
+	f.CircleAnim.Spark = f.CircleAnim:CreateTexture (nil, "overlay")
+	f.CircleAnim.Spark:SetTexture ([[Interface\COMMON\StreamSpark]])
+	f.CircleAnim.Spark:SetAllPoints()
+
+	local animGroup3 = f.CircleAnim:CreateAnimationGroup()
+	animGroup3:SetLooping ("Repeat")
+	local animLoop = animGroup3:CreateAnimation ("Rotation")
+	f.Loop = animGroup3
+	animLoop:SetOrder (1)
+	animLoop:SetDuration (.7)
+	animLoop:SetDegrees (-360)
+	animLoop:SetTarget (f.CircleAnim)
+	
+	DetailsTalentFrame.loadingTalentsAnimation = f
+	
+	f:Hide()
+end
+
+function Details:ShowTalentsPanel()
+	--build the frame to show icons
+	if (not DetailsTalentFrame) then
+		local talentsFrame = CreateFrame ("frame", "DetailsTalentFrame", InspectFrame)
+		talentsFrame:SetPoint ("topleft", InspectFrame, "topright", -20, -14)
+		talentsFrame:SetPoint ("bottomleft", InspectFrame, "bottomright", -20, 74)
+		
+		talentsFrame:SetWidth (CONST_TALENTFRAME_WIDTH)
+		talentsFrame.tabFrames = {}
+		--table to be used to sort the frames
+		talentsFrame.tabFramesSort = {}
+		DetailsFramework:ApplyStandardBackdrop (talentsFrame)
+
+		--build 3 frames within the talent frame
+		for talentTabIndex = 1, 3 do
+			local talentTab = CreateFrame ("frame", "$parentTab" .. talentTabIndex, talentsFrame)
+			talentTab.backgroundTexture = talentTab:CreateTexture (nil, "background")
+			talentTab.backgroundTexture:SetAllPoints()
+			talentTab:SetWidth (CONST_TALENTFRAME_WIDTH)
+			tinsert (talentsFrame.tabFrames, talentTab)
+			tinsert (talentsFrame.tabFramesSort, talentTab)
+
+			talentTab.selectedTab = talentTabIndex
+
+			talentTab.allButtons = {}
+
+			local idCounter = 1
+			for i = 1, MAX_NUM_TALENT_TIERS do
+				tinsert (talentTab.allButtons, {})
+				for o = 1, NUM_TALENT_COLUMNS do
+					local talentButton = createTalentButton (talentTab, i, o)
+
+					talentButton:SetSize (CONST_ICON_SIZE, CONST_ICON_SIZE)
+
+					tinsert (talentTab.allButtons [#talentTab.allButtons], talentButton)
+					--CONST_ICON_WIDTH_SPACE_REQUIRED is the space required due to the border size being bigger than the button it self
+					talentButton:SetPoint ("topleft", talentTab, "topleft", ((o - 1) * CONST_ICON_SIZE) + (CONST_ICON_WIDTH_SPACE_REQUIRED * o), (-(i - 1) * CONST_ICON_SIZE) + (-i * CONST_ICON_WIDTH_SPACE_REQUIRED))
+					talentButton:SetID (idCounter)
+					idCounter = idCounter + 1
+				end
+			end
+		end
+	end
+
+	--reset all talent tabs
+	for talentTabIndex = 1, 3 do
+		local talentTab = DetailsTalentFrame.tabFrames [talentTabIndex]
+		talentTab.numTalents = talentTabIndex / 1000
+		talentTab.maxTier = 0
+		talentTab:ClearAllPoints()
+		talentTab.backgroundTexture:SetTexture (nil)
+		for i = 1, MAX_NUM_TALENT_TIERS do
+			local columnTalents = talentTab.allButtons [i]
+			for o = 1, NUM_TALENT_COLUMNS do
+				local button = columnTalents [o]
+				button:Hide()
+				button.talentIcon:SetDesaturated (false)
+				button.rankBorder:Show()
+				button.rankText:Show()
+				button.tabIndex = 0
+			end
+		end
+	end
+
+	--reset talent frame height
+	DetailsTalentFrame:SetPoint ("bottomleft", InspectFrame, "bottomright", -20, 74)
+	local talentsSpent = 17
+
+	--local playerTalents = _detalhes.cached_talents [UnitGUID ("player")] --
+	local playerTalents = _detalhes.cached_talents [UnitGUID (InspectFrame.unit)]
+	if (playerTalents) then
+
+		local unusedButtonsByTier = {}
+		local tiersWithRanks = {}
+		for i = 1, #playerTalents do
+
+			local iconTexture, rank, tier, column, tabIndex, tabTexture, maxRank = unpack (playerTalents [i])
+
+			tabTexture = Details.specToTexture [tabTexture]
+
+			if (not tabTexture or not maxRank) then
+				DetailsTalentFrame:Hide()
+				return
+			end
+
+			DetailsTalentFrame:Show()
+
+			local talentTab = DetailsTalentFrame.tabFrames [tabIndex]
+			talentTab.backgroundTexture:SetTexture ("Interface\\TALENTFRAME\\" .. tabTexture .. "-TopLeft")
+			--add the amount of talents spent on this tab
+			talentTab.numTalents = talentTab.numTalents + (rank or 0)
+			--set the max tier of the talent tree
+
+			if (rank > 0) then
+				talentTab.maxTier = max (talentTab.maxTier, tier)
+
+				--setup the talent button
+				local tierTable = talentTab.allButtons [tier]
+				local button = tierTable [column]
+				button:Show()
+
+				button.rankText.text = rank
+				button.talentIcon.texture = iconTexture
+
+				if (rank == maxRank) then
+					button.border.vertexcolor = "yellow"
+					button.rankText.color = "yellow"
+
+				else
+					button.border.vertexcolor = "limegreen"
+					button.rankText.color = "limegreen"
+				end
+
+				tiersWithRanks [tabTexture] = tiersWithRanks [tabTexture] or {}
+				tiersWithRanks [tabTexture] [tier] = tiersWithRanks [tabTexture] [tier] or {}
+				tiersWithRanks [tabTexture] [tier] = true
+
+				button.tabIndex = tabIndex
+			else
+				--if the talent has zero ranks
+				
+				local tierTable = talentTab.allButtons [tier]
+				local button = tierTable [column]
+				--button:Show() do not show yet
+
+				unusedButtonsByTier [tabTexture] = unusedButtonsByTier [tabTexture] or {}
+				unusedButtonsByTier [tabTexture] [tier] = unusedButtonsByTier [tabTexture] [tier] or {}
+				tinsert (unusedButtonsByTier [tabTexture] [tier], button)
+
+				button.talentIcon.texture = iconTexture
+
+				--set as no rank spent on this talent
+				button.talentIcon.blackwhite = true
+				button.rankBorder:Hide()
+				button.rankText:Hide()
+			end
+		end
+
+		for tabTexture, tabTextureTable in pairs (unusedButtonsByTier) do
+			for tierIndex, tierTable in pairs (tabTextureTable) do
+				for buttonIndex, button in ipairs (tierTable) do
+					if (tiersWithRanks [tabTexture] and tiersWithRanks [tabTexture] [tierIndex]) then
+						button:Show()
+					end
+				end
+			end
+		end
+
+	else
+		--the client doesn't have information about the talents of the unit
+		--query the target player for more information
+		local CONST_DETAILS_PREFIX = "DTLS"
+		local CONST_ITEMLEVEL_DATA = "IL"
+		local CONST_ASK_TALENTS = "AT"
+		local CONST_ANSWER_TALENTS = "AWT"
+
+		local targetName = Ambiguate (GetUnitName (InspectFrame.unit, true), "none")
+
+		if (targetName) then
+			_detalhes:SendCommMessage (CONST_DETAILS_PREFIX, _detalhes:Serialize (CONST_ASK_TALENTS, UnitName("player"), GetRealmName(), _detalhes.realversion, UnitGUID ("player")), "WHISPER", targetName)
+		
+			if (not DetailsTalentFrame.showAnimation) then
+				local animHub = DetailsFramework:CreateAnimationHub (DetailsTalentFrame, function() 
+					DetailsTalentFrame:SetAlpha (0)
+
+					Details.PlayTalentLoadingAnimation()
+				end,
+				function()
+					DetailsTalentFrame:SetAlpha (1)
+					Details.StopTalentLoadingAnimation()
+
+					if (not InspectFrame:IsShown()) then
+						return DetailsTalentFrame:Hide()
+					end
+
+					if (not _detalhes.cached_talents [UnitGUID (InspectFrame.unit)]) then
+						return DetailsTalentFrame:Hide()
+					end
+				end)
+
+				DetailsFramework:CreateAnimation (animHub, "ALPHA", 1, .1, 0, .1)
+				DetailsFramework:CreateAnimation (animHub, "ALPHA", 2, 2, .1, .2)
+				DetailsFramework:CreateAnimation (animHub, "ALPHA", 3, .3, .2, 0)
+
+				local queryTalentsLabel = DetailsFramework:CreateLabel (DetailsTalentFrame, "Details!\nRetriving Talents", 10, "silver", "GameFontNormalSmall", "queryTalentLabel", "$parentQueryTalentLabel", "border")
+				queryTalentsLabel.align = "center"
+				queryTalentsLabel.alpha = .7
+				queryTalentsLabel:SetPoint ("center", DetailsTalentFrame, "center", 0, 26)
+
+				Details.CreateTalentLoadingAnimation()
+				DetailsTalentFrame.showAnimation = animHub
+			end
+
+			DetailsTalentFrame:Show()
+			DetailsTalentFrame.showAnimation:Play()
+			
+		else
+			DetailsTalentFrame:Hide()
+		end
+
+		return
+	end
+
+	table.sort (DetailsTalentFrame.tabFramesSort, function (frame1, frame2)
+		return frame1.numTalents > frame2.numTalents
+	end)
+
+	--organize talent tabs
+	local heightUsed = 0
+	local heightAvailable = DetailsTalentFrame:GetHeight()
+
+	for talentTabIndex = 1, 3 do
+		local talentTab = DetailsTalentFrame.tabFramesSort [talentTabIndex]
+
+		if (talentTab.maxTier > 0) then
+			local height = max (min (130, heightAvailable), ((talentTab.maxTier) * CONST_ICON_SIZE) + (talentTab.maxTier * CONST_ICON_WIDTH_SPACE_REQUIRED) + 10)
+			heightAvailable = heightAvailable - height
+			heightUsed = heightUsed + height
+
+			talentTab:SetHeight (height)
+
+			if (talentTabIndex == 1) then
+				talentTab:SetPoint ("topleft", DetailsTalentFrame, "topleft", 1, -1)
+				talentTab:SetPoint ("topright", DetailsTalentFrame, "topright", -1, -1)
+
+			else
+				talentTab:SetPoint ("topleft", DetailsTalentFrame.tabFramesSort [talentTabIndex - 1], "bottomleft", 0, 0)
+				talentTab:SetPoint ("topright", DetailsTalentFrame.tabFramesSort [talentTabIndex - 1], "bottomright", 0, 0)
+			end
+
+			talentTab:Show()
+		end
+	end
+
+	if (heightAvailable > 0) then
+		local talentTab = DetailsTalentFrame.tabFramesSort [1]
+		talentTab:SetHeight (talentTab:GetHeight() + heightAvailable)
+	else
+		DetailsTalentFrame:SetPoint ("bottomleft", InspectFrame, "bottomright", -20, 74 + heightAvailable - 2)
+	end
+end
+
+local LatestInspectFrameUpdate = 0
+C_Timer.After (1, function()
+	hooksecurefunc ("InspectFrame_LoadUI", function()
+		hooksecurefunc ("InspectPaperDollFrame_UpdateButtons", function()
+			if (LatestInspectFrameUpdate < GetTime()) then
+				if (not Details.disable_talent_feature) then
+					Details:ShowTalentsPanel()
+				end
+				LatestInspectFrameUpdate = GetTime() + 1.0
+			end
+		end)
+	end)
+end)
 
 --------------------------------------------------------------------------------------------------------------------------------------------
 --compress data

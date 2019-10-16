@@ -39,7 +39,7 @@ Spy 不會顯示被加入到忽略清單中的玩家。透過滑鼠右鍵選單�
 滑鼠右鍵選單也可以設定將某人加入到即殺清單的原因。如果你想要輸入不在清單中的原因，請在其他清單中使用 "自行輸入原因..."。
 
 
-|cffffd000Author: Slipjack |cffffffff
+|cffffd000作者: Slipjack |cffffffff
 
 ]]
 L["EnableSpy"] = "啟用"
@@ -70,11 +70,20 @@ L["LockSpyDescription"] = "鎖定 Spy 視窗讓它不能被移動。"
 L["InvertSpy"] = "翻轉視窗"
 L["InvertSpyDescription"] = "上下翻轉 Spy 視窗。"
 L["Reload"] = "重新加载UI"
-L["ReloadDescription"] = "需要更改 SPY 窗口."
+L["ReloadDescription"] = "需要更改 Spy 窗口."
 L["ResizeSpy"] = "自動調整視窗大小"
 L["ResizeSpyDescription"] = "新增和移除敵方玩家時自動調整 Spy 視窗的大小。"
 L["ResizeSpyLimit"] = "列表限制"
-L["ResizeSpyLimitDescription"] = "限制SPY窗口中显示的敌方玩家数量。"
+L["ResizeSpyLimitDescription"] = "限制Spy窗口中显示的敌方玩家数量。"
+L["DisplayTooltipNearSpyWindow"] = "在Spy窗口附近顯示工具提示"
+L["DisplayTooltipNearSpyWindowDescription"] = "設置此項以在“間諜”窗口附近顯示工具提示。"
+L["SelectTooltipAnchor"] = "工具提示錨"
+L["SelectTooltipAnchorDescription"] = "如果已選中上述選項，則選擇工具提示的錨點。"
+L["ANCHOR_CURSOR"] = "光标"
+L["ANCHOR_TOP"] = "在上面"
+L["ANCHOR_BOTTOM"] = "下面"
+L["ANCHOR_LEFT"] = "左"			
+L["ANCHOR_RIGHT"] = "右"
 L["TooltipDisplayWinLoss"] = "滑鼠提示中顯示勝/敗統計"
 L["TooltipDisplayWinLossDescription"] = "在玩家的滑鼠提示中顯示該玩家的勝/敗統計資訊。"
 L["TooltipDisplayKOSReason"] = "滑鼠提示中顯示即殺原因"
@@ -261,7 +270,9 @@ L["CloseDescription"] = "|cffffffff隱藏 Spy 主視窗。預設下次偵測到�
 L["Left/Right"] = "左 / 右"
 L["Left/RightDescription"] = "|cffffffff切換顯示附近、最近、忽略和即殺清單。"
 L["Clear"] = "清空"
-L["ClearDescription"] = "|cffffffff清空已經偵測到的玩家清單。顯示時 CTRL+左鍵點擊會啟用/停用 Spy。"
+L["ClearDescription"] = "|cffffffff清空已經偵測到的玩家清單。Ctrl+左键单击将开始/停止 Spy。 按住Shift並單擊可打開/關閉聲音。"
+L["SoundEnabled"] = "音頻警報已啟用"
+L["SoundDisabled"] = "音頻警報已禁用"
 L["NearbyCount"] = "附近數量"
 L["NearbyCountDescription"] = "|cffffffff附近球员的数量。"
 L["Statistics"] = "統計資料" 
@@ -424,8 +435,11 @@ L["TROLL"] = "巨魔"
 L["2002"] = "2002"
 L["2002 BOLD"] = "2002 Bold"
 L["ARIAL NARROW"] = "Arial Narrow" -- default chat font
+L["AR ZhongkaiGBK Medium"] = "AR ZhongkaiGBK Medium"
+L["BIG NOODLE TITLING"] = "Big Noodle Titling"
+L["EXPRESSWAY"] = "Expressway"
 L["FRIZ QUADRATA TT"] = "Friz Quadrata TT" -- default main UI font
-L["FRIZQUADRATACTT"] = "FrizQuadrataCTT"
+L["FRIZQUADRATACTT"] = "Friz Quadrata CTT"
 L["MOK"] = "MoK"
 L["MORPHEUS"] = "Morpheus" -- default in game mail font
 L["NIMROD MT"] = "Nimrod MT"

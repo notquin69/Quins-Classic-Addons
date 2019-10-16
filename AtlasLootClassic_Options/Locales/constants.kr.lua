@@ -40,7 +40,6 @@ AL["Show content phase indicator for loottables."] = "전리품 목록에 페이
 AL["Show content phase indicator for sets."] = "세트 아이템에 페이즈 표시"
 AL["Show favourite item icon in item tooltip"] = "아이템 툴팁에 즐겨찾기 아이템 아이콘 보기"
 AL["Show ID's in tooltip."] = "툴팁에 ID 보기"
-AL["Show level range if aviable."] = "가능하면 레벨 범위 표시"
 AL["Show listname in item tooltip"] = "아이템 툴팁에 목록명 보기"
 AL["Show minimap button."] = "미니맵 버튼 보기"
 AL["Show minimum level for entry."] = "입장을 위한 최소 레벨 보기"

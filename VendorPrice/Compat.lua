@@ -1,7 +1,7 @@
 local VP = VendorPrice
 
 local function SetPrice(tt, count, item)
-	VP:SetPrice(tt, count, item, true)
+	VP:SetPrice(tt, "Compat", count, item, true)
 end
 
 local function IsShown(frame)
@@ -36,12 +36,14 @@ GameTooltip:HookScript("OnTooltipSetItem", function(tt)
 				break
 			end
 		end
+	elseif Auctionator and IsShown(Atr_Main_Panel) then
+		SetPrice(tt)
 	elseif AuctionFaster and IsShown(AuctionFrame) and AuctionFrame.selectedTab >= 4 then
 		local count
-		if AuctionFrame.selectedTab == 4 then
+		if AuctionFrame.selectedTab == 4 then -- sell
 			local item = tt:GetOwner().item
 			count = item and item.count
-		elseif AuctionFrame.selectedTab == 5 then
+		elseif AuctionFrame.selectedTab == 5 then -- buy
 			local hoverRowData = AuctionFaster.hoverRowData
 			count = hoverRowData and hoverRowData.count -- provided by AuctionFaster
 		end
@@ -56,3 +58,30 @@ GameTooltip:HookScript("OnTooltipSetItem", function(tt)
 		SetPrice(tt)
 	end
 end)
+
+-- give auctionator precedence
+local AuctionatorTips = {
+	Compat = true,
+	OnTooltipSetItem = true,
+	SetAuctionItem = true,
+	SetAuctionSellItem = true,
+	SetBagItem = true,
+	SetInboxItem = true, -- AUCTIONATOR_SHOW_MAILBOX_TIPS
+	SetInventoryItem = true,
+	SetLootItem = true,
+	SetLootRollItem = true,
+	SetQuestItem = true,
+	SetQuestLogItem = true,
+	SetSendMailItem = true,
+	SetTradePlayerItem = true,
+	SetTradeTargetItem = true,
+	--SetAction
+	--SetCraftItem
+	--SetCraftSpell
+	--SetTradeSkillItem
+	--SetTrainerService
+}
+
+function VP:HasAuctionator(source)
+	return AUCTIONATOR_V_TIPS == 1 and AuctionatorTips[source]
+end

@@ -75,6 +75,15 @@ L["ResizeSpy"] = "Resize the Spy window automatically"
 L["ResizeSpyDescription"] = "Set this to automatically resize the Spy window as enemy players are added and removed."
 L["ResizeSpyLimit"] = "List Limit"
 L["ResizeSpyLimitDescription"] = "Limit the number of enemy players shown in the Spy window."
+L["DisplayTooltipNearSpyWindow"] = "Display tooltip near the Spy window"
+L["DisplayTooltipNearSpyWindowDescription"] = "Set this to display tooltips near the Spy window."
+L["SelectTooltipAnchor"] = "Tooltip Anchor Point"
+L["SelectTooltipAnchorDescription"] = "Select the anchor point for the tooltip if the option above has been checked"
+L["ANCHOR_CURSOR"] = "Cursor"
+L["ANCHOR_TOP"] = "Top"
+L["ANCHOR_BOTTOM"] = "Bottom"
+L["ANCHOR_LEFT"] = "Left"			
+L["ANCHOR_RIGHT"] = "Right"
 L["TooltipDisplayWinLoss"] = "Display win/loss statistics in tooltip"
 L["TooltipDisplayWinLossDescription"] = "Set this to display the win/loss statistics of a player in the player's tooltip."
 L["TooltipDisplayKOSReason"] = "Display Kill On Sight reasons in tooltip"
@@ -261,7 +270,9 @@ L["CloseDescription"] = "|cffffffffHides the Spy window. By default will show ag
 L["Left/Right"] = "Left/Right"
 L["Left/RightDescription"] = "|cffffffffNavigates between the Nearby, Last Hour, Ignore and Kill On Sight lists."
 L["Clear"] = "Clear"
-L["ClearDescription"] = "|cffffffffClears the list of players that have been detected. CTRL click will Enable/Disable Spy while displayed."
+L["ClearDescription"] = "|cffffffffClears the list of players that have been detected. CTRL-Click will turn Spy On/Off. Shift-Click will turn all sound On/Off."
+L["SoundEnabled"] = "Audio alerts enabled"
+L["SoundDisabled"] = "Audio alerts disabled"
 L["NearbyCount"] = "Nearby Count"
 L["NearbyCountDescription"] = "|cffffffffCount of nearby players."
 L["Statistics"] = "Statistics"
@@ -424,8 +435,11 @@ L["GOBLIN"] = "Goblin"
 L["2002"] = "2002"
 L["2002 BOLD"] = "2002 Bold"
 L["ARIAL NARROW"] = "Arial Narrow" -- default chat font
+L["AR ZhongkaiGBK Medium"] = "AR ZhongkaiGBK Medium"
+L["BIG NOODLE TITLING"] = "Big Noodle Titling"
+L["EXPRESSWAY"] = "Expressway"
 L["FRIZ QUADRATA TT"] = "Friz Quadrata TT" -- default main UI font
-L["FRIZQUADRATACTT"] = "FrizQuadrataCTT"
+L["FRIZQUADRATACTT"] = "Friz Quadrata CTT"
 L["MOK"] = "MoK"
 L["MORPHEUS"] = "Morpheus" -- default in game mail font
 L["NIMROD MT"] = "Nimrod MT"
@@ -799,7 +813,7 @@ Spy_AbilityList = {
 --++ Rogue Talents ++	
 	["Ghostly Strike"]={ class = "ROGUE", level = 20, },
 	["Riposte"]={ class = "ROGUE", level = 20, },
-	["Blade Furry"]={ class = "ROGUE", level = 30, },
+	["Blade Flurry"]={ class = "ROGUE", level = 30, },
 	["Cold Blood"]={ class = "ROGUE", level = 30, },
 	["Hemorrhage"]={ class = "ROGUE", level = 30, },
 	["Preparation"]={ class = "ROGUE", level = 30, },

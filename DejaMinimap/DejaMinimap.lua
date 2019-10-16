@@ -97,7 +97,7 @@ end)
 	
 	dvMMlockcheckframe=CreateFrame("Frame", "dvMMlockcheckframe", UIParent)
 	dvMMlockcheckframe:SetClampedToScreen(1)
-	dvMMlockcheckframe:SetFrameStrata(BACKGROUND)
+	dvMMlockcheckframe:SetFrameStrata("BACKGROUND")
 	dvMMlockcheckframe:SetFrameLevel("1")
 	dvMMlockcheckframe:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT")
 	dvMMlockcheckframe:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT")

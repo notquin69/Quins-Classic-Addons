@@ -541,14 +541,31 @@ local function VUHDO_updateHots(aUnit, anInfo)
 
 				if not tBuffIcon then
 					tDebuffOffset = tCnt - 1;
+				else
+					if VUHDO_LibClassicDurations then
+						local tNewDuration, tNewExpiry = VUHDO_LibClassicDurations:GetAuraDurationByUnit(aUnit, tSpellId, tCaster, tBuffName);
+		
+						if tDuration == 0 and tNewDuration then 
+							tDuration = tNewDuration;
+							tExpiry = tNewExpiry;
+						end
+					end
 				end
 			end
 
 			if tDebuffOffset then -- Achtung kein elseif
 				tBuffName, tBuffIcon, tStacks, _, tDuration, tExpiry, tCaster, _, _, tSpellId = UnitDebuff(aUnit, tCnt - tDebuffOffset);
-
 				if not tBuffIcon then
 					break;
+				end
+
+				if VUHDO_LibClassicDurations then
+			                local tNewDuration, tNewExpiry = VUHDO_LibClassicDurations:GetAuraDurationByUnit(aUnit, tSpellId, tCaster, tBuffName);
+
+					if tDuration == 0 and tNewDuration then 
+						tDuration = tNewDuration;
+						tExpiry = tNewExpiry;
+					end
 				end
 			end
 			

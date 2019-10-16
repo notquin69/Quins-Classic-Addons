@@ -2149,13 +2149,6 @@
 </Button>
 
 <Frame name="VuhDoFrameTemplate" toplevel="true" movable="true" virtual="true">
-	<Anchors>
-		<Anchor point="CENTER" relativeTo="UIParent">
-			<Offset>
-				<AbsDimension x="0" y="0" />
-			</Offset>
-		</Anchor>
-	</Anchors>
 	<Backdrop bgFile="Interface\AddOns\VuhDoOptions\Images\blue_lt_square_16_16" edgeFile="Interface\AddOns\VuhDoOptions\Images\panel_edges_2" tile="true">
 		<BackgroundInsets>
 			<AbsInset left="1" right="1" top="1" bottom="1" />
@@ -2167,10 +2160,6 @@
 			<AbsValue val="16" />
 		</EdgeSize>
 	</Backdrop>
-	<Layers>
-		<Layer>
-		</Layer>
-	</Layers>
 </Frame>
 
 

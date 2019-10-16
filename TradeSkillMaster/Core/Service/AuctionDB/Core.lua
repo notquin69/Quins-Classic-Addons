@@ -64,7 +64,8 @@ function AuctionDB.OnEnable()
 		for _, info in ipairs(appData) do
 			local realm, data = unpack(info)
 			local downloadTime = "?"
-			if realm == private.region then
+			-- try switching around "Classic-[US|EU]" to match the addon's "[US|EU]-Classic" format for classic region data
+			if realm == private.region or gsub(realm, "Classic-%-([A-Z]+)", "%1-Classic") == private.region then
 				local regionData, lastUpdate = private.LoadRegionAppData(data)
 				if regionData then
 					private.regionData = regionData
@@ -262,11 +263,11 @@ function private.OnFullScanDone()
 	TSM.db.factionrealm.internalData.auctionDBScanTime = time()
 	private.marketValueDB:TruncateAndBulkInsertStart()
 	local scanQuery = private.scanDB:NewQuery()
-		:Select("itemString", "stackSize", "itemBuyout")
+		:Select("baseItemString", "stackSize", "itemBuyout")
 		:OrderBy("itemBuyout", true)
-	for _, itemString, stackSize, itemBuyout in scanQuery:Iterator() do
-		private.ProcessScanResultItem(itemString, itemBuyout, stackSize)
-		scannedItems[itemString] = true
+	for _, baseItemString, stackSize, itemBuyout in scanQuery:Iterator() do
+		private.ProcessScanResultItem(baseItemString, itemBuyout, stackSize)
+		scannedItems[baseItemString] = true
 	end
 	local numScannedAuctions = scanQuery:Count()
 	scanQuery:Release()

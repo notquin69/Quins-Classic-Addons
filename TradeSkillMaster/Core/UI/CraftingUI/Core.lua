@@ -11,6 +11,8 @@ local CraftingUI = TSM.UI:NewPackage("CraftingUI")
 local L = TSM.L
 local private = { topLevelPages = {}, fsm = nil, craftOpen = nil, tradeSkillOpen = nil, defaultUISwitchBtn = nil, isVisible = false }
 local MIN_FRAME_SIZE = { width = 820, height = 587 }
+local BEAST_TRAINING_DE = "Bestienausbildung"
+local BEAST_TRAINING_RUS = "Воспитание питомца"
 
 
 
@@ -43,7 +45,7 @@ end
 
 function CraftingUI.IsProfessionIgnored(name)
 	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
-		if name == GetSpellInfo(5149) then -- Beast Training
+		if name == GetSpellInfo(5149) or name == BEAST_TRAINING_DE or name == BEAST_TRAINING_RUS then -- Beast Training
 			return true
 		elseif name == GetSpellInfo(7620) then -- Fishing
 			return true

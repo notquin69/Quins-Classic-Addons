@@ -207,20 +207,33 @@ function private.ScanProfession()
 		local lastHeaderIndex = 0
 		private.db:TruncateAndBulkInsertStart()
 		for i = 1, TSM.Crafting.ProfessionState.IsClassicCrafting() and GetNumCrafts() or GetNumTradeSkills() do
-			local name, subName, skillType
+			local name, _, skillType, hash = nil, nil, nil, nil
 			if TSM.Crafting.ProfessionState.IsClassicCrafting() then
-				name, subName, skillType = GetCraftInfo(i)
-				if subName and subName ~= "" then
-					name = name.." - "..subName
+				name, _, skillType = GetCraftInfo(i)
+				if skillType ~= "header" then
+					hash = TSMAPI_FOUR.Util.CalculateHash(name)
+					for j = 1, GetCraftNumReagents(i) do
+						local _, _, quantity = GetCraftReagentInfo(i, j)
+						hash = TSMAPI_FOUR.Util.CalculateHash(TSMAPI_FOUR.Item.ToItemString(GetCraftReagentItemLink(i, j)), hash)
+						hash = TSMAPI_FOUR.Util.CalculateHash(quantity, hash)
+					end
 				end
 			else
 				name, skillType = GetTradeSkillInfo(i)
+				if skillType ~= "header" then
+					hash = TSMAPI_FOUR.Util.CalculateHash(name)
+					for j = 1, GetTradeSkillNumReagents(i) do
+						local _, _, quantity = GetTradeSkillReagentInfo(i, j)
+						hash = TSMAPI_FOUR.Util.CalculateHash(TSMAPI_FOUR.Item.ToItemString(GetTradeSkillReagentItemLink(i, j)), hash)
+						hash = TSMAPI_FOUR.Util.CalculateHash(quantity, hash)
+					end
+				end
 			end
 			if skillType == "header" then
 				lastHeaderIndex = i
 			else
-				if name and name ~= "" then
-					private.db:BulkInsertNewRow(i, TSMAPI_FOUR.Util.CalculateHash(name), name, lastHeaderIndex, skillType, -1, 1)
+				if name then
+					private.db:BulkInsertNewRow(i, hash, name, lastHeaderIndex, skillType, -1, 1)
 				end
 			end
 		end

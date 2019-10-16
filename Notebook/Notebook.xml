@@ -1,16 +1,58 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ http://wowprogramming.com/FrameXML/UI.xsd">
 
-  <Frame name="Notebook" inherits="ButtonFrameTemplate" parent="UIParent" toplevel="true" frameStrata="MEDIUM" enableMouse="true" movable="true" hidden="true">
+  <Frame name="NotebookFrame" inherits="ButtonFrameTemplate" parent="UIParent" toplevel="true" frameStrata="MEDIUM" enableMouse="true" movable="true" hidden="true">
     <Size x="316" y="427"/> <!-- 338, 424 -->
     <Scripts>
-      <OnLoad function="Notebook_OnLoad"/>
-      <OnShow function="Notebook_OnShow"/>
-      <OnHide function="Notebook_OnHide"/>
-      <OnMouseDown function="Notebook_OnMouseDown"/>
-      <OnMouseWheel function="Notebook_OnMouseWheel"/>
+      <OnLoad function="NotebookFrame_OnLoad"/>
+      <OnShow function="NotebookFrame_OnShow"/>
+      <OnHide function="NotebookFrame_OnHide"/>
+      <OnMouseDown function="NotebookFrame_OnMouseDown"/>
+      <OnMouseWheel function="NotebookFrame_OnMouseWheel"/>
     </Scripts>
 
     <Frames>
+
+      <Button name="$parentCharacterTab" inherits="TabButtonTemplate" parentKey="characterTab" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT" x="51" y="-28"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="NotebookFrameTab_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button name="$parentGeneralTab" inherits="TabButtonTemplate" parentKey="generalTab" id="2">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentCharacterTab" relativePoint="RIGHT"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="NotebookFrameTab_OnClick"/>
+        </Scripts>
+      </Button>
+
+      <Button name="$parentFontButton" parentKey="fontButton" frameStrata="HIGH">
+        <Size x="16" y="16"/>
+        <Anchors>
+         <Anchor point="TOPRIGHT" x="-20" y="-43"/>
+        </Anchors>
+        <HitRectInsets>
+          <AbsInset left="-8" right="-8" top="-8" bottom="-2"/>
+        </HitRectInsets>
+        <Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="$parentText" parentKey="text" inherits="GameFontNormalLarge" text="Aa">
+							<Size x="140" y="12"/>
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="TOP" x="0" y="-6"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+        <Scripts>
+          <OnEnter function="NotebookFrameFontButton_OnEnter"/>
+          <OnLeave function="NotebookFrameFontButton_OnLeave"/>
+          <OnClick function="NotebookFrameFontButton_OnClick"/>
+        </Scripts>
+      </Button>
 
       <EditBox name="$parentEditBox" parentKey="editBox" letters="512" multiLine="true" enableMouse="true" autoFocus="false">
         <Anchors>
@@ -20,29 +62,31 @@
         <TextInsets>
           <AbsInset left="22" right="20" top="20" bottom="10"/>
         </TextInsets>
-        <FontString inherits="MailTextFontNormal"/>
+        <FontString inherits="MailTextFontNormal"> <!-- GameFontNormal_NoShadow -->
+          <Color r="0.18" g="0.12" b="0.06"/>
+        </FontString>
         <HighlightColor a="1.0" r="0.82" g="0.82" b="0.82"/>
         <Scripts>
-          <OnEditFocusGained function="NotebookEditBox_OnEditFocusGained"/>
-          <OnEditFocusLost function="NotebookEditBox_OnEditFocusLost"/>
-          <OnTextChanged function="NotebookEditBox_OnTextChanged"/>
+          <OnEditFocusGained function="NotebookFrameEditBox_OnEditFocusGained"/>
+          <OnEditFocusLost function="NotebookFrameEditBox_OnEditFocusLost"/>
+          <OnTextChanged function="NotebookFrameEditBox_OnTextChanged"/>
           <OnEscapePressed function="EditBox_ClearFocus"/>
         </Scripts>
       </EditBox>
 
-      <Button name="$parentPreviousPageButton" frameStrata="HIGH">
+      <Button name="$parentPreviousPageButton" parentKey="previousPageButton" frameStrata="HIGH">
         <Size>
           <AbsDimension x="32" y="32"/>
         </Size>
         <Anchors>
-          <Anchor point="CENTER" relativeTo="Notebook" relativePoint="BOTTOMLEFT">
+          <Anchor point="CENTER" relativeTo="NotebookFrame" relativePoint="BOTTOMLEFT">
             <Offset>
               <AbsDimension x="40" y="50"/>
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick function="NotebookPreviousPageButton_OnClick"/>
+          <OnClick function="NotebookFramePreviousPageButton_OnClick"/>
         </Scripts>
         <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Up"/>
         <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-PrevPage-Down"/>
@@ -50,19 +94,19 @@
         <HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
       </Button>
 
-      <Button name="$parentNextPageButton" frameStrata="HIGH">
+      <Button name="$parentNextPageButton" parentKey="nextPageButton" frameStrata="HIGH">
         <Size>
           <AbsDimension x="32" y="32"/>
         </Size>
         <Anchors>
-          <Anchor point="CENTER" relativeTo="Notebook" relativePoint="BOTTOMRight">
+          <Anchor point="CENTER" relativeTo="NotebookFrame" relativePoint="BOTTOMRight">
             <Offset>
               <AbsDimension x="-40" y="50"/>
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick function="NotebookNextPageButton_OnClick"/>
+          <OnClick function="NotebookFrameNextPageButton_OnClick"/>
         </Scripts>
         <NormalTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Up"/>
         <PushedTexture file="Interface\Buttons\UI-SpellbookIcon-NextPage-Down"/>
@@ -76,7 +120,7 @@
 					<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
 				</Anchors>
 				<Scripts>
-					<OnClick function="NotebookDoneButton_OnClick"/>
+					<OnClick function="NotebookFrameDoneButton_OnClick"/>
 				</Scripts>
 			</Button>
 

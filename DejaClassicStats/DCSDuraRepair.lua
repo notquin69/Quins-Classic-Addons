@@ -71,14 +71,14 @@ for _, v in ipairs(DCSITEM_SLOT_FRAMES) do
 	v.itemcolor = v:CreateTexture(nil,"ARTWORK")
 	v.itemcolor:SetAllPoints(v)
 
-	v.ItemFrameOutlineTexture = v:CreateTexture(nil,"ARTWORK",nil,-7)
-	v.ItemFrameOutlineTexture:SetPoint("TOPLEFT", v, "TOPLEFT", -1, 1);
-	v.ItemFrameOutlineTexture:SetPoint("BOTTOMRIGHT", v, "BOTTOMRIGHT", 1, -1);
+	v.ItemFrameOutlineTexture = v:CreateTexture(nil,"OVERLAY",nil)
+	v.ItemFrameOutlineTexture:SetPoint("TOPLEFT", v, "TOPLEFT", -2, 2);
+	v.ItemFrameOutlineTexture:SetPoint("BOTTOMRIGHT", v, "BOTTOMRIGHT", 2, -2);
 	v.ItemFrameOutlineTexture:SetTexture("Interface\\COMMON\\WhiteIconFrame.blp")
 
-	v.ItemFramehighlightTexture = v:CreateTexture(nil, "HIGHLIGHT",nil,-7)
-	v.ItemFramehighlightTexture:SetPoint("TOPLEFT", v, "TOPLEFT", -1, 1);
-	v.ItemFramehighlightTexture:SetPoint("BOTTOMRIGHT", v, "BOTTOMRIGHT", 1, -1);
+	v.ItemFramehighlightTexture = v:CreateTexture(nil, "HIGHLIGHT",nil)
+	v.ItemFramehighlightTexture:SetPoint("TOPLEFT", v, "TOPLEFT", -2, 2);
+	v.ItemFramehighlightTexture:SetPoint("BOTTOMRIGHT", v, "BOTTOMRIGHT", 2, -2);
 	v.ItemFramehighlightTexture:SetTexture("Interface\\COMMON\\WhiteIconFrame.blp")
 end
 
@@ -90,11 +90,18 @@ local function DCS_Set_Item_Quality_Color_Outlines()
 		if (itemLink==nil) then
 			local iLikeCake = true
 		else
+			local qualityBordersChecked = gdbprivate.gdb.gdbdefaults.DejaClassicStatsItemQualityBorders.ItemQualityBordersChecked
+			local qualityBordersAlpha
+			if qualityBordersChecked then 
+				qualityBordersAlpha = 1
+			else
+				qualityBordersAlpha = 0
+			end
 			local item = Item:CreateFromEquipmentSlot(v:GetID())
 			local itemName, itemLink = GetItemInfo(itemLink)
 			local r, g, b, hex = getItemQualityColor(C_Item.GetItemQualityByID(itemLink))
-			v.ItemFrameOutlineTexture:SetVertexColor(r, g, b, 1);
-			v.ItemFramehighlightTexture:SetVertexColor(r, g, b, 1);
+			v.ItemFrameOutlineTexture:SetVertexColor(r, g, b, qualityBordersAlpha);
+			v.ItemFramehighlightTexture:SetVertexColor(r, g, b, qualityBordersAlpha);
 		end
 	end
 end
@@ -932,33 +939,6 @@ end)
 -- 			paintblack()
 -- 		end
 -- 	end)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 local DCS_ENCHANT_IDS = {
 	[1] = "Rockbiter 3",
@@ -2506,29 +2486,6 @@ gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsAlternateInfoPlacement = {
 	AlternateInfoPlacementChecked = false,
 }
 
-local DCS_AlternateInfoPlacementCheck = CreateFrame("CheckButton", "DCS_AlternateInfoPlacementCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
-	DCS_AlternateInfoPlacementCheck:RegisterEvent("PLAYER_LOGIN")
-	DCS_AlternateInfoPlacementCheck:ClearAllPoints()
-	--DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", 30, -255)
-	DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -155)
-	DCS_AlternateInfoPlacementCheck:SetScale(1)
-	DCS_AlternateInfoPlacementCheck.tooltipText = L["Displays the item's info beside each item's slot."] --Creates a tooltip on mouseover.
-	_G[DCS_AlternateInfoPlacementCheck:GetName() .. "Text"]:SetText(L["Display Info Beside Items"])
-
-DCS_AlternateInfoPlacementCheck:SetScript("OnEvent", function(self, event, ...)
-	otherinfoplacement = gdbprivate.gdb.gdbdefaults.DejaClassicStatsAlternateInfoPlacement.AlternateInfoPlacementChecked
-	self:SetChecked(otherinfoplacement)
-	DCS_Set_Dura_Item_Positions()
-	DCS_Item_Level_Center()
-	DCS_Item_Enchant_GetText()
-end)
-
-DCS_AlternateInfoPlacementCheck:SetScript("OnClick", function(self)
-	otherinfoplacement = not otherinfoplacement
-	gdbprivate.gdb.gdbdefaults.DejaClassicStatsAlternateInfoPlacement.AlternateInfoPlacementChecked = otherinfoplacement
-	DCS_Set_Dura_Item_Positions()
-end)
-
 PaperDollFrame:HookScript("OnShow", function(self)
 	if showitemlevel then
 		DCS_Item_Level_Center()
@@ -2600,5 +2557,51 @@ end)
 -- print()
 -- local duration = tempEnchantID[mainHandEnchantID] or 3600
 
+local DCS_AlternateInfoPlacementCheck = CreateFrame("CheckButton", "DCS_AlternateInfoPlacementCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_AlternateInfoPlacementCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_AlternateInfoPlacementCheck:ClearAllPoints()
+	--DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_AlternateInfoPlacementCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -155)
+	DCS_AlternateInfoPlacementCheck:SetScale(1)
+	DCS_AlternateInfoPlacementCheck.tooltipText = L["Displays the item's info beside each item's slot."] --Creates a tooltip on mouseover.
+	_G[DCS_AlternateInfoPlacementCheck:GetName() .. "Text"]:SetText(L["Display Info Beside Items"])
 
+DCS_AlternateInfoPlacementCheck:SetScript("OnEvent", function(self, event, ...)
+	otherinfoplacement = gdbprivate.gdb.gdbdefaults.DejaClassicStatsAlternateInfoPlacement.AlternateInfoPlacementChecked
+	self:SetChecked(otherinfoplacement)
+	DCS_Set_Dura_Item_Positions()
+	DCS_Item_Level_Center()
+	DCS_Item_Enchant_GetText()
+end)
+
+DCS_AlternateInfoPlacementCheck:SetScript("OnClick", function(self)
+	otherinfoplacement = not otherinfoplacement
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsAlternateInfoPlacement.AlternateInfoPlacementChecked = otherinfoplacement
+	DCS_Set_Dura_Item_Positions()
+end)
+
+gdbprivate.gdbdefaults.gdbdefaults.DejaClassicStatsItemQualityBorders = {
+	ItemQualityBordersChecked = true,
+}
+
+local DCS_ItemQualityBordersCheck = CreateFrame("CheckButton", "DCS_ItemQualityBordersCheck", DejaClassicStatsPanel, "InterfaceOptionsCheckButtonTemplate")
+	DCS_ItemQualityBordersCheck:RegisterEvent("PLAYER_LOGIN")
+	DCS_ItemQualityBordersCheck:ClearAllPoints()
+	--DCS_ItemQualityBordersCheck:SetPoint("TOPLEFT", 30, -255)
+	DCS_ItemQualityBordersCheck:SetPoint("TOPLEFT", "dcsItemsPanelCategoryFS", 7, -195)
+	DCS_ItemQualityBordersCheck:SetScale(1)
+	DCS_ItemQualityBordersCheck.tooltipText = L["Displays a colored border around each item's slot indicating its quality."] --Creates a tooltip on mouseover.
+	_G[DCS_ItemQualityBordersCheck:GetName() .. "Text"]:SetText(L["Item Quality Borders"])
+
+DCS_ItemQualityBordersCheck:SetScript("OnEvent", function(self, event, ...)
+	qualityBordersChecked = gdbprivate.gdb.gdbdefaults.DejaClassicStatsItemQualityBorders.ItemQualityBordersChecked
+	self:SetChecked(qualityBordersChecked)
+	-- DCS_Set_Item_Quality_Color_Outlines() -- Don't use at login (only set check) as items are not cached until paperdoll has been opened thus error occurs as all item info is nil
+end)
+
+DCS_ItemQualityBordersCheck:SetScript("OnClick", function(self)
+	qualityBordersChecked = not qualityBordersChecked
+	gdbprivate.gdb.gdbdefaults.DejaClassicStatsItemQualityBorders.ItemQualityBordersChecked = qualityBordersChecked
+	DCS_Set_Item_Quality_Color_Outlines()
+end)
 

@@ -65,6 +65,8 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "無效的設定檔"
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[無效的設定檔
 在腳本或模組的選項頁面導入腳本或模組的字串]=]
 --[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_COPIED"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_FAIL_COPIED"] = ""--]] 

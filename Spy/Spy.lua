@@ -6,7 +6,7 @@ local L = AceLocale:GetLocale("Spy")
 local _
 
 Spy = LibStub("AceAddon-3.0"):NewAddon("Spy", "AceConsole-3.0", "AceEvent-3.0", "AceComm-3.0", "AceTimer-3.0")
-Spy.Version = "1.0.7"
+Spy.Version = "1.0.10"
 Spy.DatabaseVersion = "1.1"
 Spy.Signature = "[Spy]"
 Spy.ButtonLimit = 15
@@ -30,6 +30,7 @@ Spy.AlertType = nil
 Spy.UpgradeMessageSent = false
 Spy.zName = ""
 Spy.ChnlTime = 0
+Spy.Skull = -1
 
 -- Localizations for xml
 L_STATS = "Spy "..L["Statistics"]
@@ -261,7 +262,37 @@ Spy.options = {
 							Spy:RefreshCurrentList() 
 						end	
 					end,
-				},			
+				},
+				DisplayTooltipNearSpyWindow = {
+					name = L["DisplayTooltipNearSpyWindow"],
+					desc = L["DisplayTooltipNearSpyWindowDescription"],
+					type = "toggle",
+					order = 10,
+					width = "full",
+					get = function(info)
+						return Spy.db.profile.DisplayTooltipNearSpyWindow
+					end,
+					set = function(info, value)
+						Spy.db.profile.DisplayTooltipNearSpyWindow = value
+					end,
+				},	
+				SelectTooltipAnchor = {
+					type = "select",
+					order = 11,
+					name = L["SelectTooltipAnchor"],
+					desc = L["SelectTooltipAnchorDescription"],
+					values = { 
+						["ANCHOR_CURSOR"] = L["ANCHOR_CURSOR"],
+						["ANCHOR_TOP"] = L["ANCHOR_TOP"],
+						["ANCHOR_BOTTOM"] = L["ANCHOR_BOTTOM"],
+						["ANCHOR_LEFT"] = L["ANCHOR_LEFT"],						
+						["ANCHOR_RIGHT"] = L["ANCHOR_RIGHT"], 
+					},
+					get = function() return Spy.db.profile.TooltipAnchor end,
+					set = function(info, value)
+						Spy.db.profile.TooltipAnchor = value
+					end,
+				},				
 				DisplayWinLossStatistics = {
 					name = L["TooltipDisplayWinLoss"],
 					desc = L["TooltipDisplayWinLossDescription"],
@@ -310,6 +341,9 @@ Spy.options = {
 						["2002"] = L["2002"],
 						["2002 Bold"] = L["2002 BOLD"],
 						["Arial Narrow"] = L["ARIAL NARROW"],
+						["AR ZhongkaiGBK Medium"] = L["AR ZhongkaiGBK Medium"],
+						["Big Noodle Titling"] = L["BIG NOODLE TITLING"], 
+						["Expressway"] = L["EXPRESSWAY"],							
 						["Friz Quadrata TT"] = L["FRIZ QUADRATA TT"],
 						["FrizQuadrataCTT"] = L["FRIZQUADRATACTT"],
 						["MoK"] = L["MOK"],
@@ -1169,6 +1203,8 @@ local Default_Profile = {
 		DisplayOnMap=true,
 		SwitchToZone=true,
 		MapDisplayLimit="SameZone",
+		DisplayTooltipNearSpyWindow=false,
+		TooltipAnchor="ANCHOR_CURSOR",		
 		DisplayWinLossStatistics=true,
 		DisplayKOSReason=true,
 		DisplayLastSeen=true,
@@ -1313,6 +1349,8 @@ function Spy:CheckDatabase()
 	if Spy.db.profile.DisplayOnMap == nil then Spy.db.profile.DisplayOnMap = Default_Profile.profile.DisplayOnMap end
 	if Spy.db.profile.SwitchToZone == nil then Spy.db.profile.SwitchToZone = Default_Profile.profile.SwitchToZone end	
 	if Spy.db.profile.MapDisplayLimit == nil then Spy.db.profile.MapDisplayLimit = Default_Profile.profile.MapDisplayLimit end
+	if Spy.db.profile.DisplayTooltipNearSpyWindow == nil then Spy.db.profile.DisplayTooltipNearSpyWindow = Default_Profile.profile.DisplayTooltipNearSpyWindow end	
+	if Spy.db.profile.TooltipAnchor == nil then Spy.db.profile.TooltipAnchor = Default_Profile.profile.TooltipAnchor end	
 	if Spy.db.profile.DisplayWinLossStatistics == nil then Spy.db.profile.DisplayWinLossStatistics = Default_Profile.profile.DisplayWinLossStatistics end
 	if Spy.db.profile.DisplayKOSReason == nil then Spy.db.profile.DisplayKOSReason = Default_Profile.profile.DisplayKOSReason end
 	if Spy.db.profile.DisplayLastSeen == nil then Spy.db.profile.DisplayLastSeen = Default_Profile.profile.DisplayLastSeen end
@@ -1477,6 +1515,15 @@ function Spy:EnableSpy(value, changeDisplay, hideEnabledMessage)
 		if changeDisplay and not InCombatLockdown() then Spy.MainWindow:Hide() end
 		Spy:OnDisable()
 		DEFAULT_CHAT_FRAME:AddMessage(L["SpyDisabled"])
+	end
+end
+
+function Spy:EnableSound(value)
+	Spy.db.profile.EnableSound = value
+	if value then
+		DEFAULT_CHAT_FRAME:AddMessage(L["SoundEnabled"]) 
+	else
+		DEFAULT_CHAT_FRAME:AddMessage(L["SoundDisabled"])
 	end
 end
 
@@ -1666,9 +1713,22 @@ function Spy:PlayerTargetEvent()
 			local level = tonumber(UnitLevel("target"))
 			local guild = GetGuildInfo("target")
 			local guess = false
-			if level <= 0 then
-				guess = true
-				level = nil
+			if level == Spy.Skull then
+				if playerData and playerData.level then
+					if playerData.level > (UnitLevel("player") + 10) and playerData.level < Spy.MaximumPlayerLevel then	
+						guess = true
+						level = nil
+					elseif UnitLevel("player") < Spy.MaximumPlayerLevel - 9 then
+						guess = true
+						level = UnitLevel("player") + 10
+					end	
+				else
+					guess = true
+					level = UnitLevel("player") + 10
+				end
+--			else
+--				guess = true
+--				level = nil
 			end
 			
 			Spy:UpdatePlayerData(name, class, level, race, guild, true, guess)
@@ -1696,9 +1756,22 @@ function Spy:PlayerMouseoverEvent()
 			local level = tonumber(UnitLevel("mouseover"))
 			local guild = GetGuildInfo("mouseover")
 			local guess = false
-			if level <= 0 then
-				guess = true
-				level = nil
+			if level == Spy.Skull then
+				if playerData and playerData.level then
+					if playerData.level > (UnitLevel("player") + 10) and playerData.level < Spy.MaximumPlayerLevel then	
+						guess = true
+						level = nil
+					elseif UnitLevel("player") < Spy.MaximumPlayerLevel - 9 then
+						guess = true
+						level = UnitLevel("player") + 10
+					end	
+				else
+					guess = true
+					level = UnitLevel("player") + 10
+				end
+--			else
+--				guess = true
+--				level = nil
 			end
 
 			Spy:UpdatePlayerData(name, class, level, race, guild, true, guess)

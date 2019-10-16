@@ -54,6 +54,7 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "Invalid profile file."
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[Invalid profile file.
 
 Import scripts or mods at the scripting tab.]=]
+L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = "Profile '%s' already exists, overwrite it?"
 L["OPTIONS_SETTINGS_COPIED"] = "settings copied."
 L["OPTIONS_SETTINGS_FAIL_COPIED"] = "failed to get the settings for the current selected tab."
 L["OPTIONS_SHADOWCOLOR"] = "Shadow Color"

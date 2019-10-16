@@ -1,6 +1,6 @@
 # Vendor Price
 
-## [1.2.6](https://github.com/ketho-wow/VendorPrice/tree/1.2.6) (2019-09-23)
-[Full Changelog](https://github.com/ketho-wow/VendorPrice/compare/1.2.5...1.2.6)
+## [1.2.9](https://github.com/ketho-wow/VendorPrice/tree/1.2.9) (2019-10-01)
+[Full Changelog](https://github.com/ketho-wow/VendorPrice/compare/1.2.8...1.2.9)
 
-- Repackage without test config  
+- Reverted the streamlining with Auctionator tooltip  

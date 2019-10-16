@@ -54,6 +54,8 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "부적합한 프로필 문자열입�
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[잘못된 프로필입니다.
 
 스크립트나 모드에서 가져오기 해보세요.]=]
+--[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
 L["OPTIONS_SETTINGS_COPIED"] = "설정이 복사되었습니다."
 L["OPTIONS_SETTINGS_FAIL_COPIED"] = "현재 선택된 탭의 설정을 가져오지 못했습니다."
 L["OPTIONS_SHADOWCOLOR"] = "그림자 색상"

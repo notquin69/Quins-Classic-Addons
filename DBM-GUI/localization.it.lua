@@ -95,7 +95,6 @@ L.ShowEngageMessage 		= "Visualizza in chat il messaggio di Ingaggio"
 L.ShowDefeatMessage 		= "Visualizza in chat il messaggio di uccisione"
 L.WhisperMessages			= "Sussurri - Opzioni"
 L.AutoRespond 				= "Rispondi automaticamente ai sussurri mentre stai combattendo"
-L.EnableStatus 				= "Rispondi ai sussurri con lo stato del combattimento"
 L.WhisperStats 				= "Nelle risposte ai sussurri, aggiungi le informazioni su uccisioni e sconfitte."
 
 -- Tab: Barsetup

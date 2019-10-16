@@ -9,7 +9,11 @@ local LC = LibStub("AceLocale-3.0"):GetLocale("RCLootCouncil_Classic")
 -- Core
 ----------------------------------------------
 addon.coreEvents["ENCOUNTER_LOOT_RECEIVED"] = nil -- Doens't exist in Classic
+addon.coreEvents["LOOT_CLOSED"] = nil -- We have our own
 -- Defaults updates:
+-- -- Auto pass disabled:
+addon.defaults.profile.autoPassBoE = false
+addon.defaults.profile.autoPassTrinket = false
 -- -- Removed:
 addon.defaults.profile.ignoredItems = {} -- Remove all retail ignores
 addon.defaults.profile.printCompletedTrades = nil

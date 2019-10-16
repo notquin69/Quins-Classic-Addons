@@ -2202,8 +2202,8 @@ function window:CreateFrame19()
 			{"brokerAnchorLabel", 6, true},
 			{"brokerTextLabel", 7},
 			{"BrokerNumberAbbreviateLabel", 8},
-			{"ItemLevelTrackerAnchorLabel", 9, true},
-			{"ItemLevelLabel", 10}
+			--{"ItemLevelTrackerAnchorLabel", 9, true},
+			--{"ItemLevelLabel", 10}
 		}
 		
 		window:arrange_menu (frame19, left_side, x, window.top_start_at)	

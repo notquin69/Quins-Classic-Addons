@@ -1,15 +1,19 @@
 ﻿## Interface: 11302
 ## Title: Spy
-## Version: 1.0.7
+## Version: 1.0.10
 ## Notes: Detects and alerts you to the presence of nearby enemy players.
 ## Notes-ptBR: Detecta e alerta você da presença de jogadores inimigos.
 ## Notes-deDE: Detektiert und warnt Sie vor, in der Nähe befindlichen, Gegnern.
 ## Notes-zhTW: 偵測並警告你附近有敵方玩家出沒。
+## Notes-zhCN: 检测并提醒您附近有敌方玩家。
+## Notes-koKR: 근처에 있는 적 플레이어를 탐지하고 경고합니다.
 ## Creator: Immolation
 ## Author: Slipjack
 ## X-Credits-ptBR: Localization: Kasth
 ## X-Credits-zhTW: Localization: Jaspy10
 ## X-Credits-deDE: Localization: Jana
+## X-Credits-deCN: Localization: Kidd8250
+## X-Credits-koKR: Localization: Ringdove
 ## OptionalDeps:  Ace3, LibSharedMedia-3.0, 
 ## SavedVariables: SpyDB
 ## SavedVariablesPerCharacter: SpyPerCharDB
@@ -24,6 +28,8 @@ Locales\Spy-enUS.lua
 Locales\Spy-ptBR.lua
 Locales\Spy-deDE.lua
 Locales\Spy-zhTW.lua
+Locales\Spy-zhCN.lua
+Locales\Spy-koKR.lua
 
 Spy.lua
 Fonts.lua

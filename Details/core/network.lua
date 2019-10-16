@@ -44,10 +44,11 @@
 	local CONST_CLOUD_EQUALIZE = "EQ"
 	
 	local CONST_CLOUD_SHAREDATA = "SD"
-	
 	local CONST_PVP_ENEMY = "PP"
-	
 	local CONST_ROGUE_SR = "SR" --soul rip from akaari's soul (LEGION ONLY)
+
+	local CONST_ASK_TALENTS = "AT"
+	local CONST_ANSWER_TALENTS = "AWT"
 	
 	_detalhes.network.ids = {
 		["HIGHFIVE_REQUEST"] = CONST_HIGHFIVE_REQUEST,
@@ -59,16 +60,13 @@
 		["CLOUD_DATARQ"] = CONST_CLOUD_DATARQ,
 		["CLOUD_DATARC"] = CONST_CLOUD_DATARC,
 		["CLOUD_EQUALIZE"] = CONST_CLOUD_EQUALIZE,
-		
 		["WIPE_CALL"] = CONST_WIPE_CALL,
-		
 		["GUILD_SYNC"] = CONST_GUILD_SYNC,
-		
 		["PVP_ENEMY"] = CONST_PVP_ENEMY,
-		
 		["MISSDATA_ROGUE_SOULRIP"] = CONST_ROGUE_SR, --soul rip from akaari's soul (LEGION ONLY)
-		
 		["CLOUD_SHAREDATA"] = CONST_CLOUD_SHAREDATA,
+		["ASK_TALENTS"] = CONST_ASK_TALENTS,
+		["ANSWER_TALENTS"] = CONST_ANSWER_TALENTS,
 	}
 	
 	local plugins_registred = {}
@@ -163,6 +161,23 @@
 		end
 	end
 	
+--classic talents
+	function _detalhes.network.ReceivedTalentsQuery (player, realm, core_version, playerSerial)
+		Details.ask_talents_cooldown = Details.ask_Talents_cooldown or 0
+		if (Details.ask_talents_cooldown > time()) then
+			return
+		end
+		Details.ask_talents_cooldown = time() + 5
+
+		local targetName = Ambiguate (player .. "-" .. realm, "none")
+		Details:SendPlayerClassicInformation (targetName)
+	end
+
+	function _detalhes.network.ReceivedTalentsInformation (player, realm, core_version, serial, itemlevel, talents, spec)
+		_detalhes:ClassicSpecFromNetwork (player, realm, core_version, serial, itemlevel, talents, spec)
+	end
+
+--details version	
 	function _detalhes.network.Update_VersionReceived (player, realm, core_version, build_number)
 		if (_detalhes.debug) then
 			_detalhes:Msg ("(debug) received version alert ", build_number)
@@ -499,6 +514,10 @@
 		[CONST_ROGUE_SR] = _detalhes.network.HandleMissData, --soul rip from akaari's soul (LEGION ONLY)
 		
 		[CONST_PVP_ENEMY] = _detalhes.network.ReceivedEnemyPlayer,
+
+		[CONST_ASK_TALENTS] = _detalhes.network.ReceivedTalentsQuery,
+		[CONST_ANSWER_TALENTS] = _detalhes.network.ReceivedTalentsInformation,
+		
 	}
 	
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

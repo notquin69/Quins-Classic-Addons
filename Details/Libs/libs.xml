@@ -23,4 +23,5 @@
 	<Include file="ThreatClassic-1.0\lib.xml"/>
 	<!-- <Include file="LibGroupInSpecT-1.1\lib.xml"/> temp disabled due to classic-->
 	<Include file="DF\Details-Framework-Classic\load.xml"/>
+	<Include file="LibBossIDs-1.0\lib.xml"/>
 </Ui>

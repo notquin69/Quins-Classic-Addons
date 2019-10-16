@@ -1,2256 +1,2408 @@
-Version 3.102
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Re-enable LibSharedMedia fonts for zhCN, zhTW, and koKR locales
--- Fixed loading of profile/key layout on automatic spec change 
-
-
-Improvements:
--- Added Uu'nat Umbral Shell debuff absorb tracking
-
-
---------------------------------------------------------------
-Version 3.101
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Listen to UNIT_HEALTH_FREQUENT events exclusively
---   Work around a Blizzard bug that triplicates health events
--- Fixed Spell Trace for Holy Priest talent 'Trail of Light' 
---   As of 8.1.0 this talent is now triggered by 'Heal'
--- Fixed issue with case sensitivity for the 'dropdown' command
-
-
-Improvements:
--- Added new custom debuff display options 'Bar Glow' and 'Icon Glow'
---  Default color settings under 'VuhDo Options > Colors > States'
--- Added new glow display options for 'Special Dot' indicator
--- Minimap icon profile and key layout dropdown menus are now sorted
--- Added new bouquet validator 'Flag: Own Combo Points =='
--- Added new default bouquet 'Player Combo Points'
--- Added new text provider 'Combo Points: <#n>'
--- Added new bouquet validator 'Flag: Own Soul Shards =='
--- Added new default bouquet 'Player Soul Shards'
--- Added new text provider 'Soul Shards: <#n>'
--- Added new bouquet validator 'Flag: Own Runes =='
--- Added new default bouquet 'Player Runes'
--- Added new text provider 'Runes: <#n>'
--- Added new bouquet validator 'Flag: Own Arcane Charges =='
--- Added new default bouquet 'Player Arcane Charges'
--- Added new text provider 'Arcane Charges: <#n>'
--- Added default custom debuffs for Crucible of Storms raid
--- Added new slash command "/vd about"
--- MODIFIER+RIGHTBUTTON now adds debuff icons to the blacklist
---   Default key modifier is set to 'CTRL+SHIFT+ALT'
---   Set under 'VuhDo Options > Debuffs > Standard > Icons'
-
-
---------------------------------------------------------------
-Version 3.100
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Fixed hostile spells options UI recognition of talents and items
--- Fixed custom debuff spell source filter when aura is a buff
--- Fixed custom debuff update when debuff index changes
--- Fixed custom debuff display on update when slot becomes available
--- Fixed unnecessary shield value updates for irrelevant spells
--- Fixed shield overwrite detection when new shield amount is smaller
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.99
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Fixed various reset functions under 'VuhDo Options > Tools > Reset'
-
-
-Improvements:
--- Added new bouquet validator 'Icon: Is Phased'
--- Added new bouquet validator 'Icon: Is War Mode Phased'
--- Added new default bouquet 'Is Phased Icon'
--- Added spell caster source options to custom debuffs
---  See 'VuhDo Options > Debuffs > Custom > Store / Delete > Mine'
---  See 'VuhDo Options > Debuffs > Custom > Store / Delete > Others'
---  Both checkboxes are selected by default
---  These defaults are inherited by existing custom debuffs
--- Added auto-activate of profile due to a group size of '3'
--- Added '3' and '15' man group sizes for 'Hold to Test' demo mode
--- Added default custom debuffs for Battle of Dazar'alor raid
--- Added Mage spell 'Arcane Familiar' to Buff Watch
-
-
---------------------------------------------------------------
-Version 3.98
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Fixed debuff absorb tracking
-
-
-Improvements:
--- Added Vectis Immunosuppression debuff absorb tracking
--- Added Diseased Lasher Decaying Mind debuff absorb tracking
--- Added Priest Luminous Barrier absorb tracking
--- Added more default custom debuffs for Uldir raid encounters
--- Added new bouquet validator 'Has Summon'
--- Added new default bouquet 'Summon Status Icon'
--- Added new default bouquet 'Role & Summon Status Icon'
---   Now assigned to the 'Special Dot' indicator by default
--- Bump TOC interface version for 8.1
-
-
---------------------------------------------------------------
-Version 3.97
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
-
-
-Bugfixes:
--- Fixed vertical health bar display for units w/o a power bar
--- Fixed mana bar display after specialization activation
--- Fixed apostrophe issue for Priest 'Shadow Mend' in French language
--- Fixed assignment of remapped spells when dragging from spell book
--- Fixed Holy Priest 'Trail of Light' tracker
-
-
-Improvements:
--- Added panel sort method 'Tank => Healer => MDPS => RDPS'
-
-
---------------------------------------------------------------
-Version 3.96
-
-
-Known issues:
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
--- Debuff tooltips are currently bugged when using ElvUI
---   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'
--- Bug in French language clients for Priest 'Shadow Mend' spell
---   Work around for now is to create and bind a custom macro:
---     /cast [@vuhdo] Soins rapides
-
-
-Bugfixes:
--- Fixed display of custom debuffs after closing VuhDo Options
--- Fixed display of debuff tooltips after zone change
--- Fixed incoming heal and shield bar height when there is no mana bar
--- Fixed export of custom debuffs in profile string
--- Fixed range detection for out of phase units
-
-
-Improvements:
--- Added default custom debuffs for 8.0 World Boss encounters
--- Added Mage spell 'Remove Curse' to list of 'Curse' debuff types
-
-
---------------------------------------------------------------
-Version 3.95
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
-
-
-Bugfixes:
--- Fixed tracking of aura with ambiguous spell name 'Soothing Mist'
--- Fixed target type for some raid wide auras in BuffWatch
--- Fixed texture position for 'Threat Marks' indicator
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.94
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- BfA stat squish cleanup still a work in progress
---   AOE Advice spell equations need complete overhaul
---   Some text providers need changes to better display small numbers
-
-
-Bugfixes:
--- Fixed error applying key layouts which have not yet been created
--- Once again include default custom debuffs for Antorus raid encounters
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.93
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
-
-
-Bugfixes:
--- Boss unit frames now apply hostile spell binds like a target unit frame
--- UNIT_SPELLCAST_* events no longer pass spell name or rank
--- UNIT_POWER event is now named UNIT_POWER_UPDATE
--- UnitAura/UnitBuff/UnitDebuff no longer accept spell name or ID
--- UnitAura/UnitBuff/UnitDebuff no longer return spell rank
--- Fixed cluster builder/AOE advice to use the new C_Map API
--- Fixed BuffWatch tracking of auras
--- Removed deprecated Death Knight aura 'Horn of Winter' from BuffWatch
--- Removed deprecated Death Knight aura 'Bone Shield' from BuffWatch
--- Removed deprecated Death Knight presences from BuffWatch
--- Removed deprecated Warlock pet aura 'Dark Intent' from BuffWatch
--- Removed deprecated Priest aura 'Fear Ward' from BuffWatch
--- Removed deprecated Priest chakras from BuffWatch
--- Removed deprecated Druid aura 'Leader of the Park' from BuffWatch
--- Removed deprecated Druid aura 'Mark of the Wild' from BuffWatch
--- Removed deprecated Monk 'Legacy of ...' auras from BuffWatch
--- Removed deprecated Paladin aura 'Blessing of Might' from BuffWatch
--- Removed deprecated Shaman aura 'Grace of Air' from BuffWatch
--- Removed deprecated Shaman aura 'Water Shield' from BuffWatch
--- Removed passive Shaman aura 'Ancestral Swiftness' from BuffWatch
--- Removed Shaman totem type buff-overwriting groups from BuffWatch
--- Removed deprecated Shaman totem 'Searing' from BuffWatch
--- Removed deprecated Shaman totem 'Stone Bulwark' from BuffWatch
--- Removed deprecated Hunter pet aura 'Spirit Beast' from BuffWatch
--- Removed depreacted Hunter pet aura 'Roar of Courage' from BuffWatch
--- Removed deprecated Hunter pet aura 'Still Water' from BuffWatch
--- Removed deprecated Hunter aura 'Trueshot Aura' from BuffWatch
--- Removed deprecated Hunter aura 'Aspect of the Pack' from BuffWatch
--- Removed deprecated Hunter aura 'Aspect of the Fox' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Cat' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Bear' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Raptor' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Hyena' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Serpent' from BuffWatch
--- Removed deprecated Hunter aura 'Lone Wolf Primates' from BuffWatch
--- Removed default Priest HoT for deprecated aura 'Grace'
--- Removed deprecated Paladin aura 'Righteous Fury' from BuffWatch
--- Removed deprecated Paladin aura 'Seal of Righteousness' from BuffWatch
--- Removed deprecated Paladin aura 'Seal of Justice' from BuffWatch
--- Removed deprecated Paladin aura 'Seal of Insight' from BuffWatch
--- Removed deprecated Paladin aura 'Seal of Truth' from BuffWatch
--- Removed deprecated Paladin aura 'Seal of Command' from BuffWatch
--- Removed deprecated Paladin spell 'Beacon of Insight'
--- Removed deprecated Warrior spell 'Vigilance' from BuffWatch
--- Removed deprecated Mage spell 'Frost Armor' from BuffWatch
--- Removed deprecated Mage spell 'Molten Armor' from BuffWatch
--- Removed deprecated Mage spell 'Mage Armor' from BuffWatch
--- Removed deprecated Mage spell 'Incanter's Ward' from BuffWatch
--- Removed deprecated Mage spell 'Invocation' from BuffWatch
--- Removed deprecated Rogue poison 'Instant Poison' from BuffWatch
--- Removed deprecated Monk stance 'Fierce Tiger' from BuffWatch
--- Removed deprecated Monk stance 'Sturdy Ox' from BuffWatch
--- Removed deprecated Monk stance 'Wise Serpent' from BuffWatch
--- Fixed preservation of BuffWatch settings for spec specific buffs
--- Fixed lack of explicit refresh on event UPDATE_ACTIVE_BATTLEFIELD
-
-
-Improvements:
--- Misc fixes/changes needed for Battle for Azeroth 8.x
--- Added Hunter aura 'Aspect of the Chameleon' to BuffWatch
--- Added Hunter aura 'Aspect of the Eagle' to BuffWatch
--- Added Hunter aura 'Aspect of the Turtle' to BuffWatch
--- Added Hunter aura 'Aspect of the Wild' to BuffWatch
--- Added Hunter ability 'Misdirection' to BuffWatch
--- Added Paladin aura 'Greater Blessing of Kings' to BuffWatch
--- Added Paladin aura 'Greater Blessing of Wisdom' to BuffWatch
--- Added default custom debuffs for Uldir raid encounters
-
-
---------------------------------------------------------------
-Version 3.92
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Changed the way LibDBIcon-1.0 is embedded to fix loading issue
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.91
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed error when configuring tooltip settings per panel
-
-
-Improvements:
--- Migrate minimap icon to LibDBIcon (fixes SexyMap compat)
--- Standard debuffs can now be ignored/blacklisted by spell ID
--- Standard debuff blacklist dropdown is now sorted by name
-
-
---------------------------------------------------------------
-Version 3.90
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Better workaround for vehicle targeting on Antoran High Command
-
-
-Improvements:
--- Display specialization names on option checkboxes
-
-
---------------------------------------------------------------
-Version 3.89
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
--- Blizzard has changed the way vehicles work for Antoran High Command
---   For now I've just disabled the proper vehicle support
---   Targeting a player in vehicle will still targe the vehicle unit
---   However, mouseover/click-to-heal should work properly
---   Healing actual vehicles (e.g. Ulduar) is now broken though
-
-
-Bugfixes:
--- Shaman spell 'Purify Spirit' no longer remapped to 'Cleanse Spirit'
--- Fixed debuff duration for several debuff absorption spells
-
-
-Improvements:
--- Added default custom debuffs for Antorus raid encounters
--- Added debuff absorption tracking for Antorus 'Chilled Blood'
--- Removed MoP and WoD default custom debuffs
-
-
---------------------------------------------------------------
-Version 3.88
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
--- Blizzard has changed the way vehicles work for Antoran High Command
---   For now I've just disabled the proper vehicle support
---   Targeting a player in vehicle will still targe the vehicle unit
---   However, mouseover/click-to-heal should work properly
---   Healing actual vehicles (e.g. Ulduar) is now broken though
-
-
-Bugfixes:
--- Fixed saving/loading of per profile Spell Trace settings
--- Workaround for Antoran High Command vehicles, see known issues
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.87
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
--- Patch 7.2.5 Tomb of Sargeras Desolate Host encounter workaround
---   Under 'VuhDo Options > General > Scanners' set:
---     Range => '40 yards'
---     Global Scanner => 'Infinite'
--- Tracking of 'debuff absorbs' like 'Embrace of the Eclipse' requires 
---   Under 'VuhDo Options > Panels > HoT Icons > Shields' set:
---      Shield Status => checked
-
-
-Bugfixes:
--- Use full player name including realm for tell command
--- Check if GameTooltip is flagged forbidden before any interaction
---   Should fix taints related to Blizzard lock down in 7.2.5
--- Optimize common action validation on panel refresh
---   Should fix some "script ran too long" errors w/ talent spells
--- Migrate to the 7.3 PlaySound API
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.86
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
--- Patch 7.2.5 Tomb of Sargeras Desolate Host encounter workaround
---   Under 'VuhDo Options > General > Scanners' set:
---     Range => '40 yards'
---     Global Scanner => 'Infinite'
-
-
-Bugfixes:
--- Use new power type enumeration in place of deprecated constants
-
-
-Improvements:
--- Added default custom debuffs for Tomb of Sargeras raid encounters
--- Added debuff absorption tracking for ToS 'Embrace of the Eclipse'
-
-
---------------------------------------------------------------
-Version 3.85
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed display of NPC/boss units
-
-
-Improvements:
--- Profiles can now auto-activate for multiple specializations
-
-
---------------------------------------------------------------
-Version 3.84
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed use of deprecated UnitMana/UnitManaMax APIs
-
-
-Improvements:
--- TOC bump for patch 7.2
-
-
---------------------------------------------------------------
-Version 3.83
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed spell trace tracking for periodic heals (eg. 'Healing Rain')
--- Fixed debuff absorption tracking for Nighthold 'Time Release'
-
-
-Improvements:
--- Added bouquet validator 'Statusbar: Mana % (Healer Only)'
--- Added default bouquet 'Manabars: Mana (Healer Only)'
--- Added more default custom debuffs for Nighthold raid encounters
-
-
---------------------------------------------------------------
-Version 3.82
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Updated default bouquet 'Paladin Beacon'
--- Fixed resurrection smart casting while inside PvP instances
-
-
-Improvements:
--- Added ability to track different spell casts on units
---   See settings under 'VuhDo Options > General > Spell Trace'
---   Useful for tracking which units are hit by AOE healing spells
--- Added bouquet validator 'Icon: Spell Trace' 
--- Added default bouquet 'Spell Trace'
--- Added ability to track Holy Priest "Trail of Light"
---   Enable under 'VuhDo Options > General > Spell Trace'
--- Added bouquet validator 'Icon: Trail of Light'
--- Added default bouquet 'Trail of Light'
--- Added panel sort method 'Tank => MDPS => RDPS => Healer'
--- Added default custom debuffs for Nighthold raid encounters
--- Added debuff absorption tracking for Nighthold 'Time Release'
-
-
---------------------------------------------------------------
-Version 3.81
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed Priest 'Clarity of Will' maximum shield absorption amount
--- Updated spell ID for Shaman 'Earth Shield' (now an Honor Talent)
--- Fixed smart casting of unknown resurrection spells
--- Fixed command line loading of key layouts
-
-
-Improvements:
--- Added new bindable command 'MouseLook' (move the camera with mouse)
--- Added default bouquet 'Overflow Mythic+ Affix'
---   Assign this bouquet to a HoT Icon slot to track the absorb
--- Changed the default panel settings to hopefully be more palatable
-
-
---------------------------------------------------------------
-Version 3.80
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Workaround for Blizzard bug in secure button onenter/onleave
---   Should improve sticking keybindings when off VuhDo frames
---   See: https://wow.curseforge.com/projects/vuhdo/issues/442
--- Fixed ToV Guarm 'Shadow Lick' debuff absorption tracking
-
-
-Improvements:
--- Added additional default custom debuffs for ToV raid encounters
--- Map Monk 'Ancient Mistweaver Arts' to 'Soothing Mist(Honor Talent)'
--- Added spell 'Essence Font' to Mistweaver Monk default HoTs
-
-
---------------------------------------------------------------
-Version 3.79
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed an issue where Shaman 'Healing Stream Totem' would not cast
--- Fixed resurrection spell cast announcement
--- Fixed Paladin non-healer smart cast resurrection
--- Blizzard fixed the font drop shadow offset on their end finally
-
-
-Improvements:
--- Added default custom debuffs for Trial of Valor raid encounters
--- Added debuff absorption tracking for ToV 'Shadow Lick'
--- Added debuff absorption tracking for ToV 'Corrupted Axion'
--- Added seperate cast announcement for 'mass' resurrection spells
-
-
---------------------------------------------------------------
-Version 3.78
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Patch 7.1 disabled retrieval of unit facing and position in instances
---   This was an intentional breaking change by Blizzard
---   This breaks AOE Advice, Clusters and out-of-range direction arrow
---   At this time there is no way to fix or renable these features
-
-
-Bugfixes:
--- Fixed handling of empty values in health related combat log events
--- Disabled retrieval of unit facing and map position inside instances
--- Fixed font dropshadow offset which Blizzard broke in 7.1
---   Shadow offset is not scaling properly with resolution
---   Hardcoded the offset to be optimal for 1920x1080 for now
--- Fixed ability to bind Priest 'Shadow Mend' to a mouse/key directly
--- Default custom debuffs will now always be added by spell ID
---   This resolves numerous issues with ambiguous debuff names
---   Please consider a complete reset of your custom debuff settings 
---   This can be done under 'VuhDo Options > Tools > Reset > Buffs/HoTs' 
--- Removed default custom debuff spell IDs that were no longer valid
--- Fixed mapping of ambiguous Monk "Detox" debuff abilities by spec
--- Removed some default custom debuffs for Emerald Nightmare encounters
---   If there are too many debuffs for your taste then reset:
---     'VuhDo Options > Tools > Reset > Buffs/HoTs > Custom Debuffs'
---   Beware you will loose all previous custom debuff settings!
-
-
-Improvements:
--- Out of combat smart cast resurrection now prefers 'mass' spells
-
-
---------------------------------------------------------------
-Version 3.77
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
---   No support yet for new AOEs like 'Power Word: Radiance'
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
-
-
-Bugfixes:
--- Fixed role detection for Survival Hunters
--- Fixed role detection for Monks
--- Mage 'Remove Curse' is no longer a valid dispel
--- Updated all class dispel abilities
--- Updated all default spell bindings for healer dispels
--- Fixed display of GCD bar
--- Fixed absorption tracking for 'Befouled' and 'Touch of Harm'
--- Fixed shield absorption amount tracking of Hot icons
-
-
-Improvements:
--- Text provider '+<#n>k' now abbreviates millions as '+<#n>M'
--- Bar health text now abbreviates million as '<n>M'
--- Tooltip text now abbreviates millions as '<n>M'
--- Added default custom debuffs for Emerald Nightmare raid encounters
--- Added debuff absorption tracking for Mythic+ affix 'Overflow'
--- Added bouquet validator 'Counter: Mythic+ Overflow Absorb #k'
-
-
---------------------------------------------------------------
-Version 3.76
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
---   No support yet for new AOEs like 'Power Word: Radiance'
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
-
-
-Bugfixes:
--- Activate profile/key layout when only the player changes specialization
--- Fix nil reference in bar customizer for clusters after spec change
-
-
---------------------------------------------------------------
-Version 3.75
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
---   No support yet for new AOEs like 'Power Word: Radiance'
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
-
-
-Bugfixes:
--- Priest 'Purge the Wicked' can be directly assigned as a spell bind again
--- Fixed HoT clock start time rounding error
--- Fixed error on level up where VuhDo would try to handle specialization 
---   changes while still in combat lockdown
-
-
-Improvements:
--- Added Priest 'Clarity of Will' as a default HoT icon option
--- Custom flag bouquet validator now listens for VUHDO_UPDATE_NUM_CLUSTER
--- Only explicitly refresh an auras if it is whitelisted (eg. 'Atonement')
---   and listen for all SPELL_AURA events not just APPLIED so the updates 
---   are consistently immediate
-
-
---------------------------------------------------------------
-Version 3.74
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
--- Morphing spells (spells that change based on a spec or talent) such as 
---   Disc Priest 'Purge the Wicked' should always be bound by their orginal 
---   base spell name (eg. 'Shadow Word: Pain')
-
-
-Bugfixes:
--- Resolve tracking ambiguity by caching Druid 'Cenarion Ward' by spell ID
--- Import and export frames now properly auto-focus when opened
--- Druid 'Spring Blossoms' now properly auto populates in the HoT dropdown
-
-
-Improvements:
--- Explicitly refresh HoTs and bouquets when we get a SPELL_AURA_APPLIED 
---   event for an actively tracked HoT (requires 'Shield Status' option to 
---   be selected under 'VuhDo Options > Panels > HoT Icons > Shields')
-
-
---------------------------------------------------------------
-Version 3.73
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
--- Morphing spells (spells that change based on a spec or talent) such as 
---   Disc Priest 'Purge the Wicked' should always be bound by their orginal 
---   base spell name (eg. 'Shadow Word: Pain')
-
-
-Bugfixes:
--- Fixed frame strata on import/export dialogs to always be 'on top'
-
-
-Improvements:
--- Added Priest 'Atonement' as a default HoT icon option
--- Added Druid 'Spring Blossoms' as a default HoT icon option
-
-
---------------------------------------------------------------
-Version 3.72.
-
-
-Known issues:
--- Limited support for Class Order Hall Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Legion
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Removed AOE spell side effects from glyphs which are now entirely cosmetic
--- Removed 'Recently Mass Resurrected' from default ignored debuffs
--- Priest 'Prayer of Healing' is now raid wide and has a target radius of 20 yards
--- Priest 'Divine Aegis' has been removed from the game
--- Priest 'Spirit Shell' has been removed from the game
--- Druid 'Wild Growth' now hits up to 6 targets normally and 8 with 'Incarnation'
--- Druid 'Tranquility' now hits up to all 40 targets in a raid
--- Druid 'Rampant Growth' has been removed from the game
--- Paladin 'Light of Dawn' now hits up to 5 targets in a frontal 180 degree cone
--- Paladin 'Holy Radiance' has been removed from the game
--- Paladin 'Illuminated Healing' has been removed from the game
--- Paladin 'Sacred Shield' has been removed from the game
--- Monk 'Guard' has been removed from the game
--- Warrior 'Shield Barrier' has been removed from the game
--- Fixed 'Flag: Tapped' bouquet validator to use new UnitIsTapDenied() API
-
-
-Improvements:
--- Added new power types and power colors (Maelstrom, Insanity, Pain, etc.)
--- Added auto loading of profiles and key layouts for all 4 specializations
--- Added Demon Hunters to the demo groups for testing panels
-
-
---------------------------------------------------------------
-Version 3.71.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Monochrome font outline should now work for all clients without crashing
--- Fixed hiding of HoT icon countdown numbers when clock selected
--- Fixed 'shield status' display for absorption spells tracked as HoT icons
--- Fixed incorrect spell ID for Warlock Blood Pact
-
-
-Improvements:
--- Added ability to import/export bouquets as strings for sharing purposes
---   Under 'VuhDo Options > General > Bouquets'
--- Added ability to import/export profiles as strings for sharing purposes
---   Under 'VuhDo Options > Tools > Profiles'
---   Be warned that large profiles can momentarily freeze the WoW client
---   Custom debuffs are NOT included in the exported profile
--- Added ability to import/export key layouts as strings for sharing purposes
---   Under 'VuhDo Options > Tools > Key Layouts'
---   This includes mouse/key binds, hostile binds, HoTs and auto triggers
--- Added custom flag validator which accepts a user defined function.
---   Bouquets can include any valid Lua function which returns true or false.
---   The function can access the 'VUHDO_unitInfo' variable which is a map 
---   containing the relevant unit information.
---   The example below returns true if the unit is named 'Ivaria': 
---     return ("Ivaria" == VUHDO_unitInfo["name"])
---   Unit information (VUHDO_unitInfo table):
---
---     afk - boolean - true if unit is AFK
---     aggro - boolean - true if unit has aggro
---     charmed - boolean - true if unit is charmed
---     class - string - the unit's class name
---     classId - number - the unit's class ID
---       20 - warrior
---       21 - rogue
---       22 - hunter
---       23 - paladin
---       24 - mage
---       25 - warlock
---       26 - shaman
---       27 - druid
---       28 - priest
---       29 - death knight
---       30 - monk
---     className - string - the unit's class name prettified
---     connected - boolean - true if unit is connected
---     dead - boolean - true if unit is dead
---     debuff - boolean - true if the unit has an active debuff
---     debuffName - string - the most recent debuff on the unit
---     fullName - string - the full name of the unit
---     group - number - the group the unit is in
---     health - number - the unit's current health
---     healthmax - number - the unit's maximum health
---     isAltPower - boolean - true if unit has an alt power active
---     isPet - boolean - true if unit is a pet
---     isVehicle - boolean - true if unit is in a vehicle
---     name - string - the name of the unit
---     ownerUnit - string - unit's owner if pet or vehicle
---     petUnit - string - the unit's pet unit ID
---     power - number - the unit's current power
---     powermax - number - the unit's maximum power
---     powertype - number - the type of power
---       0 - mana
---       1 - rage
---       2 - focus
---       3 - energy
---       4 - happiness
---       5 - runes
---     raidIcon - number - the raid icon if unit is marked
---       1 - yellow 4-point Star
---       2 - orange circle
---       3 - purple diamond
---       4 - green triangle
---       5 - white crescent moon
---       6 - blue square
---       7 - red "X" cross
---       8 - white skull
---     range - boolean - true if unit is in range
---     role - number - the unit's combat role
---       60 - melee tank
---       61 - melee damage
---       62 - ranged damage
---       63 - ranged heal
---     targetUnit - string - the unit's target
---     threat - number - the unit's threat status
---       0 - not tanking, lower threat than tank
---       1 - not tanking, higher threat than tank
---       2 - insecurely tanking, another unit has higher threat
---       3 - securely tanking, highest threat
---     threatPerc - number - the unit's threat percentage
---     unit - string - the unit ID
---     visible - boolean - true if the unit is visible
---     
--- Added option to hide buff watch while out of combat
---   Under 'VuhDo Options > Buffs > General'
--- Added Huffman compression for profile sharing and storage
-
-
---------------------------------------------------------------
-Version 3.70.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Disabled option for Monochrome font hint which crashes some WoW clients
-
-
-Improvements:
-
-
---------------------------------------------------------------
-Version 3.69.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Removed Shadow of Death from the default custom debuff list for HFC
---   If you are upgrading from v3.68 please note Shadow of Death needs to 
---   be manually deleted from the custom debuff list
--- Fixed localization bug when adding default custom debuffs by spell ID
--- Fixed muting of SFX and Error Speech when auto-firing spells/trinkets
--- Fixed smart cast for Holy Priest while in a Chakra stance
--- Re-enabled option for Monochrome font hint
-
-
-Improvements:
--- Added additional default custom debuffs for patch 6.2 (HFC raid encounters)
--- Added healer legendary ring buff Etheralus as a HoT/absorb
--- Added Fel Lord Zakuun Befouled debuff absorb tracking
--- Added Tyrant Velhari Touch of Harm debuff absorb tracking
--- Added support for VelhariRaidFrameAdjust and Velhari Health Fix addons
---   Note only Velhari Health Fix versions greater than 1.0 will work
-
-
---------------------------------------------------------------
-Version 3.68.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Fixed updating of debuff icon texture (eg. Mark of the Necromancer)
-
-
-Improvements:
--- Bumped TOCs for 6.2
--- Added default custom debuffs for patch 6.2 (HFC raid encounters + Kazzak)
--- Added default common debuffs to the ignore list (eg. Exhaustion)
--- Added new bindable command "ExtraActionButton" (useful to pass Eye of Anzu)
-
-
---------------------------------------------------------------
-Version 3.67.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Fixed floating point number comparison when closing/canceling VuhDo Options
--- Fixed error speech sound playback during auto-trigger of trinkets and spells
--- Fixed Cluster Builder calling methods on forbidden frames
--- Fixed improper usage of API to check for Druid talent Rampant Growth
--- Fixed AOE cluster advice for spells which target randomly (thanks BlueRajasmyk)
--- Fixed interacting with a frame after battle res when using Clique compat mode
--- Fixed tracking of tier 18 Shaman four piece bonus Riptide
--- Fixed incorrect spell ID for Shaman spell Riptide
-
-
-Improvements:
--- Bumped TOCs for 6.1
--- New special panel type 'NPCs' for boss encounter unit frames (thanks Dridzt)
--- Added panel type 'NPCs' to panel wizzard under 'Tools > Panel Wizard'
--- Listen to UNIT_HEALTH_FREQUENT events for more responsive health reporting
--- Added missing notable encounter debuffs for Blackrock Foundry
-
-
---------------------------------------------------------------
-Version 3.66.
-
-
-Known issues:
--- Limited support for Garrison Bodyguards
---   Bodyguards can be used in panels when set to target or focus
---   Bodyguards have no unit ID so for now are only partially supported
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
-
-
-Bugfixes:
--- Warlock spell Dark Intent no longer provides raid wide stamina buff
--- Fixed pump aegis tooltip to correctly indicate a cap of 60% player max health
--- Fixed Clarity of Will to cap at 75% of the caster's maximum health
--- Fixed bug when saving macros for player names with extended characters
--- Removed Hunter Rapid Fire from custom debuff list
--- Added all Mar'gok's Arcane Wrath/Mark of Chaos variations to custom debuffs
--- Fixed GCD bar display for Discipline and Shadow Priests
--- Fixed cluster builder calling methods on forbidden frames (eg. in-game store)
--- Fixed Swiftmendable bouquet validator when using L100 talent Rampant Growth
--- Fixed the loading of HoTs when changing key layouts
--- Buff Watch no longer attempts to smart cast hostile buffs on friendly targets
-
-
-Improvements:
--- Added new default bouquet for Paladin Beacon of Light and Faith
--- Added Hunter Lone Wolf to Buff Watch
--- Added Paladin Beacon of Faith to Buff Watch
--- Added Paladin Beacon of Faith as default HoT icon option
--- Added Paladin Beacon of Insight as a default HoT icon option
--- Added Paladin Stay of Execution as a default HoT icon option
--- Added new bouquets for excess and total absorbtion percentages
---   Status: Excess Absorption %
---   Status: Total Absorption %
--- The menu command can still be key bound when using Clique compat mode
---   New option checkbox 'VuhDo Options > General > Misc > Clique Pass-Thru'
--- Panels can now have up to a maximum of 40 columns and 40 rows
-
-
---------------------------------------------------------------
-Version 3.65.
-
-
-Known issues:
--- Settings are not saved when the character name includes a special character
---   Mac OS X WoW client bug - http://us.battle.net/wow/en/forum/topic/14880818884
--- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2
---   Stance specific spells must all use the spell name Holy Word: Chastise
--- Incoming heal estimation reported is not even close to accurate
---   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values
--- AOE advisor not yet updated for Warlords of Draenor
---   Need new spell formulas and coefficients
-
-
-Bugfixes:
--- Fixed profile activation due to group size 20
--- Fixed the inability of players without assist to see ready checks
--- Fixed VuhDo Options tooltip mispellings in EN and ES localizations
-
-
-Improvements:
--- Added ability to select a default profile and key layout
---   Defaults are applied when no existing settings are found
--- Copying a profile now also creates a copy of the selected key layout
--- Added new raid group size 30 man
---   Tools > Profiles > Activate due to group size
---   Move > Hold to Test 
--- Added new bouquets to check if a unit is in same zone as the player
---   Flag: Player Zone, Inside
---   Flag: Player Zone, Outside
--- Added new bouquets to check if a unit is a particular class of tank
---   Flag: Role Tank, Death Knight
---   Flag: Role Tank, Druid
---   Flag: Role Tank, Monk
---   Flag: Role Tank, Paladin
---   Flag: Role Tank, Warrior
-
-
---------------------------------------------------------------
-Version 3.64.
-
-
-Bugfixes:
--- Fixed Buff Watch support for the new type of derived spells
---	Fixed watching of Shaman Lightning Shield and Water Shield
---	Fixed watching of Paladin Seal of Truth
--- Fixed bug where magic debuffs were not flagged as removable for Monks
--- Removed deprecated Hunter spell Aspect of the Iron Hawk
-
-
---------------------------------------------------------------
-Version 3.63.
-
-
-Bugfixes:
--- Fixed bug where magic debuffs were not flagged as removable for Paladins
-
-
---------------------------------------------------------------
-Version 3.62.
-
-
-Bugfixes:
--- Fixed invalid Blizzard Talent API call
-
-
---------------------------------------------------------------
-Version 3.61.
-
-
-Bugfixes:
--- Fixed Masque integration to no longer call deprecated API 'Skin'
-
-
---------------------------------------------------------------
-Version 3.60.
-
-
-Bugfixes:
--- Fixed bug where saving custom debuff settings would reset the custom debuff color
--- Fixed bug where custom debuffs added by spell ID did not have all settings applied
--- Fixed bug where custom debuffs were not playing sounds when selected
--- Fixed bug where isInSameZone check always returned true
---	BuffWatch now correctly ignores other players outside the players zone
---	Global scanner perf bump when 'same zone' limit selected
--- Fixed bug in the combat log parsing for incoming swing damage amount
--- Removed deprecated spells and abilities
---	Removed Death Knight spell Unholy Frenzy
---	Removed Druid spell Nourish
---	Removed Druid spell Symbiosis
---	Removed Hunter aspect Aspect of the Hawk
---	Changed Hunter aspect Aspect of the Iron Hawk to Iron Hawk
---	Removed Monk raid cooldown Avert Harm
---	Removed Monk spell Serpent's Zeal
---	Changed Paladin spell Divine Light to Holy Light
---	Removed Paladin spell Inquisition
---	Removed Priest spell Hymn of Hope
---	Removed Priest spell Void Shift
---	Removed Priest spell Inner Fire
---	Removed Priest spell Inner Will
---	Changed Priest spell Greater Heal to Heal
---	Removed Rogue poison Mind Numbing Poison
---	Changed Rogue poison Paralytic Poison to Internal Bleeding
---	Changed Shaman spell Greater Healing Wave to Healing Wave
---	Removed Shaman weapon enchant Earthliving Weapon
---	Removed Shaman weapon enchant Flametongue Weapon
---	Removed Shaman weapon enchant Frostbrand Weapon
---	Removed Shaman weapon enchant Rockbiter Weapon
---	Removed Shaman weapon enchant Windfury Weapon
---	Removed Shaman totem Mana Tide Totem
---	Removed Shaman totem Stormlash Totem
---	Removed Shaman spell Burning Wrath
---	Removed Warrior raid cooldown Demoralizing Banner
-
-
-Improvements:
--- Added new raid group size 20 man
---   Tools > Profiles > Activate due to group size
---   Move > Hold to Test 
--- Added custom debuffs for 6.0 raid content
--- Added new spells and abilities
---	Added new Priest spell Clarity of Will as pumpable absorb
---	Added new Hunter aspect Aspect of the Fox
---	Added new Mage raid cooldown Amplify Magic
---	Added new Druid spell Rejuvenation (Germination) as HoT icon
---	Added new Druid spell Genesis as HoT icon
-
-
-Changes:
--- Updated TOC for 6.0
--- Updated Swiftmendable check to include units with Rejuvenation (Germination)
--- Updated Swiftmendable check to exclude others HoTs when Rampant Growth is selected
--- Updated toolbox helper function for GetTalentInfo API changes
--- Updated 'Spells > Keys global' edit box to properly decorate text
-
-
-Features:
--- Minor update for Warlords of Draenor
-
-
-TODO:
--- Updated incoming/over heal estimation
---   Appears to not be a bug in VuhDo
---   UnitGetIncomingHeals API seems to return bogus values on beta/PTR?
--- Updated AOE advisor spell bases
---   Healing spell base values have been removed (H = Cx + B is now H = Cx)
---   Need to empirically test coefficients shown on beta tooltips
---   Use Hamlet's updated spreadsheet for WoD?
--- Updated AOE advisor glyph item IDs
--- Updated AOE advisor Glyph of Light of Dawn support
-
-
---------------------------------------------------------------
-Version 3.53.
-
-
-Bugfixes:
--- Fixed client side slider bug
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.52.
-
-
-Bugfixes:
--- Fixed a bug in loading profiles via command line
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.51.
-
-
-Bugfixes:
-
-
-Improvements:
--- Added custom debuffs for 5.4 raid content
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.50.
-
-
-Bugfixes:
--- Fixes to Chi Burst AoE advice (Thanks to Merlin52626)
--- Minor bugfixes
-
-
-Improvements:
-
-
-Changes:
--- Upated toc for patch 5.4
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.44.
-
-
-Bugfixes:
--- Minor bugfixes
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.43.
-
-
-Bugfixes:
--- Fixed possible taint in debuff handling
--- Minor bugfixes
-
-
-Improvements:
-
-
-Changes:
--- Some checkboxes Options=>General=>Misc changed to "enable"
-	instead of "disable" style
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.41.
-
-
-Bugfixes:
--- Minor bugfixes
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
--- Added new bouquet item "Statusbar: Overshielded"
-
-
---------------------------------------------------------------
-Version 3.40.
-
-
-Bugfixes:
--- Some bugfixes from 3.39
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.39.
-
-
-Bugfixes:
--- Minor bugfixes
--- Fixed color picker color code
-
-
-Improvements:
--- Smarter dynamic memory allocation
--- Creation of some ui elements if needed only to reduce memory usage
-
-
-Changes:
--- Using all opaque texture for panel background now. May need
-   to adjust opacity (options=>panels=>general)
--- Revamped Options=>Move and other UI elemets a bit
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.38.
-
-
-Bugfixes:
--- Minor bugfixes
-
-
-Improvements:
--- major memory optimizations
--- minor performance optimizations
--- Two VuhDo panels colliding should not lead to a short stutter
-   anymore
-
-
-Changes:
-
-
-Features:
--- Color picker for single target direction arrow w/o range
-	(options=>colors=states)
--- HoT bars can now be vertical, inverted, have axis turned
- 	 (options=>panels=>hot bars)
--- Bouquet item for showing shields as standalone bar
--- You can have your target or focus as separate panel group now
-   (options=>Move, "Special" => "Target", "Focus")
-
---------------------------------------------------------------
-Version 3.37.
-
-
-Bugfixes:
--- Fixed bug when sharing profiles
-
-
-Improvements:
--- Power Word: Solace will now be recognized
--- Major code cleanup and memory optimizations
--- Added monk abilities to default bouquet "tank cooldowns extd"
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.36.
-
-
-Bugfixes:
--- Fixed a bug where custom debuff icons could remain in wrong size
--- Minor bugfixes
-
-
-Improvements:
--- Added some more ignore by... debuffs
-
-Changes:
-
-Features:
--- Added option to not fade debuff icons when player gets out of range
-   (Options=>Debuffs=>Visuals)
-
-
---------------------------------------------------------------
-Version 3.35.
-
-
-Bugfixes:
--- Fixed irrelevant debuffs showing by icon
--- Fixed possible gvar taint issue
--- Minor bugfix
-
-
-Improvements:
--- Minor optimizations
--- Added some Mage buffs to BuffWatch
-
-
-Changes:
-
-Features:
-
---------------------------------------------------------------
-Version 3.34.
-
-
-Bugfixes:
--- Minor bugfix
-
-Improvements:
-
-
-Changes:
-
-Features:
-
---------------------------------------------------------------
-Version 3.33.
-
-
-Bugfixes:
--- Shield status hot icon now working as configured
--- Fixed some talent spells not being recognized
--- Fixed alive units showing dead BGs sometimes
--- Added Dark intent to stamina buff
-
-
-Improvements:
--- Added custom debuffs for 5.2 raids
--- Updated debuff ignore list
-
-
-Changes:
-
-Features:
-
---------------------------------------------------------------
-Version 3.32.
-
-
-Bugfixes:
--- Fixed raid target icon in combo options=>panels=>misc
-
-
-Improvements:
--- Many optimizations
-
-
-Changes:
--- Changed overall shield value detection to 5.2 standard
-   system
-
-Features:
--- Separated icons and color "removable only" debuff option
-   (Options=>Debuffs=>Standard)
-
--- Added Shield Bar
-	 (Options=>General=>Incoming, "Shield Bar")
-	 (Options=>Colors=>Modes, "Shield Bar")
-
--- Introducing Text Providers for
-   (Options=>Panels=>Misc "Overheal" Indicator)
-   (Options=>General=>Indicators", "more" next to ...
-   "Mana Bar", "Side Left", "Side Right".
-   More to come...)
-
--- You can now copy/paste color codes as hex string in any
-   color picker
-
--- Added default PvP flag carrier bouquet
---------------------------------------------------------------
-Version 3.31.
-- updated toc for patch 5.2
-
---------------------------------------------------------------
-Version 3.30.
-
-
-Bugfixes:
--- Fixed damage flash bar
--- Fixed possibly incorrect button sizes after changing a profile
-
-
-Improvements:
--- BuffWatch will be hidden in pet battles now
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.29.
-
-
-Bugfixes:
--- BuffWatch Rebuff Arcane Brilliance if either no spell power
-   OR no crit buff on target
-
-
-Improvements:
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.28.
-
-
-Bugfixes:
--- Hopefully fixed Eternal Flame AoE predicition
-
-
-Improvements:
--- Performance optimizations
--- Direction arrow bouquet now can have range text yards/10
--- Added more shields to shield absorb (thx acer13189)
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.27.
-
-
-Bugfixes:
--- Performance optimizations
-
-Improvements:
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.26.
-
-
-Bugfixes:
--- Workaround for unit incoming resurrection client bug
--- Fixed a bug in shield absorb calculation
-
-
-Improvements:
--- Added several default custom debuffs
-	 (options=>tools=>reset "Custom Debuffs" may be needed)
--- Increased performance
--- All mutual exclusive buffs should be recognized by BuffWatch now
--- Bouquet item "SHIELD_COUNT" now works for shields from all sources
-
-Changes:
-
-
-Features:
--- Added Chi Burst to trackable AOE advices (experimental)
-
-
---------------------------------------------------------------
-Version 3.25.
-
-
-Bugfixes:
--- Bugfix with bouquets
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.24.
-
-
-Bugfixes:
--- Hopefully fixed a bug with icons disappearing after player died
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.23.
-
-
-Bugfixes:
--- Fixed a bug with mana bars etc disappearing sometimes when player
-   target changed
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.22.
-
-
-Bugfixes:
--- Fixed a major bug not updating raid members properly sometimes
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.21.
-
-
-Bugfixes:
--- AOE advice calculations fix for Priests
--- Fixed rez announce chat channel name
-
-
-Improvements:
--- Signicantly reduced memory/cpu consumption on
-   when changing player target.
-
-
-Changes:
--- Removed "Keep Stance" from Options=>Spells=>Misc
-   (didn't work, use /console autoUnshift 0/1 instead)
-
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.20.
-
-
-Bugfixes:
--- Changed "Dark Power", "Light Power" constants to "Chi" pendants
-
-
-Improvements:
-
-
-Changes:
-
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.19.
-
-
-Bugfixes:
--- Changed "Mastery: Illuminated Healing" to "Illuminated
-   Healing" to track the buff really
--- Fixed error in options menu introduced with 5.1
-
-
-Improvements:
--- Increased display update speed after pet summon
--- Weapon enchants will now be told apart
-
-
-Changes:
--- Tagged for version 5.1
-
-
-
-Features:
--- Added Symbiosis to BuffWatch
--- Added rogue poisons to BuffWatch
--- Added shaman offhand weapon enchant to BuffWatch
-
-
---------------------------------------------------------------
-Version 3.18.
-
-
-Bugfixes:
--- Changed Dark Intent to raid wide buff for BuffWatch
--- Minor bugfixes
-
-
-Improvements:
--- Added improved version of PW:S to shield absorb tracking
-
-
-Changes:
-
-
-
-Features:
--- Added bouquet item for counter "Counter: All shields absorb #k"
-   showing the remaining shield absorption of all shields on the
-   target
-
-
-
---------------------------------------------------------------
-Version 3.17.
-
-
-Bugfixes:
--- Added missing GCD reference spell for monks
--- Possible fix for flashing hots
--- Possible fix for bouquets after profile loading
-
-
-Improvements:
-
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.16.
-
-
-Bugfixes:
--- Fixed a serious cpu resource hog introduced with 3.9
-
-
-Improvements:
--- Increased performance after raid roster changes
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.15.
-
-
-Bugfixes:
--- Minor bugfix in tooltips
--- Bugfix (hopefully) for totem cooldowns not displaying properly
-
-
-Improvements:
--- Added a lot of mop default custom debuffs
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.14.
-
-
-Bugfixes:
--- Fixed repeated ready-check not showing properly
--- Fixed some HoTs not updating properly when changing profiles
-
-
-Improvements:
-
-
-
-Changes:
-
-
-
-Features:
--- Added bouquet item "flag: class color if active"
-   This enables you to apply class color to any active
-   icon
-
-
-
---------------------------------------------------------------
-Version 3.13.
-
-
-Bugfixes:
--- Fixed a range detection bug in PT panel
--- Fixed party panel hiding bug
--- Fixed a bug with options not showing active panel sometimes
--- Minor bugfixes
-
-
-Improvements:
--- Inreased hitbox for custom debuff tooltips
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.12.
-
-
-Bugfixes:
--- Minor bugfixes
-
-
-Improvements:
--- Improved registering of events when force show blizz frames
-   is enabled in options=>general=>miscs
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.11.
-
-
-Bugfixes:
--- Fixed a bug in player group determination
--- Fixed several possible taint problems
--- Soulstone, Enveloping Mist and Surging Mist
-   should now work as intended if Soothing mist
-   is channeling
--- Fixed coincidence with other addons hiding Blizz UI elements
--- Fixed bug in range detecton
-
-
-Improvements:
--- Player powers will be updated more frequently
--- Minor optimizations
-
-
-Changes:
-
-
-
-Features:
-
-
-
---------------------------------------------------------------
-Version 3.9.
-
-Bugfixes:
--- Minor bugfix with range detection for enemy targets
--- Minor bugfix with overheal higlight not reseting properly
--- Other minor bugfixes
-
-Improvements:
--- Reduced memory consumption
--- Major options code rework, reduces memory usage, increased
-   flexibility for future extensions
--- Added Sacred Shield to trackable buffs
-
-Changes:
--- Added "Vixar" to default libSharedMedia fonts
-
-
-Features:
--- On popular demand: Options=>General=>Misc "Hide Blizz xyz" is
-   tri-state now. So you can "leave alone/show/hide blizz" frames.
-   May need to overwrite existing profiles in order to have Blizz
-   UI elements shown when hidden from another addon
-   Defaults to: Leave alone
-
-
---------------------------------------------------------------
-Version 3.7.
-
-Bugfixes:
--- Fixed problem with minimap button
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.6.
-
-Bugfixes:
--- Fixed dc shield macro icons
--- Fixed group size detection for group of 5
--- Fixed shield absorb calculation
--- Fix for libSharedMedia which seems to be registering
-   nil for "none" borders now
--- Hopefully fixes a bug with minimap setting not saving
-   sometimes
--- Minor bugfixes
--- Attempt to fix smart cast battle rez
-
-Improvements:
--- Added Grimoire of Sacrifice to BuffWatch
--- Added Cenarion Ward to hot list
--- Added Serpent's Zeal to trackable hots
--- Improved BuffWatch options buff detection
-   for low level toons
-
-Changes:
--- Integrated minimap icon into VuhDo to save
-   some bytes
--- Some Code cleanup
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.5.
-
-Bugfixes:
--- All characters "." and "#" will be removed from bouquet names
-   to avoid crashes
--- Switched shield absorb estimation to spell ids instead of spell names
--- Aggro indicator marks working again
--- Minor bugfixes
-
-Improvements:
--- Improved range checking for hostile targets
--- Added default bouquet "Raid Cooldowns" (Thank you, Zohar)
--- Added Spirit Shell to "Pump Aegis" feature
--- Updated libSharedMedia
--- Minor optimizations
-
-
-Changes:
-
-
-Features:
--- Added default bouquet "Raid CDs" (Thanks to Zohar)
-
-
---------------------------------------------------------------
-Version 3.4.
-
-Bugfixes:
--- Some rewrite of buff watch code to make it more robus
--- Fixed glyph/talent taint bug
--- Fixed a bug with resurrection announcement
--- Fixed a bug with VuhDo not auto hiding in parties
--- Hopefully fixed a bug with target/focus frame taint
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.2.
-
-Bugfixes:
--- Fixed use of custom macros
-
-
-Improvements:
-
-
-Changes:
-
-
-Features:
-
-
---------------------------------------------------------------
-Version 3.1.
-
-Bugfixes:
--- Sharing profiles fixed
--- Casting Purify Spirit, Eternal Flame fixed
--- Eternal Flame available for HoT Icons
-
-Improvements:
-
-
-Changes:
-
-
-Features:
+Version 3.107-classic  
+  
+  
+Known issues:  
+-- Spells by rank can be specified using a rank suffix:  
+--  Example: Lesser Heal(Rank 1)  
+-- Buff Watch is not currently working (missing many spells)  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'    
+-- Shield bar is not working due to unavailable Blizzard APIs  
+-- Threat is not working due to unavailable Blizzard APIs  
+-- Spell trace only works for known spells in the player's spellbook
+  
+  
+Bugfixes:  
+-- Better display of small numbers in text providers  
+-- Fixed timer display for other players buffs/debuffs  
+-- Fixed incoming heal display  
+--   Note: Only works with others players using LibHealComm  
+-- Fixed compatability layer to not modify global functions  
+-- Fixed text providers using kilo/+kilo displaying zero values  
+-- Fixed classic dispel/cure debuff spells  
+-- Fixed misc classic spell IDs  
+-- Fixed spell trace for known player spells  
+-- Fixed unit threat indicators  
+  
+  
+Improvements:  
+-- Added support for LibClassicHealComm-1.0  
+-- Added support for LibClassicDurations  
+-- Added support for LibThreatClassic  
+  
+  
+--------------------------------------------------------------  
+Version 3.107  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- In 8.2.0 Blizzard removed the ability to play sounds by file path  
+--   If you have LibSharedMedia installed make sure it is up to date  
+--   You may need to reselect your sound options in VuhDo for debuffs  
+  
+  
+Bugfixes:  
+-- Real fix for 8.2 bug preventing moving of the VuhDo Options frame  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.106  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- In 8.2.0 Blizzard removed the ability to play sounds by file path  
+--   If you have LibSharedMedia installed make sure it is up to date  
+--   You may need to reselect your sound options in VuhDo for debuffs  
+  
+  
+Bugfixes:  
+-- Safer sound playback for profiles created w/ old versions of LSM  
+-- Workaround for 8.2 bug preventing moving of the VuhDo Options frame  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.105  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- In 8.2.0 Blizzard removed the ability to play sounds by file path  
+--   If you have LibSharedMedia installed make sure it is up to date  
+--   You may need to reselect your sound options in VuhDo for debuffs  
+-- VuhDo Options frame cannot be moved due to a bug introduced in 8.2  
+  
+  
+Bugfixes:  
+-- Fix auto loading of profiles w/o a key layout on spec change  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.104  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- In 8.2.0 Blizzard removed the ability to play sounds by file path  
+--   If you have LibSharedMedia installed make sure it is up to date  
+--   You may need to reselect your sound options in VuhDo for debuffs  
+-- VuhDo Options frame cannot be moved due to a bug introduced in 8.2  
+  
+  
+Bugfixes:  
+-- Safer handling of sound playback  
+-- Anchor VuhDo Options frame to top of the screen  
+--  Note: Still working on a real fix to the frame moving bug in 8.2  
+  
+  
+Improvements:  
+-- Added default custom debuffs for Eternal Palace raid encounters  
+  
+  
+--------------------------------------------------------------  
+Version 3.103  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- VuhDo Options frame cannot be moved due to a bug introduced in 8.2  
+  
+  
+Bugfixes:  
+-- Better handling of tooltips missing zone information  
+-- Workaround bug with VuhDo Options frame when moving  
+--  NOTE: This disables moving VuhDo Options for now  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.102  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Re-enable LibSharedMedia fonts for zhCN, zhTW, and koKR locales  
+-- Fixed loading of profile/key layout on automatic spec change  
+-- Fixed referencing external sound files (8.2 restriction)  
+-- Unit power text providers only display when non-zero  
+  
+  
+Improvements:  
+-- Added Uu'nat Umbral Shell debuff absorb tracking  
+  
+  
+--------------------------------------------------------------  
+Version 3.101  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Listen to UNIT_HEALTH_FREQUENT events exclusively  
+--   Work around a Blizzard bug that triplicates health events  
+-- Fixed Spell Trace for Holy Priest talent 'Trail of Light'   
+--   As of 8.1.0 this talent is now triggered by 'Heal'  
+-- Fixed issue with case sensitivity for the 'dropdown' command  
+  
+  
+Improvements:  
+-- Added new custom debuff display options 'Bar Glow' and 'Icon Glow'  
+--  Default color settings under 'VuhDo Options > Colors > States'  
+-- Added new glow display options for 'Special Dot' indicator  
+-- Minimap icon profile and key layout dropdown menus are now sorted  
+-- Added new bouquet validator 'Flag: Own Combo Points =='  
+-- Added new default bouquet 'Player Combo Points'  
+-- Added new text provider 'Combo Points: <#n>'  
+-- Added new bouquet validator 'Flag: Own Soul Shards =='  
+-- Added new default bouquet 'Player Soul Shards'  
+-- Added new text provider 'Soul Shards: <#n>'  
+-- Added new bouquet validator 'Flag: Own Runes =='  
+-- Added new default bouquet 'Player Runes'  
+-- Added new text provider 'Runes: <#n>'  
+-- Added new bouquet validator 'Flag: Own Arcane Charges =='  
+-- Added new default bouquet 'Player Arcane Charges'  
+-- Added new text provider 'Arcane Charges: <#n>'  
+-- Added default custom debuffs for Crucible of Storms raid  
+-- Added new slash command "/vd about"  
+-- MODIFIER+RIGHTBUTTON now adds debuff icons to the blacklist  
+--   Default key modifier is set to 'CTRL+SHIFT+ALT'  
+--   Set under 'VuhDo Options > Debuffs > Standard > Icons'  
+  
+  
+--------------------------------------------------------------  
+Version 3.100  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Fixed hostile spells options UI recognition of talents and items  
+-- Fixed custom debuff spell source filter when aura is a buff  
+-- Fixed custom debuff update when debuff index changes  
+-- Fixed custom debuff display on update when slot becomes available  
+-- Fixed unnecessary shield value updates for irrelevant spells  
+-- Fixed shield overwrite detection when new shield amount is smaller  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.99  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Fixed various reset functions under 'VuhDo Options > Tools > Reset'  
+  
+  
+Improvements:  
+-- Added new bouquet validator 'Icon: Is Phased'  
+-- Added new bouquet validator 'Icon: Is War Mode Phased'  
+-- Added new default bouquet 'Is Phased Icon'  
+-- Added spell caster source options to custom debuffs  
+--  See 'VuhDo Options > Debuffs > Custom > Store / Delete > Mine'  
+--  See 'VuhDo Options > Debuffs > Custom > Store / Delete > Others'  
+--  Both checkboxes are selected by default  
+--  These defaults are inherited by existing custom debuffs  
+-- Added auto-activate of profile due to a group size of '3'  
+-- Added '3' and '15' man group sizes for 'Hold to Test' demo mode  
+-- Added default custom debuffs for Battle of Dazar'alor raid  
+-- Added Mage spell 'Arcane Familiar' to Buff Watch  
+  
+  
+--------------------------------------------------------------  
+Version 3.98  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Fixed debuff absorb tracking  
+  
+  
+Improvements:  
+-- Added Vectis Immunosuppression debuff absorb tracking  
+-- Added Diseased Lasher Decaying Mind debuff absorb tracking  
+-- Added Priest Luminous Barrier absorb tracking  
+-- Added more default custom debuffs for Uldir raid encounters  
+-- Added new bouquet validator 'Has Summon'  
+-- Added new default bouquet 'Summon Status Icon'  
+-- Added new default bouquet 'Role & Summon Status Icon'  
+--   Now assigned to the 'Special Dot' indicator by default  
+-- Bump TOC interface version for 8.1  
+  
+  
+--------------------------------------------------------------  
+Version 3.97  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+  
+  
+Bugfixes:  
+-- Fixed vertical health bar display for units w/o a power bar  
+-- Fixed mana bar display after specialization activation  
+-- Fixed apostrophe issue for Priest 'Shadow Mend' in French language  
+-- Fixed assignment of remapped spells when dragging from spell book  
+-- Fixed Holy Priest 'Trail of Light' tracker  
+  
+  
+Improvements:  
+-- Added panel sort method 'Tank => Healer => MDPS => RDPS'  
+  
+  
+--------------------------------------------------------------  
+Version 3.96  
+  
+  
+Known issues:  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+-- Debuff tooltips are currently bugged when using ElvUI  
+--   Deselect 'VuhDo Options > Panels > Tooltips > Tooltips > Debuffs'  
+-- Bug in French language clients for Priest 'Shadow Mend' spell  
+--   Work around for now is to create and bind a custom macro:  
+--     /cast [@vuhdo] Soins rapides  
+  
+  
+Bugfixes:  
+-- Fixed display of custom debuffs after closing VuhDo Options  
+-- Fixed display of debuff tooltips after zone change  
+-- Fixed incoming heal and shield bar height when there is no mana bar  
+-- Fixed export of custom debuffs in profile string  
+-- Fixed range detection for out of phase units  
+  
+  
+Improvements:  
+-- Added default custom debuffs for 8.0 World Boss encounters  
+-- Added Mage spell 'Remove Curse' to list of 'Curse' debuff types  
+  
+  
+--------------------------------------------------------------  
+Version 3.95  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+  
+  
+Bugfixes:  
+-- Fixed tracking of aura with ambiguous spell name 'Soothing Mist'  
+-- Fixed target type for some raid wide auras in BuffWatch  
+-- Fixed texture position for 'Threat Marks' indicator  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.94  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- BfA stat squish cleanup still a work in progress  
+--   AOE Advice spell equations need complete overhaul  
+--   Some text providers need changes to better display small numbers  
+  
+  
+Bugfixes:  
+-- Fixed error applying key layouts which have not yet been created  
+-- Once again include default custom debuffs for Antorus raid encounters  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.93  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+  
+  
+Bugfixes:  
+-- Boss unit frames now apply hostile spell binds like a target unit frame  
+-- UNIT_SPELLCAST_* events no longer pass spell name or rank  
+-- UNIT_POWER event is now named UNIT_POWER_UPDATE  
+-- UnitAura/UnitBuff/UnitDebuff no longer accept spell name or ID  
+-- UnitAura/UnitBuff/UnitDebuff no longer return spell rank  
+-- Fixed cluster builder/AOE advice to use the new C_Map API  
+-- Fixed BuffWatch tracking of auras  
+-- Removed deprecated Death Knight aura 'Horn of Winter' from BuffWatch  
+-- Removed deprecated Death Knight aura 'Bone Shield' from BuffWatch  
+-- Removed deprecated Death Knight presences from BuffWatch  
+-- Removed deprecated Warlock pet aura 'Dark Intent' from BuffWatch  
+-- Removed deprecated Priest aura 'Fear Ward' from BuffWatch  
+-- Removed deprecated Priest chakras from BuffWatch  
+-- Removed deprecated Druid aura 'Leader of the Park' from BuffWatch  
+-- Removed deprecated Druid aura 'Mark of the Wild' from BuffWatch  
+-- Removed deprecated Monk 'Legacy of ...' auras from BuffWatch  
+-- Removed deprecated Paladin aura 'Blessing of Might' from BuffWatch  
+-- Removed deprecated Shaman aura 'Grace of Air' from BuffWatch  
+-- Removed deprecated Shaman aura 'Water Shield' from BuffWatch  
+-- Removed passive Shaman aura 'Ancestral Swiftness' from BuffWatch  
+-- Removed Shaman totem type buff-overwriting groups from BuffWatch  
+-- Removed deprecated Shaman totem 'Searing' from BuffWatch  
+-- Removed deprecated Shaman totem 'Stone Bulwark' from BuffWatch  
+-- Removed deprecated Hunter pet aura 'Spirit Beast' from BuffWatch  
+-- Removed depreacted Hunter pet aura 'Roar of Courage' from BuffWatch  
+-- Removed deprecated Hunter pet aura 'Still Water' from BuffWatch  
+-- Removed deprecated Hunter aura 'Trueshot Aura' from BuffWatch  
+-- Removed deprecated Hunter aura 'Aspect of the Pack' from BuffWatch  
+-- Removed deprecated Hunter aura 'Aspect of the Fox' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Cat' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Bear' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Raptor' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Hyena' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Serpent' from BuffWatch  
+-- Removed deprecated Hunter aura 'Lone Wolf Primates' from BuffWatch  
+-- Removed default Priest HoT for deprecated aura 'Grace'  
+-- Removed deprecated Paladin aura 'Righteous Fury' from BuffWatch  
+-- Removed deprecated Paladin aura 'Seal of Righteousness' from BuffWatch  
+-- Removed deprecated Paladin aura 'Seal of Justice' from BuffWatch  
+-- Removed deprecated Paladin aura 'Seal of Insight' from BuffWatch  
+-- Removed deprecated Paladin aura 'Seal of Truth' from BuffWatch  
+-- Removed deprecated Paladin aura 'Seal of Command' from BuffWatch  
+-- Removed deprecated Paladin spell 'Beacon of Insight'  
+-- Removed deprecated Warrior spell 'Vigilance' from BuffWatch  
+-- Removed deprecated Mage spell 'Frost Armor' from BuffWatch  
+-- Removed deprecated Mage spell 'Molten Armor' from BuffWatch  
+-- Removed deprecated Mage spell 'Mage Armor' from BuffWatch  
+-- Removed deprecated Mage spell 'Incanter's Ward' from BuffWatch  
+-- Removed deprecated Mage spell 'Invocation' from BuffWatch  
+-- Removed deprecated Rogue poison 'Instant Poison' from BuffWatch  
+-- Removed deprecated Monk stance 'Fierce Tiger' from BuffWatch  
+-- Removed deprecated Monk stance 'Sturdy Ox' from BuffWatch  
+-- Removed deprecated Monk stance 'Wise Serpent' from BuffWatch  
+-- Fixed preservation of BuffWatch settings for spec specific buffs  
+-- Fixed lack of explicit refresh on event UPDATE_ACTIVE_BATTLEFIELD  
+  
+  
+Improvements:  
+-- Misc fixes/changes needed for Battle for Azeroth 8.x  
+-- Added Hunter aura 'Aspect of the Chameleon' to BuffWatch  
+-- Added Hunter aura 'Aspect of the Eagle' to BuffWatch  
+-- Added Hunter aura 'Aspect of the Turtle' to BuffWatch  
+-- Added Hunter aura 'Aspect of the Wild' to BuffWatch  
+-- Added Hunter ability 'Misdirection' to BuffWatch  
+-- Added Paladin aura 'Greater Blessing of Kings' to BuffWatch  
+-- Added Paladin aura 'Greater Blessing of Wisdom' to BuffWatch  
+-- Added default custom debuffs for Uldir raid encounters  
+  
+  
+--------------------------------------------------------------  
+Version 3.92  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Changed the way LibDBIcon-1.0 is embedded to fix loading issue  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.91  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed error when configuring tooltip settings per panel  
+  
+  
+Improvements:  
+-- Migrate minimap icon to LibDBIcon (fixes SexyMap compat)  
+-- Standard debuffs can now be ignored/blacklisted by spell ID  
+-- Standard debuff blacklist dropdown is now sorted by name  
+  
+  
+--------------------------------------------------------------  
+Version 3.90  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Better workaround for vehicle targeting on Antoran High Command  
+  
+  
+Improvements:  
+-- Display specialization names on option checkboxes  
+  
+  
+--------------------------------------------------------------  
+Version 3.89  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+-- Blizzard has changed the way vehicles work for Antoran High Command  
+--   For now I've just disabled the proper vehicle support  
+--   Targeting a player in vehicle will still targe the vehicle unit  
+--   However, mouseover/click-to-heal should work properly  
+--   Healing actual vehicles (e.g. Ulduar) is now broken though  
+  
+  
+Bugfixes:  
+-- Shaman spell 'Purify Spirit' no longer remapped to 'Cleanse Spirit'  
+-- Fixed debuff duration for several debuff absorption spells  
+  
+  
+Improvements:  
+-- Added default custom debuffs for Antorus raid encounters  
+-- Added debuff absorption tracking for Antorus 'Chilled Blood'  
+-- Removed MoP and WoD default custom debuffs  
+  
+  
+--------------------------------------------------------------  
+Version 3.88  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+-- Blizzard has changed the way vehicles work for Antoran High Command  
+--   For now I've just disabled the proper vehicle support  
+--   Targeting a player in vehicle will still targe the vehicle unit  
+--   However, mouseover/click-to-heal should work properly  
+--   Healing actual vehicles (e.g. Ulduar) is now broken though  
+  
+  
+Bugfixes:  
+-- Fixed saving/loading of per profile Spell Trace settings  
+-- Workaround for Antoran High Command vehicles, see known issues  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.87  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+-- Patch 7.2.5 Tomb of Sargeras Desolate Host encounter workaround  
+--   Under 'VuhDo Options > General > Scanners' set:  
+--     Range => '40 yards'  
+--     Global Scanner => 'Infinite'  
+-- Tracking of 'debuff absorbs' like 'Embrace of the Eclipse' requires   
+--   Under 'VuhDo Options > Panels > HoT Icons > Shields' set:  
+--      Shield Status => checked  
+  
+  
+Bugfixes:  
+-- Use full player name including realm for tell command  
+-- Check if GameTooltip is flagged forbidden before any interaction  
+--   Should fix taints related to Blizzard lock down in 7.2.5  
+-- Optimize common action validation on panel refresh  
+--   Should fix some "script ran too long" errors w/ talent spells  
+-- Migrate to the 7.3 PlaySound API  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.86  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+-- Patch 7.2.5 Tomb of Sargeras Desolate Host encounter workaround  
+--   Under 'VuhDo Options > General > Scanners' set:  
+--     Range => '40 yards'  
+--     Global Scanner => 'Infinite'  
+  
+  
+Bugfixes:  
+-- Use new power type enumeration in place of deprecated constants  
+  
+  
+Improvements:  
+-- Added default custom debuffs for Tomb of Sargeras raid encounters  
+-- Added debuff absorption tracking for ToS 'Embrace of the Eclipse'  
+  
+  
+--------------------------------------------------------------  
+Version 3.85  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed display of NPC/boss units  
+  
+  
+Improvements:  
+-- Profiles can now auto-activate for multiple specializations  
+  
+  
+--------------------------------------------------------------  
+Version 3.84  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed use of deprecated UnitMana/UnitManaMax APIs  
+  
+  
+Improvements:  
+-- TOC bump for patch 7.2  
+  
+  
+--------------------------------------------------------------  
+Version 3.83  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed spell trace tracking for periodic heals (eg. 'Healing Rain')  
+-- Fixed debuff absorption tracking for Nighthold 'Time Release'  
+  
+  
+Improvements:  
+-- Added bouquet validator 'Statusbar: Mana % (Healer Only)'  
+-- Added default bouquet 'Manabars: Mana (Healer Only)'  
+-- Added more default custom debuffs for Nighthold raid encounters  
+  
+  
+--------------------------------------------------------------  
+Version 3.82  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Updated default bouquet 'Paladin Beacon'  
+-- Fixed resurrection smart casting while inside PvP instances  
+  
+  
+Improvements:  
+-- Added ability to track different spell casts on units  
+--   See settings under 'VuhDo Options > General > Spell Trace'  
+--   Useful for tracking which units are hit by AOE healing spells  
+-- Added bouquet validator 'Icon: Spell Trace'   
+-- Added default bouquet 'Spell Trace'  
+-- Added ability to track Holy Priest "Trail of Light"  
+--   Enable under 'VuhDo Options > General > Spell Trace'  
+-- Added bouquet validator 'Icon: Trail of Light'  
+-- Added default bouquet 'Trail of Light'  
+-- Added panel sort method 'Tank => MDPS => RDPS => Healer'  
+-- Added default custom debuffs for Nighthold raid encounters  
+-- Added debuff absorption tracking for Nighthold 'Time Release'  
+  
+  
+--------------------------------------------------------------  
+Version 3.81  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed Priest 'Clarity of Will' maximum shield absorption amount  
+-- Updated spell ID for Shaman 'Earth Shield' (now an Honor Talent)  
+-- Fixed smart casting of unknown resurrection spells  
+-- Fixed command line loading of key layouts  
+  
+  
+Improvements:  
+-- Added new bindable command 'MouseLook' (move the camera with mouse)  
+-- Added default bouquet 'Overflow Mythic+ Affix'  
+--   Assign this bouquet to a HoT Icon slot to track the absorb  
+-- Changed the default panel settings to hopefully be more palatable  
+  
+  
+--------------------------------------------------------------  
+Version 3.80  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Workaround for Blizzard bug in secure button onenter/onleave  
+--   Should improve sticking keybindings when off VuhDo frames  
+--   See: https://wow.curseforge.com/projects/vuhdo/issues/442  
+-- Fixed ToV Guarm 'Shadow Lick' debuff absorption tracking  
+  
+  
+Improvements:  
+-- Added additional default custom debuffs for ToV raid encounters  
+-- Map Monk 'Ancient Mistweaver Arts' to 'Soothing Mist(Honor Talent)'  
+-- Added spell 'Essence Font' to Mistweaver Monk default HoTs  
+  
+  
+--------------------------------------------------------------  
+Version 3.79  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed an issue where Shaman 'Healing Stream Totem' would not cast  
+-- Fixed resurrection spell cast announcement  
+-- Fixed Paladin non-healer smart cast resurrection  
+-- Blizzard fixed the font drop shadow offset on their end finally  
+  
+  
+Improvements:  
+-- Added default custom debuffs for Trial of Valor raid encounters  
+-- Added debuff absorption tracking for ToV 'Shadow Lick'  
+-- Added debuff absorption tracking for ToV 'Corrupted Axion'  
+-- Added seperate cast announcement for 'mass' resurrection spells  
+  
+  
+--------------------------------------------------------------  
+Version 3.78  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Patch 7.1 disabled retrieval of unit facing and position in instances  
+--   This was an intentional breaking change by Blizzard  
+--   This breaks AOE Advice, Clusters and out-of-range direction arrow  
+--   At this time there is no way to fix or renable these features  
+  
+  
+Bugfixes:  
+-- Fixed handling of empty values in health related combat log events  
+-- Disabled retrieval of unit facing and map position inside instances  
+-- Fixed font dropshadow offset which Blizzard broke in 7.1  
+--   Shadow offset is not scaling properly with resolution  
+--   Hardcoded the offset to be optimal for 1920x1080 for now  
+-- Fixed ability to bind Priest 'Shadow Mend' to a mouse/key directly  
+-- Default custom debuffs will now always be added by spell ID  
+--   This resolves numerous issues with ambiguous debuff names  
+--   Please consider a complete reset of your custom debuff settings   
+--   This can be done under 'VuhDo Options > Tools > Reset > Buffs/HoTs'   
+-- Removed default custom debuff spell IDs that were no longer valid  
+-- Fixed mapping of ambiguous Monk "Detox" debuff abilities by spec  
+-- Removed some default custom debuffs for Emerald Nightmare encounters  
+--   If there are too many debuffs for your taste then reset:  
+--     'VuhDo Options > Tools > Reset > Buffs/HoTs > Custom Debuffs'  
+--   Beware you will loose all previous custom debuff settings!  
+  
+  
+Improvements:  
+-- Out of combat smart cast resurrection now prefers 'mass' spells  
+  
+  
+--------------------------------------------------------------  
+Version 3.77  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+--   No support yet for new AOEs like 'Power Word: Radiance'  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+  
+  
+Bugfixes:  
+-- Fixed role detection for Survival Hunters  
+-- Fixed role detection for Monks  
+-- Mage 'Remove Curse' is no longer a valid dispel  
+-- Updated all class dispel abilities  
+-- Updated all default spell bindings for healer dispels  
+-- Fixed display of GCD bar  
+-- Fixed absorption tracking for 'Befouled' and 'Touch of Harm'  
+-- Fixed shield absorption amount tracking of Hot icons  
+  
+  
+Improvements:  
+-- Text provider '+<#n>k' now abbreviates millions as '+<#n>M'  
+-- Bar health text now abbreviates million as '<n>M'  
+-- Tooltip text now abbreviates millions as '<n>M'  
+-- Added default custom debuffs for Emerald Nightmare raid encounters  
+-- Added debuff absorption tracking for Mythic+ affix 'Overflow'  
+-- Added bouquet validator 'Counter: Mythic+ Overflow Absorb #k'  
+  
+  
+--------------------------------------------------------------  
+Version 3.76  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+--   No support yet for new AOEs like 'Power Word: Radiance'  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+  
+  
+Bugfixes:  
+-- Activate profile/key layout when only the player changes specialization  
+-- Fix nil reference in bar customizer for clusters after spec change  
+  
+  
+--------------------------------------------------------------  
+Version 3.75  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+--   No support yet for new AOEs like 'Power Word: Radiance'  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+  
+  
+Bugfixes:  
+-- Priest 'Purge the Wicked' can be directly assigned as a spell bind again  
+-- Fixed HoT clock start time rounding error  
+-- Fixed error on level up where VuhDo would try to handle specialization   
+--   changes while still in combat lockdown  
+  
+  
+Improvements:  
+-- Added Priest 'Clarity of Will' as a default HoT icon option  
+-- Custom flag bouquet validator now listens for VUHDO_UPDATE_NUM_CLUSTER  
+-- Only explicitly refresh an auras if it is whitelisted (eg. 'Atonement')  
+--   and listen for all SPELL_AURA events not just APPLIED so the updates   
+--   are consistently immediate  
+  
+  
+--------------------------------------------------------------  
+Version 3.74  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+-- Morphing spells (spells that change based on a spec or talent) such as   
+--   Disc Priest 'Purge the Wicked' should always be bound by their orginal   
+--   base spell name (eg. 'Shadow Word: Pain')  
+  
+  
+Bugfixes:  
+-- Resolve tracking ambiguity by caching Druid 'Cenarion Ward' by spell ID  
+-- Import and export frames now properly auto-focus when opened  
+-- Druid 'Spring Blossoms' now properly auto populates in the HoT dropdown  
+  
+  
+Improvements:  
+-- Explicitly refresh HoTs and bouquets when we get a SPELL_AURA_APPLIED   
+--   event for an actively tracked HoT (requires 'Shield Status' option to   
+--   be selected under 'VuhDo Options > Panels > HoT Icons > Shields')  
+  
+  
+--------------------------------------------------------------  
+Version 3.73  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+-- Morphing spells (spells that change based on a spec or talent) such as   
+--   Disc Priest 'Purge the Wicked' should always be bound by their orginal   
+--   base spell name (eg. 'Shadow Word: Pain')  
+  
+  
+Bugfixes:  
+-- Fixed frame strata on import/export dialogs to always be 'on top'  
+  
+  
+Improvements:  
+-- Added Priest 'Atonement' as a default HoT icon option  
+-- Added Druid 'Spring Blossoms' as a default HoT icon option  
+  
+  
+--------------------------------------------------------------  
+Version 3.72.  
+  
+  
+Known issues:  
+-- Limited support for Class Order Hall Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Legion  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Removed AOE spell side effects from glyphs which are now entirely cosmetic  
+-- Removed 'Recently Mass Resurrected' from default ignored debuffs  
+-- Priest 'Prayer of Healing' is now raid wide and has a target radius of 20 yards  
+-- Priest 'Divine Aegis' has been removed from the game  
+-- Priest 'Spirit Shell' has been removed from the game  
+-- Druid 'Wild Growth' now hits up to 6 targets normally and 8 with 'Incarnation'  
+-- Druid 'Tranquility' now hits up to all 40 targets in a raid  
+-- Druid 'Rampant Growth' has been removed from the game  
+-- Paladin 'Light of Dawn' now hits up to 5 targets in a frontal 180 degree cone  
+-- Paladin 'Holy Radiance' has been removed from the game  
+-- Paladin 'Illuminated Healing' has been removed from the game  
+-- Paladin 'Sacred Shield' has been removed from the game  
+-- Monk 'Guard' has been removed from the game  
+-- Warrior 'Shield Barrier' has been removed from the game  
+-- Fixed 'Flag: Tapped' bouquet validator to use new UnitIsTapDenied() API  
+  
+  
+Improvements:  
+-- Added new power types and power colors (Maelstrom, Insanity, Pain, etc.)  
+-- Added auto loading of profiles and key layouts for all 4 specializations  
+-- Added Demon Hunters to the demo groups for testing panels  
+  
+  
+--------------------------------------------------------------  
+Version 3.71.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Monochrome font outline should now work for all clients without crashing  
+-- Fixed hiding of HoT icon countdown numbers when clock selected  
+-- Fixed 'shield status' display for absorption spells tracked as HoT icons  
+-- Fixed incorrect spell ID for Warlock Blood Pact  
+  
+  
+Improvements:  
+-- Added ability to import/export bouquets as strings for sharing purposes  
+--   Under 'VuhDo Options > General > Bouquets'  
+-- Added ability to import/export profiles as strings for sharing purposes  
+--   Under 'VuhDo Options > Tools > Profiles'  
+--   Be warned that large profiles can momentarily freeze the WoW client  
+--   Custom debuffs are NOT included in the exported profile  
+-- Added ability to import/export key layouts as strings for sharing purposes  
+--   Under 'VuhDo Options > Tools > Key Layouts'  
+--   This includes mouse/key binds, hostile binds, HoTs and auto triggers  
+-- Added custom flag validator which accepts a user defined function.  
+--   Bouquets can include any valid Lua function which returns true or false.  
+--   The function can access the 'VUHDO_unitInfo' variable which is a map   
+--   containing the relevant unit information.  
+--   The example below returns true if the unit is named 'Ivaria':   
+--     return ("Ivaria" == VUHDO_unitInfo["name"])  
+--   Unit information (VUHDO_unitInfo table):  
+--  
+--     afk - boolean - true if unit is AFK  
+--     aggro - boolean - true if unit has aggro  
+--     charmed - boolean - true if unit is charmed  
+--     class - string - the unit's class name  
+--     classId - number - the unit's class ID  
+--       20 - warrior  
+--       21 - rogue  
+--       22 - hunter  
+--       23 - paladin  
+--       24 - mage  
+--       25 - warlock  
+--       26 - shaman  
+--       27 - druid  
+--       28 - priest  
+--       29 - death knight  
+--       30 - monk  
+--     className - string - the unit's class name prettified  
+--     connected - boolean - true if unit is connected  
+--     dead - boolean - true if unit is dead  
+--     debuff - boolean - true if the unit has an active debuff  
+--     debuffName - string - the most recent debuff on the unit  
+--     fullName - string - the full name of the unit  
+--     group - number - the group the unit is in  
+--     health - number - the unit's current health  
+--     healthmax - number - the unit's maximum health  
+--     isAltPower - boolean - true if unit has an alt power active  
+--     isPet - boolean - true if unit is a pet  
+--     isVehicle - boolean - true if unit is in a vehicle  
+--     name - string - the name of the unit  
+--     ownerUnit - string - unit's owner if pet or vehicle  
+--     petUnit - string - the unit's pet unit ID  
+--     power - number - the unit's current power  
+--     powermax - number - the unit's maximum power  
+--     powertype - number - the type of power  
+--       0 - mana  
+--       1 - rage  
+--       2 - focus  
+--       3 - energy  
+--       4 - happiness  
+--       5 - runes  
+--     raidIcon - number - the raid icon if unit is marked  
+--       1 - yellow 4-point Star  
+--       2 - orange circle  
+--       3 - purple diamond  
+--       4 - green triangle  
+--       5 - white crescent moon  
+--       6 - blue square  
+--       7 - red "X" cross  
+--       8 - white skull  
+--     range - boolean - true if unit is in range  
+--     role - number - the unit's combat role  
+--       60 - melee tank  
+--       61 - melee damage  
+--       62 - ranged damage  
+--       63 - ranged heal  
+--     targetUnit - string - the unit's target  
+--     threat - number - the unit's threat status  
+--       0 - not tanking, lower threat than tank  
+--       1 - not tanking, higher threat than tank  
+--       2 - insecurely tanking, another unit has higher threat  
+--       3 - securely tanking, highest threat  
+--     threatPerc - number - the unit's threat percentage  
+--     unit - string - the unit ID  
+--     visible - boolean - true if the unit is visible  
+--       
+-- Added option to hide buff watch while out of combat  
+--   Under 'VuhDo Options > Buffs > General'  
+-- Added Huffman compression for profile sharing and storage  
+  
+  
+--------------------------------------------------------------  
+Version 3.70.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Disabled option for Monochrome font hint which crashes some WoW clients  
+  
+  
+Improvements:  
+  
+  
+--------------------------------------------------------------  
+Version 3.69.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Removed Shadow of Death from the default custom debuff list for HFC  
+--   If you are upgrading from v3.68 please note Shadow of Death needs to   
+--   be manually deleted from the custom debuff list  
+-- Fixed localization bug when adding default custom debuffs by spell ID  
+-- Fixed muting of SFX and Error Speech when auto-firing spells/trinkets  
+-- Fixed smart cast for Holy Priest while in a Chakra stance  
+-- Re-enabled option for Monochrome font hint  
+  
+  
+Improvements:  
+-- Added additional default custom debuffs for patch 6.2 (HFC raid encounters)  
+-- Added healer legendary ring buff Etheralus as a HoT/absorb  
+-- Added Fel Lord Zakuun Befouled debuff absorb tracking  
+-- Added Tyrant Velhari Touch of Harm debuff absorb tracking  
+-- Added support for VelhariRaidFrameAdjust and Velhari Health Fix addons  
+--   Note only Velhari Health Fix versions greater than 1.0 will work  
+  
+  
+--------------------------------------------------------------  
+Version 3.68.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Fixed updating of debuff icon texture (eg. Mark of the Necromancer)  
+  
+  
+Improvements:  
+-- Bumped TOCs for 6.2  
+-- Added default custom debuffs for patch 6.2 (HFC raid encounters + Kazzak)  
+-- Added default common debuffs to the ignore list (eg. Exhaustion)  
+-- Added new bindable command "ExtraActionButton" (useful to pass Eye of Anzu)  
+  
+  
+--------------------------------------------------------------  
+Version 3.67.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Fixed floating point number comparison when closing/canceling VuhDo Options  
+-- Fixed error speech sound playback during auto-trigger of trinkets and spells  
+-- Fixed Cluster Builder calling methods on forbidden frames  
+-- Fixed improper usage of API to check for Druid talent Rampant Growth  
+-- Fixed AOE cluster advice for spells which target randomly (thanks BlueRajasmyk)  
+-- Fixed interacting with a frame after battle res when using Clique compat mode  
+-- Fixed tracking of tier 18 Shaman four piece bonus Riptide  
+-- Fixed incorrect spell ID for Shaman spell Riptide  
+  
+  
+Improvements:  
+-- Bumped TOCs for 6.1  
+-- New special panel type 'NPCs' for boss encounter unit frames (thanks Dridzt)  
+-- Added panel type 'NPCs' to panel wizzard under 'Tools > Panel Wizard'  
+-- Listen to UNIT_HEALTH_FREQUENT events for more responsive health reporting  
+-- Added missing notable encounter debuffs for Blackrock Foundry  
+  
+  
+--------------------------------------------------------------  
+Version 3.66.  
+  
+  
+Known issues:  
+-- Limited support for Garrison Bodyguards  
+--   Bodyguards can be used in panels when set to target or focus  
+--   Bodyguards have no unit ID so for now are only partially supported  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+  
+  
+Bugfixes:  
+-- Warlock spell Dark Intent no longer provides raid wide stamina buff  
+-- Fixed pump aegis tooltip to correctly indicate a cap of 60% player max health  
+-- Fixed Clarity of Will to cap at 75% of the caster's maximum health  
+-- Fixed bug when saving macros for player names with extended characters  
+-- Removed Hunter Rapid Fire from custom debuff list  
+-- Added all Mar'gok's Arcane Wrath/Mark of Chaos variations to custom debuffs  
+-- Fixed GCD bar display for Discipline and Shadow Priests  
+-- Fixed cluster builder calling methods on forbidden frames (eg. in-game store)  
+-- Fixed Swiftmendable bouquet validator when using L100 talent Rampant Growth  
+-- Fixed the loading of HoTs when changing key layouts  
+-- Buff Watch no longer attempts to smart cast hostile buffs on friendly targets  
+  
+  
+Improvements:  
+-- Added new default bouquet for Paladin Beacon of Light and Faith  
+-- Added Hunter Lone Wolf to Buff Watch  
+-- Added Paladin Beacon of Faith to Buff Watch  
+-- Added Paladin Beacon of Faith as default HoT icon option  
+-- Added Paladin Beacon of Insight as a default HoT icon option  
+-- Added Paladin Stay of Execution as a default HoT icon option  
+-- Added new bouquets for excess and total absorbtion percentages  
+--   Status: Excess Absorption %  
+--   Status: Total Absorption %  
+-- The menu command can still be key bound when using Clique compat mode  
+--   New option checkbox 'VuhDo Options > General > Misc > Clique Pass-Thru'  
+-- Panels can now have up to a maximum of 40 columns and 40 rows  
+  
+  
+--------------------------------------------------------------  
+Version 3.65.  
+  
+  
+Known issues:  
+-- Settings are not saved when the character name includes a special character  
+--   Mac OS X WoW client bug - http://us.battle.net/wow/en/forum/topic/14880818884  
+-- Holy Priest spells derived from Chakra stance behave oddly as of 6.0.2  
+--   Stance specific spells must all use the spell name Holy Word: Chastise  
+-- Incoming heal estimation reported is not even close to accurate  
+--   Bug in Blizzard API UnitGetIncomingHeals() - returns bogus values  
+-- AOE advisor not yet updated for Warlords of Draenor  
+--   Need new spell formulas and coefficients  
+  
+  
+Bugfixes:  
+-- Fixed profile activation due to group size 20  
+-- Fixed the inability of players without assist to see ready checks  
+-- Fixed VuhDo Options tooltip mispellings in EN and ES localizations  
+  
+  
+Improvements:  
+-- Added ability to select a default profile and key layout  
+--   Defaults are applied when no existing settings are found  
+-- Copying a profile now also creates a copy of the selected key layout  
+-- Added new raid group size 30 man  
+--   Tools > Profiles > Activate due to group size  
+--   Move > Hold to Test   
+-- Added new bouquets to check if a unit is in same zone as the player  
+--   Flag: Player Zone, Inside  
+--   Flag: Player Zone, Outside  
+-- Added new bouquets to check if a unit is a particular class of tank  
+--   Flag: Role Tank, Death Knight  
+--   Flag: Role Tank, Druid  
+--   Flag: Role Tank, Monk  
+--   Flag: Role Tank, Paladin  
+--   Flag: Role Tank, Warrior  
+  
+  
+--------------------------------------------------------------  
+Version 3.64.  
+  
+  
+Bugfixes:  
+-- Fixed Buff Watch support for the new type of derived spells  
+--	Fixed watching of Shaman Lightning Shield and Water Shield  
+--	Fixed watching of Paladin Seal of Truth  
+-- Fixed bug where magic debuffs were not flagged as removable for Monks  
+-- Removed deprecated Hunter spell Aspect of the Iron Hawk  
+  
+  
+--------------------------------------------------------------  
+Version 3.63.  
+  
+  
+Bugfixes:  
+-- Fixed bug where magic debuffs were not flagged as removable for Paladins  
+  
+  
+--------------------------------------------------------------  
+Version 3.62.  
+  
+  
+Bugfixes:  
+-- Fixed invalid Blizzard Talent API call  
+  
+  
+--------------------------------------------------------------  
+Version 3.61.  
+  
+  
+Bugfixes:  
+-- Fixed Masque integration to no longer call deprecated API 'Skin'  
+  
+  
+--------------------------------------------------------------  
+Version 3.60.  
+  
+  
+Bugfixes:  
+-- Fixed bug where saving custom debuff settings would reset the custom debuff color  
+-- Fixed bug where custom debuffs added by spell ID did not have all settings applied  
+-- Fixed bug where custom debuffs were not playing sounds when selected  
+-- Fixed bug where isInSameZone check always returned true  
+--	BuffWatch now correctly ignores other players outside the players zone  
+--	Global scanner perf bump when 'same zone' limit selected  
+-- Fixed bug in the combat log parsing for incoming swing damage amount  
+-- Removed deprecated spells and abilities  
+--	Removed Death Knight spell Unholy Frenzy  
+--	Removed Druid spell Nourish  
+--	Removed Druid spell Symbiosis  
+--	Removed Hunter aspect Aspect of the Hawk  
+--	Changed Hunter aspect Aspect of the Iron Hawk to Iron Hawk  
+--	Removed Monk raid cooldown Avert Harm  
+--	Removed Monk spell Serpent's Zeal  
+--	Changed Paladin spell Divine Light to Holy Light  
+--	Removed Paladin spell Inquisition  
+--	Removed Priest spell Hymn of Hope  
+--	Removed Priest spell Void Shift  
+--	Removed Priest spell Inner Fire  
+--	Removed Priest spell Inner Will  
+--	Changed Priest spell Greater Heal to Heal  
+--	Removed Rogue poison Mind Numbing Poison  
+--	Changed Rogue poison Paralytic Poison to Internal Bleeding  
+--	Changed Shaman spell Greater Healing Wave to Healing Wave  
+--	Removed Shaman weapon enchant Earthliving Weapon  
+--	Removed Shaman weapon enchant Flametongue Weapon  
+--	Removed Shaman weapon enchant Frostbrand Weapon  
+--	Removed Shaman weapon enchant Rockbiter Weapon  
+--	Removed Shaman weapon enchant Windfury Weapon  
+--	Removed Shaman totem Mana Tide Totem  
+--	Removed Shaman totem Stormlash Totem  
+--	Removed Shaman spell Burning Wrath  
+--	Removed Warrior raid cooldown Demoralizing Banner  
+  
+  
+Improvements:  
+-- Added new raid group size 20 man  
+--   Tools > Profiles > Activate due to group size  
+--   Move > Hold to Test   
+-- Added custom debuffs for 6.0 raid content  
+-- Added new spells and abilities  
+--	Added new Priest spell Clarity of Will as pumpable absorb  
+--	Added new Hunter aspect Aspect of the Fox  
+--	Added new Mage raid cooldown Amplify Magic  
+--	Added new Druid spell Rejuvenation (Germination) as HoT icon  
+--	Added new Druid spell Genesis as HoT icon  
+  
+  
+Changes:  
+-- Updated TOC for 6.0  
+-- Updated Swiftmendable check to include units with Rejuvenation (Germination)  
+-- Updated Swiftmendable check to exclude others HoTs when Rampant Growth is selected  
+-- Updated toolbox helper function for GetTalentInfo API changes  
+-- Updated 'Spells > Keys global' edit box to properly decorate text  
+  
+  
+Features:  
+-- Minor update for Warlords of Draenor  
+  
+  
+TODO:  
+-- Updated incoming/over heal estimation  
+--   Appears to not be a bug in VuhDo  
+--   UnitGetIncomingHeals API seems to return bogus values on beta/PTR?  
+-- Updated AOE advisor spell bases  
+--   Healing spell base values have been removed (H = Cx + B is now H = Cx)  
+--   Need to empirically test coefficients shown on beta tooltips  
+--   Use Hamlet's updated spreadsheet for WoD?  
+-- Updated AOE advisor glyph item IDs  
+-- Updated AOE advisor Glyph of Light of Dawn support  
+  
+  
+--------------------------------------------------------------  
+Version 3.53.  
+  
+  
+Bugfixes:  
+-- Fixed client side slider bug  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.52.  
+  
+  
+Bugfixes:  
+-- Fixed a bug in loading profiles via command line  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.51.  
+  
+  
+Bugfixes:  
+  
+  
+Improvements:  
+-- Added custom debuffs for 5.4 raid content  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.50.  
+  
+  
+Bugfixes:  
+-- Fixes to Chi Burst AoE advice (Thanks to Merlin52626)  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+-- Upated toc for patch 5.4  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.44.  
+  
+  
+Bugfixes:  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.43.  
+  
+  
+Bugfixes:  
+-- Fixed possible taint in debuff handling  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+-- Some checkboxes Options=>General=>Misc changed to "enable"  
+	instead of "disable" style  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.41.  
+  
+  
+Bugfixes:  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+-- Added new bouquet item "Statusbar: Overshielded"  
+  
+  
+--------------------------------------------------------------  
+Version 3.40.  
+  
+  
+Bugfixes:  
+-- Some bugfixes from 3.39  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.39.  
+  
+  
+Bugfixes:  
+-- Minor bugfixes  
+-- Fixed color picker color code  
+  
+  
+Improvements:  
+-- Smarter dynamic memory allocation  
+-- Creation of some ui elements if needed only to reduce memory usage  
+  
+  
+Changes:  
+-- Using all opaque texture for panel background now. May need  
+   to adjust opacity (options=>panels=>general)  
+-- Revamped Options=>Move and other UI elemets a bit  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.38.  
+  
+  
+Bugfixes:  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+-- major memory optimizations  
+-- minor performance optimizations  
+-- Two VuhDo panels colliding should not lead to a short stutter  
+   anymore  
+  
+  
+Changes:  
+  
+  
+Features:  
+-- Color picker for single target direction arrow w/o range  
+	(options=>colors=states)  
+-- HoT bars can now be vertical, inverted, have axis turned  
+ 	 (options=>panels=>hot bars)  
+-- Bouquet item for showing shields as standalone bar  
+-- You can have your target or focus as separate panel group now  
+   (options=>Move, "Special" => "Target", "Focus")  
+  
+--------------------------------------------------------------  
+Version 3.37.  
+  
+  
+Bugfixes:  
+-- Fixed bug when sharing profiles  
+  
+  
+Improvements:  
+-- Power Word: Solace will now be recognized  
+-- Major code cleanup and memory optimizations  
+-- Added monk abilities to default bouquet "tank cooldowns extd"  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.36.  
+  
+  
+Bugfixes:  
+-- Fixed a bug where custom debuff icons could remain in wrong size  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+-- Added some more ignore by... debuffs  
+  
+Changes:  
+  
+Features:  
+-- Added option to not fade debuff icons when player gets out of range  
+   (Options=>Debuffs=>Visuals)  
+  
+  
+--------------------------------------------------------------  
+Version 3.35.  
+  
+  
+Bugfixes:  
+-- Fixed irrelevant debuffs showing by icon  
+-- Fixed possible gvar taint issue  
+-- Minor bugfix  
+  
+  
+Improvements:  
+-- Minor optimizations  
+-- Added some Mage buffs to BuffWatch  
+  
+  
+Changes:  
+  
+Features:  
+  
+--------------------------------------------------------------  
+Version 3.34.  
+  
+  
+Bugfixes:  
+-- Minor bugfix  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+Features:  
+  
+--------------------------------------------------------------  
+Version 3.33.  
+  
+  
+Bugfixes:  
+-- Shield status hot icon now working as configured  
+-- Fixed some talent spells not being recognized  
+-- Fixed alive units showing dead BGs sometimes  
+-- Added Dark intent to stamina buff  
+  
+  
+Improvements:  
+-- Added custom debuffs for 5.2 raids  
+-- Updated debuff ignore list  
+  
+  
+Changes:  
+  
+Features:  
+  
+--------------------------------------------------------------  
+Version 3.32.  
+  
+  
+Bugfixes:  
+-- Fixed raid target icon in combo options=>panels=>misc  
+  
+  
+Improvements:  
+-- Many optimizations  
+  
+  
+Changes:  
+-- Changed overall shield value detection to 5.2 standard  
+   system  
+  
+Features:  
+-- Separated icons and color "removable only" debuff option  
+   (Options=>Debuffs=>Standard)  
+  
+-- Added Shield Bar  
+	 (Options=>General=>Incoming, "Shield Bar")  
+	 (Options=>Colors=>Modes, "Shield Bar")  
+  
+-- Introducing Text Providers for  
+   (Options=>Panels=>Misc "Overheal" Indicator)  
+   (Options=>General=>Indicators", "more" next to ...  
+   "Mana Bar", "Side Left", "Side Right".  
+   More to come...)  
+  
+-- You can now copy/paste color codes as hex string in any  
+   color picker  
+  
+-- Added default PvP flag carrier bouquet  
+--------------------------------------------------------------  
+Version 3.31.  
+- updated toc for patch 5.2  
+  
+--------------------------------------------------------------  
+Version 3.30.  
+  
+  
+Bugfixes:  
+-- Fixed damage flash bar  
+-- Fixed possibly incorrect button sizes after changing a profile  
+  
+  
+Improvements:  
+-- BuffWatch will be hidden in pet battles now  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.29.  
+  
+  
+Bugfixes:  
+-- BuffWatch Rebuff Arcane Brilliance if either no spell power  
+   OR no crit buff on target  
+  
+  
+Improvements:  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.28.  
+  
+  
+Bugfixes:  
+-- Hopefully fixed Eternal Flame AoE predicition  
+  
+  
+Improvements:  
+-- Performance optimizations  
+-- Direction arrow bouquet now can have range text yards/10  
+-- Added more shields to shield absorb (thx acer13189)  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.27.  
+  
+  
+Bugfixes:  
+-- Performance optimizations  
+  
+Improvements:  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.26.  
+  
+  
+Bugfixes:  
+-- Workaround for unit incoming resurrection client bug  
+-- Fixed a bug in shield absorb calculation  
+  
+  
+Improvements:  
+-- Added several default custom debuffs  
+	 (options=>tools=>reset "Custom Debuffs" may be needed)  
+-- Increased performance  
+-- All mutual exclusive buffs should be recognized by BuffWatch now  
+-- Bouquet item "SHIELD_COUNT" now works for shields from all sources  
+  
+Changes:  
+  
+  
+Features:  
+-- Added Chi Burst to trackable AOE advices (experimental)  
+  
+  
+--------------------------------------------------------------  
+Version 3.25.  
+  
+  
+Bugfixes:  
+-- Bugfix with bouquets  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.24.  
+  
+  
+Bugfixes:  
+-- Hopefully fixed a bug with icons disappearing after player died  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.23.  
+  
+  
+Bugfixes:  
+-- Fixed a bug with mana bars etc disappearing sometimes when player  
+   target changed  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.22.  
+  
+  
+Bugfixes:  
+-- Fixed a major bug not updating raid members properly sometimes  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.21.  
+  
+  
+Bugfixes:  
+-- AOE advice calculations fix for Priests  
+-- Fixed rez announce chat channel name  
+  
+  
+Improvements:  
+-- Signicantly reduced memory/cpu consumption on  
+   when changing player target.  
+  
+  
+Changes:  
+-- Removed "Keep Stance" from Options=>Spells=>Misc  
+   (didn't work, use /console autoUnshift 0/1 instead)  
+  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.20.  
+  
+  
+Bugfixes:  
+-- Changed "Dark Power", "Light Power" constants to "Chi" pendants  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.19.  
+  
+  
+Bugfixes:  
+-- Changed "Mastery: Illuminated Healing" to "Illuminated  
+   Healing" to track the buff really  
+-- Fixed error in options menu introduced with 5.1  
+  
+  
+Improvements:  
+-- Increased display update speed after pet summon  
+-- Weapon enchants will now be told apart  
+  
+  
+Changes:  
+-- Tagged for version 5.1  
+  
+  
+  
+Features:  
+-- Added Symbiosis to BuffWatch  
+-- Added rogue poisons to BuffWatch  
+-- Added shaman offhand weapon enchant to BuffWatch  
+  
+  
+--------------------------------------------------------------  
+Version 3.18.  
+  
+  
+Bugfixes:  
+-- Changed Dark Intent to raid wide buff for BuffWatch  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+-- Added improved version of PW:S to shield absorb tracking  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+-- Added bouquet item for counter "Counter: All shields absorb #k"  
+   showing the remaining shield absorption of all shields on the  
+   target  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.17.  
+  
+  
+Bugfixes:  
+-- Added missing GCD reference spell for monks  
+-- Possible fix for flashing hots  
+-- Possible fix for bouquets after profile loading  
+  
+  
+Improvements:  
+  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.16.  
+  
+  
+Bugfixes:  
+-- Fixed a serious cpu resource hog introduced with 3.9  
+  
+  
+Improvements:  
+-- Increased performance after raid roster changes  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.15.  
+  
+  
+Bugfixes:  
+-- Minor bugfix in tooltips  
+-- Bugfix (hopefully) for totem cooldowns not displaying properly  
+  
+  
+Improvements:  
+-- Added a lot of mop default custom debuffs  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.14.  
+  
+  
+Bugfixes:  
+-- Fixed repeated ready-check not showing properly  
+-- Fixed some HoTs not updating properly when changing profiles  
+  
+  
+Improvements:  
+  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+-- Added bouquet item "flag: class color if active"  
+   This enables you to apply class color to any active  
+   icon  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.13.  
+  
+  
+Bugfixes:  
+-- Fixed a range detection bug in PT panel  
+-- Fixed party panel hiding bug  
+-- Fixed a bug with options not showing active panel sometimes  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+-- Inreased hitbox for custom debuff tooltips  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.12.  
+  
+  
+Bugfixes:  
+-- Minor bugfixes  
+  
+  
+Improvements:  
+-- Improved registering of events when force show blizz frames  
+   is enabled in options=>general=>miscs  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.11.  
+  
+  
+Bugfixes:  
+-- Fixed a bug in player group determination  
+-- Fixed several possible taint problems  
+-- Soulstone, Enveloping Mist and Surging Mist  
+   should now work as intended if Soothing mist  
+   is channeling  
+-- Fixed coincidence with other addons hiding Blizz UI elements  
+-- Fixed bug in range detecton  
+  
+  
+Improvements:  
+-- Player powers will be updated more frequently  
+-- Minor optimizations  
+  
+  
+Changes:  
+  
+  
+  
+Features:  
+  
+  
+  
+--------------------------------------------------------------  
+Version 3.9.  
+  
+Bugfixes:  
+-- Minor bugfix with range detection for enemy targets  
+-- Minor bugfix with overheal higlight not reseting properly  
+-- Other minor bugfixes  
+  
+Improvements:  
+-- Reduced memory consumption  
+-- Major options code rework, reduces memory usage, increased  
+   flexibility for future extensions  
+-- Added Sacred Shield to trackable buffs  
+  
+Changes:  
+-- Added "Vixar" to default libSharedMedia fonts  
+  
+  
+Features:  
+-- On popular demand: Options=>General=>Misc "Hide Blizz xyz" is  
+   tri-state now. So you can "leave alone/show/hide blizz" frames.  
+   May need to overwrite existing profiles in order to have Blizz  
+   UI elements shown when hidden from another addon  
+   Defaults to: Leave alone  
+  
+  
+--------------------------------------------------------------  
+Version 3.7.  
+  
+Bugfixes:  
+-- Fixed problem with minimap button  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.6.  
+  
+Bugfixes:  
+-- Fixed dc shield macro icons  
+-- Fixed group size detection for group of 5  
+-- Fixed shield absorb calculation  
+-- Fix for libSharedMedia which seems to be registering  
+   nil for "none" borders now  
+-- Hopefully fixes a bug with minimap setting not saving  
+   sometimes  
+-- Minor bugfixes  
+-- Attempt to fix smart cast battle rez  
+  
+Improvements:  
+-- Added Grimoire of Sacrifice to BuffWatch  
+-- Added Cenarion Ward to hot list  
+-- Added Serpent's Zeal to trackable hots  
+-- Improved BuffWatch options buff detection  
+   for low level toons  
+  
+Changes:  
+-- Integrated minimap icon into VuhDo to save  
+   some bytes  
+-- Some Code cleanup  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.5.  
+  
+Bugfixes:  
+-- All characters "." and "#" will be removed from bouquet names  
+   to avoid crashes  
+-- Switched shield absorb estimation to spell ids instead of spell names  
+-- Aggro indicator marks working again  
+-- Minor bugfixes  
+  
+Improvements:  
+-- Improved range checking for hostile targets  
+-- Added default bouquet "Raid Cooldowns" (Thank you, Zohar)  
+-- Added Spirit Shell to "Pump Aegis" feature  
+-- Updated libSharedMedia  
+-- Minor optimizations  
+  
+  
+Changes:  
+  
+  
+Features:  
+-- Added default bouquet "Raid CDs" (Thanks to Zohar)  
+  
+  
+--------------------------------------------------------------  
+Version 3.4.  
+  
+Bugfixes:  
+-- Some rewrite of buff watch code to make it more robus  
+-- Fixed glyph/talent taint bug  
+-- Fixed a bug with resurrection announcement  
+-- Fixed a bug with VuhDo not auto hiding in parties  
+-- Hopefully fixed a bug with target/focus frame taint  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.2.  
+  
+Bugfixes:  
+-- Fixed use of custom macros  
+  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  
+  
+  
+--------------------------------------------------------------  
+Version 3.1.  
+  
+Bugfixes:  
+-- Sharing profiles fixed  
+-- Casting Purify Spirit, Eternal Flame fixed  
+-- Eternal Flame available for HoT Icons  
+  
+Improvements:  
+  
+  
+Changes:  
+  
+  
+Features:  

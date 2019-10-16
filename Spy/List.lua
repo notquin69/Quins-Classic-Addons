@@ -226,21 +226,25 @@ function Spy:RemovePlayerFromList(player)
 end
 
 function Spy:ClearList()
-	Spy.NearbyList = {}
-	Spy.ActiveList = {}
-	Spy.InactiveList = {}
-	Spy.PlayerCommList = {}
-	Spy.ListAmountDisplayed = 0
-	for i = 1, Spy.MapNoteLimit do
-		Spy.MapNoteList[i].displayed = false
-		Spy.MapNoteList[i].worldIcon:Hide()
-		HBDP:RemoveMinimapIcon(self, Spy.MapNoteList[i].miniIcon)
-	end
-	Spy:SetCurrentList(1)
-	if IsControlKeyDown() then
-		Spy:EnableSpy(not Spy.db.profile.Enabled, false)
-	end
-	Spy:UpdateActiveCount()
+	if IsShiftKeyDown () then
+		Spy:EnableSound(not Spy.db.profile.EnableSound, false)		
+	else	
+		Spy.NearbyList = {}
+		Spy.ActiveList = {}
+		Spy.InactiveList = {}
+		Spy.PlayerCommList = {}
+		Spy.ListAmountDisplayed = 0
+		for i = 1, Spy.MapNoteLimit do
+			Spy.MapNoteList[i].displayed = false
+			Spy.MapNoteList[i].worldIcon:Hide()
+			HBDP:RemoveMinimapIcon(self, Spy.MapNoteList[i].miniIcon)
+		end
+		Spy:SetCurrentList(1)
+		if IsControlKeyDown() then
+			Spy:EnableSpy(not Spy.db.profile.Enabled, false)
+		end
+		Spy:UpdateActiveCount()
+	end	
 end
 
 function Spy:AddPlayerData(name, class, level, race, guild, isEnemy, isGuess)

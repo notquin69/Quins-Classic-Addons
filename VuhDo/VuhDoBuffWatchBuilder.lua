@@ -224,6 +224,14 @@ end
 
 --
 local sIsOutOfCombat = false;
+function VUHDO_getIsOutOfCombat()
+
+	return sIsOutOfCombat;
+
+end
+
+
+
 function VUHDO_setIsOutOfCombat(anIsEnded)
 	sIsOutOfCombat = anIsEnded;
 

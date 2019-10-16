@@ -18,7 +18,7 @@ local APP_INFO_REQUIRED_KEYS = { "version", "lastSync", "message", "news" }
 local LOGOUT_TIME_WARNING_THRESHOLD_MS = 20
 do
 	-- show a message if we were updated
-	if GetAddOnMetadata("TradeSkillMaster", "Version") ~= "v4.8.9" then
+	if GetAddOnMetadata("TradeSkillMaster", "Version") ~= "v4.8.14" then
 		message("TSM was just updated and may not work properly until you restart WoW.")
 	end
 end
@@ -69,10 +69,10 @@ end
 -- [48] added profile.internalData.exportGroupTreeContext
 -- [49] added factionrealm.internalData.{mailDisenchantablesChar,mailExcessGoldChar,mailExcessGoldLimit}
 -- [50] added factionrealm.internalData.{csvAuctionDBScan,auctionDBScanTime,auctionDBScanHash}
--- [51] resetting factionrealm.internalData.crafts
+-- [51-53] resetting factionrealm.internalData.crafts
 
 local SETTINGS_INFO = {
-	version = 51,
+	version = 53,
 	global = {
 		debug = {
 			chatLoggingEnabled = { type = "boolean", default = false, lastModifiedVersion = 19 },
@@ -218,7 +218,7 @@ local SETTINGS_INFO = {
 			mailDisenchantablesChar = { type = "string", default = "", lastModifiedVersion = 49 },
 			mailExcessGoldChar = { type = "string", default = "", lastModifiedVersion = 49 },
 			mailExcessGoldLimit = { type = "number", default = 10000000000, lastModifiedVersion = 49 },
-			crafts = { type = "table", default = {}, lastModifiedVersion = 51 },
+			crafts = { type = "table", default = {}, lastModifiedVersion = 53 },
 			mats = { type = "table", default = {}, lastModifiedVersion = 10 },
 			guildGoldLog = { type = "table", default = {}, lastModifiedVersion = 25 },
 			csvAuctionDBScan = { type = "string", default = "", lastModifiedVersion = 50 },
@@ -509,7 +509,7 @@ function TSM.OnInitialize()
 				end
 			end
 		end
-		if prevVersion < 51 and WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+		if prevVersion < 53 and WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
 			for key, value in upgradeObj:RemovedSettingIterator() do
 				local scopeType, factionrealm, namespace, settingKey = upgradeObj:GetKeyInfo(key)
 				if scopeType == "factionrealm" and namespace == "internalData" and settingKey == "crafts" then
@@ -551,7 +551,7 @@ function TSM.OnInitialize()
 		TSM.CustomPrice.RegisterSource("External", "AtrValue", L["Auctionator - Auction Value"], Atr_GetAuctionBuyout, true)
 	end
 
-	-- TheUndermineJournal price sources
+	-- TheUndermineJournal and BootyBayGazette price sources
 	if TSMAPI_FOUR.Util.IsAddonEnabled("TheUndermineJournal") and TUJMarketInfo then
 		local function GetTUJPrice(itemLink, arg)
 			local data = TUJMarketInfo(itemLink)
@@ -561,6 +561,15 @@ function TSM.OnInitialize()
 		TSM.CustomPrice.RegisterSource("External", "TUJMarket", L["TUJ 14-Day Price"], GetTUJPrice, true, "market")
 		TSM.CustomPrice.RegisterSource("External", "TUJGlobalMean", L["TUJ Global Mean"], GetTUJPrice, true, "globalMean")
 		TSM.CustomPrice.RegisterSource("External", "TUJGlobalMedian", L["TUJ Global Median"], GetTUJPrice, true, "globalMedian")
+	elseif TSMAPI_FOUR.Util.IsAddonEnabled("BootyBayGazette") and TUJMarketInfo then
+		local function GetBBGPrice(itemLink, arg)
+			local data = TUJMarketInfo(itemLink)
+			return data and data[arg] or nil
+		end
+		TSM.CustomPrice.RegisterSource("External", "BBGRecent", L["BBG 3-Day Price"], GetBBGPrice, true, "recent")
+		TSM.CustomPrice.RegisterSource("External", "BBGMarket", L["BBG 14-Day Price"], GetBBGPrice, true, "market")
+		TSM.CustomPrice.RegisterSource("External", "BBGGlobalMean", L["BBG Global Mean"], GetBBGPrice, true, "globalMean")
+		TSM.CustomPrice.RegisterSource("External", "BBGGlobalMedian", L["BBG Global Median"], GetBBGPrice, true, "globalMedian")
 	end
 
 	-- AHDB price sources

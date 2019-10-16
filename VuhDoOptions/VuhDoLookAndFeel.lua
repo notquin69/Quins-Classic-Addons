@@ -575,7 +575,7 @@ function VUHDO_lnfSliderUpdateModel(aSlider)
 
 	--[[if tModel and strfind(tModel, "SOUND", 1, true) and VUHDO_SOUNDS[tValue] then
 		tValue = VUHDO_SOUNDS[tValue][1];
-		if tValue then PlaySoundFile(tValue); end
+		if tValue then VUHDO_playSoundFile(tValue); end
 	end]]
 
 	VUHDO_lnfUpdateVarFromModel(aSlider:GetParent(), tValue);

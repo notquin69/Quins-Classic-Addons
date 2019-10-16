@@ -43,7 +43,7 @@ local GetTime = GetTime;
 local CheckInteractDistance = CheckInteractDistance;
 local UnitInRange = UnitInRange;
 local IsSpellInRange = IsSpellInRange;
-local UnitDetailedThreatSituation = UnitDetailedThreatSituation;
+local VUHDO_unitDetailedThreatSituation = VUHDO_unitDetailedThreatSituation;
 local UnitIsCharmed = UnitIsCharmed;
 local UnitCanAttack = UnitCanAttack;
 local UnitName = UnitName;
@@ -52,7 +52,7 @@ local UnitIsTrivial = UnitIsTrivial;
 local GetSpellCooldown = GetSpellCooldown;
 local HasFullControl = HasFullControl;
 local pairs = pairs;
-local UnitThreatSituation = UnitThreatSituation;
+local VUHDO_unitThreatSituation = VUHDO_unitThreatSituation;
 local InCombatLockdown = InCombatLockdown;
 local type = type;
 
@@ -198,7 +198,7 @@ local tEmpty = {};
 local function VUHDO_updateThreat(aUnit)
 	tInfo = (VUHDO_RAID or tEmpty)[aUnit];
 	if tInfo then
-		tInfo["threat"] = UnitThreatSituation(aUnit) or 0;
+		tInfo["threat"] = VUHDO_unitThreatSituation(aUnit) or 0;
 
 		if VUHDO_INTERNAL_TOGGLES[17] then -- VUHDO_UPDATE_THREAT_LEVEL
 			VUHDO_updateBouquetsForEvent(aUnit, 17); -- VUHDO_UPDATE_THREAT_LEVEL
@@ -411,6 +411,16 @@ function VUHDO_OnEvent(_, anEvent, anArg1, anArg2, anArg3, anArg4, anArg5, anArg
 		if VUHDO_VARIABLES_LOADED then
 			-- As of 8.x COMBAT_LOG_EVENT_UNFILTERED is now just an event with no arguments
 			anArg1, anArg2, anArg3, anArg4, anArg5, anArg6, anArg7, anArg8, anArg9, anArg10, anArg11, anArg12, anArg13, anArg14, anArg15, anArg16, anArg17 = CombatLogGetCurrentEventInfo();
+
+			-- in classic, CLEU payload for spell ID is always 0
+			-- map this as best we can but lookups outside player spellbook will fail
+			if anArg12 == 0 then
+				local _, _, _, _, _, _, tSpellId = GetSpellInfo(anArg13);
+
+				if tSpellId then
+					anArg12 = tSpellId;
+				end
+			end
 
 			-- SWING_DAMAGE - the amount of damage is the 12th arg
 			-- ENVIRONMENTAL_DAMAGE - the amount of damage is the 13th arg
@@ -695,10 +705,12 @@ function VUHDO_OnEvent(_, anEvent, anArg1, anArg2, anArg3, anArg4, anArg5, anArg
 	elseif "PLAYER_SPECIALIZATION_CHANGED" == anEvent then
 		if VUHDO_VARIABLES_LOADED and not InCombatLockdown() then
 			if "player" == anArg1 then
-				local tSpecNum = tostring(GetSpecialization()) or "1";
+				local tSpecNum = tostring(VUHDO_getSpecialization()) or "1";
+				local tBestProfile = VUHDO_getBestProfileAfterSpecChange();
 
 				-- event sometimes fires multiple times so we must de-dupe
-				if VUHDO_SPEC_LAYOUTS["selected"] ~= VUHDO_SPEC_LAYOUTS[tSpecNum] then
+				if (VUHDO_SPEC_LAYOUTS["selected"] ~= VUHDO_SPEC_LAYOUTS[tSpecNum]) or 
+					(VUHDO_CONFIG["CURRENT_PROFILE"] ~= tBestProfile) then
 					VUHDO_activateSpecc(tSpecNum);
 				end
 			end
@@ -1040,7 +1052,7 @@ local function VUHDO_updateAllAggro()
 			tTarget = tInfo["targetUnit"];
 			if UnitIsEnemy(tUnit, tTarget) then
 				if VUHDO_INTERNAL_TOGGLES[14] then -- VUHDO_UPDATE_AGGRO
-					_, _, tThreatPerc = UnitDetailedThreatSituation(tUnit, tTarget);
+					_, _, tThreatPerc = VUHDO_unitDetailedThreatSituation(tUnit, tTarget);
 					tInfo["threatPerc"] = tThreatPerc or 0;
 				end
 
@@ -1048,7 +1060,7 @@ local function VUHDO_updateAllAggro()
 
 				if tAggroUnit then
 					if VUHDO_INTERNAL_TOGGLES[14] then -- VUHDO_UPDATE_AGGRO
-						_, _, tThreatPerc = UnitDetailedThreatSituation(tAggroUnit, tTarget);
+						_, _, tThreatPerc = VUHDO_unitDetailedThreatSituation(tAggroUnit, tTarget);
 						VUHDO_RAID[tAggroUnit]["threatPerc"] = tThreatPerc or 0;
 					end
 
@@ -1090,7 +1102,7 @@ local function VUHDO_updateAllRange()
 		end
 
 		-- Check if unit is phased
-		if UnitIsWarModePhased(tUnit) or not UnitInPhase(tUnit) then
+		if VUHDO_unitIsWarModePhased(tUnit) or not UnitInPhase(tUnit) then
 			tIsInRange = false;
 		else
 			-- Check if unit is in range
@@ -1555,6 +1567,41 @@ function VUHDO_OnLoad(anInstance)
 	end
 
 	VUHDO_ALL_EVENTS = nil;
+
+	if VUHDO_LibClassicHealComm then 
+		local function HealComm_HealUpdated(aEvent, aCasterGUID, aSpellID, aHealType, aEndTime, ...)
+			local tTargets = { n = select("#", ...), ... };
+
+			for i = 1, tTargets.n do
+				local tTarget = VUHDO_RAID_GUIDS[tTargets[i]];
+
+				if (VUHDO_RAID or tEmptyRaid)[tTarget] then -- auch target, focus
+					VUHDO_updateHealth(tTarget, 9); -- VUHDO_UPDATE_INC
+					VUHDO_updateBouquetsForEvent(tTarget, 9); -- VUHDO_UPDATE_ALT_POWER
+				end
+			end
+			
+		end
+		anInstance.HealComm_HealUpdated = HealComm_HealUpdated;
+
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_HealStarted", HealComm_HealUpdated);
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_HealStopped", HealComm_HealUpdated);
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_HealDelayed", HealComm_HealUpdated);
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_HealUpdated", HealComm_HealUpdated);
+
+		local function HealComm_HealModified(aEvent, aTargetGUID)
+			local tTarget = VUHDO_RAID_GUIDS[aTargetGUID];
+
+			if (VUHDO_RAID or tEmptyRaid)[tTarget] then -- auch target, focus
+				VUHDO_updateHealth(tTarget, 9); -- VUHDO_UPDATE_INC
+				VUHDO_updateBouquetsForEvent(tTarget, 9); -- VUHDO_UPDATE_ALT_POWER
+			end
+		end
+		anInstance.HealComm_HealModified = HealComm_HealModified;
+
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_ModifierChanged", HealComm_HealModified);
+		VUHDO_LibClassicHealComm.RegisterCallback(anInstance, "HealComm_GUIDDisappeared", HealComm_HealModified);
+	end
 
 	SLASH_VUHDO1 = "/vuhdo";
 	SLASH_VUHDO2 = "/vd";

@@ -56,6 +56,8 @@ function addon.updateFromQuestLog()
 	local newQuest = false
 	for id, q in pairs(addon.quests) do
 		if questLog[id] ~= nil and not questLog[id].failed then
+			local numObjectives = GetNumQuestLeaderBoards(questLog[id].index)
+			if numObjectives == 0 then questLog[id].finished = true end
 			if q.logIndex ~= nil then
 				questFound = true
 				if q.logIndex ~= questLog[id].index or q.finished ~= questLog[id].finished then
@@ -74,17 +76,17 @@ function addon.updateFromQuestLog()
 				q.sort = questLog[id].sort
 				--if addon.debugging then print("LIME: new log entry ".. id .. " finished", q.finished) end
 			end
-			if q.objectives == nil or #q.objectives ~= GetNumQuestLeaderBoards(q.logIndex) then q.objectives = {} end
-			for k = 1, GetNumQuestLeaderBoards(q.logIndex) do
+			if q.objectives == nil or #q.objectives ~= numObjectives then q.objectives = {} end
+			for k = 1, numObjectives do
 				local desc, type, done = GetQuestLogLeaderBoard(k, addon.quests[id].logIndex)
 				if q.objectives[k] == nil or desc ~= q.objectives[k] or done ~= q.objectives[k].done then
 					questChanged = true
 					q.objectives[k] = {desc = desc, done = done, type = type}
 				end					
 			end
-		else
+		elseif not q.completed then
+			checkCompleted = true
 			if q.logIndex ~= nil and q.logIndex ~= -1 and not isCollapsed[q.sort] then
-				checkCompleted = true
 				q.logIndex = nil
 				newQuest = true
 				--if addon.debugging then print("LIME: removed log entry ".. id) end

@@ -505,6 +505,7 @@ function private.ScanAuctionPageThreaded(auctionScan, filter)
 			return false
 		end
 
+		auctionScan._db:BulkInsertStart()
 		local maxIndex = min(numAuctions, index + NUM_AUCTION_ITEMS_PER_PAGE)
 		while index <= maxIndex do
 			local rawName, rawLink, texture, stackSize, minBid, minIncrement, buyout, bid, isHighBidder, seller, timeLeft, displayedBid, itemDisplayedBid, itemBuyout, itemLink, itemString, hash, hashNoSeller, filterId, targetItem, targetItemRate = auctionScan:_GetAuctionRowFields(index, filter)
@@ -523,6 +524,7 @@ function private.ScanAuctionPageThreaded(auctionScan, filter)
 				numInsertedRows = numInsertedRows + 1
 			end
 		end
+		auctionScan._db:BulkInsertEnd()
 
 		if filter:_IsGetAll() then
 			-- update the "page"
@@ -676,9 +678,7 @@ function private.ScanQueryThreaded(auctionScan)
 				auctionScan._db:SetQueryUpdatesPaused(false)
 			else
 				-- scan the results
-				auctionScan._db:BulkInsertStart()
 				local scanSuccess, numInsertedRows = private.ScanAuctionPageThreaded(auctionScan, filter)
-				auctionScan._db:BulkInsertEnd()
 				if not scanSuccess then
 					-- don't store results for a failed filter
 					TSM:LOG_ERR("Failed to scan filter")

@@ -2204,15 +2204,13 @@ local icon_frame_on_enter = function (self)
 			_detalhes:AddTooltipHeaderStatusbar()
 			
 			local talent_string = ""
-			if (talents) then
+			if (talents and type (talents) == "table") then
 				for i = 1, #talents do
-
 					local iconTexture, rank, tier, column = unpack (talents [i])
 					--local talentID, name, texture, selected, available = GetTalentInfoByID (talents [i])
 					if (rank and rank > 0) then
 						talent_string = talent_string ..  " |T" .. iconTexture .. ":" .. 24 .. ":" .. 24 ..":0:0:64:64:4:60:4:60|t " .. rank .. " "
 					end
-
 				end
 			end
 			

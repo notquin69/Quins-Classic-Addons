@@ -57,7 +57,7 @@ function VUHDO_deleteDebuffIgnoreClicked(aButton)
 		if (VUHDO_DEBUFF_BLACKLIST[strtrim(tText)]) then
 			VUHDO_DEBUFF_BLACKLIST[strtrim(tText)] = nil;
 		else
-			local tSpellId = string.match(tText, "([^\]\[]+)");
+			local tSpellId = string.match(tText, [[([^\]\[]+)]]);
 
 			if (tSpellId ~= nil and VUHDO_DEBUFF_BLACKLIST[tSpellId]) then
 				VUHDO_DEBUFF_BLACKLIST[tSpellId] = nil;

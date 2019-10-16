@@ -4,6 +4,8 @@ local SM = LibStub:GetLibrary("LibSharedMedia-3.0")
 local _
 
 SM:Register("font", "ABF", [[Interface\AddOns\Spy\Fonts\ABF.ttf]])
+SM:Register("font", "Big Noodle Titling", [[Interface\AddOns\Spy\Fonts\BigNoodleTitling.ttf]])
+SM:Register("font", "Expressway", [[Interface\AddOns\Spy\Fonts\Expressway.ttf]])
 
 function Spy:AddFontString(string)
 	local Font, Height, Flags
@@ -28,7 +30,6 @@ function Spy:SetFont(fontname)
 	Spy.db.profile.Font = fontname
 	FontFile = SM:Fetch("font",fontname)
 
---	for _, v in pairs(FontStrings) do
 	for k, v in pairs(FontStrings) do
 		k, Height, Flags = v:GetFont()
 		v:SetFont(FontFile, Height, Flags)

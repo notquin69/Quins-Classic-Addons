@@ -22,6 +22,13 @@ local private = {
 -- Module Functions
 -- ============================================================================
 
+function Gathering.OnInitialize()
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		TSMAPI_FOUR.Util.TableRemoveByValue(TSM.db.profile.gatheringOptions.sources, "guildBank")
+		TSMAPI_FOUR.Util.TableRemoveByValue(TSM.db.profile.gatheringOptions.sources, "altGuildBank")
+	end
+end
+
 function Gathering.OnEnable()
 	private.db = TSMAPI_FOUR.Database.NewSchema("GATHERING_MATS")
 		:AddUniqueStringField("itemString")

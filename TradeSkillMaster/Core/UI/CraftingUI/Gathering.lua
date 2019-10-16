@@ -40,6 +40,12 @@ local SOURCE_TEXT_LIST = {
 	L["AH (Disenchanting)"],
 	L["AH (Crafting)"],
 }
+if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	TSMAPI_FOUR.Util.TableRemoveByValue(SOURCE_LIST, "guildBank")
+	TSMAPI_FOUR.Util.TableRemoveByValue(SOURCE_LIST, "altGuildBank")
+	TSMAPI_FOUR.Util.TableRemoveByValue(SOURCE_TEXT_LIST, L["Guild Bank"])
+	TSMAPI_FOUR.Util.TableRemoveByValue(SOURCE_TEXT_LIST, L["Alt Guild Bank"])
+end
 assert(#SOURCE_LIST == #SOURCE_TEXT_LIST)
 local BASE_STYLESHEET = TSM.UI.Util.Stylesheet()
 	:SetStyleTable("Text", "TITLE", {
@@ -250,6 +256,10 @@ function private.CreateSourceRows(frame)
 end
 
 function private.UpdateSourceRows(setupFrame)
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		TSMAPI_FOUR.Util.TableRemoveByValue(TSM.db.profile.gatheringOptions.sources, "guildBank")
+		TSMAPI_FOUR.Util.TableRemoveByValue(TSM.db.profile.gatheringOptions.sources, "altGuildBank")
+	end
 	local texts = TSMAPI_FOUR.Util.AcquireTempTable()
 	local sources = TSMAPI_FOUR.Util.AcquireTempTable()
 	for i = 1, #SOURCE_LIST do

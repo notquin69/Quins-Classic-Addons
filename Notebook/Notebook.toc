@@ -1,9 +1,12 @@
-## Interface: 80200
-## Title: Stian's |cFFFFFFFFNotebook|r |cFFFF2020BETA|r
+## Interface: 11302
+## Title: Notebook
 ## Notes: Simple notebook for scribbling down whatever. Open with |cFFFFD200/notebook|r or |cFFFFD200/nb|r, or with keybinding.
+## Author: stianhoiland
+## SavedVariables: NotebookDBGeneral
 ## SavedVariablesPerCharacter: NotebookDB
 
+Events.lua
 Notebook.lua
 Notebook.xml
 Bindings.lua
-#Bindings.xml
+SlashCmds.lua

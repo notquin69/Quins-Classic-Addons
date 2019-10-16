@@ -21,7 +21,7 @@ local GetTime = GetTime;
 local GetRealZoneText = GetRealZoneText;
 local GetSpellInfo = GetSpellInfo;
 local SetMapToCurrentZone = SetMapToCurrentZone;
-local UnitAlternatePowerInfo = UnitAlternatePowerInfo;
+local VUHDO_unitAlternatePowerInfo = VUHDO_unitAlternatePowerInfo;
 local WorldMapFrame = WorldMapFrame;
 local GetMouseFocus = GetMouseFocus;
 local GetPlayerFacing = GetPlayerFacing;
@@ -285,7 +285,7 @@ function VUHDO_isInRange(aUnit)
 		return true;
 	elseif VUHDO_isSpecialUnit(aUnit) then 
 		return VUHDO_isTargetInRange(aUnit);
-	elseif UnitIsWarModePhased(aUnit) or not UnitInPhase(aUnit) then
+	elseif VUHDO_unitIsWarModePhased(aUnit) or not UnitInPhase(aUnit) then
 		return false;
 	elseif (sIsGuessRange) then 
 		return UnitInRange(aUnit);
@@ -412,10 +412,13 @@ function VUHDO_getUnitZoneName(aUnit)
 	else
 		VuhDoScanTooltip:SetOwner(VuhDo, "ANCHOR_NONE");
 		VuhDoScanTooltip:ClearLines();
-		VuhDoScanTooltip:SetUnit(aUnit)
-		tZone = VuhDoScanTooltipTextLeft3:GetText();
+		VuhDoScanTooltip:SetUnit(aUnit);
+
+		if VuhDoScanTooltip:NumLines() > 2 then
+			tZone = VuhDoScanTooltipTextLeft3:GetText();
+		end
 	
-		if tZone == "PvP" then 
+		if tZone and tZone == "PvP" and VuhDoScanTooltip:NumLines() > 3 then 
 			tZone = VuhDoScanTooltipTextLeft4:GetText();
 		end
 	end
@@ -471,6 +474,10 @@ end
 
 --
 function VUHDO_isSpellKnown(aSpellName)
+	if not aSpellName then 
+		return false; 
+	end
+
 	return (type(aSpellName) == "number" and IsSpellKnown(aSpellName))
 		or (type(aSpellName) == "number" and IsPlayerSpell(aSpellName))
 		or GetSpellBookItemInfo(aSpellName) ~= nil
@@ -540,7 +547,7 @@ end
 local tResurrectionSpells;
 local tKnownResurrectionSpells;
 function VUHDO_getResurrectionSpells()
-	tResurrectionSpells = (VUHDO_RESURRECTION_SPELLS[VUHDO_PLAYER_CLASS] or sEmpty)[GetSpecialization() or 0];
+	tResurrectionSpells = (VUHDO_RESURRECTION_SPELLS[VUHDO_PLAYER_CLASS] or sEmpty)[VUHDO_getSpecialization() or 0];
 
 	if tResurrectionSpells then
 		tKnownResurrectionSpells = { };
@@ -752,7 +759,7 @@ end
 
 --
 function VUHDO_isAltPowerActive(aUnit)
-	local tBarType, _, _, _, _, tIsHideFromOthers = UnitAlternatePowerInfo(aUnit);
+	local tBarType, _, _, _, _, tIsHideFromOthers = VUHDO_unitAlternatePowerInfo(aUnit);
 	return tBarType and (not tIsHideFromOthers or "player" == aUnit);
 end
 
@@ -969,6 +976,15 @@ function VUHDO_unitAura(aUnit, aSpell, aFilter)
 		local tSpellName, tIcon, tCount, tDebuffType, tDuration, tExpirationTime, tSource, tIsStealable, tNameplateShowPersonal, tSpellId, tCanApplyAura, tIsBossDebuff, tNameplateShowAll, tTimeMod, tValue1, tValue2, tValue3 = UnitAura(aUnit, tCnt, aFilter);
 
 		if (aSpell == tSpellName or tonumber(aSpell) == tSpellId) then
+			if VUHDO_LibClassicDurations and tSpellId then
+		                local tNewDuration, tNewExpirationTime = VUHDO_LibClassicDurations:GetAuraDurationByUnit(aUnit, tSpellId, tSource, tSpellName);
+		
+				if tDuration == 0 and tNewDuration then 
+					tDuration = tNewDuration;
+					tExpirationTime = tNewExpirationTime;
+				end
+			end
+
 			return tSpellName, tIcon, tCount, tDebuffType, tDuration, tExpirationTime, tSource, tIsStealable, tNameplateShowPersonal, tSpellId, tCanApplyAura, tIsBossDebuff, tNameplateShowAll, tTimeMod, tValue1, tValue2, tValue3;
 		end
 	end
@@ -995,101 +1011,252 @@ end
 
 
 
+function VUHDO_playSoundFile(aSound)
+
+	if (aSound and (aSound == "Interface\\Quiet.ogg" or aSound == "Interface\\Quiet.mp3")) then
+		-- sweep and reset any sound settings referencing the old 'none' LSM default	
+		for _, tDebuffInfo in pairs(VUHDO_CONFIG["CUSTOM_DEBUFF"]["STORED_SETTINGS"]) do
+			if (tDebuffInfo["SOUND"] and 
+				(tDebuffInfo["SOUND"] == "Interface\\Quiet.ogg" or 
+					tDebuffInfo["SOUND"] == "Interface\\Quiet.mp3")) then
+				tDebuffInfo["SOUND"] = nil;
+			end
+		end
+
+		-- reset custom debuff default sound if set to old 'none' LSM default
+		if (VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"] and 
+			(VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"] == "Interface\\Quiet.ogg" or 
+				VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"] == "Interface\\Quiet.mp3")) then
+			VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"] = nil;
+		end
+
+		-- reset standard debuff sound if set to old 'none' LSM default
+		if (VUHDO_CONFIG["SOUND_DEBUFF"] and 
+		      (VUHDO_CONFIG["SOUND_DEBUFF"] == "Interface\\Quiet.ogg" or 
+				VUHDO_CONFIG["SOUND_DEBUFF"] == "Interface\\Quiet.mp3")) then
+			VUHDO_CONFIG["SOUND_DEBUFF"] = nil;
+		end
+
+		-- return success because we've played nothing as requested (eg. Quiet.ogg)
+		return true;
+	end
+
+	local tSuccess, tError = pcall(PlaySoundFile, aSound);
+
+	if not tSuccess then
+		VUHDO_Msg(format(VUHDO_I18N_PLAY_SOUND_FILE_ERR, aSound, tError));
+	end
+
+	return tSuccess;
+
+end
+
+
+
 ---------------------------------
 -- CLASSIC COMPATIBILITY LAYER --
 ---------------------------------
-function GetSpecialization()
+function VUHDO_getSpecialization()
 
-	return 1;
-
-end
-
-
-
-function GetSpecializationInfo()
-
-	return 1, "Unknown", _, _, _, "NONE";
+	if not GetSpecialization then
+		return 1;
+	else
+		return GetSpecialization();
+	end
 
 end
 
 
 
-function GetInspectSpecialization()
+function VUHDO_getSpecializationInfo(...)
 
-	return 0;
-
-end
-
-
-
-function GetSpecializationRoleByID()
-
-	return "NONE";
+	if not GetSpecializationInfo then 
+		return 1, "Unknown", _, _, _, "NONE";
+	else
+		return GetSpecializationInfo(...);
+	end
 
 end
 
 
 
-function UnitGetIncomingHeals()
+function VUHDO_getInspectSpecialization(...)
 
-	return 0;
-
-end
-
-
-
-function UnitGetTotalAbsorbs()
-
-	return 0;
+	if not GetInspectSpecialization then
+		return 0;
+	else
+		return GetInspectSpecialization(...);
+	end
 
 end
 
 
 
-function UnitThreatSituation()
+function VUHDO_getSpecializationRoleByID(...)
 
-	return 0;
-
-end
-
-
-
-function UnitIsWarModePhased()
-
-	return false;
+	if not GetSpecializationRoleByID then
+		return "NONE";
+	else
+		return GetSpecializationRoleByID(...);
+	end
 
 end
 
 
 
-function UnitHasVehicleUI()
+function VUHDO_unitGetIncomingHeals(aUnit, aCasterUnit)
 
-	return false;
+	if not aUnit then
+		return 0;
+	end
+
+	if not UnitGetIncomingHeals then
+		if VUHDO_LibClassicHealComm then
+			local tTargetGUID = UnitGUID(aUnit);
+
+			if aCasterUnit then
+				local tCasterGUID = UnitGUID(aCasterUnit);
+
+				return (VUHDO_LibClassicHealComm:GetHealAmount(tTargetGUID, VUHDO_LibClassicHealComm.ALL_HEALS, nil, tCasterGUID) or 0) * (VUHDO_LibClassicHealComm:GetHealModifier(tTargetGUID) or 1);
+			else
+				return (VUHDO_LibClassicHealComm:GetHealAmount(tTargetGUID, VUHDO_LibClassicHealComm.ALL_HEALS) or 0) * (VUHDO_LibClassicHealComm:GetHealModifier(tTargetGUID) or 1);
+			end
+		else
+			return 0;
+		end
+	else
+		return UnitGetIncomingHeals(aUnit, aCasterUnit);
+	end
 
 end
 
 
 
-function UnitGroupRolesAssigned()
+function VUHDO_unitGetTotalAbsorbs(...)
 
-	return "NONE";
-
-end
-
-
-
-function UnitAlternatePowerInfo()
-
-	return false;
+	if not UnitGetTotalAbsorbs then
+		return 0;
+	else
+		return UnitGetTotalAbsorbs(...);
+	end
 
 end
 
 
 
-C_IncomingSummon = { };
-function C_IncomingSummon.HasIncomingSummon()
+function VUHDO_unitThreatSituation(aUnit)
 
-	return false;
+	if not aUnit then 
+		return nil; 
+	end
 
+	if not UnitThreatSituation then
+		if VUHDO_LibThreatClassic then
+			local tOtherUnit = nil;
+
+			-- check target and boss unit threat
+			if UnitExists(aUnit .. "target") and UnitIsEnemy(aUnit, aUnit .. "target") then
+				tOtherUnit = aUnit .. "target";
+			elseif UnitExists("target") and UnitIsEnemy("player", "target") then
+				tOtherUnit = "target";
+			elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then
+				tOtherUnit = "boss1";
+			elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then
+				tOtherUnit = "boss2";
+			elseif UnitExists("boss3") and UnitIsEnemy("player", "boss3") then
+				tOtherUnit = "boss3";
+			elseif UnitExists("boss4") and UnitIsEnemy("player", "boss4") then
+				tOtherUnit = "boss4";
+			elseif UnitExists("boss5") and UnitIsEnemy("player", "boss5") then
+				tOtherUnit = "boss5";
+			end
+
+			return VUHDO_LibThreatClassic:UnitThreatSituation(aUnit, tOtherUnit);
+		else
+			return nil;
+		end
+	else
+		return UnitThreatSituation(aUnit);
+	end
+
+end
+
+
+
+function VUHDO_unitDetailedThreatSituation(aUnit, aOtherUnit)
+
+	if not aUnit or not aOtherUnit then 
+		return nil; 
+	end
+
+	if not UnitDetailedThreatSituation then
+		if VUHDO_LibThreatClassic then
+			return VUHDO_LibThreatClassic:UnitDetailedThreatSituation(aUnit, aOtherUnit);
+		else
+			return nil;
+		end
+	else
+		return UnitDetailedThreatSituation(aUnit, aOtherUnit);
+	end
+
+end
+
+
+
+function VUHDO_unitIsWarModePhased(...)
+
+	if not UnitIsWarModePhased then
+		return false;
+	else
+		return UnitIsWarModePhased(...);
+	end
+
+end
+
+
+
+function VUHDO_unitHasVehicleUI(...)
+
+	if not UnitHasVehicleUI then
+		return false;
+	else
+		return UnitHasVehicleUI(...);
+	end
+
+end
+
+
+
+function VUHDO_unitGroupRolesAssigned(...)
+
+	if not UnitGroupRolesAssigned then
+		return "NONE";
+	else
+		return UnitGroupRolesAssigned(...);
+	end
+
+end
+
+
+
+function VUHDO_unitAlternatePowerInfo(...)
+
+	if not UnitAlternatePowerInfo then 
+		return false;
+	else
+		return UnitAlternatePowerInfo(...);
+	end
+
+end
+
+
+
+function VUHDO_hasIncomingSummon(...)
+
+	if not C_IncomingSummon or not C_IncomingSummon.HasIncomingSummon then
+		return false;
+	else
+		return C_IncomingSummon.HasIncomingSummon(...);
+	end
 end
 

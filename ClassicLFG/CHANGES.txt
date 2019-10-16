@@ -1,0 +1,10 @@
+lightweight tag ff4926b6e259be20beb6993ac9b37e26eb7e3d1f 1.1.0
+Author:	Domenik Irrgang <domenikirrgang@gmail.com>
+Date:	Tue Sep 17 10:42:56 2019 +0200
+
+commit ff4926b6e259be20beb6993ac9b37e26eb7e3d1f
+Author: Domenik Irrgang <domenikirrgang@gmail.com>
+Date:   Tue Sep 17 10:42:56 2019 +0200
+
+    changed version
+

@@ -12,6 +12,7 @@ local private = { playerProfessionsThread = nil, db = nil, query = nil }
 local MINING = GetSpellInfo(TSM.CONST.MINING_SPELLID)
 local SMELTING = GetSpellInfo(TSM.CONST.SMELTING_SPELLID)
 local POISONS = GetSpellInfo(TSM.CONST.POISONS_SPELLID)
+local ARTISAN_ZHCN = "大师级"
 local ARTISAN_RUS = "Мастеровой"
 
 
@@ -85,7 +86,7 @@ function private.PlayerProfessionsSkillUpdate()
 				TSMAPI_FOUR.Delay.AfterTime(0.05, private.PlayerProfessionsSkillUpdate)
 				return
 			end
-			if name and subName and (TSMAPI_FOUR.Util.In(strtrim(subName, " "), APPRENTICE, JOURNEYMAN, EXPERT, ARTISAN, ARTISAN_RUS) or name == SMELTING or name == POISONS) and not TSM.UI.CraftingUI.IsProfessionIgnored(name) then
+			if name and subName and (TSMAPI_FOUR.Util.In(strtrim(subName, " "), APPRENTICE, JOURNEYMAN, EXPERT, ARTISAN, ARTISAN_ZHCN, ARTISAN_RUS) or name == SMELTING or name == POISONS) and not TSM.UI.CraftingUI.IsProfessionIgnored(name) then
 				local level, maxLevel = nil, nil
 				for j = 1, GetNumSkillLines() do
 					local skillName, _, _, skillRank, _, _, skillMaxRank = GetSkillLineInfo(j)

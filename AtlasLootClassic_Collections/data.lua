@@ -39,7 +39,7 @@ local PRICE_EXTRA_ITTYPE = data:AddExtraItemTableType("Price")
 local SET_EXTRA_ITTYPE = data:AddExtraItemTableType("Set")
 
 local SET_CONTENT = data:AddContentType(AL["Sets"], ATLASLOOT_PVP_COLOR)
-local WORLD_BOSS_CONTENT = data:AddContentType(AL["World Bosses"], ATLASLOOT_WORLD_BOSS_COLOR)
+--local WORLD_BOSS_CONTENT = data:AddContentType(AL["World Bosses"], ATLASLOOT_WORLD_BOSS_COLOR)
 local COLLECTIONS_CONTENT = data:AddContentType(AL["Collections"], ATLASLOOT_COLLECTIONS_COLOR)
 local WORLD_EVENT_CONTENT = data:AddContentType(AL["World Events"], ATLASLOOT_SEASONALEVENTS_COLOR)
 
@@ -308,6 +308,7 @@ data["MiscSets"] = {
 	},
 }
 
+--[[
 data["Azuregos"] = {
 	name = AL["Azuregos"],
 	AtlasMapFile = "Azuregos",
@@ -318,6 +319,7 @@ data["Azuregos"] = {
 		{ -- AAzuregos
 			name = AL["Azuregos"],
 			npcId = 6109,
+			Level = 999,
 			DisplayIDs = {{11460}},
 			AtlasMapBossID = 1,
 			[NORMAL_DIFF] = {
@@ -357,6 +359,7 @@ data["LordKazzak"] = {
 		{ -- KKazzak
 			name = AL["Lord Kazzak"],
 			npcId = 12397,
+			Level = 999,
 			DisplayIDs = {{12449}},
 			AtlasMapBossID = 1,
 			[NORMAL_DIFF] = {
@@ -386,6 +389,7 @@ data["DragonsOfNightmare"] = {
 		{ -- DLethon
 			name = AL["Lethon"],
 			npcId = 14888,
+			Level = 999,
 			DisplayIDs = {{15365}},
 			[NORMAL_DIFF] = {
 				{ 1,  20628 }, -- Deviate Growth Cap
@@ -411,6 +415,7 @@ data["DragonsOfNightmare"] = {
 		{ -- DEmeriss
 			name = AL["Emeriss"],
 			npcId = 14889,
+			Level = 999,
 			DisplayIDs = {{15366}},
 			[NORMAL_DIFF] = {
 				{ 1,  20623 }, -- Circlet of Restless Dreams
@@ -435,6 +440,7 @@ data["DragonsOfNightmare"] = {
 		{ -- DTaerar
 			name = AL["Taerar"],
 			npcId = 14890,
+			Level = 999,
 			DisplayIDs = {{15363}, {15367}},
 			[NORMAL_DIFF] = {
 				{ 1,  20633 }, -- Unnatural Leather Spaulders
@@ -459,6 +465,7 @@ data["DragonsOfNightmare"] = {
 		{ -- DYsondre
 			name = AL["Ysondre"],
 			npcId = 14887,
+			Level = 999,
 			DisplayIDs = {{15364}},
 			[NORMAL_DIFF] = {
 				{ 1,  20637 }, -- Acid Inscribed Pauldrons
@@ -493,6 +500,7 @@ data["DragonsOfNightmare"] = {
 		},
 	},
 }
+]]--
 
 data["WorldEpics"] = {
 	name = AL["World Epics"],
@@ -695,7 +703,6 @@ data["Tabards"] = {
 		},
 	},
 }
-
 
 data["GurubashiArena"] = {
 	name = AL["Gurubashi Arena"],

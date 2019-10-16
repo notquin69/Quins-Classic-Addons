@@ -1,5 +1,5 @@
 ## Interface: 80200
-## Version: 820r203
+## Version: 820r204
 ## Title: DejaMinimap
 ## Authors: Dejablue, Bõb, Ertkal and Eurytus
 ## Notes: Dejablue's simple minimap.

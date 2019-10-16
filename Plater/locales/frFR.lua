@@ -68,6 +68,8 @@ L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[Fichier de profil non valide.
 
 Importez des scripts ou des mods dans l’onglet Script.]=]
 --[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
+--[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_COPIED"] = ""--]] 
 --[[Translation missing --]]
 --[[ L["OPTIONS_SETTINGS_FAIL_COPIED"] = ""--]] 

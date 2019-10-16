@@ -1,6 +1,5 @@
 --
 local UnitPower = UnitPower;
-local UnitGetIncomingHeals = UnitGetIncomingHeals;
 local pairs = pairs;
 local ipairs = ipairs;
 local floor = floor;
@@ -269,7 +268,7 @@ local function VUHDO_aoeGetIncHeals(aUnit, aCastTime)
 		return 0;
 	end
 
-	return (UnitGetIncomingHeals(aUnit) or 0) - (UnitGetIncomingHeals(aUnit, "player") or 0);
+	return (VUHDO_unitGetIncomingHeals(aUnit) or 0) - (VUHDO_unitGetIncomingHeals(aUnit, "player") or 0);
 end
 
 

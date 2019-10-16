@@ -26,6 +26,8 @@ L["CASTBAR_TEXTURE_FONT"] = "Castbar Textures"
 L["DEFAULT"] = "Default"
 L["FONT_SIZE"] = "Font Size"
 L["FONT_SIZE_TOOLTIP"] = "Sets font size used for spell name and timer text."
+L["FRAME_LEVEL"] = "Frame Level"
+L["FRAME_LEVEL_DESC"] = "Change frame level to layer the castbar below or above another frame."
 L["GENERAL"] = "General Settings"
 L["HEIGHT"] = "Castbar Height"
 L["HEIGHT_TOOLTIP"] = "Sets the castbar height."
@@ -43,12 +45,15 @@ L["MOVEMENT_DETECT_TOOLTIP"] = [=[Enable this to stop the castbar when the unit 
 You might want to disable this if you play with high latency as it can sometimes incorrectly stop the castbar for laggy players.
 ]=]
 L["NAMEPLATE"] = "Nameplate"
+L["PARTY"] = "Party"
+L["PLAYER"] = "Player"
 L["POSXY_TOOLTIP"] = "Adjust the XY offset values to move the frame."
 L["PUSHBACK"] = "Detect Cast Pushbacks"
 L["PUSHBACK_TOOLTIP"] = [=[Enables detection for cast pushback and modifiers (i.e Curse of Tongues).
 
 This detection is not fully accurate as certain spells & talents gives a chance to ignore pushback.
 ]=]
+L["REQUIRES_RESTART"] = "Disabling this castbar module requires a reload of your interface. Press Accept to reload UI."
 L["RESET_ALL"] = "Reset All Settings"
 L["SHOW_CAST_INFO_ONLY"] = "Show Cast Info Only"
 L["SHOW_CAST_INFO_ONLY_TOOLTIP"] = [=[Enable to hide cast timers, but still show the cast information.
@@ -56,6 +61,7 @@ L["SHOW_CAST_INFO_ONLY_TOOLTIP"] = [=[Enable to hide cast timers, but still show
 You can also set the castbar height to zero and border to none if you want to only show the spell name instead of the whole bar.]=]
 L["SHOW_TIMER"] = "Show Timer Text"
 L["SHOW_TIMER_TOOLTIP"] = "Display a timer countdown for the current cast."
+L["STATUS_BG_COLOR"] = "Select Background Color"
 L["STATUS_CHANNEL_COLOR"] = "Select Channel Fill Color"
 L["STATUS_COLOR"] = "Select Cast Fill Color"
 L["TARGET"] = "Target"
@@ -74,3 +80,5 @@ L["TOGGLE_CASTBAR"] = "Enable Castbar"
 L["TOGGLE_CASTBAR_TOOLTIP"] = "Enables or disables castbar for this specific unit frame."
 L["WIDTH"] = "Castbar Width"
 L["WIDTH_TOOLTIP"] = "Sets the castbar width."
+
+L.ICON_SHOW = "Show Spell Icon"

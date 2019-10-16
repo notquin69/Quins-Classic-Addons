@@ -106,7 +106,7 @@ if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
 				minLevel = 26,
 				maxLevel = 30,
 				sourceInfo = {
-					{itemType = ARMOR, rarity = 2, minItemLevel = 31, maxItemLevel = 35, matRate = 0.150, minAmount = 1, maxAmount = 2, amountOfMats = 0.300},
+					{itemType = ARMOR, rarity = 2, minItemLevel = 31, maxItemLevel = 35, matRate = 0.200, minAmount = 1, maxAmount = 2, amountOfMats = 0.300},
 					{itemType = WEAPON, rarity = 2, minItemLevel = 31, maxItemLevel = 35, matRate = 0.750, minAmount = 1, maxAmount = 2, amountOfMats = 1.100},
 				},
 			},

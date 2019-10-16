@@ -1,0 +1,19 @@
+## Interface: 11302
+## Title: ClassicLFG
+## Author: Suu
+## Version: 1.1.0
+## Notes: Tool to form groups for any activity in Classic!
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariables: ClassicLFG_DB
+
+libs.xml
+locales\locales.xml
+
+
+src\main.lua
+src\config.lua
+
+code.xml
+
+bindings.xml

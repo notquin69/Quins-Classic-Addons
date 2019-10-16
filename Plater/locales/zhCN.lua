@@ -53,6 +53,8 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "无效的配置文件。"
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[无效的配置文件。
 
 在脚本或模组选项页面导入脚本或者模组的字符串。]=]
+--[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
 L["OPTIONS_SETTINGS_COPIED"] = "设置已经拷贝"
 L["OPTIONS_SETTINGS_FAIL_COPIED"] = "从当前选择的标签页获取设置失败"
 L["OPTIONS_SHADOWCOLOR"] = "阴影颜色"

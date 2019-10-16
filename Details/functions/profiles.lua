@@ -1312,6 +1312,7 @@ local default_global_data = {
 		
 	--> ilvl
 		item_level_pool = {},
+		disable_talent_feature = false,
 		
 	--> latest report
 		latest_report_table = {},

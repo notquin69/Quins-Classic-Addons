@@ -187,13 +187,22 @@ end
 
 --
 local tNextSoundTime = 0;
-local function VUHDO_playDebuffSound(aSound)
+local function VUHDO_playDebuffSound(aSound, aDebuffName)
 	if (aSound or "") == "" or GetTime() < tNextSoundTime then
 		return;
 	end
 
-	PlaySoundFile(aSound);
-	tNextSoundTime = GetTime() + 2;
+	local tSuccess = VUHDO_playSoundFile(aSound);
+
+	if tSuccess then
+		tNextSoundTime = GetTime() + 2;
+	else
+		if aDebuffName then
+			VUHDO_Msg(format(VUHDO_I18N_PLAY_SOUND_FILE_CUSTOM_DEBUFF_ERR, aSound, aDebuffName));
+		else
+			VUHDO_Msg(format(VUHDO_I18N_PLAY_SOUND_FILE_DEBUFF_ERR, aSound));
+		end
+	end
 end
 
 
@@ -299,8 +308,18 @@ function VUHDO_determineDebuff(aUnit)
 
 		for tCnt = 1, huge do
 			tName, tIcon, tStacks, tTypeString, tDuration, tExpiry, tUnitCaster, _, _, tSpellId, _, tIsBossDebuff = UnitDebuff(aUnit, tCnt);
+
 			if not tIcon then 
 				break;
+			end
+
+			if VUHDO_LibClassicDurations then
+				local tNewDuration, tNewExpiry = VUHDO_LibClassicDurations:GetAuraDurationByUnit(aUnit, tSpellId, tUnitCaster, tName);
+		
+				if tDuration == 0 and tNewDuration then 
+					tDuration = tNewDuration;
+					tExpiry = tNewExpiry;
+				end
 			end
 
 			tStacks = tStacks or 0;
@@ -354,7 +373,19 @@ function VUHDO_determineDebuff(aUnit)
 
 		for tCnt = 1, huge do
 			tName, tIcon, tStacks, _, tDuration, tExpiry, tUnitCaster, _, _, tSpellId = UnitBuff(aUnit, tCnt);
-			if not tIcon then	break; end
+
+			if not tIcon then 
+				break; 
+			end
+
+			if VUHDO_LibClassicDurations then
+				local tNewDuration, tNewExpiry = VUHDO_LibClassicDurations:GetAuraDurationByUnit(aUnit, tSpellId, tUnitCaster, tName);
+		
+				if tDuration == 0 and tNewDuration then 
+					tDuration = tNewDuration;
+					tExpiry = tNewExpiry;
+				end
+			end
 
 			tDebuffConfig = VUHDO_CUSTOM_DEBUFF_CONFIG[tName] or VUHDO_CUSTOM_DEBUFF_CONFIG[tostring(tSpellId)] or sEmpty;
 
@@ -382,9 +413,9 @@ function VUHDO_determineDebuff(aUnit)
 					tDebuffSettings = sAllDebuffSettings[tName] or sAllDebuffSettings[tostring(tDebuffInfo[6])];
 
 					if tDebuffSettings then -- particular custom debuff sound?
-						VUHDO_playDebuffSound(tDebuffSettings["SOUND"]);
+						VUHDO_playDebuffSound(tDebuffSettings["SOUND"], tName);
 					elseif VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"] then -- default custom debuff sound?
-						VUHDO_playDebuffSound(VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"]);
+						VUHDO_playDebuffSound(VUHDO_CONFIG["CUSTOM_DEBUFF"]["SOUND"], tName);
 					end
 				end
 

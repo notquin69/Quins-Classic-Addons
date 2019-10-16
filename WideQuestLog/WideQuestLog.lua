@@ -3,38 +3,30 @@ UIPanelWindows["QuestLogFrame"] = { area = "override", pushable = 0, xoffset = -
 
 local elvEnabled = IsAddOnLoaded("ElvUI")
 
+local function ElvSkinningEnabled(E)
+	return E.private.skins.blizzard.enable == true and E.private.skins.blizzard.quest == true
+end
+
 local function ElvSkinFrames()
 	if (not elvEnabled) then return end
-	
+
 	local E, L, V, P, G = unpack(ElvUI)
 	local S = E:GetModule('Skins')
-		
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true then return end
-	
-	local function LoadSkin()			
-		QuestLogFrame:Width(724)
-		
+
+	if ElvSkinningEnabled(E) == false then return end
+
+	local function LoadSkin()
 		for i = 1, QUESTS_DISPLAYED do
 			local questLogTitle = _G['QuestLogTitle'..i]
 			questLogTitle:Width(320)
 		end
-		
-		QuestLogFrame:HookScript('OnShow', function()
-			QuestLogListScrollFrame:SetHeight(396);
-		
-			QuestLogDetailScrollFrame:SetHeight(396);
-			QuestLogDetailScrollFrameScrollBar:Point('TOPLEFT', QuestLogDetailScrollFrame, 'TOPRIGHT', 5, -16);
-			
-			QuestLogFrameAbandonButton:SetPoint('BOTTOMLEFT', 18, 14);
 
-			QuestFramePushQuestButton:ClearAllPoints();
-			QuestFramePushQuestButton:SetPoint('RIGHT', QuestFrameExitButton, 'LEFT', -2);
-						
+		QuestLogFrame:HookScript('OnShow', function()
 			QuestLogNoQuestsText:ClearAllPoints();
 			QuestLogNoQuestsText:SetPoint("CENTER", QuestLogFrame);
 		end)
 	end
-	
+
 	S:AddCallback('Quest', LoadSkin)
 end
 
@@ -50,8 +42,7 @@ QuestLogTitleText:SetPoint("TOP", QuestLogFrame, "TOP", 0, -18);
 -- Relocate the detail frame over to the right, and stretch it to full
 -- height.
 QuestLogDetailScrollFrame:ClearAllPoints();
-QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogListScrollFrame,
-                                   "TOPRIGHT", 41, 0);
+QuestLogDetailScrollFrame:SetPoint("TOPLEFT", QuestLogListScrollFrame, "TOPRIGHT", 41, 0);
 QuestLogDetailScrollFrame:SetHeight(362);
 
 -- Relocate the 'no active quests' text
@@ -66,12 +57,12 @@ local oldQuestsDisplayed = QUESTS_DISPLAYED;
 QUESTS_DISPLAYED = QUESTS_DISPLAYED + 17;
 
 -- Show 3 more quests when ElvUI is present
-if (elvEnabled) then	
+if (elvEnabled) then
 	local E, L, V, P, G = unpack(ElvUI)
 	local S = E:GetModule('Skins')
-		
-	if E.private.skins.blizzard.enable == true and E.private.skins.blizzard.quest == true then
-		QUESTS_DISPLAYED = QUESTS_DISPLAYED + 3;
+
+	if ElvSkinningEnabled(E) then
+		QUESTS_DISPLAYED = QUESTS_DISPLAYED + 1;
 	end
 end
 

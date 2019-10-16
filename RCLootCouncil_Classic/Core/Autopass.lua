@@ -13,9 +13,9 @@ local autopassOverride = {
 -- @table autopassTable
 local autopassTable = {
 	[LE_ITEM_CLASS_ARMOR] = {
-		[LE_ITEM_ARMOR_CLOTH]		= {"WARRIOR",  "PALADIN", "DRUID",  "ROGUE",   "HUNTER", "SHAMAN", },
+		[LE_ITEM_ARMOR_CLOTH]		= { },
 		[LE_ITEM_ARMOR_LEATHER] 	= {"PRIEST", "MAGE",    "WARLOCK"}, -- "HUNTER", "SHAMAN", "WARRIOR",  "PALADIN",
-		[LE_ITEM_ARMOR_MAIL] 		= {"DRUID",  "ROGUE",   "PRIEST", "MAGE",    "WARLOCK", }, -- "WARRIOR",  "PALADIN",
+		[LE_ITEM_ARMOR_MAIL] 		= {"DRUID",  "ROGUE",   "PRIEST", "MAGE",  "WARLOCK", }, -- "WARRIOR",  "PALADIN",
 		[LE_ITEM_ARMOR_PLATE]		= {"DRUID",    "ROGUE",   "HUNTER", "SHAMAN",  "PRIEST", "MAGE",    "WARLOCK", },
 		[LE_ITEM_ARMOR_SHIELD] 		= { "DRUID",   "ROGUE",   "HUNTER", "PRIEST",  "MAGE",   "WARLOCK", },
       -- "Relic" types seem to be coming in phase 5

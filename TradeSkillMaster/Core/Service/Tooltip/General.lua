@@ -222,7 +222,12 @@ function General.LoadTooltip(tooltip, itemString)
 		end
 		local totalNum = totalPlayer + totalAlt + totalGuild + totalAuction
 		if totalNum > 0 then
-			local rightText = format(L["%s (%s player, %s alts, %s guild, %s AH)"], "|cffffffff"..totalNum.."|r", "|cffffffff"..totalPlayer.."|r", "|cffffffff"..totalAlt.."|r", "|cffffffff"..totalGuild.."|r", "|cffffffff"..totalAuction.."|r")
+			local rightText = nil
+			if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+				rightText = format(L["%s (%s player, %s alts, %s guild, %s AH)"], "|cffffffff"..totalNum.."|r", "|cffffffff"..totalPlayer.."|r", "|cffffffff"..totalAlt.."|r", "|cffffffff"..totalGuild.."|r", "|cffffffff"..totalAuction.."|r")
+			else
+				rightText = format(L["%s (%s player, %s alts, %s AH)"], "|cffffffff"..totalNum.."|r", "|cffffffff"..totalPlayer.."|r", "|cffffffff"..totalAlt.."|r", "|cffffffff"..totalAuction.."|r")
+			end
 			tooltip:AddLine(L["Inventory"], rightText)
 		end
 	end

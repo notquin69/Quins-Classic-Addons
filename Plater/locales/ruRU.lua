@@ -54,6 +54,8 @@ L["OPTIONS_PROFILE_ERROR_STRINGINVALID"] = "Неверный файл профи
 L["OPTIONS_PROFILE_ERROR_WRONGTAB"] = [=[Неверный файл профиля.
 
 Импорт 'Своего кода' или 'Улучшение Platera' можно найти в меню.]=]
+--[[Translation missing --]]
+--[[ L["OPTIONS_PROFILE_IMPORT_OVERWRITE"] = ""--]] 
 L["OPTIONS_SETTINGS_COPIED"] = "настройки скопированы."
 L["OPTIONS_SETTINGS_FAIL_COPIED"] = "не удалось получить настройки для текущей выбранной вкладки."
 L["OPTIONS_SHADOWCOLOR"] = "Цвет тени"

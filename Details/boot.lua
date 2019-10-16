@@ -1,12 +1,12 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --> global name declaration
 		
-		--set the global underscore to nil
+		--remove the underscope from global namespace
 		_ = nil
 		_detalhes = LibStub("AceAddon-3.0"):NewAddon("_detalhes", "AceTimer-3.0", "AceComm-3.0", "AceSerializer-3.0", "NickTag-1.0")
 		
-		_detalhes.build_counter = 159
-		_detalhes.alpha_build_counter = 159 --if this is higher than the regular counter, use it instead
+		_detalhes.build_counter = 168
+		_detalhes.alpha_build_counter = 168 --if this is higher than the regular counter, use it instead
 		_detalhes.game_version = "v1.13.2"
 		_detalhes.userversion = "v1.13.2." .. _detalhes.build_counter
 		_detalhes.realversion = 140 --core version, this is used to check API version for scripts and plugins (see alias below)

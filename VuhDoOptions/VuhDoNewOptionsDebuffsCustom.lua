@@ -108,6 +108,12 @@ function VUHDO_customDebuffUpdateEditBox(anEditBox)
 		VUHDO_lnfSetModel(tCheckButton, "VUHDO_CONFIG.CUSTOM_DEBUFF.STORED_SETTINGS." .. tValue .. ".isStacks");
 		VUHDO_lnfCheckButtonInitFromModel(tCheckButton);
 
+		-- reset any sound settings referencing the old 'none' LSM default
+		if (VUHDO_CONFIG["CUSTOM_DEBUFF"]["STORED_SETTINGS"][tValue].SOUND and 
+			VUHDO_CONFIG["CUSTOM_DEBUFF"]["STORED_SETTINGS"][tValue].SOUND == "Interface\\Quiet.ogg") then
+			VUHDO_CONFIG["CUSTOM_DEBUFF"]["STORED_SETTINGS"][tValue].SOUND = nil;
+		end
+
 		tComboBox = _G[tPanelName .. "SoundCombo"];
 		VUHDO_setComboModel(tComboBox, "VUHDO_CONFIG.CUSTOM_DEBUFF.STORED_SETTINGS." .. tValue .. ".SOUND", VUHDO_SOUNDS);
 		VUHDO_lnfComboBoxInitFromModel(tComboBox);
@@ -279,8 +285,11 @@ end
 local tOldValue = nil;
 function VUHDO_notifySoundSelect(aComboBox, aValue)
 	if (aValue ~= nil and tOldValue ~= aValue) then
-		PlaySoundFile(aValue);
-		tOldValue = aValue;
+		local tSuccess = VUHDO_playSoundFile(aValue);
+		
+		if tSuccess then
+			tOldValue = aValue;
+		end
 	end
 end
 

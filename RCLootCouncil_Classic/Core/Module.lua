@@ -33,9 +33,19 @@ function ClassicModule:OnEnable ()
    db = addon:Getdb()
 
    -- Remove "role" column
-   addon:GetModule("RCVotingFrame"):RemoveColumn("role")
+   local vf = addon:GetModule("RCVotingFrame")
+   vf:RemoveColumn("role")
+   -- TEMP Fix here until we have a proper RCLootCouncil fix
+   -- "Role" is index 4
+   for i = 3, #vf.scrollCols do
+      if vf.scrollCols[i].sortnext and vf.scrollCols[i].sortnext > 4 then
+         vf.scrollCols[i].sortnext = vf.scrollCols[i].sortnext - 1
+      end
+   end
+   -- END_TEMP
 
    self:RegisterEvent("LOOT_OPENED", "LootOpened")
+   self:RegisterEvent("LOOT_CLOSED", "LootClosed")
 end
 
 function ClassicModule:LootOpened (...)
@@ -76,6 +86,11 @@ function ClassicModule:LootOpened (...)
    if addon.isMasterLooter then
 		self:OnLootOpen()
 	end
+end
+
+function ClassicModule:LootClosed ()
+	addon:DebugLog("LootClosed")
+   addon.lootOpen = false
 end
 
 ----------------------------------------------

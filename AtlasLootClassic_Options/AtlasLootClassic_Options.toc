@@ -1,6 +1,6 @@
 ﻿## Interface: 11302
 ## Author: Lag
-## Version: v1.1.12
+## Version: v1.3.0
 ## Dependencies: AtlasLootClassic
 ## LoadOnDemand: 1
 
@@ -12,14 +12,14 @@
 ## Title-itIT: AtlasLoot Classic |cFF22B14C[Options]|r
 ## Title-koKR: AtlasLoot 클래식 |cFF22B14C[옵션]|r
 ## Title-ptBR: AtlasLoot Classic |cFF22B14C[Options]|r
-## Title-ruRU: AtlasLoot Classic |cFF22B14C[(настройки)]|r
+## Title-ruRU: AtlasLoot Classic |cFF22B14C[Настройки]|r
 ## Title-zhCN: AtlasLoot Classic |cFF22B14C[Options]|r
 ## Title-zhTW: 副本戰利品查詢經典版 |cFF22B14C[設定選項]|r
 ## Notes: AtlasLoot options module
 ## Notes-deDE: AtlasLoot Optionen
 ## Notes-esES: AtlasLoot options module
 ## Notes-esMX: AtlasLoot options module
-## Notes-frFR: AtlasLoot options module
+## Notes-frFR: Module des options
 ## Notes-itIT: AtlasLoot options module
 ## Notes-koKR: AtlasLoot 옵션 모듈
 ## Notes-ptBR: AtlasLoot options module
@@ -29,8 +29,6 @@
 
 ## X-Category: Map
 ## X-License: GPL v2
-
-## X-AtlasLoot-LootModule: 0
 
 embeds.xml
 

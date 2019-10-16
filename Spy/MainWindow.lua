@@ -900,8 +900,12 @@ function Spy:ShowTooltip(self, show, id)
 		if name and name ~= "" then
 			local titleText = Spy.db.profile.Colors.Tooltip["Title Text"]
 
-			GameTooltip:SetOwner(Spy.MainWindow, "ANCHOR_NONE")
-			GameTooltip:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -CONTAINER_OFFSET_X - 13, CONTAINER_OFFSET_Y)
+			if not Spy.db.profile.DisplayTooltipNearSpyWindow then
+				GameTooltip:SetOwner(Spy.MainWindow, "ANCHOR_NONE")
+				GameTooltip:SetPoint("BOTTOMRIGHT", "UIParent", "BOTTOMRIGHT", -CONTAINER_OFFSET_X - 13, CONTAINER_OFFSET_Y)
+			else
+				GameTooltip:SetOwner(self, Spy.db.profile.TooltipAnchor)
+			end			
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(string.gsub(name, "%-", " - "), titleText.r, titleText.g, titleText.b)
 
